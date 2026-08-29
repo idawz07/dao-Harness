@@ -2,10 +2,10 @@ import { randomUUID } from 'node:crypto'
 import { once } from 'node:events'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import WebSocket, { type RawData } from 'ws'
-import { Context, Service, symbols } from '@deepseek-ai/cordis'
-import { apply as applyConnection, inject as connectionInject } from '@deepseek-ai/dsh-client-connection'
-import WebServer from '@deepseek-ai/dsh-host-webserver'
-import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
+import { Context, Service, symbols } from '@daoai/cordis'
+import { apply as applyConnection, inject as connectionInject } from '@daoai/dao-client-connection'
+import WebServer from '@daoai/dao-host-webserver'
+import { MAX_TIMER_DELAY_MS } from '@daoai/dao-timeout'
 import {
   bindTypertRemote,
   Remote,
@@ -13,8 +13,8 @@ import {
   type TypertContextMap,
   type TypertContextWire,
   TypertRemoteFailure,
-} from '@deepseek-ai/dsh-typert-protocol'
-import TypertRegistry from '@deepseek-ai/dsh-typert-registry'
+} from '@daoai/dao-typert-protocol'
+import TypertRegistry from '@daoai/dao-typert-registry'
 import { provideBrowserCredentials } from './browser-credentials.ts'
 import TypertGatewayService, {
   TypertGatewayError,
@@ -22,7 +22,7 @@ import TypertGatewayService, {
   type TypertRemoteEventDispatch,
   type TypertRemoteEventInvocation,
   type TypertRemoteEventOutcome,
-} from '@deepseek-ai/dsh-api-gateway'
+} from '@daoai/dao-api-gateway'
 import { z } from 'zod'
 import type {
   RemoteEventClientId,

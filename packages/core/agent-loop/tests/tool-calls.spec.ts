@@ -4,17 +4,17 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { createUserMessage, ToolCallId, StreamChunk  } from '@deepseek-ai/dsh-llm'
-import SessionStore, { SessionEvent, SessionId } from '@deepseek-ai/dsh-session'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import LlmRuntime from '@deepseek-ai/dsh-llm'
-import ToolRuntime, { defineContentToolFixture, TOOL_ABORTED_BEFORE_DISPATCH, TOOL_RUNTIME_SCHEDULER, type PostToolDecision, type PreToolDecision } from '@deepseek-ai/dsh-tools'
-import AgentRegistry, { type Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop, { DEFAULT_MAX_PARALLEL_TOOL_CALLS } from '@deepseek-ai/dsh-agent-loop'
+import { Context } from '@daoai/cordis'
+import { createUserMessage, ToolCallId, StreamChunk  } from '@daoai/dao-llm'
+import SessionStore, { SessionEvent, SessionId } from '@daoai/dao-session'
+import SystemPrompt from '@daoai/dao-system-prompt'
+import LlmRuntime from '@daoai/dao-llm'
+import ToolRuntime, { defineContentToolFixture, TOOL_ABORTED_BEFORE_DISPATCH, TOOL_RUNTIME_SCHEDULER, type PostToolDecision, type PreToolDecision } from '@daoai/dao-tools'
+import AgentRegistry, { type Agent } from '@daoai/dao-agent'
+import AgentLoop, { DEFAULT_MAX_PARALLEL_TOOL_CALLS } from '@daoai/dao-agent-loop'
 import { MockAdapter, textResponse } from './mock-adapter.ts'
-import { CodeRuntime } from '@deepseek-ai/dsh-code-runtime'
-import type { CodeRunRequest, CodeRunResult } from '@deepseek-ai/dsh-code-runtime'
+import { CodeRuntime } from '@daoai/dao-code-runtime'
+import type { CodeRunRequest, CodeRunResult } from '@daoai/dao-code-runtime'
 
 async function harness(adapter: MockAdapter, maxParallelToolCalls?: number) {
   const ctx = new Context()

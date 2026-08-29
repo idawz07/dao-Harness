@@ -3,13 +3,13 @@ description: "全局 send_message、interrupt_agent 与 list_agents 工具，供
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-tool-subagent-control
+# @daoai/dao-tool-subagent-control
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-tool-subagent-control` 为可继续子级添加全局控制工具：`send_message` 投递一条成为子级下一轮次的后续消息，`interrupt_agent` 停止子级当前轮次但保留其队列与后代，`list_agents`（来自可单独加载的 `list-agents` 插件）按持久化 id 与标签列出可继续子级。这些工具是全局的，因此任意数量的委派工具都不会产生重复。这些工具只覆盖父到子方向；子到父方向属于独立安装的 `dsh-tool-subagent-report`。是否加载这些工具不会决定委派工具是否启动可继续工作。
+`dao-tool-subagent-control` 为可继续子级添加全局控制工具：`send_message` 投递一条成为子级下一轮次的后续消息，`interrupt_agent` 停止子级当前轮次但保留其队列与后代，`list_agents`（来自可单独加载的 `list-agents` 插件）按持久化 id 与标签列出可继续子级。这些工具是全局的，因此任意数量的委派工具都不会产生重复。这些工具只覆盖父到子方向；子到父方向属于独立安装的 `dao-tool-subagent-report`。是否加载这些工具不会决定委派工具是否启动可继续工作。
 
 ## 目录
 
@@ -32,14 +32,14 @@ kind: "package-reference"
 先加载 subagent 服务、一个后端、委派工具与本包。加上独立的列表插件即可公开全部三个工具：
 
 ```yaml
-- name: '@deepseek-ai/dsh-subagent'
-- name: '@deepseek-ai/dsh-subagent-spawn-in-process'
-- name: '@deepseek-ai/dsh-tool-subagent'
+- name: '@daoai/dao-subagent'
+- name: '@daoai/dao-subagent-spawn-in-process'
+- name: '@daoai/dao-tool-subagent'
   config:
     provider: spawn
     backgroundMode: continuable
-- name: '@deepseek-ai/dsh-tool-subagent-control'
-- name: '@deepseek-ai/dsh-tool-subagent-control/list-agents'
+- name: '@daoai/dao-tool-subagent-control'
+- name: '@daoai/dao-tool-subagent-control/list-agents'
 ```
 
 本包不接收任何配置：根插件提供 `send_message` 与 `interrupt_agent`，列表插件提供 `list_agents`。
@@ -96,9 +96,9 @@ kind: "package-reference"
 当包级约定不够用时阅读以下页面；它们从工具 schema 进入其背后的继续执行服务。
 
 - [Subagent 子系统](../../../docs/subsystems/subagent.zh.md)——可继续子级、Activation、inbox、中断与后续消息权限。
-- [dsh-tool-subagent](../tool-subagent/README.zh.md)——启动可继续子级的委派工具。
-- [dsh-tool-subagent-report](../tool-subagent-report/README.zh.md)——子到父的上报通道。
-- [生成工具目录](../../../docs/tool-catalog.zh.md#deepseek-aidsh-tool-subagent-control)——三个工具的 schema。
+- [dao-tool-subagent](../tool-subagent/README.zh.md)——启动可继续子级的委派工具。
+- [dao-tool-subagent-report](../tool-subagent-report/README.zh.md)——子到父的上报通道。
+- [生成工具目录](../../../docs/tool-catalog.zh.md#daoaidao-tool-subagent-control)——三个工具的 schema。
 
 -----
 
@@ -109,7 +109,7 @@ kind: "package-reference"
 
 #### 模型看到什么
 
-已生成的 [schema](../../../docs/tool-catalog.zh.md#deepseek-aidsh-tool-subagent-control)：`send_message` 接受 `subagent_id` 与 `message`；`interrupt_agent` 接受 `agent_id`；`list_agents` 接受可选的 `scope` 枚举。
+已生成的 [schema](../../../docs/tool-catalog.zh.md#daoaidao-tool-subagent-control)：`send_message` 接受 `subagent_id` 与 `message`；`interrupt_agent` 接受 `agent_id`；`list_agents` 接受可选的 `scope` 枚举。
 
 #### Token 影响
 

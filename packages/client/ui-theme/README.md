@@ -1,15 +1,15 @@
 ---
-description: "Theme and content-font-size settings for the dsh web client: --dsw-* token stylesheets, ThemeRuntime state, General settings rows, and the pre-plugin bootstrap."
+description: "Theme and content-font-size settings for the dao web client: --dsw-* token stylesheets, ThemeRuntime state, General settings rows, and the pre-plugin bootstrap."
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-theme
+# @daoai/dao-client-ui-theme
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-client-ui-theme` lets Web GUI users choose `light`, `dark`, or `system` and set conversation content text from 12 to 17 px in Settings. A loopback client stores both values in the `ui-theme` settings namespace, which the local provider persists in `$DSH_HOME/settings.yaml` by default. The plugin resolves `system` through `prefers-color-scheme` and publishes immutable `ThemeSnapshot`s; ui-layout applies each snapshot to the document. The package also ships the `--dsw-*` token stylesheets and injects a synchronous bootstrap so the selected palette and font size apply before the shell loads. Third-party themes can register alias-token overrides through `ctx.theme`.
+`dao-client-ui-theme` lets Web GUI users choose `light`, `dark`, or `system` and set conversation content text from 12 to 17 px in Settings. A loopback client stores both values in the `ui-theme` settings namespace, which the local provider persists in `$DAO_HOME/settings.yaml` by default. The plugin resolves `system` through `prefers-color-scheme` and publishes immutable `ThemeSnapshot`s; ui-layout applies each snapshot to the document. The package also ships the `--dsw-*` token stylesheets and injects a synchronous bootstrap so the selected palette and font size apply before the shell loads. Third-party themes can register alias-token overrides through `ctx.theme`.
 
 ## Table of Contents
 
@@ -37,7 +37,7 @@ A composition can register a third-party theme id with alias-token overrides thr
 
 ### Pre-plugin palette
 
-When the host composition includes an HTTP server, the host half embeds the registered `ui-theme` settings, or schema defaults, into each index response. Before the loading page renders, the browser sets `color-scheme`, `body[data-ds-dark-theme]`, and `--dsh-content-font-size`, so the first paint uses the selected palette and text size.
+When the host composition includes an HTTP server, the host half embeds the registered `ui-theme` settings, or schema defaults, into each index response. Before the loading page renders, the browser sets `color-scheme`, `body[data-ds-dark-theme]`, and `--dao-content-font-size`, so the first paint uses the selected palette and text size.
 
 -----
 
@@ -53,11 +53,11 @@ The service owns theme and font-size state and publishes snapshots. The ui-layou
 
 `src/styles/` holds five sheets imported in order by ui-theme's dynamic client entry: `base.css`, `design-platform.css`, `scrollbar.css`, `gradient-shadow-text.css`, and `shiki.css`. The client bundle compiles and injects them as plugin-owned global styles, so unload and HMR remove them with ui-theme. `scrollbar.css` is the sole consumer of the `--dsw-alias-scrollbar-*` tokens and must follow `design-platform.css`, which declares them.
 
-`gradient-shadow-text.css` derives `--dsh-content-font-delta` from `--dsh-content-font-size` and shifts the Markdown heading and base-text ladder by that increment. It also derives the secondary tier `--dsh-content-font-size-secondary` (setting −1 at ≤14, setting −2 above; 13px at the default) with its own `--dsh-content-font-delta-secondary` for the table variants and the flow rows one step under the body. Dense small and code variants stay fixed. Outside the ladder, the user bubble and composer draft read the body pair directly, and flow-row titles and summaries read the secondary pair.
+`gradient-shadow-text.css` derives `--dao-content-font-delta` from `--dao-content-font-size` and shifts the Markdown heading and base-text ladder by that increment. It also derives the secondary tier `--dao-content-font-size-secondary` (setting −1 at ≤14, setting −2 above; 13px at the default) with its own `--dao-content-font-delta-secondary` for the table variants and the flow rows one step under the body. Dense small and code variants stay fixed. Outside the ladder, the user bubble and composer draft read the body pair directly, and flow-row titles and summaries read the secondary pair.
 
 ### Scrollbar rebinding
 
-`scrollbar.css` binds `--dsh-scrollbar-thumb` and `--dsh-scrollbar-thumb-hover` on `body` to the l1 base-surface tokens; an elevated surface (menu, popover, dialog) rebinds them to the l2 tokens on its own container, and the pair's other legal target is `transparent` (ui-sidebar rebinds its column that way while the pointer is elsewhere). `--dsh-scrollbar-width` mirrors the WebKit bar's layout width for surfaces that align beside a space-consuming bar. The two rendering paths are mutually exclusive by construction: Firefox takes the standard properties inside `@supports not selector(::-webkit-scrollbar)`, and WebKit-based engines take the pseudo-elements, so the hover token only ever renders through the pseudo-element path ([scrollbar note](../../../.agents/notes/implemented/bug-fix/2026-07-28-themed-scrollbars-and-reserved-gutter.md)).
+`scrollbar.css` binds `--dao-scrollbar-thumb` and `--dao-scrollbar-thumb-hover` on `body` to the l1 base-surface tokens; an elevated surface (menu, popover, dialog) rebinds them to the l2 tokens on its own container, and the pair's other legal target is `transparent` (ui-sidebar rebinds its column that way while the pointer is elsewhere). `--dao-scrollbar-width` mirrors the WebKit bar's layout width for surfaces that align beside a space-consuming bar. The two rendering paths are mutually exclusive by construction: Firefox takes the standard properties inside `@supports not selector(::-webkit-scrollbar)`, and WebKit-based engines take the pseudo-elements, so the hover token only ever renders through the pseudo-element path ([scrollbar note](../../../.agents/notes/implemented/bug-fix/2026-07-28-themed-scrollbars-and-reserved-gutter.md)).
 
 ### Preference persistence
 
@@ -74,7 +74,7 @@ These pages cover the layout presenter, the token consumers, and the styling rul
 
 - [ui-layout](../ui-layout/README.md) — the presenter that applies the resolved theme snapshot.
 - [ui-sidebar](../ui-sidebar/README.md) — a consumer of the scrollbar rebinding contract.
-- [ui-conversation](../ui-conversation/README.md) — a consumer of `--dsh-scrollbar-width` for the composer seat.
+- [ui-conversation](../ui-conversation/README.md) — a consumer of `--dao-scrollbar-width` for the composer seat.
 - [Web styling](../../../docs/web-styling.md) — the authoritative styling rules for web client components.
 - [Host-backed preferences](../../../.agents/notes/implemented/bug-fix/2026-08-06-host-backed-web-preferences.md) — the persistence boundary decision.
 

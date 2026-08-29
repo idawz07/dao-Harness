@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-tool-todo",
-  "description": "Model-facing todo_write tool over the DeepSeek Harness event-sourced session log",
+  "name": "@daoai/dao-tool-todo",
+  "description": "Model-facing todo_write tool over the Dao event-sourced session log",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -37,30 +37,30 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@daoai/schemastery": "workspace:^",
     "zod": "^4.4.3"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-projection": "workspace:^",
+    "@daoai/dao-tools": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/dsh-user-questions": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/cordis-plugin-include": "workspace:^",
+    "@daoai/cordis-plugin-loader": "workspace:^",
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-agent-loop": "workspace:^",
+    "@daoai/dao-agent-loop-testkit": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-projection": "workspace:^",
+    "@daoai/dao-system-prompt": "workspace:^",
+    "@daoai/dao-tools": "workspace:^",
+    "@daoai/dao-user-questions": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

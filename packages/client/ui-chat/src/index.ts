@@ -1,7 +1,7 @@
 /** Host registration for browser Chat preferences. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import { settingsNamespace } from '@deepseek-ai/dsh-settings'
+import type { Context } from '@daoai/cordis'
+import { settingsNamespace } from '@daoai/dao-settings'
 import { CHAT_SETTINGS_NAMESPACE, ChatSettingsSchema } from './chat-settings.ts'
 
 export {

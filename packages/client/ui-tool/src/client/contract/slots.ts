@@ -1,11 +1,11 @@
 /** Tool UI slot declarations and their composed component props. */
-import type { ConnectionGenerationState } from '@deepseek-ai/dsh-client-connection/client'
-import type { InjectFace, PropsLocale, PropsRenderSlots, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import type { ToolCallBlock } from '@deepseek-ai/dsh-client-ui-chat/client'
-import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type {} from '@deepseek-ai/dsh-client-locale/client'
+import type { ConnectionGenerationState } from '@daoai/dao-client-connection/client'
+import type { InjectFace, PropsLocale, PropsRenderSlots, PropsRuntime } from '@daoai/dao-client-ui-slots'
+import type { ToolCallBlock } from '@daoai/dao-client-ui-chat/client'
+import type {} from '@daoai/dao-client-ui-conversation/client'
+import type {} from '@daoai/dao-client-locale/client'
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@daoai/dao-client-ui-slots' {
   interface SlotMap {
     /**
      * Keyed atomic Tool call view, dispatched by the wire Tool name. Register

@@ -1,9 +1,9 @@
 /** Release the gated background SDK child only after job_output starts waiting. */
 
 import { writeFileSync } from 'node:fs'
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@daoai/cordis'
 
-export const name = 'subagent-dsh-sdk-release-on-job-output'
+export const name = 'subagent-dao-sdk-release-on-job-output'
 export const inject = ['tools']
 
 /**
@@ -14,7 +14,7 @@ export function apply(ctx: Context): void {
   ctx.on('tools/execute', async (exec, next) => {
     const delegated = next()
     if (exec.name === 'job_output') {
-      writeFileSync('.dsh-sdk-background-release', 'release\n')
+      writeFileSync('.dao-sdk-background-release', 'release\n')
     }
     return delegated
   }, { prepend: true })

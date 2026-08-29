@@ -2,31 +2,31 @@ import { mkdtempSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { ToolCallId } from '@deepseek-ai/dsh-llm'
-import { ShellExecutor } from '@deepseek-ai/dsh-shell'
-import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellProcessRead, ShellRunResult } from '@deepseek-ai/dsh-shell'
-import SystemPrompt, { FIRST_PARTY_SECTION_ORDER } from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { TOOL_ABORTED, TOOL_ABORTED_BEFORE_DISPATCH } from '@deepseek-ai/dsh-tools'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import LocalJobRegistry from '@deepseek-ai/dsh-jobs-local'
-import * as ToolTasks from '@deepseek-ai/dsh-tool-jobs'
-import ApprovalService from '@deepseek-ai/dsh-user-approval'
-import type { ApprovalOutcome } from '@deepseek-ai/dsh-user-approval'
-import { LocalBashExecutor } from '@deepseek-ai/dsh-bash-local'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import SandboxPolicyService from '@deepseek-ai/dsh-sandbox-policy'
-import * as ToolBash from '@deepseek-ai/dsh-tool-bash'
-import * as BashEnvPlugin from '@deepseek-ai/dsh-shell-env'
+import { Context } from '@daoai/cordis'
+import { ToolCallId } from '@daoai/dao-llm'
+import { ShellExecutor } from '@daoai/dao-shell'
+import type { ShellExecRequest, ShellExecSpec, ShellProcess, ShellProcessRead, ShellRunResult } from '@daoai/dao-shell'
+import SystemPrompt, { FIRST_PARTY_SECTION_ORDER } from '@daoai/dao-system-prompt'
+import ToolRuntime, { TOOL_ABORTED, TOOL_ABORTED_BEFORE_DISPATCH } from '@daoai/dao-tools'
+import AgentRegistry from '@daoai/dao-agent'
+import type { Agent } from '@daoai/dao-agent'
+import SessionStore, { SessionId } from '@daoai/dao-session'
+import JsonlSessionPersistence from '@daoai/dao-session-persistence-jsonl'
+import LocalJobRegistry from '@daoai/dao-jobs-local'
+import * as ToolTasks from '@daoai/dao-tool-jobs'
+import ApprovalService from '@daoai/dao-user-approval'
+import type { ApprovalOutcome } from '@daoai/dao-user-approval'
+import { LocalBashExecutor } from '@daoai/dao-bash-local'
+import LocalSubprocessRuntime from '@daoai/dao-subprocess-local'
+import SandboxPolicyService from '@daoai/dao-sandbox-policy'
+import * as ToolBash from '@daoai/dao-tool-bash'
+import * as BashEnvPlugin from '@daoai/dao-shell-env'
 import { processOutcome } from '../src/background.ts'
 import { renderProcessRead, renderResult } from '../src/render.ts'
 
 const testToolSignal = new AbortController().signal
 
-const spillDir = mkdtempSync(join(tmpdir(), 'dsh-tool-bash-spec-'))
+const spillDir = mkdtempSync(join(tmpdir(), 'dao-tool-bash-spec-'))
 
 /** Foreground-only harness: no job runtime (backgrounding fails loud here). */
 async function setup() {
@@ -300,7 +300,7 @@ describe('bash tool', () => {
 
   it('surfaces spawn failures as isError', async () => {
     const ctx = await setup()
-    const result = await call(ctx, 'bash', { command: 'true', description: 'test command', workdir: '/nonexistent-dsh' })
+    const result = await call(ctx, 'bash', { command: 'true', description: 'test command', workdir: '/nonexistent-dao' })
     expect(result.isError).toBe(true)
     expect(text(result)).toMatch(/ENOENT/)
   })
@@ -500,7 +500,7 @@ describe('background execution through the job runtime', () => {
     const ctx = await setup() // no LocalJobRegistry / ToolTasks
     const result = await call(ctx, 'bash', { command: 'sleep 60', description: 'test command', run_in_background: true })
     expect(result.isError).toBe(true)
-    expect(text(result)).toContain('background jobs unavailable: load @deepseek-ai/dsh-jobs and @deepseek-ai/dsh-tool-jobs')
+    expect(text(result)).toContain('background jobs unavailable: load @daoai/dao-jobs and @daoai/dao-tool-jobs')
   })
 
   it('a pre-aborted call is skipped before the process starts', async () => {
@@ -1059,7 +1059,7 @@ describe('tool-owned UI presentation (presentCall / presentResult)', () => {
 })
 
 describe('the model-facing bash tool builds its request from named args only (no {...args} forward)', () => {
-  const recordingDshHome = join(spillDir, 'dsh-home')
+  const recordingDshHome = join(spillDir, 'dao-home')
 
   /**
    * Records every {@link ShellExecRequest} the consumer hands to `resolve()`, so a
@@ -1070,7 +1070,7 @@ describe('the model-facing bash tool builds its request from named args only (no
    * future refactor that blindly forwards `...args` — which would silently thread
    * model input into the post-scrub `env` merge or per-run capture budget — NOT
    * to defend a trust boundary
-   * (the credential scrub in dsh-bash-local is the security control; see the
+   * (the credential scrub in dao-bash-local is the security control; see the
    * bash-stdin-env Agent Note). Foreground `run()` returns a canned result; `start()`
    * hands back an already-settled fake handle so the task registration completes.
    */
@@ -1086,7 +1086,7 @@ describe('the model-facing bash tool builds its request from named args only (no
         ...request.signal ? { signal: request.signal } : {},
         ...request.stdin !== undefined ? { stdin: request.stdin } : {},
         ...request.env !== undefined ? { env: request.env } : {},
-        ...request.dshEnv !== undefined ? { dshEnv: request.dshEnv } : {},
+        ...request.daoEnv !== undefined ? { daoEnv: request.daoEnv } : {},
         sandboxPolicy: request.sandboxPolicy,
       }
     }
@@ -1119,7 +1119,7 @@ describe('the model-facing bash tool builds its request from named args only (no
     }
     await ctx.plugin(LocalJobRegistry)
     await ctx.plugin(ToolTasks)
-    await ctx.plugin(BashEnvPlugin, { dshHome: recordingDshHome })
+    await ctx.plugin(BashEnvPlugin, { daoHome: recordingDshHome })
     await ctx.plugin(RecordingBashExecutor)
     await ctx.plugin(ToolBash)
     return { ctx, bash: ctx.shell as RecordingBashExecutor }
@@ -1128,8 +1128,8 @@ describe('the model-facing bash tool builds its request from named args only (no
   it('describes the managed harness environment namespace to the model', async () => {
     const { ctx } = await setupRecording()
     const description = ctx.tools.get('bash')?.description ?? ''
-    expect(description).toContain('$DSH_*')
-    expect(description).not.toContain('DSH_SESSION_JSONL')
+    expect(description).toContain('$DAO_*')
+    expect(description).not.toContain('DAO_SESSION_JSONL')
   })
 
   it('injects the session id and JSONL target path into a foreground request', async () => {
@@ -1145,11 +1145,11 @@ describe('the model-facing bash tool builds its request from named args only (no
       agent,
     })
 
-    expect(bash.requests[0]?.dshEnv).toEqual({
-      DSH_HOME: recordingDshHome,
-      DSH_SESSION_ID: 'request-fg',
-      DSH_SESSION_JSONL: path,
-      DSH_SHELL: '1',
+    expect(bash.requests[0]?.daoEnv).toEqual({
+      DAO_HOME: recordingDshHome,
+      DAO_SESSION_ID: 'request-fg',
+      DAO_SESSION_JSONL: path,
+      DAO_SHELL: '1',
     })
   })
 
@@ -1166,24 +1166,24 @@ describe('the model-facing bash tool builds its request from named args only (no
         command: 'sleep 1',
         description: 'run command',
         run_in_background: true,
-        env: { DSH_SESSION_ID: 'spoofed', DSH_SESSION_JSONL: '/tmp/spoofed' },
+        env: { DAO_SESSION_ID: 'spoofed', DAO_SESSION_JSONL: '/tmp/spoofed' },
       },
       agent,
     })
 
     expect(bash.requests[0]?.env).toBeUndefined()
-    expect(bash.requests[0]?.dshEnv).toEqual({
-      DSH_HOME: recordingDshHome,
-      DSH_SESSION_ID: 'request-bg',
-      DSH_SESSION_JSONL: path,
-      DSH_SHELL: '1',
+    expect(bash.requests[0]?.daoEnv).toEqual({
+      DAO_HOME: recordingDshHome,
+      DAO_SESSION_ID: 'request-bg',
+      DAO_SESSION_JSONL: path,
+      DAO_SHELL: '1',
     })
   })
 
   it('injects built-ins and the stable session id when no JSONL locator is available', async () => {
     const { ctx, bash } = await setupRecording()
     const agent = registerFakeAgent(ctx, 'request-id-only', () => undefined)
-    const ambient = process.env.DSH_SESSION_ID
+    const ambient = process.env.DAO_SESSION_ID
 
     await ctx.tools.execute({
       signal: testToolSignal,
@@ -1193,12 +1193,12 @@ describe('the model-facing bash tool builds its request from named args only (no
       agent,
     })
 
-    expect(bash.requests[0]?.dshEnv).toEqual({
-      DSH_HOME: recordingDshHome,
-      DSH_SESSION_ID: 'request-id-only',
-      DSH_SHELL: '1',
+    expect(bash.requests[0]?.daoEnv).toEqual({
+      DAO_HOME: recordingDshHome,
+      DAO_SESSION_ID: 'request-id-only',
+      DAO_SHELL: '1',
     })
-    expect(process.env.DSH_SESSION_ID).toBe(ambient)
+    expect(process.env.DAO_SESSION_ID).toBe(ambient)
   })
 
   it('keeps parent and child agent session environments isolated', async () => {
@@ -1216,21 +1216,21 @@ describe('the model-facing bash tool builds its request from named args only (no
       })
     }
 
-    expect(bash.requests.map(request => request.dshEnv)).toEqual([
+    expect(bash.requests.map(request => request.daoEnv)).toEqual([
       {
-        DSH_HOME: recordingDshHome,
-        DSH_SESSION_ID: 'request-parent',
-        DSH_SESSION_JSONL: ctx.sessionPersistence.locate(parent.session.header)?.path,
-        DSH_SHELL: '1',
+        DAO_HOME: recordingDshHome,
+        DAO_SESSION_ID: 'request-parent',
+        DAO_SESSION_JSONL: ctx.sessionPersistence.locate(parent.session.header)?.path,
+        DAO_SHELL: '1',
       },
       {
-        DSH_HOME: recordingDshHome,
-        DSH_SESSION_ID: 'request-child',
-        DSH_SESSION_JSONL: ctx.sessionPersistence.locate(child.session.header)?.path,
-        DSH_SHELL: '1',
+        DAO_HOME: recordingDshHome,
+        DAO_SESSION_ID: 'request-child',
+        DAO_SESSION_JSONL: ctx.sessionPersistence.locate(child.session.header)?.path,
+        DAO_SHELL: '1',
       },
     ])
-    expect(bash.requests[0]?.dshEnv?.DSH_SESSION_JSONL).not.toBe(bash.requests[1]?.dshEnv?.DSH_SESSION_JSONL)
+    expect(bash.requests[0]?.daoEnv?.DAO_SESSION_JSONL).not.toBe(bash.requests[1]?.daoEnv?.DAO_SESSION_JSONL)
   })
 
   it('does not forward trusted-only fields even when the model includes them as extra arguments', async () => {

@@ -2,24 +2,24 @@
 import { describe, expect, it, vi } from 'vitest'
 import {
   chatSnapshot, SlotTestRuntime, TestRemote, stubSettingsScope, usePinnedBrowserLanguages,
-} from '@deepseek-ai/dsh-client-test-runtime'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { resolveSlotLabel } from '@deepseek-ai/dsh-client-ui-slots'
-import type { ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
-import type { SessionBinding } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+} from '@daoai/dao-client-test-runtime'
+import { LocaleRuntime } from '@daoai/dao-client-locale/client'
+import { resolveSlotLabel } from '@daoai/dao-client-ui-slots'
+import type { ObservableSnapshot } from '@daoai/dao-client-store'
+import type { SessionBinding } from '@daoai/dao-api-session-controller/client'
+import type { SessionId } from '@daoai/dao-session/types'
 import {
   apply as applyConversation, inject as injectConversation,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@daoai/dao-client-ui-conversation/client'
 import {
   apply as applyChat, EMPTY_CHAT_SNAPSHOT, inject as injectChat,
-} from '@deepseek-ai/dsh-client-ui-chat/client'
+} from '@daoai/dao-client-ui-chat/client'
 import type {
   ChatNodeTurnDataInjected, ChatSnapshot, TranscriptViewRowInjected, UseChat,
-} from '@deepseek-ai/dsh-client-ui-chat/client'
+} from '@daoai/dao-client-ui-chat/client'
 import { CHAT_SETTINGS_NAMESPACE, type ChatSettings } from '../src/chat-settings.ts'
 
-declare module '@deepseek-ai/dsh-client-ui-conversation/client' {
+declare module '@daoai/dao-client-ui-conversation/client' {
   interface ConversationTurnDataMap {
     metric: number
   }

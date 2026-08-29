@@ -2,19 +2,19 @@
  * JSON-RPC methods and notifications for out-of-process harness SDKs.
  * The surrounding context owns plugins, persistence, and configured adapters.
  *
- * @module @deepseek-ai/dsh-sdk-jsonrpc-server/server
+ * @module @daoai/dao-sdk-jsonrpc-server/server
  */
 
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@daoai/cordis'
 import { resolve } from 'node:path'
-import type { Agent, AgentHandle } from '@deepseek-ai/dsh-agent'
-import { admitEncodedImages, type EncodedImageAttachment, type ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
-import { createUserMessage, ReasoningEffortId, type ContentBlock, type LlmRuntime } from '@deepseek-ai/dsh-llm'
-import { carrierKeyOf, type Scoped } from '@deepseek-ai/dsh-scope'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import type SubagentRuntime from '@deepseek-ai/dsh-subagent'
-import type { SubagentRunEndInfo } from '@deepseek-ai/dsh-subagent'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek'
+import type { Agent, AgentHandle } from '@daoai/dao-agent'
+import { admitEncodedImages, type EncodedImageAttachment, type ImageAttachmentRef } from '@daoai/dao-attachment'
+import { createUserMessage, ReasoningEffortId, type ContentBlock, type LlmRuntime } from '@daoai/dao-llm'
+import { carrierKeyOf, type Scoped } from '@daoai/dao-scope'
+import { SessionId } from '@daoai/dao-session'
+import type SubagentRuntime from '@daoai/dao-subagent'
+import type { SubagentRunEndInfo } from '@daoai/dao-subagent'
+import * as LlmDeepSeek from '@daoai/dao-llm-deepseek'
 import type {
   InitializeParams,
   InitializeResult,
@@ -25,7 +25,7 @@ import type {
   SdkEncodedImageBlock,
   SubagentFinishedNotification,
   SubagentStartedNotification,
-} from '@deepseek-ai/dsh-sdk-protocol'
+} from '@daoai/dao-sdk-protocol'
 
 interface SessionRecord {
   handle: AgentHandle
@@ -164,7 +164,7 @@ export class HarnessSdkJsonRpcServer {
     this.reasoningEffort = reasoningEffort
     this.maxTokens = params.maxTokens
     this.initialized = true
-    return { serverInfo: { name: 'deepseek-harness-sdk-runtime', version: '0.0.1' } }
+    return { serverInfo: { name: 'dao-sdk-runtime', version: '0.0.1' } }
   }
 
   /**
@@ -251,7 +251,7 @@ export class HarnessSdkJsonRpcServer {
       case 'shutdown':
         return this.shutdown()
       default:
-        throw new Error(`unknown DeepSeek Harness SDK runtime method: ${method}`)
+        throw new Error(`unknown Dao SDK runtime method: ${method}`)
     }
   }
 
@@ -274,7 +274,7 @@ export class HarnessSdkJsonRpcServer {
     // No preset composition: this server's compositions keep the model-facing
     // rows in the host plane, so this agent reads them from the global layer. A
     // deployment that configures a roster has to join one here first
-    // (@deepseek-ai/dsh-agent-presets README, "Composing a child agent").
+    // (@daoai/dao-agent-presets README, "Composing a child agent").
     const handle = await this.ctx.agents.create({
       sessionId: SessionId(sessionId),
       meta: { cwd: this.cwd },

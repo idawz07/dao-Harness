@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-session-snapshot",
+  "name": "@daoai/dao-session-snapshot",
   "description": "Session-log snapshot core with an ACP protocol adapter, expected-output normalization, and fixture invariants",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
@@ -33,29 +33,29 @@
   "license": "MIT",
   "dependencies": {
     "@agentclientprotocol/sdk": "1.4.0",
-    "@deepseek-ai/cordis-plugin-include": "workspace:*",
-    "@deepseek-ai/dsh-loader-smoke": "workspace:*",
+    "@daoai/cordis-plugin-include": "workspace:*",
+    "@daoai/dao-loader-smoke": "workspace:*",
     "js-yaml": "^4.2.0",
     "vitest": "^4.1.8"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^",
-    "@deepseek-ai/dsh-compaction": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-subagent": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/dsh-user-questions": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-agent-loop": "workspace:^",
+    "@daoai/dao-compaction": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-sandbox": "workspace:^",
+    "@daoai/dao-sandbox-policy": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-subagent": "workspace:^",
+    "@daoai/dao-tools": "workspace:^",
+    "@daoai/dao-user-questions": "workspace:^",
+    "@daoai/cordis": "workspace:^",
     "@types/js-yaml": "^4.0.9"
   }
 }

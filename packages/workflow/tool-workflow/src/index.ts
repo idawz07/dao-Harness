@@ -2,28 +2,28 @@
  * The model-facing `workflow` tool: run a JavaScript orchestration script that fans out
  * subagents, and return the script's final value. It owns the model-facing schema and run lifecycle; script
  * parsing, execution, caps, and cancellation live behind `ctx.workflowEngine`
- * (`@deepseek-ai/dsh-workflow`), so a hardened engine swaps in without touching what the model
+ * (`@daoai/dao-workflow`), so a hardened engine swaps in without touching what the model
  * sees. Execution awaits `run.result` and always disposes the run; non-completed reasons become tool
  * errors, and background collection remains deferred. Presentation is an args-only generic card
  * titled from `meta.name`. Explicit-ask usage guidance is registered as the tool's own prompt
  * section rather than deployment persona prose.
- * @module @deepseek-ai/dsh-tool-workflow
+ * @module @daoai/dao-tool-workflow
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import type { ToolCallView, ToolResultView } from '@deepseek-ai/dsh-tools'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { JsonValue, Session, SessionEventMap } from '@deepseek-ai/dsh-session'
+import type { Context } from '@daoai/cordis'
+import z from '@daoai/schemastery'
+import { defineTool } from '@daoai/dao-tools'
+import type { ToolCallView, ToolResultView } from '@daoai/dao-tools'
+import type { ContentBlock } from '@daoai/dao-llm'
+import type { JsonValue, Session, SessionEventMap } from '@daoai/dao-session'
 import type {
   WorkflowResult, WorkflowRun, WorkflowRunId, WorkflowStopReason,
-} from '@deepseek-ai/dsh-workflow'
+} from '@daoai/dao-workflow'
 import type {
   ToolWorkflowAgentEndData, ToolWorkflowAgentStartData,
   ToolWorkflowRunEndData, ToolWorkflowRunStartData,
 } from './types.ts'
-import { FIRST_PARTY_SECTION_ORDER } from '@deepseek-ai/dsh-system-prompt'
+import { FIRST_PARTY_SECTION_ORDER } from '@daoai/dao-system-prompt'
 
 export const name = 'tool-workflow'
 export const inject = ['tools', 'workflowEngine', 'systemPrompt']

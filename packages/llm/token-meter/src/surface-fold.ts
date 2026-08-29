@@ -13,13 +13,13 @@
  * Nodes also carry their durable image occurrences and image-free heuristic
  * price, so `measure()` can reprice image content for the routed model.
  *
- * @module @deepseek-ai/dsh-token-meter/surface-fold
+ * @module @daoai/dao-token-meter/surface-fold
  */
 
-import { deriveEventMessage } from '@deepseek-ai/dsh-session'
-import type { SurfaceEvent } from '@deepseek-ai/dsh-session'
-import type { ContentBlock, Message } from '@deepseek-ai/dsh-llm'
-import type { ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
+import { deriveEventMessage } from '@daoai/dao-session'
+import type { SurfaceEvent } from '@daoai/dao-session'
+import type { ContentBlock, Message } from '@daoai/dao-llm'
+import type { ImageAttachmentRef } from '@daoai/dao-attachment'
 import { estimateMessage, estimateStructuralBlock } from './estimate.ts'
 
 /** One priced surface node with the image occurrences route pricing replaces. */

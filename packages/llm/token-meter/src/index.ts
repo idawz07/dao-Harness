@@ -1,17 +1,17 @@
 /**
  * Single replay-aware token-meter service for request and surface pressure.
  *
- * @module @deepseek-ai/dsh-token-meter
+ * @module @daoai/dao-token-meter
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { BlockAssembler, deepFreeze } from '@deepseek-ai/dsh-llm'
-import type { LlmImageRequestPricing, Message, TokenUsage } from '@deepseek-ai/dsh-llm'
-import type { EpochHeader, Session, SessionEvent } from '@deepseek-ai/dsh-session'
-import { canonicalHeader, headerEquals, isSurfaceEvent } from '@deepseek-ai/dsh-session'
+import { Context, Service } from '@daoai/cordis'
+import z from '@daoai/schemastery'
+import { BlockAssembler, deepFreeze } from '@daoai/dao-llm'
+import type { LlmImageRequestPricing, Message, TokenUsage } from '@daoai/dao-llm'
+import type { EpochHeader, Session, SessionEvent } from '@daoai/dao-session'
+import { canonicalHeader, headerEquals, isSurfaceEvent } from '@daoai/dao-session'
 // Type-only: resolves the optional projection registry Context declaration.
-import type {} from '@deepseek-ai/dsh-session-projection'
+import type {} from '@daoai/dao-session-projection'
 import type {
   TokenMeasurement,
   TokenMeasurementBaseline,
@@ -73,7 +73,7 @@ function validateConfigKeys(config: TokenMeterConfig): void {
   }
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@daoai/cordis' {
   interface Context {
     tokenMeter: TokenMeter
   }

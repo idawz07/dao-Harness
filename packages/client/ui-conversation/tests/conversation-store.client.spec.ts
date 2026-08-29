@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { createConversationStore } from '../src/client/stores.ts'
 
-const KEY = 'dsh.conversation'
+const KEY = 'dao.conversation'
 
 beforeEach(() => {
   localStorage.clear()

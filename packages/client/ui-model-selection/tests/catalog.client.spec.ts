@@ -1,4 +1,4 @@
-import type { ClientRemote, ModelCatalog } from '@deepseek-ai/dsh-api-remotes/client'
+import type { ClientRemote, ModelCatalog } from '@daoai/dao-api-remotes/client'
 import { describe, expect, it, vi } from 'vitest'
 import { ModelCatalogDirectory } from '../src/client/catalog.ts'
 

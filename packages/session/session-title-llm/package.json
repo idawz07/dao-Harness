@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-session-title-llm",
-  "description": "Shared LLM generation policy for DeepSeek Harness session-title providers",
+  "name": "@daoai/dao-session-title-llm",
+  "description": "Shared LLM generation policy for Dao session-title providers",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,22 +32,22 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-title": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-title": "workspace:^",
+    "@daoai/dao-timeout": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-title": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-title": "workspace:^",
+    "@daoai/dao-timeout": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

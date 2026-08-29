@@ -2,16 +2,16 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import { SessionId, type Session } from '@deepseek-ai/dsh-session'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import SubagentService from '@deepseek-ai/dsh-subagent'
-import * as SubagentFork from '@deepseek-ai/dsh-subagent-fork-in-process'
-import * as SubagentSpawn from '@deepseek-ai/dsh-subagent-spawn-in-process'
+import { Context } from '@daoai/cordis'
+import type { Agent } from '@daoai/dao-agent'
+import AgentLoop from '@daoai/dao-agent-loop'
+import { mountAgentLoopTestDependencies } from '@daoai/dao-agent-loop-testkit'
+import { createUserMessage } from '@daoai/dao-llm'
+import { SessionId, type Session } from '@daoai/dao-session'
+import JsonlSessionPersistence from '@daoai/dao-session-persistence-jsonl'
+import SubagentService from '@daoai/dao-subagent'
+import * as SubagentFork from '@daoai/dao-subagent-fork-in-process'
+import * as SubagentSpawn from '@daoai/dao-subagent-spawn-in-process'
 import { MockAdapter, textResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import TeamService, { foldTeam, TeamError, TeamId, TeamMessageId, TeamTaskId } from '../src/index.ts'
 import { TeamRuntimeLifecycle } from '../src/lifecycle.ts'
@@ -46,7 +46,7 @@ async function setup(
 ) {
   const ctx = new Context()
   await mountAgentLoopTestDependencies(ctx)
-  const storageRoot = mkdtempSync(join(tmpdir(), 'dsh-team-'))
+  const storageRoot = mkdtempSync(join(tmpdir(), 'dao-team-'))
   roots.push(storageRoot)
   await ctx.plugin(JsonlSessionPersistence, { root: storageRoot })
   await ctx.plugin(TestSessionQuery)
@@ -138,7 +138,7 @@ describe('Team identity and provisioning', () => {
   it('supports direct-constructor defaults and recovers roots that already exist', async () => {
     const ctx = new Context()
     await mountAgentLoopTestDependencies(ctx)
-    const storageRoot = mkdtempSync(join(tmpdir(), 'dsh-team-direct-'))
+    const storageRoot = mkdtempSync(join(tmpdir(), 'dao-team-direct-'))
     roots.push(storageRoot)
     await ctx.plugin(JsonlSessionPersistence, { root: storageRoot })
     await ctx.plugin(AgentLoop, { agents: [] })
@@ -1331,7 +1331,7 @@ describe('Team mailbox and waiting', () => {
   it('waits for one change, supports cancellation, times out, and releases waiters on HMR disposal', async () => {
     const ctx = new Context()
     await mountAgentLoopTestDependencies(ctx)
-    const storageRoot = mkdtempSync(join(tmpdir(), 'dsh-team-wait-'))
+    const storageRoot = mkdtempSync(join(tmpdir(), 'dao-team-wait-'))
     roots.push(storageRoot)
     await ctx.plugin(JsonlSessionPersistence, { root: storageRoot })
     await ctx.plugin(AgentLoop, { agents: [] })

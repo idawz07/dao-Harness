@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-settings-file",
-  "description": "File-backed settings provider (settings.yaml) for the DeepSeek Harness",
+  "name": "@daoai/dao-settings-file",
+  "description": "File-backed settings provider (settings.yaml) for the Dao",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,22 +32,22 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-atomic-write": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-home-paths": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-atomic-write": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-home-paths": "workspace:^",
+    "@daoai/dao-settings": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
     "chokidar": "^4.0.3",
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@daoai/schemastery": "workspace:^",
     "yaml": "^2.9.0"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-atomic-write": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-home-paths": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-atomic-write": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-home-paths": "workspace:^",
+    "@daoai/dao-settings": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

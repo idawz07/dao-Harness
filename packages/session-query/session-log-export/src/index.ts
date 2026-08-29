@@ -1,11 +1,11 @@
 /** Session-log download command and Host-owned streaming route. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import Schema from '@deepseek-ai/schemastery'
-import type {} from '@deepseek-ai/dsh-attachment'
-import type { CommandResult } from '@deepseek-ai/dsh-commands'
-import { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { SessionRawArtifact } from '@deepseek-ai/dsh-session-persistence'
+import type { Context } from '@daoai/cordis'
+import Schema from '@daoai/schemastery'
+import type {} from '@daoai/dao-attachment'
+import type { CommandResult } from '@daoai/dao-commands'
+import { SessionId } from '@daoai/dao-session/types'
+import type { SessionRawArtifact } from '@daoai/dao-session-persistence'
 import {
   DEFAULT_SESSION_LOG_COMPRESSION_LEVEL,
   flushLiveSessionLog,

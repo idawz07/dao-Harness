@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-subprocess-e2b",
-  "description": "E2B subprocess implementation for DeepSeek Harness",
+  "name": "@daoai/dao-subprocess-e2b",
+  "description": "E2B subprocess implementation for Dao",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,20 +32,20 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-e2b": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-subprocess": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-e2b": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-subprocess": "workspace:^",
+    "@daoai/dao-timeout": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-e2b": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-subprocess": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-e2b": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-subprocess": "workspace:^",
+    "@daoai/dao-timeout": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

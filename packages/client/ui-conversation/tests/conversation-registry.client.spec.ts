@@ -1,19 +1,19 @@
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@daoai/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
+import type { SessionId } from '@daoai/dao-session/types'
+import { createSnapshotStore } from '@daoai/dao-client-store'
 import {
   createScope, MutableSessionEventSource,
-} from '@deepseek-ai/dsh-api-session-controller/client'
+} from '@daoai/dao-api-session-controller/client'
 import type {
   ISessions, SessionBinding, SessionFace, SessionListState, SessionSnapshot,
-} from '@deepseek-ai/dsh-api-session-controller/client'
+} from '@daoai/dao-api-session-controller/client'
 import {
   ConversationEventRegistry, ConversationNodeAssembler, ConversationViewRegistry, UiConversation,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@daoai/dao-client-ui-conversation/client'
 import type {
   ConversationNodeDefinition, ConversationViewDefinition, ConversationViewNode,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@daoai/dao-client-ui-conversation/client'
 
 const SESSION_ID = 'resident' as SessionId
 

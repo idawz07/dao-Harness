@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, expectTypeOf, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { Fiber } from '@deepseek-ai/cordis'
-import LlmRuntime, { createUserMessage, ToolCallId, EMPTY_RESPONSE_CODE, LlmAdapter, LlmError, resolveRetryPolicy  } from '@deepseek-ai/dsh-llm'
+import { Context } from '@daoai/cordis'
+import type { Fiber } from '@daoai/cordis'
+import LlmRuntime, { createUserMessage, ToolCallId, EMPTY_RESPONSE_CODE, LlmAdapter, LlmError, resolveRetryPolicy  } from '@daoai/dao-llm'
 import type {
   AlwaysRetryPolicyConfig,
   BackoffConfig,
@@ -10,15 +10,15 @@ import type {
   ResolvedRetryPolicy,
   RetryPolicyConfig,
   StreamChunk,
-} from '@deepseek-ai/dsh-llm'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionEventMap } from '@deepseek-ai/dsh-session'
-import type { LlmRetryEventData } from '@deepseek-ai/dsh-llm-retry/types'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { defineContentToolFixture } from '@deepseek-ai/dsh-tools'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent, RequestErrorAction } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
+} from '@daoai/dao-llm'
+import SessionStore, { SessionId } from '@daoai/dao-session'
+import type { SessionEvent, SessionEventMap } from '@daoai/dao-session'
+import type { LlmRetryEventData } from '@daoai/dao-llm-retry/types'
+import SystemPrompt from '@daoai/dao-system-prompt'
+import ToolRuntime, { defineContentToolFixture } from '@daoai/dao-tools'
+import AgentRegistry from '@daoai/dao-agent'
+import type { Agent, RequestErrorAction } from '@daoai/dao-agent'
+import AgentLoop from '@daoai/dao-agent-loop'
 import * as retry from '../src/index.ts'
 
 type ScriptEntry = Error | Iterable<StreamChunk> | AsyncIterable<StreamChunk>

@@ -1,9 +1,9 @@
 import { readFileSync, readdirSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { Session, SessionId, type SessionEvent } from '@deepseek-ai/dsh-session'
-import { scanLog } from '@deepseek-ai/dsh-session-persistence-jsonl/src/format.ts'
-import { foldSubagentDescriptor } from '@deepseek-ai/dsh-subagent'
+import { Session, SessionId, type SessionEvent } from '@daoai/dao-session'
+import { scanLog } from '@daoai/dao-session-persistence-jsonl/src/format.ts'
+import { foldSubagentDescriptor } from '@daoai/dao-subagent'
 import {
   buildVfsExampleFiles,
   VFS_EXAMPLE_OLDEST_MESSAGE,
@@ -28,7 +28,7 @@ function filesUnder(root: string): string[] {
 
 function readSession(id: string): ReturnType<typeof scanLog> {
   return scanLog(readFileSync(
-    join(VFS_EXAMPLE_ROOT, 'home/sessions/--dsh-workspace--', id, 'session.jsonl'),
+    join(VFS_EXAMPLE_ROOT, 'home/sessions/--dao-workspace--', id, 'session.jsonl'),
   ))
 }
 
@@ -61,7 +61,7 @@ describe('WebWorker preview VFS example', () => {
     }
     expect(cache.unit).toEqual({ name: 'session_projcache', version: 3 })
     expect(cache.tables.sessions[VFS_EXAMPLE_SESSION_IDS.main]).toMatchObject({
-      identity: { createdAt: 1_787_472_000_000, cwd: '/dsh/workspace' },
+      identity: { createdAt: 1_787_472_000_000, cwd: '/dao/workspace' },
       rows: { title: { ver: 1, val: VFS_EXAMPLE_TITLE } },
     })
   })
@@ -70,7 +70,7 @@ describe('WebWorker preview VFS example', () => {
     const { meta, events } = readSession(VFS_EXAMPLE_SESSION_IDS.main)
     expect(meta).toMatchObject({
       id: VFS_EXAMPLE_SESSION_IDS.main,
-      cwd: '/dsh/workspace',
+      cwd: '/dao/workspace',
       delegationDepth: 0,
       agentPreset: 'standard',
     })
@@ -103,7 +103,7 @@ describe('WebWorker preview VFS example', () => {
       const { meta, events } = readSession(id)
       expect(meta).toMatchObject({
         id,
-        cwd: '/dsh/workspace',
+        cwd: '/dao/workspace',
         parentSession: VFS_EXAMPLE_SESSION_IDS.main,
         origin: 'subagent',
         delegationDepth: 1,

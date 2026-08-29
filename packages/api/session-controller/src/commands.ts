@@ -1,21 +1,21 @@
 /** Session commands whose activation policy is explicit at each Remote method. */
 
 import { randomUUID } from 'node:crypto'
-import type { Context } from '@deepseek-ai/cordis'
-import type { Agent, ModelSelection as AgentModelSelection } from '@deepseek-ai/dsh-agent'
-import { PresetMountError, UnknownPresetError } from '@deepseek-ai/dsh-agent-presets'
-import { AttachmentError, admitEncodedImages } from '@deepseek-ai/dsh-attachment'
-import type { ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
+import type { Context } from '@daoai/cordis'
+import type { Agent, ModelSelection as AgentModelSelection } from '@daoai/dao-agent'
+import { PresetMountError, UnknownPresetError } from '@daoai/dao-agent-presets'
+import { AttachmentError, admitEncodedImages } from '@daoai/dao-attachment'
+import type { ImageAttachmentRef } from '@daoai/dao-attachment'
 import {
   ReasoningEffortId, createUserMessage, freezeMessage,
-} from '@deepseek-ai/dsh-llm'
-import type { ContentBlock, MessageSource } from '@deepseek-ai/dsh-llm'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionHeader, UserMessage } from '@deepseek-ai/dsh-session'
-import { SessionQueryError, type SessionObservation } from '@deepseek-ai/dsh-session-query'
-import { SessionTitleInvalidError } from '@deepseek-ai/dsh-session-title'
-import { TypertRemoteFailure } from '@deepseek-ai/dsh-typert-protocol'
-import type { Workspace } from '@deepseek-ai/dsh-workspace'
+} from '@daoai/dao-llm'
+import type { ContentBlock, MessageSource } from '@daoai/dao-llm'
+import { SessionId } from '@daoai/dao-session'
+import type { SessionEvent, SessionHeader, UserMessage } from '@daoai/dao-session'
+import { SessionQueryError, type SessionObservation } from '@daoai/dao-session-query'
+import { SessionTitleInvalidError } from '@daoai/dao-session-title'
+import { TypertRemoteFailure } from '@daoai/dao-typert-protocol'
+import type { Workspace } from '@daoai/dao-workspace'
 import {
   ApiSessionAgentController,
   ApiSessionCwdConflict,

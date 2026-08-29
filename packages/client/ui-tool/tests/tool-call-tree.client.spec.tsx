@@ -2,14 +2,14 @@
 /** ToolCallTree-owned root/subcall markers and selection projection. */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, render } from '@testing-library/react'
-import type { ConnectionGeneration } from '@deepseek-ai/dsh-client-connection/client'
-import type { SessionSnapshot } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { ToolResultNode } from '@deepseek-ai/dsh-client-ui-chat/client'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import { zh as commonZh } from '@deepseek-ai/dsh-client-locale/src/locales/zh.ts'
+import type { ConnectionGeneration } from '@daoai/dao-client-connection/client'
+import type { SessionSnapshot } from '@daoai/dao-api-session-controller/client'
+import type { ToolResultNode } from '@daoai/dao-client-ui-chat/client'
+import { makeTranslate } from '@daoai/dao-client-test-runtime'
+import { zh as commonZh } from '@daoai/dao-client-locale/src/locales/zh.ts'
 import type { ToolCallOwnerProps, ToolTreeProps } from '../src/client/contract/slots.ts'
 import { ToolCallTree } from '../src/client/tool/ToolCallTree.tsx'
-import { zh } from '@deepseek-ai/dsh-client-ui-conversation/src/client/locales.ts'
+import { zh } from '@daoai/dao-client-ui-conversation/src/client/locales.ts'
 
 afterEach(cleanup)
 

@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-system-prompt",
-  "description": "System prompt assembly registry for the DeepSeek Harness",
+  "name": "@daoai/dao-system-prompt",
+  "description": "System prompt assembly registry for the Dao",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,18 +32,18 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-scope": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-scope": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

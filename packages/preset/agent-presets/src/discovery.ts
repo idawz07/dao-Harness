@@ -18,7 +18,7 @@
  * a package that was renamed or uninstalled. Resolving those names is a
  * separate pass from the shape check and stops short of importing anything,
  * so a composition is judged without running a line of plugin code.
- * @module @deepseek-ai/dsh-agent-presets/discovery
+ * @module @daoai/dao-agent-presets/discovery
  */
 
 import { existsSync } from 'node:fs'
@@ -27,8 +27,8 @@ import { isBuiltin } from 'node:module'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { load } from 'js-yaml'
-import { entryListSchema } from '@deepseek-ai/cordis-plugin-include'
-import { expandHomePath } from '@deepseek-ai/dsh-home-paths'
+import { entryListSchema } from '@daoai/cordis-plugin-include'
+import { expandHomePath } from '@daoai/dao-home-paths'
 import { readPresetMetadata } from './metadata.ts'
 import { PRESET_ID, type AgentPreset, type PresetRoot } from './preset.ts'
 import { classifyRowSpecifier, type RowSpecifier } from './specifier.ts'
@@ -39,8 +39,8 @@ export const COMPOSITION_FILE = 'agent.cordis.yml'
 /**
  * Harness-home directory holding locally authored presets.
  *
- * This package owns the writable root the way `dsh-skill-filesystem` owns
- * `<dshHome>/skills`: where a person's own presets go is the same place in
+ * This package owns the writable root the way `dao-skill-filesystem` owns
+ * `<daoHome>/skills`: where a person's own presets go is the same place in
  * every deployment that does not say otherwise, so a launcher that forgets to
  * configure one still finds them.
  *

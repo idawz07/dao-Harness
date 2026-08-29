@@ -14,12 +14,12 @@ import clsx from 'clsx'
 import {
   Button, IconCloseFill14, IconPersonalizationOutline16,
   IconProjectAddOutline16, IconSearchOutline16, Menu, Modal, Tooltip,
-} from '@deepseek-ai/dsh-client-ui-primitives'
+} from '@daoai/dao-client-ui-primitives'
 import type {
   SessionListState, SessionSearchResultItem,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import type { WorkspaceId, WorkspaceView } from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+} from '@daoai/dao-api-session-controller/client'
+import type { WorkspaceId, WorkspaceView } from '@daoai/dao-api-workspace-controller/client'
+import type { SessionId } from '@daoai/dao-session/types'
 import type { WorkspaceBrowserProps } from '../contract/slots.ts'
 import type { SessionNode, SessionOrderBy } from '../tree.ts'
 import { deriveFlat, deriveGroups, deriveSearchResults, UNGROUPED_KEY } from '../tree.ts'

@@ -1,6 +1,6 @@
 /** Reconnecting lifecycle for one single-consumer Remote stream. */
 
-import type { ConnectionHandle } from '@deepseek-ai/dsh-client-connection/client'
+import type { ConnectionHandle } from '@daoai/dao-client-connection/client'
 import { RemoteStreamCarrierError } from './stream-client.ts'
 
 /** One item annotated with the physical Remote-stream generation that delivered it. */

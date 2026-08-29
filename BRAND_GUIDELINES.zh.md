@@ -1,12 +1,15 @@
-# DeepSeek Harness 品牌素材使用规范
+# Dao 品牌声明
 
 [English](BRAND_GUIDELINES.md) | 中文
 
-为了维护 DeepSeek Harness 生态的长期健康发展，避免用户混淆，方便用户对相关资源进行检索和识别，我们特别制定本规范，希望大家共同遵守：
+Dao 是一个私有使用、本地驱动的 agent 系统。它的品牌是队伍（squad），而不是 logo：一名通才指挥（orchestrator）生成专职子 agent（Scout、Forge、Lens、Quill、Relay、Scribe），并以文档参考库作为支撑。Squad、XP、等级与徽章是产品词汇；每位专职角色带有名字、头衔、画像与作为其 UI token 的强调色。
 
-- 在项目的描述性文字中，您可以使用“DeepSeek Harness”真实、准确地说明您的项目与 DeepSeek Harness 的关系，例如“基于 DeepSeek Harness 构建”或“兼容 DeepSeek Harness”等。这类说明符合许可证的要求，也有助于用户理解项目的定位。
-- 如果您希望项目名称能体现与 DeepSeek Harness 生态的关联，我们建议使用缩写的 **“DSH”** 标识来命名，这样既清晰又便于社区内的交流。
-- 在项目命名时，请避免直接使用完整的 **“DeepSeek Harness”** 商标。**“DeepSeek Harness”** 是深度求索公司的注册商标，未经授权用于项目名，容易引发用户的误解和混淆，从而影响整个生态的清晰度。同时，也可能涉及商标侵权行为。
-- 此外，请您避免在宣传或展示时，以容易引起误解的方式使用官方品牌素材，以免让用户产生官方背书、合作或授权等不实印象。
+## 命名
 
-我们相信，一个清晰、有序的社区环境，能让每一位开发者的努力都更容易被看见和认可。对于少数不符合上述规范的情况，我们可能会联系相关方进行适当的调整，以维护生态整体的秩序。感谢大家的理解与支持，让我们一起构建一个更友好、更可持续发展的开源社区。
+- 产品名在所有语言中均为 "Dao"；CLI 二进制为 `dao`，npm scope 为 `@daoai`。
+- 事实性地描述项目："built on Dao"、"Dao-based agent system"。这类说明符合许可证要求，并帮助理解项目定位。
+- 不要以 DeepSeek 的名称或品牌呈现 Dao：本产品已移除 DeepSeek API 层及其品牌。
+
+## 来源
+
+本仓库是 DeepSeek Harness（MIT，"Copyright (c) 2026 DeepSeek"）的私有 fork。上游溯源保留在 `LICENSE`、`THIRD_PARTY_NOTICES.md` 与 `vendor/` 清单中，上游关于 DeepSeek 名称的商标指引继续适用于这些表面。

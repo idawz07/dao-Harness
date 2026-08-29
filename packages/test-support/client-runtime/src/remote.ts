@@ -1,5 +1,5 @@
 /** Test-owned Remote face: `$on` subscriptions with an explicit test event driver. */
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@daoai/cordis'
 
 /**
  * Remote service test double for the forwarded-event path. Feature specs need

@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-spill",
-  "description": "Abstract spill storage seam (ctx.spillStore) for the DeepSeek Harness — save oversized tool text and return a retrieval locator",
+  "name": "@daoai/dao-spill",
+  "description": "Abstract spill storage seam (ctx.spillStore) for the Dao — save oversized tool text and return a retrieval locator",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,17 +32,17 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-brand": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-brand": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

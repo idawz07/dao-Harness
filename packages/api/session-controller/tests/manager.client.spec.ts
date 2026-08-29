@@ -4,9 +4,9 @@
  */
 
 import { describe, expect, it, vi } from 'vitest'
-import type { SessionId } from '@deepseek-ai/dsh-api-remotes/client'
-import type { SessionControlFrame } from '@deepseek-ai/dsh-api-session-controller/types'
-import type {} from '@deepseek-ai/dsh-session-title/client'
+import type { SessionId } from '@daoai/dao-api-remotes/client'
+import type { SessionControlFrame } from '@daoai/dao-api-session-controller/types'
+import type {} from '@daoai/dao-session-title/client'
 import { SessionManager } from '../src/client/sessions/manager.ts'
 import { FakeApiClient, deferred, err, fakeRemote, ok, remoteErr, remoteOk } from './fake-api.client.ts'
 import { entries, plainTurn } from './event-script.client.ts'

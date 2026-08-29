@@ -3,13 +3,13 @@ description: "The default executor-less, UI-less agent spine as one Cordis bundl
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-agent-spine-demo
+# @daoai/dao-agent-spine-demo
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-agent-spine-demo` gives you a working agent in one plugin: mount it, add an LLM adapter and an executor, and you can run a full agent conversation — in-memory sessions with automatic titles, a system prompt with your persona and workspace instructions, tools for bash, skills, and background jobs, and a loop that runs turns with retries. You configure it in user terms: persona, tool order, workspace-context budget, which agents to pre-create, optional persisted goals, and background-job limits. It ships no UI, executor, or persistence backend, and it adds no prompts or tool schemas of its own — the model sees only what your configuration produces. Use it when you are building a headless, ACP, or JSON-RPC agent and want the common agent machinery without building it yourself. Read this package for what you get out of the box and what you must supply.
+`dao-agent-spine-demo` gives you a working agent in one plugin: mount it, add an LLM adapter and an executor, and you can run a full agent conversation — in-memory sessions with automatic titles, a system prompt with your persona and workspace instructions, tools for bash, skills, and background jobs, and a loop that runs turns with retries. You configure it in user terms: persona, tool order, workspace-context budget, which agents to pre-create, optional persisted goals, and background-job limits. It ships no UI, executor, or persistence backend, and it adds no prompts or tool schemas of its own — the model sees only what your configuration produces. Use it when you are building a headless, ACP, or JSON-RPC agent and want the common agent machinery without building it yourself. Read this package for what you get out of the box and what you must supply.
 
 ## Table of Contents
 
@@ -46,12 +46,12 @@ These pieces are yours to supply; the bundle leaves them out so each entry point
 The smallest working setup mounts the bundle with a workspace-context budget, plus an LLM adapter and an executor:
 
 ```yaml
-- name: '@deepseek-ai/dsh-agent-spine-demo'
+- name: '@daoai/dao-agent-spine-demo'
   config:
     workspaceContext:
       maxBytes: 4096
-- name: '@deepseek-ai/dsh-llm-deepseek'   # concrete adapter for ctx.llm
-- name: '@deepseek-ai/dsh-bash-local'     # executor for ctx.shell
+- name: '@daoai/dao-llm-deepseek'   # concrete adapter for ctx.llm
+- name: '@daoai/dao-bash-local'     # executor for ctx.shell
 ```
 
 `workspaceContext` is the one required field: give it a byte budget so workspace files load into the agent's context, or set `false` for hermetic prompts. `agents` defaults to none, so pass the agents you want running — or omit it when your entry point creates them on demand (the ACP app does this). You know the setup works when the agent answers a first prompt and its session is saved.
@@ -60,12 +60,12 @@ The smallest working setup mounts the bundle with a workspace-context budget, pl
 |---|---|---|
 | `agents` | `[]` | which agents your entry point pre-creates; omit to create them on demand |
 | `maxParallelToolCalls` | agent-loop default | how many tool calls may run at once; `1` is serial |
-| `includeHarnessIdentity` | `true` | whether the system prompt names the DeepSeek Harness identity |
+| `includeHarnessIdentity` | `true` | whether the system prompt names the Dao identity |
 | `includeRuntimeContext` | `true` | whether the agent's history includes dynamic runtime-context snapshots |
 | `persona` | `''` | the deployment persona text in the system prompt |
 | `toolOrder` | lexicographic | the order the model sees tools in |
 | `tools` | `{ mode: 'native' }` | how tools reach the model: native schemas, PTC mode, or both |
-| `dshHome` | `$DSH_HOME` or `~/.dsh` | the harness home used for the bash environment and local skill folders |
+| `daoHome` | `$DAO_HOME` or `~/.dao` | the harness home used for the bash environment and local skill folders |
 | `sessionTitle` | example limits | fallback title limits: 5 words, 40 fallback bytes, 80 accepted bytes |
 | `workspaceContext` | required | byte budget for loading workspace files into context, or `false` |
 | `skills` | enabled | whether local skills load and the skill tool is available |
@@ -75,7 +75,7 @@ The smallest working setup mounts the bundle with a workspace-context budget, pl
 | `invariants` | owner default | developer setting: which package checks run and which packages are filtered |
 | `goals` | unmounted | optional persisted goals the agent can create and track across turns |
 
-The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-agent-spine-demo) is the exhaustive source for every accepted field and its source declaration.
+The generated [configuration catalog](../../../docs/config-catalog.md#daoaidao-agent-spine-demo) is the exhaustive source for every accepted field and its source declaration.
 
 ### Request retry and billing
 
@@ -93,36 +93,36 @@ This section explains how the bundle composes the spine and points at the code t
 
 ### Composition model
 
-`apply(ctx, config)` mounts each child plugin under the bundle fiber and forwards every config field to the child that owns it. Cordis pends each fiber on its `inject` declarations until the services it needs exist, so load order is irrelevant to correctness; the listing below mirrors dependency layering for readability. `pickSpineConfig()` copies only the bundle-owned fields from an app config, so entry-point settings never leak into the spine; conflicting `dshHome` values fail during composition because local skills and the managed bash environment must share one harness home. The retry policy keeps retry status, provider errors, and failed partial chunks outside model history, and it reconstructs a retried request with its prior prefix intact so provider caches stay reusable.
+`apply(ctx, config)` mounts each child plugin under the bundle fiber and forwards every config field to the child that owns it. Cordis pends each fiber on its `inject` declarations until the services it needs exist, so load order is irrelevant to correctness; the listing below mirrors dependency layering for readability. `pickSpineConfig()` copies only the bundle-owned fields from an app config, so entry-point settings never leak into the spine; conflicting `daoHome` values fail during composition because local skills and the managed bash environment must share one harness home. The retry policy keeps retry status, provider errors, and failed partial chunks outside model history, and it reconstructs a retried request with its prior prefix intact so provider caches stay reusable.
 
 ### The tree it loads
 
 ```text
-@deepseek-ai/cordis-plugin-timer      timer service (writes nothing to stdout)
-@deepseek-ai/dsh-llm                  abstract LLM service + content-block vocabulary
-@deepseek-ai/dsh-session              event-sourced session log + store
-@deepseek-ai/dsh-session-title        log-backed title service + deterministic fallback
-@deepseek-ai/dsh-system-prompt        prompt-section + tool-schema assembly
-@deepseek-ai/dsh-tools                registry + guarded pre/around/post/final-result pipeline
-@deepseek-ai/dsh-skill                skill provider registry
-@deepseek-ai/dsh-skill-filesystem     local filesystem skill provider
-@deepseek-ai/dsh-agent                agent registry + initiator scope + agent/* events
-@deepseek-ai/dsh-goal                 optional persisted same-session goal domain
-@deepseek-ai/dsh-tool-goal            optional model-facing goal controls
-@deepseek-ai/dsh-goal-round-driver    optional same-session goal-round driver
-@deepseek-ai/dsh-llm-retry            provider-routed request retry policy
-@deepseek-ai/dsh-jobs-local           generic background-job registry
-@deepseek-ai/dsh-invariants           configurable invariant registry service
-@deepseek-ai/dsh-session/invariant
-@deepseek-ai/dsh-agent/invariant
-@deepseek-ai/dsh-scope/invariant
-@deepseek-ai/dsh-agent-loop/invariant package-owned relational checks
-@deepseek-ai/dsh-shell-env            managed DSH_* shell environment for model shell calls (unless toolBash=false)
-@deepseek-ai/dsh-tool-bash            the model-facing bash schema (unless toolBash=false)
-@deepseek-ai/dsh-agent-instructions   AGENTS.md/CLAUDE.md workspace context loader
-@deepseek-ai/dsh-tool-skill           session-prefix skill catalog + model-facing loader schema
-@deepseek-ai/dsh-tool-jobs            job_output/job_list/job_kill schemas + completion notices
-@deepseek-ai/dsh-agent-loop           THE concrete loop (gets the forwarded `agents`)
+@daoai/cordis-plugin-timer      timer service (writes nothing to stdout)
+@daoai/dao-llm                  abstract LLM service + content-block vocabulary
+@daoai/dao-session              event-sourced session log + store
+@daoai/dao-session-title        log-backed title service + deterministic fallback
+@daoai/dao-system-prompt        prompt-section + tool-schema assembly
+@daoai/dao-tools                registry + guarded pre/around/post/final-result pipeline
+@daoai/dao-skill                skill provider registry
+@daoai/dao-skill-filesystem     local filesystem skill provider
+@daoai/dao-agent                agent registry + initiator scope + agent/* events
+@daoai/dao-goal                 optional persisted same-session goal domain
+@daoai/dao-tool-goal            optional model-facing goal controls
+@daoai/dao-goal-round-driver    optional same-session goal-round driver
+@daoai/dao-llm-retry            provider-routed request retry policy
+@daoai/dao-jobs-local           generic background-job registry
+@daoai/dao-invariants           configurable invariant registry service
+@daoai/dao-session/invariant
+@daoai/dao-agent/invariant
+@daoai/dao-scope/invariant
+@daoai/dao-agent-loop/invariant package-owned relational checks
+@daoai/dao-shell-env            managed DAO_* shell environment for model shell calls (unless toolBash=false)
+@daoai/dao-tool-bash            the model-facing bash schema (unless toolBash=false)
+@daoai/dao-agent-instructions   AGENTS.md/CLAUDE.md workspace context loader
+@daoai/dao-tool-skill           session-prefix skill catalog + model-facing loader schema
+@daoai/dao-tool-jobs            job_output/job_list/job_kill schemas + completion notices
+@daoai/dao-agent-loop           THE concrete loop (gets the forwarded `agents`)
 ```
 
 ### Why a code bundle, not a shared YAML include
@@ -150,10 +150,10 @@ The bundle mounts the invariant registry and its four package companions (`sessi
 Read these pages when the package-level contract is not enough. They move from the sibling demo apps to the subsystems this spine mounts and the exhaustive configuration.
 
 - [Examples group map](../README.md) — sibling demo bundles and how the runnable leaves consume them.
-- [ACP application bundle](../../bundle/acp-app/README.md) — the `dsh --profile acp` application that composes this spine without pre-created agents.
-- [SDK application bundle](../../bundle/sdk-app/README.md) — the `dsh --profile sdk` application that composes this spine for JSON-RPC clients.
+- [ACP application bundle](../../bundle/acp-app/README.md) — the `dao --profile acp` application that composes this spine without pre-created agents.
+- [SDK application bundle](../../bundle/sdk-app/README.md) — the `dao --profile sdk` application that composes this spine for JSON-RPC clients.
 - [Core subsystem](../../../docs/subsystems/core.md) — the services this spine mounts and the agent-loop contract.
-- [Generated configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-agent-spine-demo) — every accepted config field and its source declaration.
+- [Generated configuration catalog](../../../docs/config-catalog.md#daoaidao-agent-spine-demo) — every accepted config field and its source declaration.
 - [Service Definition / Service Provider / Consumer separation](../../../.agents/notes/implemented/architecture/2026-06-13-capability-seams.md) — why the bundle owns the shared spine while leaves own the backends.
 
 -----
@@ -161,11 +161,11 @@ Read these pages when the package-level contract is not enough. They move from t
 <a id="model-experience"></a>
 ## Model Experience
 
-Indirectly, through the model-facing child plugins the bundle mounts — `dsh-system-prompt`, `dsh-tools`, `dsh-tool-skill`, `dsh-tool-bash`, `dsh-tool-jobs`, and `dsh-llm-retry`, plus `dsh-tool-goal` and the goal-round driver's prompts when `goals` is enabled; the bundle adds no model-bound wrapper content of its own.
+Indirectly, through the model-facing child plugins the bundle mounts — `dao-system-prompt`, `dao-tools`, `dao-tool-skill`, `dao-tool-bash`, `dao-tool-jobs`, and `dao-llm-retry`, plus `dao-tool-goal` and the goal-round driver's prompts when `goals` is enabled; the bundle adds no model-bound wrapper content of its own.
 
 #### KV Cache effect
 
-The bundle adds no request-prefix content of its own; provider cache reuse depends on the mounted consumers' contributions, and `dsh-llm-retry` reconstructs a retried request with its prior prefix intact.
+The bundle adds no request-prefix content of its own; provider cache reuse depends on the mounted consumers' contributions, and `dao-llm-retry` reconstructs a retried request with its prior prefix intact.
 
 ## Known Limitations and Deferred Work
 
@@ -186,6 +186,6 @@ These limits define when the bundle is a poor fit or needs special operational c
 
 This Dev Note is working context for maintainers; it is explicitly non-authoritative — shipped behavior, limits, and accepted rationale live in the sections above and the package code.
 
-The fallback title limits (5 words, 40 fallback bytes, 80 accepted-title bytes) are an overridable example policy owned by this bundle rather than by `dsh-session-title`; an entry point that needs different bounds passes its own `sessionTitle` config. The `workspaceContext` field is required (not defaulted) because it changes model-visible input; keep that requirement if the field is ever re-shaped.
+The fallback title limits (5 words, 40 fallback bytes, 80 accepted-title bytes) are an overridable example policy owned by this bundle rather than by `dao-session-title`; an entry point that needs different bounds passes its own `sessionTitle` config. The `workspaceContext` field is required (not defaulted) because it changes model-visible input; keep that requirement if the field is ever re-shaped.
 
 </details>

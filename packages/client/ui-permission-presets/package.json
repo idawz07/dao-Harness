@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-ui-permission-presets",
+  "name": "@daoai/dao-client-ui-permission-presets",
   "description": "Permission surfaces: a new-session default in General settings and a current-session /permission popup over the permissions projection",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
@@ -29,14 +29,14 @@
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "dsh": {
+  "dao": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-api-session-controller",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-commands",
-        "@deepseek-ai/dsh-api-remotes",
-        "@deepseek-ai/dsh-client-ui-settings"
+        "@daoai/dao-api-session-controller",
+        "@daoai/dao-client-locale",
+        "@daoai/dao-client-ui-commands",
+        "@daoai/dao-api-remotes",
+        "@daoai/dao-client-ui-settings"
       ],
       "platform": "web"
     }
@@ -47,36 +47,36 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-api-remotes": "workspace:^",
-    "@deepseek-ai/dsh-api-session-controller": "workspace:^",
-    "@deepseek-ai/dsh-client-locale": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-commands": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-settings": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-input-trigger": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-permission-presets": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-renderer": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-session": "workspace:^"
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-api-remotes": "workspace:^",
+    "@daoai/dao-api-session-controller": "workspace:^",
+    "@daoai/dao-client-locale": "workspace:^",
+    "@daoai/dao-client-ui-commands": "workspace:^",
+    "@daoai/dao-client-ui-settings": "workspace:^",
+    "@daoai/dao-client-ui-input-trigger": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-permission-presets": "workspace:^",
+    "@daoai/dao-client-ui-renderer": "workspace:^",
+    "@daoai/dao-client-ui-session": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-api-remotes": "workspace:^",
-    "@deepseek-ai/dsh-api-session-controller": "workspace:^",
-    "@deepseek-ai/dsh-client-locale": "workspace:^",
-    "@deepseek-ai/dsh-client-store": "workspace:^",
-    "@deepseek-ai/dsh-client-test-runtime": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-commands": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-primitives": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-settings": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-input-trigger": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-permission-presets": "workspace:^",
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-api-remotes": "workspace:^",
+    "@daoai/dao-api-session-controller": "workspace:^",
+    "@daoai/dao-client-locale": "workspace:^",
+    "@daoai/dao-client-store": "workspace:^",
+    "@daoai/dao-client-test-runtime": "workspace:^",
+    "@daoai/dao-client-ui-commands": "workspace:^",
+    "@daoai/dao-client-ui-primitives": "workspace:^",
+    "@daoai/dao-client-ui-settings": "workspace:^",
+    "@daoai/dao-client-ui-input-trigger": "workspace:^",
+    "@daoai/dao-client-ui-slots": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-permission-presets": "workspace:^",
     "@types/react": "~18.3.1",
     "react": "^18.2.0",
-    "@deepseek-ai/dsh-client-ui-renderer": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-session": "workspace:^"
+    "@daoai/dao-client-ui-renderer": "workspace:^",
+    "@daoai/dao-client-ui-session": "workspace:^"
   },
   "files": [
     "lib/index.js",

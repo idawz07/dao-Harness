@@ -11,13 +11,13 @@
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
 import { $getRoot, $isTextNode } from 'lexical'
-import { bindSnapshotSelector } from '@deepseek-ai/dsh-client-test-runtime'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { SessionListState, SessionSnapshot } from '@deepseek-ai/dsh-api-session-controller/client'
-import { conversationSnapshot as conversationFixture, makeTranslate, sessionSnapshot as sessionFixture } from '@deepseek-ai/dsh-client-test-runtime'
-import { zh as commonZh } from '@deepseek-ai/dsh-client-locale/src/locales/zh.ts'
-import type { Context } from '@deepseek-ai/cordis'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import { bindSnapshotSelector } from '@daoai/dao-client-test-runtime'
+import { createSnapshotStore } from '@daoai/dao-client-store'
+import type { SessionListState, SessionSnapshot } from '@daoai/dao-api-session-controller/client'
+import { conversationSnapshot as conversationFixture, makeTranslate, sessionSnapshot as sessionFixture } from '@daoai/dao-client-test-runtime'
+import { zh as commonZh } from '@daoai/dao-client-locale/src/locales/zh.ts'
+import type { Context } from '@daoai/cordis'
+import type { SessionId } from '@daoai/dao-session/types'
 import type { SubmitOutcome } from '../src/client/contract/input.ts'
 import { SessionInputShell } from '../src/client/input/facade.ts'
 import { $replaceDetectSpanWithText, $selectDetectSpan } from '../src/client/input/editor/span-map.ts'
@@ -1056,11 +1056,11 @@ describe('decorations', () => {
       shell.editor.update(() => {}, { discrete: true }) // flush the queued decoration refresh
     })
     expect(tokenSpanOf(view.container)?.textContent).toBe('/goal ')
-    expect(textarea.style.getPropertyValue('--dsh-composer-hint')).toBe(JSON.stringify('目标内容'))
+    expect(textarea.style.getPropertyValue('--dao-composer-hint')).toBe(JSON.stringify('目标内容'))
     // Args typed: the hint disappears, the token style stays.
     act(() => { shell.setDraft('/goal 发布') })
     act(() => { shell.editor.update(() => {}, { discrete: true }) }) // flush the queued decoration refresh
-    expect(textarea.style.getPropertyValue('--dsh-composer-hint')).toBe('')
+    expect(textarea.style.getPropertyValue('--dao-composer-hint')).toBe('')
     expect(tokenSpanOf(view.container)).not.toBeNull()
   })
 
@@ -1073,7 +1073,7 @@ describe('decorations', () => {
         { start: 0, end: 6, draftRev: shell.snapshot.draftRev },
       )
     })
-    expect(textarea.style.getPropertyValue('--dsh-composer-hint')).toBe(JSON.stringify('输入目标，智能体将持续执行'))
+    expect(textarea.style.getPropertyValue('--dao-composer-hint')).toBe(JSON.stringify('输入目标，智能体将持续执行'))
   })
 
   it('an inserted reference renders a real chip capsule with its icon and label', () => {

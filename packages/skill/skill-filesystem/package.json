@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-skill-filesystem",
-  "description": "Local filesystem skill provider for the DeepSeek Harness",
+  "name": "@daoai/dao-skill-filesystem",
+  "description": "Local filesystem skill provider for the Dao",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,22 +32,22 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-fs": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-home-paths": "workspace:^",
-    "@deepseek-ai/dsh-skill": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-fs": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-home-paths": "workspace:^",
+    "@daoai/dao-skill": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
     "chokidar": "^5.0.0",
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@daoai/schemastery": "workspace:^",
     "yaml": "^2.4.2"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-fs": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-home-paths": "workspace:^",
-    "@deepseek-ai/dsh-skill": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-fs": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-home-paths": "workspace:^",
+    "@daoai/dao-skill": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

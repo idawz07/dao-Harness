@@ -1,13 +1,13 @@
 /** Package-owned relationship invariant for webhook-origin prompt admission. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-agent'
-import type { InvariantFailure, InvariantInstaller } from '@deepseek-ai/dsh-invariants'
-import type { Session, SessionEvent } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-workspace'
+import type { Context } from '@daoai/cordis'
+import type {} from '@daoai/dao-agent'
+import type { InvariantFailure, InvariantInstaller } from '@daoai/dao-invariants'
+import type { Session, SessionEvent } from '@daoai/dao-session'
+import type {} from '@daoai/dao-workspace'
 import type {} from './types.ts'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-webhook'
+const PACKAGE_NAME = '@daoai/dao-webhook'
 
 /** Cordis invariant-companion plugin name. */
 export const name = 'webhook-invariant'

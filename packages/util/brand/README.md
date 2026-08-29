@@ -3,13 +3,13 @@ description: "The Branded<B> nominal-typing primitive for packages that own ids 
 kind: "package-library"
 ---
 
-# @deepseek-ai/dsh-brand
+# @daoai/dao-brand
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-brand` makes structurally identical strings non-interchangeable at the type level with its `Branded<B>` primitive: a `SessionId` cannot be passed where a `ToolCallId` is expected even though both are plain `string`s at runtime. Comparison, logging, JSON serialization, and the wire format all behave exactly as for ordinary strings because the brand is erased at compile time. It is a type-only package with no runtime code and no dependency on other harness packages, so any package can brand the ids it owns without importing an unrelated capability package. Packages that own a cross-package id — `ToolCallId` in `dsh-llm`, the shared agent/session `SessionId`, `JobId` in `dsh-jobs` — brand that id and construct it through a per-id factory.
+`dao-brand` makes structurally identical strings non-interchangeable at the type level with its `Branded<B>` primitive: a `SessionId` cannot be passed where a `ToolCallId` is expected even though both are plain `string`s at runtime. Comparison, logging, JSON serialization, and the wire format all behave exactly as for ordinary strings because the brand is erased at compile time. It is a type-only package with no runtime code and no dependency on other harness packages, so any package can brand the ids it owns without importing an unrelated capability package. Packages that own a cross-package id — `ToolCallId` in `dao-llm`, the shared agent/session `SessionId`, `JobId` in `dao-jobs` — brand that id and construct it through a per-id factory.
 
 ## Table of Contents
 
@@ -30,7 +30,7 @@ Brand the ids a package owns when they cross a package boundary and could plausi
 Declare the branded type and its construction factory in the owning package:
 
 ```ts
-import type { Branded } from '@deepseek-ai/dsh-brand'
+import type { Branded } from '@daoai/dao-brand'
 
 export type SessionId = Branded<'SessionId'>
 
@@ -44,7 +44,7 @@ The factory is a plain cast with zero runtime cost. Once branded, the id flows t
 
 ### When to brand
 
-Brand ids that cross package boundaries and could plausibly be confused — `ToolCallId` in `dsh-llm`, the shared agent/session `SessionId` in `dsh-session`, `JobId` in `dsh-jobs`, `LspProviderId` in `dsh-lsp`. Do not brand every string: the cost is a factory at every construction site and a type import in every consumer, so ids that never leave their owning package do not earn it.
+Brand ids that cross package boundaries and could plausibly be confused — `ToolCallId` in `dao-llm`, the shared agent/session `SessionId` in `dao-session`, `JobId` in `dao-jobs`, `LspProviderId` in `dao-lsp`. Do not brand every string: the cost is a factory at every construction site and a type import in every consumer, so ids that never leave their owning package do not earn it.
 
 -----
 
@@ -69,7 +69,7 @@ The symbol never exists at runtime: the type is erased during compilation, so a 
 
 ### Why it stays dependency-free
 
-Keeping `Branded` in its own package means `dsh-jobs` can brand `JobId` without importing an unrelated capability package just to reach the primitive, and the brand vocabulary has exactly one owner.
+Keeping `Branded` in its own package means `dao-jobs` can brand `JobId` without importing an unrelated capability package just to reach the primitive, and the brand vocabulary has exactly one owner.
 
 </details>
 

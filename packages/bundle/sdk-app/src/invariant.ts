@@ -1,12 +1,12 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-sdk-app`.
- * @module @deepseek-ai/dsh-sdk-app/invariant
+ * Package-owned invariant companion for `@daoai/dao-sdk-app`.
+ * @module @daoai/dao-sdk-app/invariant
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-sdk-app'
+const PACKAGE_NAME = '@daoai/dao-sdk-app'
 
 /** Cordis companion plugin name. */
 export const name = 'sdk-app-invariant'

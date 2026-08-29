@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-fs-sandbox`.
- * @module @deepseek-ai/dsh-fs-sandbox/invariant
+ * Package-owned invariant companion for `@daoai/dao-fs-sandbox`.
+ * @module @daoai/dao-fs-sandbox/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-fs-sandbox'
+const PACKAGE_NAME = '@daoai/dao-fs-sandbox'
 
 /** Cordis companion plugin name. */
 export const name = 'fs-sandbox-invariant'

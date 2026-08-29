@@ -1,7 +1,7 @@
-/** Client-safe question, answer, and event types. @module @deepseek-ai/dsh-user-questions/types */
+/** Client-safe question, answer, and event types. @module @daoai/dao-user-questions/types */
 
-import type { Scoped } from '@deepseek-ai/dsh-scope'
-import type { Agent } from '@deepseek-ai/dsh-agent/types'
+import type { Scoped } from '@daoai/dao-scope'
+import type { Agent } from '@daoai/dao-agent/types'
 
 /** One selectable answer offered to the user. */
 export interface AskUserQuestionOption {
@@ -73,12 +73,12 @@ export interface AskUserQuestionRequestEvent {
   signal?: AbortSignal
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@daoai/cordis' {
   interface Events {
     /**
      * Ask composed answerers for structured user input. Return an answer to
      * claim the request or call `next()` to delegate. Scope-filtered dispatch
-     * (`@deepseek-ai/dsh-scope`): agent-scoped listeners receive only that agent.
+     * (`@daoai/dao-scope`): agent-scoped listeners receive only that agent.
      * @param request - pending user-question request.
      * @mode waterfall
      */

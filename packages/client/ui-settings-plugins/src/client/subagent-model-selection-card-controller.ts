@@ -3,9 +3,9 @@
 import type {
   ClientRemote,
   ModelProviderGroup,
-} from '@deepseek-ai/dsh-api-remotes/client'
-import { createSnapshotStore, type SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { SettingsScope } from '@deepseek-ai/dsh-client-ui-settings/client'
+} from '@daoai/dao-api-remotes/client'
+import { createSnapshotStore, type SnapshotStore } from '@daoai/dao-client-store'
+import type { SettingsScope } from '@daoai/dao-client-ui-settings/client'
 import type { CardShell } from './card-form.ts'
 
 /** Namespace of the Host-owned subagent model-selection preference. */

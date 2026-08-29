@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-headless",
-  "description": "The dsh one-shot bundle: a direct core Agent/Session runner over dsh-base with no Host, HTTP, or browser layer",
+  "name": "@daoai/dao-headless",
+  "description": "The dao one-shot bundle: a direct core Agent/Session runner over dao-base with no Host, HTTP, or browser layer",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -38,33 +38,33 @@
     "lib/types/**/*.d.ts"
   ],
   "license": "MIT",
-  "dsh": {
+  "dao": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
   },
   "dependencies": {
-    "@deepseek-ai/dsh-cmdline": "workspace:^",
-    "@deepseek-ai/dsh-code-runtime-worker-thread": "workspace:^",
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@daoai/dao-cmdline": "workspace:^",
+    "@daoai/dao-code-runtime-worker-thread": "workspace:^",
+    "@daoai/schemastery": "workspace:^",
     "commander": "^15.0.0"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-default-model": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/cordis-plugin-loader": "workspace:^",
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-agent-default-model": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-default-model": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/cordis-plugin-loader": "workspace:^",
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-agent-default-model": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

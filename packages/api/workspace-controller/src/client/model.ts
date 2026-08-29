@@ -1,8 +1,8 @@
 /** Client-side Workspace state model shared by Remote transport and UI projection. */
 
-import { notifySubscribers } from '@deepseek-ai/dsh-client-store'
-import type {} from '@deepseek-ai/dsh-api-workspace-controller/remote'
-import type { RemoteFailure, RemoteResult, TypertClientRemote } from '@deepseek-ai/dsh-typert-protocol'
+import { notifySubscribers } from '@daoai/dao-client-store'
+import type {} from '@daoai/dao-api-workspace-controller/remote'
+import type { RemoteFailure, RemoteResult, TypertClientRemote } from '@daoai/dao-typert-protocol'
 import type {
   WorkspaceArchiveSessionRequest,
   WorkspaceArchiveValue,

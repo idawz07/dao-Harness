@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-goal",
-  "description": "Event-sourced same-session goal state and lifecycle service for the DeepSeek Harness",
+  "name": "@daoai/dao-goal",
+  "description": "Event-sourced same-session goal state and lifecycle service for the Dao",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -53,35 +53,35 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-session-projection": "workspace:^",
+    "@daoai/dao-brand": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-scope": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-typert-protocol": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@daoai/schemastery": "workspace:^",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-spine-demo": "workspace:^",
-    "@deepseek-ai/dsh-bash-local": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-loader-smoke": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-checkpoint-policy": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence-jsonl": "workspace:^",
-    "@deepseek-ai/dsh-subprocess-local": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-agent-spine-demo": "workspace:^",
+    "@daoai/dao-bash-local": "workspace:^",
+    "@daoai/dao-session-projection": "workspace:^",
+    "@daoai/dao-brand": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-loader-smoke": "workspace:^",
+    "@daoai/dao-scope": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-checkpoint-policy": "workspace:^",
+    "@daoai/dao-session-persistence-jsonl": "workspace:^",
+    "@daoai/dao-subprocess-local": "workspace:^",
+    "@daoai/dao-typert-protocol": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

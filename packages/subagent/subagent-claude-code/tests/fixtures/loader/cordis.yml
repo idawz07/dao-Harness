@@ -4,28 +4,28 @@
   name: './fixture.ts'
 
 - id: subagent
-  name: '@deepseek-ai/dsh-subagent'
+  name: '@daoai/dao-subagent'
 
 - id: subprocess
-  name: '@deepseek-ai/dsh-subprocess-local'
+  name: '@daoai/dao-subprocess-local'
 
 - id: subagent-codex
-  name: '@deepseek-ai/dsh-subagent-codex'
+  name: '@daoai/dao-subagent-codex'
 
 - id: subagent-claude-primary
-  name: '@deepseek-ai/dsh-subagent-claude-code'
+  name: '@daoai/dao-subagent-claude-code'
   config:
     providerName: claude-primary
     model: claude-primary-model
 
 - id: subagent-claude-secondary
-  name: '@deepseek-ai/dsh-subagent-claude-code'
+  name: '@daoai/dao-subagent-claude-code'
   config:
     providerName: claude-secondary
     model: claude-secondary-model
 
 - id: tool-subagent-codex
-  name: '@deepseek-ai/dsh-tool-subagent'
+  name: '@daoai/dao-tool-subagent'
   config:
     provider: codex
     toolName: subagent_codex
@@ -33,7 +33,7 @@
     maxDepth: 'provider-managed'
 
 - id: tool-subagent-claude-code
-  name: '@deepseek-ai/dsh-tool-subagent'
+  name: '@daoai/dao-tool-subagent'
   config:
     provider: claude-code
     toolName: subagent_claude_code
@@ -41,7 +41,7 @@
     maxDepth: 'provider-managed'
 
 - id: tool-subagent-claude-primary
-  name: '@deepseek-ai/dsh-tool-subagent'
+  name: '@daoai/dao-tool-subagent'
   config:
     provider: claude-primary
     toolName: subagent_claude_primary
@@ -49,7 +49,7 @@
     maxDepth: 'provider-managed'
 
 - id: tool-subagent-claude-secondary
-  name: '@deepseek-ai/dsh-tool-subagent'
+  name: '@daoai/dao-tool-subagent'
   config:
     provider: claude-secondary
     toolName: subagent_claude_secondary
@@ -57,7 +57,7 @@
     maxDepth: 'provider-managed'
 
 - id: agent-spine
-  name: '@deepseek-ai/dsh-agent-spine-demo'
+  name: '@daoai/dao-agent-spine-demo'
   config:
     agents:
       - id: main
@@ -68,9 +68,9 @@
     workspaceContext: false
 
 - id: persistence
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@daoai/dao-session-persistence-jsonl'
   config:
     root: './.sessions'
 
 - id: checkpoint-policy
-  name: '@deepseek-ai/dsh-session-checkpoint-policy'
+  name: '@daoai/dao-session-checkpoint-policy'

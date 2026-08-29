@@ -1,7 +1,7 @@
 /** Client operation results spanning the Session and subagent Remote calls. */
 
-import type { RpcError } from '@deepseek-ai/dsh-client-connection/client'
-import type { SubagentControlError } from '@deepseek-ai/dsh-subagent/client'
+import type { RpcError } from '@daoai/dao-client-connection/client'
+import type { SubagentControlError } from '@daoai/dao-subagent/client'
 import type { SessionError } from '../../types.ts'
 
 /** Failure surfaced by the Client Session object layer. */

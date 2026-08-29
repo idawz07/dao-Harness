@@ -2,12 +2,12 @@
 
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { SessionId } from '@daoai/dao-session/types'
 import type {
   TeamTaskId, TeamTaskView as TeamTask, TeamView,
-} from '@deepseek-ai/dsh-experimental-agent-team/client'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import { zh as commonZh } from '@deepseek-ai/dsh-client-locale/src/locales/zh.ts'
+} from '@daoai/dao-experimental-agent-team/client'
+import { makeTranslate } from '@daoai/dao-client-test-runtime'
+import { zh as commonZh } from '@daoai/dao-client-locale/src/locales/zh.ts'
 import {
   TeamAction, type TeamActionInjected, type TeamActionProps, type TeamActionResult,
   type TeamTaskActionResult,

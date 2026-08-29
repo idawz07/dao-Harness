@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import InvariantRegistry, { InvariantError } from '@deepseek-ai/dsh-invariants'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
+import { Context } from '@daoai/cordis'
+import InvariantRegistry, { InvariantError } from '@daoai/dao-invariants'
+import SessionStore, { SessionId } from '@daoai/dao-session'
 import * as SessionLogInvariant from '../src/invariant.ts'
 import type {} from '../src/types.ts'
 
@@ -38,7 +38,7 @@ describe('DeepSeek session-log acceptance invariant', () => {
       throughSeq: 0,
     })).toThrow(expect.objectContaining<Partial<InvariantError>>({
       code: 'INVARIANT',
-      packageName: '@deepseek-ai/dsh-session-log-deepseek',
+      packageName: '@daoai/dao-session-log-deepseek',
     }))
 
     const wrongSeq = ctx.sessions.create(SessionId('wrong-seq'))
@@ -48,7 +48,7 @@ describe('DeepSeek session-log acceptance invariant', () => {
       throughSeq: 1,
     })).toThrow(expect.objectContaining<Partial<InvariantError>>({
       code: 'INVARIANT',
-      packageName: '@deepseek-ai/dsh-session-log-deepseek',
+      packageName: '@daoai/dao-session-log-deepseek',
     }))
   })
 
@@ -71,7 +71,7 @@ describe('DeepSeek session-log acceptance invariant', () => {
     }
     expect(failure).toMatchObject<Partial<InvariantError>>({
       code: 'INVARIANT',
-      packageName: '@deepseek-ai/dsh-session-log-deepseek',
+      packageName: '@daoai/dao-session-log-deepseek',
     })
   })
 

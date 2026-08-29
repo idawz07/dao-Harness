@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/architecture/2026-07-31-code-runtime-portable-identifier-seam.md
-2026-07-31-code-runtime-portable-identifier-seam.md: 2011b0f6bc8209e628227ddf486aa1143a63688a
-2026-07-31-code-runtime-portable-identifier-seam.zh.md: 36af33366d004fedc6b1077a937d6519de743638
+2026-07-31-code-runtime-portable-identifier-seam.md: 5a95eb86a3411743c0f46682a82f23cf4ae96ab5
+2026-07-31-code-runtime-portable-identifier-seam.zh.md: c8b3ab6600990ed8d7e24fb4e87fa832b7324b65

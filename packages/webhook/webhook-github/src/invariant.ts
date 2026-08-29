@@ -1,9 +1,9 @@
 /** Package-owned invariant companion for the GitHub webhook adapter. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-webhook-github'
+const PACKAGE_NAME = '@daoai/dao-webhook-github'
 
 /** Cordis invariant-companion plugin name. */
 export const name = 'webhook-github-invariant'
@@ -12,7 +12,7 @@ export const inject = ['invariants']
 
 /**
  * No runtime invariant: authentication and input validation occur at the exact
- * HTTP operation; dsh-host-webserver owns route/disposer symmetry.
+ * HTTP operation; dao-host-webserver owns route/disposer symmetry.
  */
 const install: InvariantInstaller = () => {}
 

@@ -4,25 +4,25 @@
   name: './fixture.ts'
 
 - id: subagent
-  name: '@deepseek-ai/dsh-subagent'
+  name: '@daoai/dao-subagent'
 
 - id: subprocess
-  name: '@deepseek-ai/dsh-subprocess-local'
+  name: '@daoai/dao-subprocess-local'
 
 - id: subagent-codex-primary
-  name: '@deepseek-ai/dsh-subagent-codex'
+  name: '@daoai/dao-subagent-codex'
   config:
     providerName: codex-primary
     model: codex-primary-model
 
 - id: subagent-codex-secondary
-  name: '@deepseek-ai/dsh-subagent-codex'
+  name: '@daoai/dao-subagent-codex'
   config:
     providerName: codex-secondary
     model: codex-secondary-model
 
 - id: tool-subagent-codex
-  name: '@deepseek-ai/dsh-tool-subagent'
+  name: '@daoai/dao-tool-subagent'
   config:
     provider: codex
     toolName: subagent_codex
@@ -30,7 +30,7 @@
     maxDepth: 'provider-managed'
 
 - id: tool-subagent-codex-primary
-  name: '@deepseek-ai/dsh-tool-subagent'
+  name: '@daoai/dao-tool-subagent'
   config:
     provider: codex-primary
     toolName: subagent_codex_primary
@@ -38,7 +38,7 @@
     maxDepth: 'provider-managed'
 
 - id: tool-subagent-codex-secondary
-  name: '@deepseek-ai/dsh-tool-subagent'
+  name: '@daoai/dao-tool-subagent'
   config:
     provider: codex-secondary
     toolName: subagent_codex_secondary
@@ -46,7 +46,7 @@
     maxDepth: 'provider-managed'
 
 - id: agent-spine
-  name: '@deepseek-ai/dsh-agent-spine-demo'
+  name: '@daoai/dao-agent-spine-demo'
   config:
     agents:
       - id: main
@@ -57,9 +57,9 @@
     workspaceContext: false
 
 - id: persistence
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@daoai/dao-session-persistence-jsonl'
   config:
     root: './.sessions'
 
 - id: checkpoint-policy
-  name: '@deepseek-ai/dsh-session-checkpoint-policy'
+  name: '@daoai/dao-session-checkpoint-policy'

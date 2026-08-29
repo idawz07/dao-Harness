@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-agent-default-model",
+  "name": "@daoai/dao-agent-default-model",
   "description": "Default model selection shared by Agent entry points",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
@@ -32,20 +32,20 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-settings": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-settings": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

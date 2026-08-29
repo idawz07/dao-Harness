@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-fs-observation-policy",
-  "description": "File-context policy plugin for the DeepSeek Harness — observed-state, read-before-edit, and version-guarded write/edit added over the ctx.fs provider seam through the fs/* event gate (no service API)",
+  "name": "@daoai/dao-fs-observation-policy",
+  "description": "File-context policy plugin for the Dao — observed-state, read-before-edit, and version-guarded write/edit added over the ctx.fs provider seam through the fs/* event gate (no service API)",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,14 +32,14 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-fs": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-fs": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-fs": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-fs": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

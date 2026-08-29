@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-llm-pi-ai",
-  "description": "pi-ai-backed DeepSeek adapter for the DeepSeek Harness LLM seam (design-verification twin of dsh-llm-deepseek)",
+  "name": "@daoai/dao-llm-pi-ai",
+  "description": "pi-ai-backed DeepSeek adapter for the Dao LLM seam (design-verification twin of dao-llm-deepseek)",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,32 +32,32 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-attachment": "workspace:^",
-    "@deepseek-ai/dsh-authorization": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-fs": "workspace:^",
-    "@deepseek-ai/dsh-launch-environment": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-attachment": "workspace:^",
+    "@daoai/dao-authorization": "workspace:^",
+    "@daoai/dao-credentials": "workspace:^",
+    "@daoai/dao-fs": "workspace:^",
+    "@daoai/dao-launch-environment": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-settings": "workspace:^",
+    "@daoai/dao-timeout": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
     "@earendil-works/pi-ai": "^0.84.2",
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-attachment": "workspace:^",
-    "@deepseek-ai/dsh-authorization": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-fs": "workspace:^",
-    "@deepseek-ai/dsh-launch-environment": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-llm-deepseek": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-attachment": "workspace:^",
+    "@daoai/dao-authorization": "workspace:^",
+    "@daoai/dao-credentials": "workspace:^",
+    "@daoai/dao-fs": "workspace:^",
+    "@daoai/dao-launch-environment": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-llm-deepseek": "workspace:^",
+    "@daoai/dao-settings": "workspace:^",
+    "@daoai/dao-timeout": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

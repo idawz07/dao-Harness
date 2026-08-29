@@ -4,8 +4,8 @@ import {
   createAssistantMessage,
   createToolResultMessage,
   createUserMessage,
-} from '@deepseek-ai/dsh-llm/message'
-import { ToolCallId, type MessageId } from '@deepseek-ai/dsh-llm/brand'
+} from '@daoai/dao-llm/message'
+import { ToolCallId, type MessageId } from '@daoai/dao-llm/brand'
 import type {
   AssistantMessage,
   ContentBlock,
@@ -14,25 +14,25 @@ import type {
   TokenUsage,
   ToolResultMessage,
   UserMessage,
-} from '@deepseek-ai/dsh-llm'
-import type { AttachmentIdType, ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
+} from '@daoai/dao-llm'
+import type { AttachmentIdType, ImageAttachmentRef } from '@daoai/dao-attachment'
 import type {
   JsonValue,
   SessionEvent,
   SessionHeader,
   SessionId,
-} from '@deepseek-ai/dsh-session/types'
-import { isChunkRow, packChunkRuns } from '@deepseek-ai/dsh-session/chunk-rows'
-import type { ChunkRow } from '@deepseek-ai/dsh-session/chunk-rows'
-import type { TodoItem } from '@deepseek-ai/dsh-tool-todo/client'
+} from '@daoai/dao-session/types'
+import { isChunkRow, packChunkRuns } from '@daoai/dao-session/chunk-rows'
+import type { ChunkRow } from '@daoai/dao-session/chunk-rows'
+import type { TodoItem } from '@daoai/dao-tool-todo/client'
 // Type-only: the brand constructor is host-side; the fixture casts at its
 // wire-fabrication boundary (the schema layer's one-cast-point posture).
-import type { CommandId } from '@deepseek-ai/dsh-commands/brand'
-import type { CommandDescriptor, CommandExecution, CommandResult } from '@deepseek-ai/dsh-commands/types'
-import type { CredentialInfo } from '@deepseek-ai/dsh-credentials/types'
-import type { DirectoryListing as FixtureDirectoryListing } from '@deepseek-ai/dsh-host-directory-picker/types'
-import type { SettingsDescribeValue, SettingsNamespaceView } from '@deepseek-ai/dsh-settings/types'
-import { deriveEventMessage, foldSurface } from '@deepseek-ai/dsh-session/surface'
+import type { CommandId } from '@daoai/dao-commands/brand'
+import type { CommandDescriptor, CommandExecution, CommandResult } from '@daoai/dao-commands/types'
+import type { CredentialInfo } from '@daoai/dao-credentials/types'
+import type { DirectoryListing as FixtureDirectoryListing } from '@daoai/dao-host-directory-picker/types'
+import type { SettingsDescribeValue, SettingsNamespaceView } from '@daoai/dao-settings/types'
+import { deriveEventMessage, foldSurface } from '@daoai/dao-session/surface'
 import type { RpcResult } from './api.ts'
 import { randomUuid } from './random-uuid.ts'
 import type {
@@ -515,11 +515,11 @@ const READ_SAMPLE_TEXT = [
  * titled source without a snippet; `truncated` exercises the capped indicator.
  */
 const WEB_SEARCH_META = {
-  answer: 'DeepSeek Harness is a plugin-based agent harness on vendored Cordis where **every capability is a plugin**.',
+  answer: 'Dao is a plugin-based agent harness on vendored Cordis where **every capability is a plugin**.',
   sources: [
     {
       url: 'https://github.com/deepseek-ai/deepseek-harness',
-      title: 'DeepSeek Harness — plugin-based agent harness',
+      title: 'Dao — plugin-based agent harness',
       snippet: 'Everything is a plugin: session, tools, agent-loop, and LLM adapters all mount on the same Cordis context.',
       publishedAt: '2026-07-01',
     },
@@ -869,8 +869,8 @@ function buildAlphaLog(): SessionEvent[] {
   toolTurn(
     70,
     'web_search',
-    '{"queries":["deepseek harness architecture"]}',
-    'Search results for deepseek harness architecture.',
+    '{"queries":["Dao architecture"]}',
+    'Search results for Dao architecture.',
     WEB_SEARCH_META,
   )
   toolTurn(
@@ -1626,7 +1626,7 @@ function backscanTodos(log: readonly SessionEvent[]): TodoItem[] | undefined {
   return undefined
 }
 
-/** Fixture-local mirror of the goal projection value (dsh-goal's GoalProjection shape). */
+/** Fixture-local mirror of the goal projection value (dao-goal's GoalProjection shape). */
 interface FxGoalProjection {
   goal: {
     id: string
@@ -1881,9 +1881,9 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
    * roster a GUI journey sees after writing is the text it wrote.
    */
   const fixturePresets = new Map<string, { trust: 'system' | 'user'; content: string }>([
-    ['standard', { trust: 'system', content: "- id: tool-bash\n  name: '@deepseek-ai/dsh-tool-bash'\n" }],
-    ['minimal', { trust: 'system', content: "- id: tool-web-search\n  name: '@deepseek-ai/dsh-tool-web-search'\n" }],
-    ['my-agent', { trust: 'user', content: "- id: tool-read\n  name: '@deepseek-ai/dsh-tool-read'\n" }],
+    ['standard', { trust: 'system', content: "- id: tool-bash\n  name: '@daoai/dao-tool-bash'\n" }],
+    ['minimal', { trust: 'system', content: "- id: tool-web-search\n  name: '@daoai/dao-tool-web-search'\n" }],
+    ['my-agent', { trust: 'user', content: "- id: tool-read\n  name: '@daoai/dao-tool-read'\n" }],
   ])
   let fixtureDefaultPreset = 'standard'
   const nextTurn = new Map<SessionId, number>([[sid('fx-alpha'), 75]])
@@ -2250,7 +2250,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
             label,
             ...item.cwd === undefined ? {} : { cwd: item.cwd },
             createdAt: item.updatedAt,
-            mention: `@[${label}](dsh-session:${encoded})`,
+            mention: `@[${label}](dao-session:${encoded})`,
           }
         })
       return { ok: true, value }
@@ -2962,7 +2962,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
       })
       // The host echoes the prompt's requestId as the user source's rpcId;
       // the Session object retires its local submission echo on it. The
-      // user-rpc source member is declared by dsh-api-session-controller,
+      // user-rpc source member is declared by dao-api-session-controller,
       // which this standalone fixture does not import — hence the assertion.
       const promptSource = { kind: 'user', rpcId: request.requestId } as MessageSource
       if (mode === 'steer' && replays.has(id)) {

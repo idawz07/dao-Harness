@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-compaction-basic",
-  "description": "Token-meter-driven compaction policy and LLM summarization backend for the DeepSeek Harness",
+  "name": "@daoai/dao-compaction-basic",
+  "description": "Token-meter-driven compaction policy and LLM summarization backend for the Dao",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,39 +32,39 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-compaction": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-token-meter": "workspace:^",
-    "@deepseek-ai/dsh-compaction-tool-result-pruner": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-compaction": "workspace:^",
+    "@daoai/dao-commands": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-token-meter": "workspace:^",
+    "@daoai/dao-compaction-tool-result-pruner": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "peerDependenciesMeta": {
-    "@deepseek-ai/dsh-compaction-tool-result-pruner": {
+    "@daoai/dao-compaction-tool-result-pruner": {
       "optional": true
     }
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:^",
-    "@deepseek-ai/dsh-compaction": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-llm-retry": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-token-meter": "workspace:^",
-    "@deepseek-ai/dsh-compaction-tool-result-pruner": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/cordis-plugin-include": "workspace:^",
+    "@daoai/cordis-plugin-loader": "workspace:^",
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-agent-loop": "workspace:^",
+    "@daoai/dao-agent-loop-testkit": "workspace:^",
+    "@daoai/dao-compaction": "workspace:^",
+    "@daoai/dao-commands": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-llm-retry": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-token-meter": "workspace:^",
+    "@daoai/dao-compaction-tool-result-pruner": "workspace:^",
+    "@daoai/dao-tools": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

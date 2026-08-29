@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-web-search-perplexity",
-  "description": "Perplexity-backed search provider for the DeepSeek Harness web capability seam (ctx.web)",
+  "name": "@daoai/dao-web-search-perplexity",
+  "description": "Perplexity-backed search provider for the Dao web capability seam (ctx.web)",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,18 +32,18 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-launch-environment": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-web": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-launch-environment": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-web": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-launch-environment": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-web": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-launch-environment": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-web": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

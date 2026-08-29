@@ -1,11 +1,11 @@
 /** Event-level policy tests; no filesystem provider is needed because the plugin performs no I/O. */
 
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { FsTargetKey, FsVersion } from '@deepseek-ai/dsh-fs'
-import type { FsObservation, FsTarget, FsWriteIntent } from '@deepseek-ai/dsh-fs'
-import * as FsPolicy from '@deepseek-ai/dsh-fs-observation-policy'
-import type { FsObservationActor } from '@deepseek-ai/dsh-fs-observation-policy'
+import { Context } from '@daoai/cordis'
+import { FsTargetKey, FsVersion } from '@daoai/dao-fs'
+import type { FsObservation, FsTarget, FsWriteIntent } from '@daoai/dao-fs'
+import * as FsPolicy from '@daoai/dao-fs-observation-policy'
+import type { FsObservationActor } from '@daoai/dao-fs-observation-policy'
 
 function target(path: string): FsTarget {
   return { targetKey: FsTargetKey(path), displayPath: path }

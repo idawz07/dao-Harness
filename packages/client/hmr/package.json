@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-hmr",
+  "name": "@daoai/dao-client-hmr",
   "description": "Dev-only hot-reload driver for script-loaded client entries: SSE rebuilt frames → invalidate/prefetch → fiber swap through the vendored Loader entry",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
@@ -29,7 +29,7 @@
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "dsh": {
+  "dao": {
     "client": {
       "inject": [],
       "platform": "web",
@@ -38,21 +38,21 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-client-modules": "workspace:^",
-    "@deepseek-ai/dsh-host-webserver": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/cordis-plugin-loader": "workspace:^",
+    "@daoai/dao-client-modules": "workspace:^",
+    "@daoai/dao-host-webserver": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-client-modules": "workspace:^",
-    "@deepseek-ai/dsh-host-webserver": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/cordis-plugin-loader": "workspace:^",
+    "@daoai/dao-client-modules": "workspace:^",
+    "@daoai/dao-host-webserver": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "files": [
     "lib/index.js",

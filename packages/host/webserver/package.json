@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-host-webserver",
+  "name": "@daoai/dao-host-webserver",
   "description": "Web route-registration plugin: HTTP and upgrade routes, index transform taps, and static dist fallback; knows no harness concepts",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
@@ -32,17 +32,17 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^"
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@daoai/schemastery": "workspace:^",
     "compression": "^1.8.1",
     "negotiator": "^1.0.0"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
     "@types/compression": "^1.8.1",
     "@types/negotiator": "^0.6.5"
   }

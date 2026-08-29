@@ -11,18 +11,18 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@daoai/cordis'
 import { join, sep } from 'node:path'
-import { createUserMessage, ToolCallId } from '@deepseek-ai/dsh-llm'
-import SystemPrompt, { renderPrompt } from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { TOOL_ABORTED_BEFORE_DISPATCH, type ToolExecution, type ToolExecutionToken } from '@deepseek-ai/dsh-tools'
-import { SubprocessRuntime } from '@deepseek-ai/dsh-subprocess'
-import type { SubprocessCollectedOutputs, SubprocessHandle, SubprocessOutcome, SubprocessOutputRead, SubprocessOutputReader, SubprocessSpawnSpec } from '@deepseek-ai/dsh-subprocess'
-import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
+import { createUserMessage, ToolCallId } from '@daoai/dao-llm'
+import SystemPrompt, { renderPrompt } from '@daoai/dao-system-prompt'
+import ToolRuntime, { TOOL_ABORTED_BEFORE_DISPATCH, type ToolExecution, type ToolExecutionToken } from '@daoai/dao-tools'
+import { SubprocessRuntime } from '@daoai/dao-subprocess'
+import type { SubprocessCollectedOutputs, SubprocessHandle, SubprocessOutcome, SubprocessOutputRead, SubprocessOutputReader, SubprocessSpawnSpec } from '@daoai/dao-subprocess'
+import { MAX_TIMER_DELAY_MS } from '@daoai/dao-timeout'
 import { rgPath } from '@vscode/ripgrep'
-import { SpillLocator, SpillStore } from '@deepseek-ai/dsh-spill'
-import type { SaveTextSpill, SpillRef } from '@deepseek-ai/dsh-spill'
-import * as ToolFsSearch from '@deepseek-ai/dsh-tool-fs-search'
+import { SpillLocator, SpillStore } from '@daoai/dao-spill'
+import type { SaveTextSpill, SpillRef } from '@daoai/dao-spill'
+import * as ToolFsSearch from '@daoai/dao-tool-fs-search'
 import {
   buildGlobCommand,
   buildGrepCommand,
@@ -37,7 +37,7 @@ import {
   runRipgrep,
   sampleAcrossTopLevel,
   toWorkdirRelative,
-} from '@deepseek-ai/dsh-tool-fs-search'
+} from '@daoai/dao-tool-fs-search'
 
 const testToolSignal = new AbortController().signal
 

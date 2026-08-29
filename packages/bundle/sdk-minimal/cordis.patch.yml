@@ -1,58 +1,58 @@
 # Standalone minimal SDK application. Unlike the ordinary SDK profile, this
-# bundle does not layer over dsh-base: this insert is the complete Cordis tree.
+# bundle does not layer over dao-base: this insert is the complete Cordis tree.
 # User profile, home, and invocation patches still apply above it.
 
 - insert:
     - id: sdk-app-startup
-      name: '@deepseek-ai/dsh-sdk-app'
+      name: '@daoai/dao-sdk-app'
       config:
         profile: sdk-minimal
 
     - id: sdk-jsonrpc-server
-      name: '@deepseek-ai/dsh-sdk-jsonrpc-server'
+      name: '@daoai/dao-sdk-jsonrpc-server'
       inject: [sdkAppStartup, loader]
       config:
         maxTokensAsSuccess: false
 
     - id: deepseek-llm-api-extensions
-      name: '@deepseek-ai/dsh-deepseek-llm-api-extensions'
+      name: '@daoai/dao-deepseek-llm-api-extensions'
 
     - id: session-log-deepseek
-      name: '@deepseek-ai/dsh-session-log-deepseek'
+      name: '@daoai/dao-session-log-deepseek'
 
     - id: plugin-package-inventory-deepseek
-      name: '@deepseek-ai/dsh-plugin-package-inventory-deepseek'
+      name: '@daoai/dao-plugin-package-inventory-deepseek'
 
     - id: llm-deepseek
-      name: '@deepseek-ai/dsh-llm-deepseek'
+      name: '@daoai/dao-llm-deepseek'
       config:
         apiKeyEnv: DEEPSEEK_API_KEY
-        defaultContextWindow: !!js Number(process.env.DSH_CONTEXT_WINDOW ?? 1000000)
+        defaultContextWindow: !!js Number(process.env.DAO_CONTEXT_WINDOW ?? 1000000)
         streamIdleTimeoutMs: 172800000
 
     - id: sandbox
-      name: '@deepseek-ai/dsh-sandbox-local'
+      name: '@daoai/dao-sandbox-local'
 
     - id: sandbox-policy
-      name: '@deepseek-ai/dsh-sandbox-policy'
+      name: '@daoai/dao-sandbox-policy'
       config:
         mode: danger-full-access
         workspaceRoot: !!js process.cwd()
 
     - id: subprocess
-      name: '@deepseek-ai/dsh-subprocess-local'
+      name: '@daoai/dao-subprocess-local'
 
     - id: pty
-      name: '@deepseek-ai/dsh-terminal'
+      name: '@daoai/dao-terminal'
 
     - id: terminal-bash
-      name: '@deepseek-ai/dsh-terminal-bash'
+      name: '@daoai/dao-terminal-bash'
       disabled: !!js process.platform === 'win32'
       config:
         timeoutMs: 300000
 
     - id: terminal-pwsh
-      name: '@deepseek-ai/dsh-terminal-bash'
+      name: '@daoai/dao-terminal-bash'
       disabled: !!js process.platform !== 'win32'
       config:
         shellDialect: pwsh
@@ -61,16 +61,16 @@
     # The editor uses the bare local filesystem; persistent Bash still consumes
     # the shared danger-full-access sandbox policy above.
     - id: fs-local
-      name: '@deepseek-ai/dsh-fs-local'
+      name: '@daoai/dao-fs-local'
       config:
         cwd: !!js process.cwd()
 
     - id: agent-spine
-      name: '@deepseek-ai/dsh-agent-spine-demo'
+      name: '@daoai/dao-agent-spine-demo'
       config:
         includeHarnessIdentity: false
         includeRuntimeContext: false
-        persona: !!js process.env.DSH_SYSTEM_PROMPT ?? 'You are a helpful software engineer assistant.'
+        persona: !!js process.env.DAO_SYSTEM_PROMPT ?? 'You are a helpful software engineer assistant.'
         workspaceContext: false
         skills:
           enabled: false
@@ -78,7 +78,7 @@
         toolJobs: false
 
     - id: persistent-bash
-      name: '@deepseek-ai/dsh-tool-bash-persistent'
+      name: '@daoai/dao-tool-bash-persistent'
       disabled: !!js process.platform === 'win32'
       config:
         timeoutMs: 300000
@@ -93,7 +93,7 @@
           * Please run long lived commands in the background, e.g. 'sleep 10 &' or start a server in the background.
 
     - id: persistent-pwsh
-      name: '@deepseek-ai/dsh-tool-pwsh-persistent'
+      name: '@daoai/dao-tool-pwsh-persistent'
       disabled: !!js process.platform !== 'win32'
       config:
         timeoutMs: 300000
@@ -107,12 +107,12 @@
           * Please run long lived commands in the background, e.g. 'Start-Job' or start a server with Start-Process.
 
     - id: str-replace-editor
-      name: '@deepseek-ai/dsh-tool-str-replace-editor'
+      name: '@daoai/dao-tool-str-replace-editor'
       config:
         maxOutputChars: 16000
 
     - id: sessions
-      name: '@deepseek-ai/dsh-session-persistence-jsonl'
+      name: '@daoai/dao-session-persistence-jsonl'
       config:
-        root: !!js dshHomePath('sessions')
+        root: !!js daoHomePath('sessions')
         compression: none

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { SettingsNamespaceView } from '@deepseek-ai/dsh-api-remotes/client'
+import type { SettingsNamespaceView } from '@daoai/dao-api-remotes/client'
 import { SettingsDescribeMirror, type SettingsDescribeView } from '../src/client/settings-mirror.ts'
 
 /** What a Remote call answers with: no carrier envelope, and a free-form failure code. */

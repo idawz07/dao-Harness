@@ -16,11 +16,11 @@
  * before expanding and fails loud on a malformed row-tagged value instead of
  * silently dropping a whole run.
  *
- * @module @deepseek-ai/dsh-session/chunk-rows
+ * @module @daoai/dao-session/chunk-rows
  */
 
-import { ToolCallId } from '@deepseek-ai/dsh-llm/brand'
-import type { StreamChunk } from '@deepseek-ai/dsh-llm'
+import { ToolCallId } from '@daoai/dao-llm/brand'
+import type { StreamChunk } from '@daoai/dao-llm'
 import type { SessionEvent } from './types.ts'
 
 /** The chunk kinds that may pack; block boundaries, usage, and finish chunks always stay one event per line. */

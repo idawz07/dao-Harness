@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-ui-attachment",
+  "name": "@daoai/dao-client-ui-attachment",
   "description": "Dynamic attachment presentation plugin for conversation input, message-image, and trajectory image slots",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
@@ -29,13 +29,13 @@
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "dsh": {
+  "dao": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-client-ui-chat",
-        "@deepseek-ai/dsh-client-ui-conversation",
-        "@deepseek-ai/dsh-client-ui-renderer",
-        "@deepseek-ai/dsh-client-ui-trajectory"
+        "@daoai/dao-client-ui-chat",
+        "@daoai/dao-client-ui-conversation",
+        "@daoai/dao-client-ui-renderer",
+        "@daoai/dao-client-ui-trajectory"
       ],
       "platform": "web"
     }
@@ -49,19 +49,19 @@
     "clsx": "^2.0.0"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
     "@types/react": "~18.3.1",
     "@types/react-dom": "~18.3.0",
-    "@deepseek-ai/dsh-client-ui-chat": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-conversation": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-trajectory": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-renderer": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-primitives": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:^",
+    "@daoai/dao-client-ui-chat": "workspace:^",
+    "@daoai/dao-client-ui-conversation": "workspace:^",
+    "@daoai/dao-client-ui-trajectory": "workspace:^",
+    "@daoai/dao-client-ui-renderer": "workspace:^",
+    "@daoai/dao-client-ui-primitives": "workspace:^",
+    "@daoai/dao-client-ui-slots": "workspace:^",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@deepseek-ai/dsh-attachment": "workspace:^"
+    "@daoai/dao-attachment": "workspace:^"
   },
   "files": [
     "lib/index.js",
@@ -70,12 +70,12 @@
     "lib/types/**/*.d.ts"
   ],
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-chat": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-conversation": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-trajectory": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-renderer": "workspace:^",
-    "@deepseek-ai/dsh-attachment": "workspace:^"
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-client-ui-chat": "workspace:^",
+    "@daoai/dao-client-ui-conversation": "workspace:^",
+    "@daoai/dao-client-ui-trajectory": "workspace:^",
+    "@daoai/dao-client-ui-renderer": "workspace:^",
+    "@daoai/dao-attachment": "workspace:^"
   }
 }

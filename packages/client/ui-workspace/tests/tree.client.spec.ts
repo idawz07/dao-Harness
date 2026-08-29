@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import type { SessionListState, SessionSummary } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { WorkspaceId, WorkspaceView } from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type { SessionPendingInteractionBase } from '@deepseek-ai/dsh-client-ui-session/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { SessionListState, SessionSummary } from '@daoai/dao-api-session-controller/client'
+import type { WorkspaceId, WorkspaceView } from '@daoai/dao-api-workspace-controller/client'
+import type { SessionPendingInteractionBase } from '@daoai/dao-client-ui-session/client'
+import type { SessionId } from '@daoai/dao-session/types'
 import {
   deriveFlat, deriveGroups, deriveSearchResults, workspaceLabel,
   UNGROUPED_KEY,

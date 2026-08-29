@@ -4,8 +4,8 @@ import {
   RemoteStreamCarrierError,
   RemoteStreamError,
   type RemoteStreamOptions,
-} from '@deepseek-ai/dsh-api-gateway/client'
-import type { RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
+} from '@daoai/dao-api-gateway/client'
+import type { RemoteResult } from '@daoai/dao-typert-protocol'
 import {
   createSessionControlStream,
   SessionEventStream,

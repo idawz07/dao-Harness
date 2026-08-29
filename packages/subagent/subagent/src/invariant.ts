@@ -1,10 +1,10 @@
-/** Package-owned subagent registry and lifecycle invariants. @module @deepseek-ai/dsh-subagent/invariant */
+/** Package-owned subagent registry and lifecycle invariants. @module @daoai/dao-subagent/invariant */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantFailure, InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantFailure, InvariantInstaller } from '@daoai/dao-invariants'
 import type { SubagentProvider, SubagentRunEndInfo, SubagentRunInfo } from './types.ts'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-subagent'
+const PACKAGE_NAME = '@daoai/dao-subagent'
 
 /** Cordis companion plugin name. */
 export const name = 'subagent-invariant'

@@ -1,9 +1,9 @@
 /** Local submission echoes: synchronous insertion, observed/failed retirement, and settlement callbacks. */
 
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
-import type { SessionEvent, SessionId } from '@deepseek-ai/dsh-session/types'
+import { createUserMessage } from '@daoai/dao-llm'
+import type { ImageAttachmentRef } from '@daoai/dao-attachment'
+import type { SessionEvent, SessionId } from '@daoai/dao-session/types'
 import { Session } from '../src/client/sessions/session.ts'
 import type { PendingSubmissionRetirement } from '../src/client/contract/session.ts'
 import type { SessionQueuedItem, SessionRequestId } from '../src/types.ts'

@@ -9,12 +9,12 @@
  */
 
 import { useEffect } from 'react'
-import type { SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import { IconAgentPresetOutline16 } from '@deepseek-ai/dsh-client-ui-primitives'
+import type { SnapshotStore } from '@daoai/dao-client-store'
+import type { InjectFace, PropsLocale, PropsRuntime } from '@daoai/dao-client-ui-slots'
+import { IconAgentPresetOutline16 } from '@daoai/dao-client-ui-primitives'
 // Type-only: pulls the ui-conversation SlotMap merge (the header actions).
-import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type {} from '@deepseek-ai/dsh-agent-presets/types'
+import type {} from '@daoai/dao-client-ui-conversation/client'
+import type {} from '@daoai/dao-agent-presets/types'
 import type { AgentPresetSettingsState } from './settings-store.ts'
 import { presetDisplayText } from './locales.ts'
 import css from './AgentPresetLabel.module.css'

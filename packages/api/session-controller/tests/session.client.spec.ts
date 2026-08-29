@@ -1,9 +1,9 @@
 /** Session object lifecycle, event-window transport, commands, and resync behavior. */
 
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { RemoteStreamError } from '@deepseek-ai/dsh-api-gateway/client'
-import type { SessionEvent } from '@deepseek-ai/dsh-session/types'
-import type { SessionId } from '@deepseek-ai/dsh-api-remotes/client'
+import { RemoteStreamError } from '@daoai/dao-api-gateway/client'
+import type { SessionEvent } from '@daoai/dao-session/types'
+import type { SessionId } from '@daoai/dao-api-remotes/client'
 import { Session, type SessionOptions } from '../src/client/sessions/session.ts'
 import { FakeApiClient, deferred, err, fakeRemote, ok, remoteErr } from './fake-api.client.ts'
 import { entries, ev, historyValue, plainTurn } from './event-script.client.ts'

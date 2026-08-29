@@ -3,13 +3,13 @@
  * row both the listing and the browser catalog answer with, plus the
  * browser-facing control surface's prompt, receipts, and failures.
  *
- * @module @deepseek-ai/dsh-subagent/control-types
+ * @module @daoai/dao-subagent/control-types
  */
 
-import type { Branded } from '@deepseek-ai/dsh-brand'
-import type { MessageId } from '@deepseek-ai/dsh-llm/brand'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm/types'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { Branded } from '@daoai/dao-brand'
+import type { MessageId } from '@daoai/dao-llm/brand'
+import type { ContentBlock } from '@daoai/dao-llm/types'
+import type { SessionId } from '@daoai/dao-session/types'
 import type { z as zCore } from 'zod'
 
 /**

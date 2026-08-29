@@ -9,9 +9,9 @@
  * covers everything the card shows.
  */
 
-import type { ClientRemote } from '@deepseek-ai/dsh-api-remotes/client'
-import type { SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { SettingsScope, SettingsScopeSnapshot } from '@deepseek-ai/dsh-client-ui-settings/client'
+import type { ClientRemote } from '@daoai/dao-api-remotes/client'
+import type { SnapshotStore } from '@daoai/dao-client-store'
+import type { SettingsScope, SettingsScopeSnapshot } from '@daoai/dao-client-ui-settings/client'
 import {
   CardForm, numberField, textField,
   type CardActions, type CardFieldState, type CardShell,

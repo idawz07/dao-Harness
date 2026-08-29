@@ -8,15 +8,15 @@ import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react
 import { useSyncExternalStore } from 'react'
 import type {
   QueuedMessage, SessionListState, SessionSnapshot,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { SnapshotSelectorHook } from '@deepseek-ai/dsh-client-ui-slots'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
+} from '@daoai/dao-api-session-controller/client'
+import type { SessionId } from '@daoai/dao-session/types'
+import type { SnapshotSelectorHook } from '@daoai/dao-client-ui-slots'
+import { createSnapshotStore } from '@daoai/dao-client-store'
 import {
   bindSnapshotSelector, conversationSnapshot, makeTranslate,
-} from '@deepseek-ai/dsh-client-test-runtime'
-import type { SessionPendingInteractionSnapshot } from '@deepseek-ai/dsh-client-ui-session/client'
-import { zh as commonZh } from '@deepseek-ai/dsh-client-locale/src/locales/zh.ts'
+} from '@daoai/dao-client-test-runtime'
+import type { SessionPendingInteractionSnapshot } from '@daoai/dao-client-ui-session/client'
+import { zh as commonZh } from '@daoai/dao-client-locale/src/locales/zh.ts'
 import type { QueueItemId } from '../src/client/contract/queue.ts'
 import type { InputState } from '../src/client/contract/input.ts'
 import { zh } from '../src/client/locales.ts'

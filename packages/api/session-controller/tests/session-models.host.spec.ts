@@ -6,23 +6,23 @@
  */
 
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry, { agentEvents } from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AttachmentStore from '@deepseek-ai/dsh-attachment'
-import LlmRuntime, { LlmAdapter, ReasoningEffortId } from '@deepseek-ai/dsh-llm'
+import { Context } from '@daoai/cordis'
+import AgentRegistry, { agentEvents } from '@daoai/dao-agent'
+import type { Agent } from '@daoai/dao-agent'
+import AttachmentStore from '@daoai/dao-attachment'
+import LlmRuntime, { LlmAdapter, ReasoningEffortId } from '@daoai/dao-llm'
 import type {
   GenerateOptions, LlmCallConfig, LlmCallConfigAdapterDefaults, LlmModelInfo,
   LlmModelReasoningInfo, LlmProviderInfo, LlmResolvedModelInfo, StreamChunk,
   UserMessage,
-} from '@deepseek-ai/dsh-llm'
-import SessionStore from '@deepseek-ai/dsh-session'
-import type { SessionId } from '@deepseek-ai/dsh-session'
+} from '@daoai/dao-llm'
+import SessionStore from '@daoai/dao-session'
+import type { SessionId } from '@daoai/dao-session'
 import type { SessionPromptRequest, SessionRequestId } from '../src/types.ts'
 import { ApiSessionAgentController } from '../src/agent.ts'
 import { buildModelCatalog } from '../src/catalog.ts'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import { TypertRemoteFailure } from '@deepseek-ai/dsh-typert-protocol'
+import SystemPrompt from '@daoai/dao-system-prompt'
+import { TypertRemoteFailure } from '@daoai/dao-typert-protocol'
 import { createSessionTestRemote } from './test-remote.ts'
 
 function request<P>(payload: P): P {

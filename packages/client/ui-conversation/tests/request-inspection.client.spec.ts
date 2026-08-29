@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { SessionEvent } from '@deepseek-ai/dsh-session/types'
+import type { SessionEvent } from '@daoai/dao-session/types'
 import { inspectRequestPrompt } from '../src/client/contract/request-inspection.ts'
 
 const CONFIG = { provider: 'test', model: 'test' }

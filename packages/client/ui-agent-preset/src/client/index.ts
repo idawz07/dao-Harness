@@ -12,18 +12,18 @@
  */
 
 // Type-only: pulls the Session Controller service merge (ctx.sessions).
-import type {} from '@deepseek-ai/dsh-api-session-controller/client'
+import type {} from '@daoai/dao-api-session-controller/client'
 // Type-only: pulls the locale plugin's Context merge (ctx.locale).
-import type {} from '@deepseek-ai/dsh-client-locale/client'
+import type {} from '@daoai/dao-client-locale/client'
 // Type-only: pulls the ctx.remote merge and the forwarded-event key face
 // (the settings invalidation rides the allowlist) into this program.
-import type {} from '@deepseek-ai/dsh-api-remotes/client'
+import type {} from '@daoai/dao-api-remotes/client'
 // Type-only: pulls the settings shell's SlotMap merge (the 'settings.section' entry).
-import type {} from '@deepseek-ai/dsh-client-ui-settings/client'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
+import type {} from '@daoai/dao-client-ui-settings/client'
+import type {} from '@daoai/dao-client-ui-renderer/client'
 // Type-only: pulls the Workspace UI navigation service merge (ctx.uiWorkspace).
-import type {} from '@deepseek-ai/dsh-client-ui-workspace/client'
-import type { Context as ClientContext } from '@deepseek-ai/cordis'
+import type {} from '@daoai/dao-client-ui-workspace/client'
+import type { Context as ClientContext } from '@daoai/cordis'
 import { AgentPresetLabel } from './AgentPresetLabel.tsx'
 import type { AgentPresetLabelInjected } from './AgentPresetLabel.tsx'
 import { AgentPresetRow } from './AgentPresetRow.tsx'

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { ToolCallId , createMessage, createToolResultMessage } from '@deepseek-ai/dsh-llm'
+import { ToolCallId , createMessage, createToolResultMessage } from '@daoai/dao-llm'
 import { interruptedTurnClosers, TOOL_NOT_STARTED, TOOL_OUTCOME_UNKNOWN } from '../src/index.ts'
 import type { SessionEvent, SurfaceEvent } from '../src/index.ts'
 

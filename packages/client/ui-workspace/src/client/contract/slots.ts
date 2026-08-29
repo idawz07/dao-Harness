@@ -22,15 +22,15 @@
  * and a hole has exactly one declaring entry — they carry the same owner
  * contract and the same occupant.
  */
-import type { ConnectionGenerationState } from '@deepseek-ai/dsh-client-connection/client'
-import type { HostObservable, PropsHooks, PropsLocale, PropsRenderSlots, PropsRuntime, PropsStore } from '@deepseek-ai/dsh-client-ui-slots'
+import type { ConnectionGenerationState } from '@daoai/dao-client-connection/client'
+import type { HostObservable, PropsHooks, PropsLocale, PropsRenderSlots, PropsRuntime, PropsStore } from '@daoai/dao-client-ui-slots'
 // Type-only: pull the owner SlotMap merges into programs that resolve the
 // runtime shares below.
-import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
-import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { SessionSearchResultItem } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { WorkspaceId, WorkspaceView } from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type {} from '@daoai/dao-client-ui-sidebar/client'
+import type {} from '@daoai/dao-client-ui-conversation/client'
+import type { SessionSearchResultItem } from '@daoai/dao-api-session-controller/client'
+import type { WorkspaceId, WorkspaceView } from '@daoai/dao-api-workspace-controller/client'
+import type { SessionId } from '@daoai/dao-session/types'
 import type { createWorkspaceViewStore } from '../stores.ts'
 
 /**
@@ -51,7 +51,7 @@ export interface DirectoryFlowOwnerProps {
   onError: (message: string) => void
 }
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@daoai/dao-client-ui-slots' {
   interface SlotMap {
     /** Directory-flow hole under the conversation empty-state picker (declared by the WorkspacePicker entry). */
     'conversation.hero.workspace.directoryFlow': { kind: 'single'; scope: 'root'; owner: DirectoryFlowOwnerProps }

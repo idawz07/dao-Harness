@@ -21,7 +21,7 @@ describe('Python runtime executable assets', () => {
     })
 
     expect(result.status).toBe(0)
-    expect(result.stdout).toContain('node_modules/@deepseek-ai/dsh-web-frontend/dist/**/*')
-    expect(result.stdout).toContain('node_modules/@deepseek-ai/dsh-skill-badge/assets/**/*')
+    expect(result.stdout).toContain('node_modules/@daoai/dao-web-frontend/dist/**/*')
+    expect(result.stdout).toContain('node_modules/@daoai/dao-skill-badge/assets/**/*')
   })
 })

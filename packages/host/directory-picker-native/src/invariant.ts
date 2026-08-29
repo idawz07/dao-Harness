@@ -1,12 +1,12 @@
 /**
  * Package-owned invariant companion for the native directory-picker backend.
- * @module @deepseek-ai/dsh-host-directory-picker-native/invariant
+ * @module @daoai/dao-host-directory-picker-native/invariant
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-host-directory-picker-native'
+const PACKAGE_NAME = '@daoai/dao-host-directory-picker-native'
 
 /** Cordis companion plugin name. */
 export const name = 'host-directory-picker-native-invariant'

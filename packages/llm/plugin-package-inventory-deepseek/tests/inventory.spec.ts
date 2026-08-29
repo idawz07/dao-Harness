@@ -3,14 +3,14 @@ import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import AgentRegistry, { type Agent } from '@deepseek-ai/dsh-agent'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import { createScope } from '@deepseek-ai/dsh-scope'
-import AgentPresets, { mountPreset } from '@deepseek-ai/dsh-agent-presets'
-import DeepSeekLlmApiExtensionRegistry from '@deepseek-ai/dsh-deepseek-llm-api-extensions'
+import { Context } from '@daoai/cordis'
+import Loader from '@daoai/cordis-plugin-loader'
+import Include from '@daoai/cordis-plugin-include'
+import AgentRegistry, { type Agent } from '@daoai/dao-agent'
+import { SessionId } from '@daoai/dao-session'
+import { createScope } from '@daoai/dao-scope'
+import AgentPresets, { mountPreset } from '@daoai/dao-agent-presets'
+import DeepSeekLlmApiExtensionRegistry from '@daoai/dao-deepseek-llm-api-extensions'
 import * as PluginInventory from '../src/index.ts'
 
 const contexts: Context[] = []
@@ -36,7 +36,7 @@ async function packagePlugin(
 }
 
 async function harness(enabled?: boolean): Promise<{ ctx: Context; root: string; disposeInventory: () => Promise<void> }> {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-plugin-packages-'))
+  const root = await mkdtemp(join(tmpdir(), 'dao-plugin-packages-'))
   roots.push(root)
   const ctx = new Context()
   contexts.push(ctx)

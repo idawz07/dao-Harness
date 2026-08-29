@@ -1,14 +1,14 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-commands`:
+ * Package-owned invariant companion for `@daoai/dao-commands`:
  * command lifecycle events pair by commandId within one session log.
- * @module @deepseek-ai/dsh-commands/invariant
+ * @module @daoai/dao-commands/invariant
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { Session, SessionEvent } from '@deepseek-ai/dsh-session'
-import type { InvariantFailure, InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { Session, SessionEvent } from '@daoai/dao-session'
+import type { InvariantFailure, InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-commands'
+const PACKAGE_NAME = '@daoai/dao-commands'
 
 /** Cordis companion plugin name. */
 export const name = 'commands-invariant'

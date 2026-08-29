@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-session-query`.
- * @module @deepseek-ai/dsh-session-query/invariant
+ * Package-owned invariant companion for `@daoai/dao-session-query`.
+ * @module @daoai/dao-session-query/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-session-query'
+const PACKAGE_NAME = '@daoai/dao-session-query'
 
 /** Cordis companion plugin name. */
 export const name = 'session-query-invariant'

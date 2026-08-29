@@ -6,13 +6,13 @@
  * over its snapshot.
  */
 
-import { Service } from '@deepseek-ai/cordis'
-import type { Context } from '@deepseek-ai/cordis'
+import { Service } from '@daoai/cordis'
+import type { Context } from '@daoai/cordis'
 import type {
   ConnectionHandle, JsonValue, SettingsNamespaceView, SettingsPathOpView,
-} from '@deepseek-ai/dsh-api-remotes/client'
-import { createSnapshotStore, type SnapshotStore } from '@deepseek-ai/dsh-client-store'
-// Type-only, and deliberately NOT `@deepseek-ai/dsh-api-remotes/client`: this
+} from '@daoai/dao-api-remotes/client'
+import { createSnapshotStore, type SnapshotStore } from '@daoai/dao-client-store'
+// Type-only, and deliberately NOT `@daoai/dao-api-remotes/client`: this
 // package is reachable from the Host build graph through its feature-package
 // callers, and api-remotes' Client face imports a Host-tsdown-generated
 // `/remote` artifact, which would deadlock the Host tsc phase. The gateway's
@@ -21,13 +21,13 @@ import { createSnapshotStore, type SnapshotStore } from '@deepseek-ai/dsh-client
 // `$on` and its key face without dragging a build artifact in. The runtime
 // `remote` injection belongs to the providing plugin's apply, which registers
 // the mirror's invalidation subscriptions.
-import type {} from '@deepseek-ai/dsh-api-remotes/client'
-import type {} from '@deepseek-ai/dsh-api-remotes/types'
+import type {} from '@daoai/dao-api-remotes/client'
+import type {} from '@daoai/dao-api-remotes/types'
 // The forwarded event's own declaration: `$on`'s key face is
 // `Extract<keyof Events, keyof Selection>`, so the allowlist alone resolves to
 // never — the owning package's client-safe, type-only subpath supplies the
 // cordis `Events` entry (and with it the branded `SettingsNamespace`).
-import type {} from '@deepseek-ai/dsh-settings/types'
+import type {} from '@daoai/dao-settings/types'
 import type { SettingsSchemaService } from './schema.ts'
 import type { SettingsScope, SettingsScopeSnapshot, SettingsScopeSpec } from './settings-contract.ts'
 import { SettingsDescribeMirror, type SettingsDescribeFace, type SettingsWireFace } from './settings-mirror.ts'
@@ -222,7 +222,7 @@ export class SettingsScopeController<T> implements SettingsScope<T> {
   }
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@daoai/cordis' {
   interface Context {
     settingsScope: SettingsScopeBinder
   }

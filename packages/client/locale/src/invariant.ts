@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-client-locale`.
- * @module @deepseek-ai/dsh-client-locale/invariant
+ * Package-owned invariant companion for `@daoai/dao-client-locale`.
+ * @module @daoai/dao-client-locale/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-client-locale'
+const PACKAGE_NAME = '@daoai/dao-client-locale'
 
 /** Cordis companion plugin name. */
 export const name = 'client-locale-invariant'

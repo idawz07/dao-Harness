@@ -1,10 +1,10 @@
 import {
   ToolCallId, createMessage, createToolResultMessage, createUserMessage,
-} from '@deepseek-ai/dsh-llm'
+} from '@daoai/dao-llm'
 // Minimal SessionEvent builders for orchestration tests (shape mirrors what the
 // host emits; only the fields the object layer reads).
-import type { ContentBlock } from '@deepseek-ai/dsh-llm/types'
-import type { SessionEvent } from '@deepseek-ai/dsh-session/types'
+import type { ContentBlock } from '@daoai/dao-llm/types'
+import type { SessionEvent } from '@daoai/dao-session/types'
 import type {
   SessionEventEntry,
   SessionPage,

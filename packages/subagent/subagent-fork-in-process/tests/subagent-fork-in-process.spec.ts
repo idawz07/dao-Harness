@@ -1,20 +1,20 @@
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
+import { createUserMessage } from '@daoai/dao-llm'
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import InvariantRegistry from '@deepseek-ai/dsh-invariants'
-import * as SessionInvariant from '@deepseek-ai/dsh-session/invariant'
-import * as AgentInvariant from '@deepseek-ai/dsh-agent/invariant'
-import * as AgentLoopInvariant from '@deepseek-ai/dsh-agent-loop/invariant'
-import SubagentRuntime, { type SubagentStartRequest } from '@deepseek-ai/dsh-subagent'
+import { Context } from '@daoai/cordis'
+import Loader from '@daoai/cordis-plugin-loader'
+import AgentRegistry from '@daoai/dao-agent'
+import { SessionId } from '@daoai/dao-session'
+import AgentLoop from '@daoai/dao-agent-loop'
+import { mountAgentLoopTestDependencies } from '@daoai/dao-agent-loop-testkit'
+import InvariantRegistry from '@daoai/dao-invariants'
+import * as SessionInvariant from '@daoai/dao-session/invariant'
+import * as AgentInvariant from '@daoai/dao-agent/invariant'
+import * as AgentLoopInvariant from '@daoai/dao-agent-loop/invariant'
+import SubagentRuntime, { type SubagentStartRequest } from '@daoai/dao-subagent'
 import { MockAdapter, textResponse, toolCallResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
-import type { StreamChunk } from '@deepseek-ai/dsh-llm'
+import type { StreamChunk } from '@daoai/dao-llm'
 import * as fork from '../src/index.ts'
-import { STRUCTURED_OUTPUT_TOOL } from '@deepseek-ai/dsh-subagent-in-process-driver'
+import { STRUCTURED_OUTPUT_TOOL } from '@daoai/dao-subagent-in-process-driver'
 
 type Script = ConstructorParameters<typeof MockAdapter>[0]
 
@@ -55,7 +55,7 @@ function text(blocks: { type: string; text?: string }[]): string {
   return blocks.filter(b => b.type === 'text').map(b => b.text).join('')
 }
 
-describe('dsh-subagent-fork-in-process', () => {
+describe('dao-subagent-fork-in-process', () => {
   it('emits subagent/start only after the seeded child is published', async () => {
     const { ctx, parent } = await setup([textResponse('child answer')])
     let childAtStart: ReturnType<typeof ctx.agents.get>

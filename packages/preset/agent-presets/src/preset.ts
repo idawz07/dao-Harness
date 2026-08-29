@@ -1,6 +1,6 @@
 /** Agent-preset vocabulary shared by discovery, mounting, and consumers. */
 
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { SessionId } from '@daoai/dao-session/types'
 
 /**
  * Where a preset's composition came from. A `system` preset ships with the

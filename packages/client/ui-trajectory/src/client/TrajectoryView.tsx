@@ -3,9 +3,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type {
   AssistantBlock, AssistantMessageNode, ConvViewProps, MessageImageLoader, RenderMessageImages,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { InjectFace, PropsLocale, PropsRenderSlots } from '@deepseek-ai/dsh-client-ui-slots'
-import type { SnapshotStore } from '@deepseek-ai/dsh-client-store'
+} from '@daoai/dao-client-ui-conversation/client'
+import type { InjectFace, PropsLocale, PropsRenderSlots } from '@daoai/dao-client-ui-slots'
+import type { SnapshotStore } from '@daoai/dao-client-store'
 import {
   TrajectoryTable,
   type TrajectoryRequestNumber,

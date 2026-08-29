@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-experimental-agent-team-web-profile",
+  "name": "@daoai/dao-experimental-agent-team-web-profile",
   "description": "Private Web profile layer for Agent Teams Remote and UI plugins",
   "version": "0.1.2-alpha.1",
   "private": true,
@@ -31,22 +31,22 @@
     "lib/types/**/*.d.ts"
   ],
   "license": "MIT",
-  "dsh": {
+  "dao": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
   },
   "dependencies": {
-    "@deepseek-ai/dsh-experimental-client-ui-agent-team": "workspace:^"
+    "@daoai/dao-experimental-client-ui-agent-team": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
+    "@daoai/cordis-plugin-include": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^",
     "js-yaml": "^4.2.0"
   }
 }

@@ -11,15 +11,15 @@
  * ui-sidebar would close a reference cycle through ui-layout and ui-theme.
  * Export discipline: packages/client/AGENTS.md.
  */
-import type { Context } from '@deepseek-ai/cordis'
-import type { ConnectionHandle } from '@deepseek-ai/dsh-api-remotes/client'
+import type { Context } from '@daoai/cordis'
+import type { ConnectionHandle } from '@daoai/dao-api-remotes/client'
 // Type-only service merge for the connection lifecycle event.
-import type {} from '@deepseek-ai/dsh-client-connection/client'
+import type {} from '@daoai/dao-client-connection/client'
 // Type-only pair supplying `$on` and its key face without dragging a build
 // artifact into the Host graph (rationale beside the same pair in
 // settings-scope.ts).
-import type {} from '@deepseek-ai/dsh-api-remotes/types'
-import type {} from '@deepseek-ai/dsh-settings/types'
+import type {} from '@daoai/dao-api-remotes/types'
+import type {} from '@daoai/dao-settings/types'
 import { SettingsSchemaService } from './schema.ts'
 import { SettingsScopeBinder } from './settings-scope.ts'
 import { SettingsDescribeMirror } from './settings-mirror.ts'

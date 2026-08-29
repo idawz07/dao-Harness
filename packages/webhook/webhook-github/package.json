@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-webhook-github",
-  "description": "Signed GitHub HTTP webhook adapter for the DeepSeek Harness webhook runtime",
+  "name": "@daoai/dao-webhook-github",
+  "description": "Signed GitHub HTTP webhook adapter for the Dao webhook runtime",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -37,25 +37,25 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-host-webserver": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-webhook": "workspace:^"
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-credentials": "workspace:^",
+    "@daoai/dao-host-webserver": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-webhook": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@daoai/schemastery": "workspace:^",
     "@octokit/webhooks": "^14.2.0"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-host-webserver": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-webhook": "workspace:^"
+    "@daoai/cordis": "workspace:^",
+    "@daoai/cordis-plugin-include": "workspace:^",
+    "@daoai/cordis-plugin-loader": "workspace:^",
+    "@daoai/dao-credentials": "workspace:^",
+    "@daoai/dao-host-webserver": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-webhook": "workspace:^"
   }
 }

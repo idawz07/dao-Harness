@@ -2,17 +2,17 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import { ToolCallId } from '@deepseek-ai/dsh-llm'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SubagentRuntime from '@deepseek-ai/dsh-subagent'
-import * as SubagentSpawn from '@deepseek-ai/dsh-subagent-spawn-in-process'
-import type { GenerateOptions, StreamChunk } from '@deepseek-ai/dsh-llm'
-import { LlmAdapter } from '@deepseek-ai/dsh-llm'
+import { Context } from '@daoai/cordis'
+import { ToolCallId } from '@daoai/dao-llm'
+import AgentLoop from '@daoai/dao-agent-loop'
+import { mountAgentLoopTestDependencies } from '@daoai/dao-agent-loop-testkit'
+import { SessionId } from '@daoai/dao-session'
+import JsonlSessionPersistence from '@daoai/dao-session-persistence-jsonl'
+import SessionProjectionRegistry from '@daoai/dao-session-projection'
+import SubagentRuntime from '@daoai/dao-subagent'
+import * as SubagentSpawn from '@daoai/dao-subagent-spawn-in-process'
+import type { GenerateOptions, StreamChunk } from '@daoai/dao-llm'
+import { LlmAdapter } from '@daoai/dao-llm'
 import { MockAdapter, textResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import * as tool from '../src/index.ts'
 import { parkParent } from './park-parent.ts'
@@ -54,7 +54,7 @@ afterEach(() => {
 async function setupWith(adapter: MockAdapter | GatedAdapter) {
   const ctx = new Context()
   await mountAgentLoopTestDependencies(ctx)
-  const root = mkdtempSync(join(tmpdir(), 'dsh-tool-subagent-control-'))
+  const root = mkdtempSync(join(tmpdir(), 'dao-tool-subagent-control-'))
   roots.push(root)
   await ctx.plugin(JsonlSessionPersistence, { root })
   await ctx.plugin(TestSessionQuery)
@@ -101,7 +101,7 @@ async function waitNoActivation(ctx: Context, childId: SessionId): Promise<void>
   }, { timeout: 5_000 })
 }
 
-describe('dsh-tool-subagent-control', () => {
+describe('dao-tool-subagent-control', () => {
   it('registers send_message once, globally, with the two required parameters', async () => {
     const { ctx } = await setup([])
     const schemas = ctx.tools.schemas().filter(schema => schema.name === 'send_message')
@@ -226,7 +226,7 @@ describe('dsh-tool-subagent-control', () => {
   })
 })
 
-describe('dsh-tool-subagent-control interrupt_agent', () => {
+describe('dao-tool-subagent-control interrupt_agent', () => {
   it('registers interrupt_agent with the single agent_id parameter and current-turn wording', async () => {
     const { ctx } = await setup([])
     const schemas = ctx.tools.schemas().filter(schema => schema.name === 'interrupt_agent')

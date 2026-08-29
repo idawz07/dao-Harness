@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-fs-sandbox",
-  "description": "Sandbox-enforcing implementation of the DeepSeek Harness filesystem seam: fences write/edit by the per-call sandbox mode (read-only denies mutation, workspace-write contains it to the workspace + temp roots) while reads pass through",
+  "name": "@daoai/dao-fs-sandbox",
+  "description": "Sandbox-enforcing implementation of the Dao filesystem seam: fences write/edit by the per-call sandbox mode (read-only denies mutation, workspace-write contains it to the workspace + temp roots) while reads pass through",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,19 +32,19 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-fs": "workspace:^",
-    "@deepseek-ai/dsh-fs-local": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-fs": "workspace:^",
+    "@daoai/dao-fs-local": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-sandbox": "workspace:^",
+    "@daoai/dao-sandbox-policy": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-fs": "workspace:^",
-    "@deepseek-ai/dsh-fs-local": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-fs": "workspace:^",
+    "@daoai/dao-fs-local": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-sandbox": "workspace:^",
+    "@daoai/dao-sandbox-policy": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

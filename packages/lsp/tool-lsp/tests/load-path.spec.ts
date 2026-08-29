@@ -1,15 +1,15 @@
 /**
- * Loader export-shape guard for @deepseek-ai/dsh-tool-lsp. It is a NAMESPACE plugin with `inject`, so a
+ * Loader export-shape guard for @daoai/dao-tool-lsp. It is a NAMESPACE plugin with `inject`, so a
  * stray `export default apply` would make the Loader's `unwrapExports` collapse the module to the
  * bare `apply`, dropping `inject` (postmortem 0001). This verifies the namespace survives
  * `Loader.prototype.unwrapExports`; the `lsp-definition` ACP snapshot owns full app composition.
  */
 
 import { describe, expect, it } from 'vitest'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import * as toolLsp from '@deepseek-ai/dsh-tool-lsp'
+import Loader from '@daoai/cordis-plugin-loader'
+import * as toolLsp from '@daoai/dao-tool-lsp'
 
-describe('dsh-tool-lsp Loader export-shape guard', () => {
+describe('dao-tool-lsp Loader export-shape guard', () => {
   it('has no default export and keeps name/inject/Config through unwrapExports', () => {
     expect('default' in toolLsp).toBe(false)
 

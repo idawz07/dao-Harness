@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 import { act, cleanup, renderHook } from '@testing-library/react'
-import type { SessionLiveEventEntry } from '@deepseek-ai/dsh-api-session-controller/client'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { EMPTY_CHAT_SNAPSHOT } from '@deepseek-ai/dsh-client-ui-chat/client'
-import { EMPTY_CONVERSATION_SNAPSHOT } from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { SessionLiveEventEntry } from '@daoai/dao-api-session-controller/client'
+import { createSnapshotStore } from '@daoai/dao-client-store'
+import { EMPTY_CHAT_SNAPSHOT } from '@daoai/dao-client-ui-chat/client'
+import { EMPTY_CONVERSATION_SNAPSHOT } from '@daoai/dao-client-ui-conversation/client'
+import type { SessionId } from '@daoai/dao-session/types'
 import { afterAll, afterEach, describe, expect, it, vi } from 'vitest'
 import {
   bindSnapshotSelector,

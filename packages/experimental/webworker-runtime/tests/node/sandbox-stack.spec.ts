@@ -1,18 +1,18 @@
 /** The unchanged sandbox-local → bash-sandbox → subprocess stack over the Worker Node layer. */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { SandboxBashExecutor } from '@deepseek-ai/dsh-bash-sandbox'
-import LocalSandboxProvider from '@deepseek-ai/dsh-sandbox-local'
-import { SandboxPolicyService } from '@deepseek-ai/dsh-sandbox-policy'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
+import { Context } from '@daoai/cordis'
+import { SandboxBashExecutor } from '@daoai/dao-bash-sandbox'
+import LocalSandboxProvider from '@daoai/dao-sandbox-local'
+import { SandboxPolicyService } from '@daoai/dao-sandbox-policy'
+import LocalSubprocessRuntime from '@daoai/dao-subprocess-local'
 import { MemoryVfs } from '../../src/storage/memory.ts'
 import { setActiveVfs } from '../../src/storage/active.ts'
 import { processAlive, signalProcess } from '../../src/node/process-table.ts'
 
 vi.mock('node:child_process', async () => await import('../../src/node/builtin_modules/implemented/child_process.ts'))
 
-const WORKSPACE = '/dsh/workspace'
-const OUTSIDE = '/dsh/home'
+const WORKSPACE = '/dao/workspace'
+const OUTSIDE = '/dao/home'
 let vfs: MemoryVfs
 const contexts: Context[] = []
 
@@ -21,7 +21,7 @@ beforeEach(() => {
   setActiveVfs(vfs)
   vfs.mkdirSync(WORKSPACE, { recursive: true })
   vfs.mkdirSync(OUTSIDE, { recursive: true })
-  vfs.mkdirSync('/dsh/tmp', { recursive: true })
+  vfs.mkdirSync('/dao/tmp', { recursive: true })
   vi.spyOn(process, 'kill').mockImplementation((pid: number, signal?: string | number): true => {
     if (signal === 0) {
       if (processAlive(pid)) return true
@@ -58,7 +58,7 @@ describe('Worker Landlock through the production sandbox stack', () => {
     }))
     expect(allowed.sandbox).toEqual({ mode: 'workspace-write', denied: false, enforcement: 'full' })
     expect(vfs.readFileSync(`${WORKSPACE}/allowed.txt`, 'utf8')).toBe('workspace\n')
-    expect(vfs.readFileSync('/dsh/tmp/allowed.txt', 'utf8')).toBe('temp\n')
+    expect(vfs.readFileSync('/dao/tmp/allowed.txt', 'utf8')).toBe('temp\n')
 
     const denied = await bash.run(bash.resolve({ command: `echo denied > ${OUTSIDE}/denied.txt` }))
     expect(denied.exitCode).toBe(1)

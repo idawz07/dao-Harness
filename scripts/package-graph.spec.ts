@@ -11,15 +11,15 @@ afterEach(() => {
 })
 
 function fixture(packages: Readonly<Record<string, readonly string[]>>): string {
-  const root = mkdtempSync(join(tmpdir(), 'dsh-package-graph-'))
+  const root = mkdtempSync(join(tmpdir(), 'dao-package-graph-'))
   roots.push(root)
   for (const [name, dependencies] of Object.entries(packages)) {
     const directory = join(root, 'packages', 'client', name)
     mkdirSync(directory, { recursive: true })
     writeFileSync(join(directory, 'package.json'), `${JSON.stringify({
-      name: `@deepseek-ai/dsh-${name}`,
+      name: `@daoai/dao-${name}`,
       peerDependencies: Object.fromEntries(dependencies.map(dependency => [
-        `@deepseek-ai/dsh-${dependency}`,
+        `@daoai/dao-${dependency}`,
         'workspace:^',
       ])),
     }, null, 2)}\n`)
@@ -46,6 +46,6 @@ describe('collectPackageGraph', () => {
     const root = fixture({ consumer: ['missing'] })
 
     expect(() => collectPackageGraph(root, ['client'], 'fixture'))
-      .toThrow('fixture: @deepseek-ai/dsh-consumer references missing in-repo peer @deepseek-ai/dsh-missing')
+      .toThrow('fixture: @daoai/dao-consumer references missing in-repo peer @daoai/dao-missing')
   })
 })

@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-skill-badge",
-  "description": "Bundled dsh badge skill provider for DeepSeek Harness",
+  "name": "@daoai/dao-skill-badge",
+  "description": "Bundled dao badge skill provider for Dao",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,13 +32,13 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-skill": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-skill": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-skill": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-skill": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

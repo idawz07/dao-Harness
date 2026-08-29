@@ -3,13 +3,13 @@ description: "fd-3 wire protocol between a Node host and a CPython subprocess fo
 kind: "package-library"
 ---
 
-# @deepseek-ai/dsh-code-runtime-python
+# @daoai/dao-code-runtime-python
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-code-runtime-python` owns the versionless wire protocol between a Node host and a CPython subprocess for the [`dsh-code-runtime`](../code-runtime/README.md) seam: one JSON object per line on the child's fd 3, leaving stdout/stderr free for the program's own output. The package ships the host-side frame codec and hostile-frame validators (`src/protocol.ts`) plus the Python-side mirror of the same message vocabulary (`py/protocol.py`), so every consumer of the wire shares one vocabulary. It is the protocol layer for the Python backend — the package carries no subprocess execution path, so nothing here spawns `python3` outside the cross-language mirror test. The host treats every inbound frame as hostile, because model code has full access to fd 3 and can post anything through it.
+`dao-code-runtime-python` owns the versionless wire protocol between a Node host and a CPython subprocess for the [`dao-code-runtime`](../code-runtime/README.md) seam: one JSON object per line on the child's fd 3, leaving stdout/stderr free for the program's own output. The package ships the host-side frame codec and hostile-frame validators (`src/protocol.ts`) plus the Python-side mirror of the same message vocabulary (`py/protocol.py`), so every consumer of the wire shares one vocabulary. It is the protocol layer for the Python backend — the package carries no subprocess execution path, so nothing here spawns `python3` outside the cross-language mirror test. The host treats every inbound frame as hostile, because model code has full access to fd 3 and can post anything through it.
 
 ## Table of Contents
 
@@ -94,7 +94,7 @@ Read these when the protocol contract is not enough. They move from the seam def
 <a id="model-experience"></a>
 ## Model Experience
 
-Indirectly, through PTC mode in `dsh-tools`, which renders the program's completion value or failure into a retained `run_code` result.
+Indirectly, through PTC mode in `dao-tools`, which renders the program's completion value or failure into a retained `run_code` result.
 
 #### KV Cache effect
 

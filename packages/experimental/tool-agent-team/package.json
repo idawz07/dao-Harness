@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-experimental-tool-agent-team",
+  "name": "@daoai/dao-experimental-tool-agent-team",
   "description": "Scoped model-facing Agent Teams tools over ctx.agentTeams",
   "version": "0.1.2-alpha.1",
   "private": true,
@@ -30,33 +30,33 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-experimental-agent-team": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-system-prompt": "workspace:^",
+    "@daoai/dao-experimental-agent-team": "workspace:^",
+    "@daoai/dao-tools": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence-jsonl": "workspace:^",
-    "@deepseek-ai/dsh-session-query": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-subagent": "workspace:^",
-    "@deepseek-ai/dsh-subagent-fork-in-process": "workspace:^",
-    "@deepseek-ai/dsh-subagent-spawn-in-process": "workspace:^",
-    "@deepseek-ai/dsh-tool-subagent-control": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-experimental-agent-team": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-agent-loop": "workspace:^",
+    "@daoai/dao-agent-loop-testkit": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-persistence-jsonl": "workspace:^",
+    "@daoai/dao-session-query": "workspace:^",
+    "@daoai/dao-scope": "workspace:^",
+    "@daoai/dao-subagent": "workspace:^",
+    "@daoai/dao-subagent-fork-in-process": "workspace:^",
+    "@daoai/dao-subagent-spawn-in-process": "workspace:^",
+    "@daoai/dao-tool-subagent-control": "workspace:^",
+    "@daoai/dao-system-prompt": "workspace:^",
+    "@daoai/dao-experimental-agent-team": "workspace:^",
+    "@daoai/dao-tools": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

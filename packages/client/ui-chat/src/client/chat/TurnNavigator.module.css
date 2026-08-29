@@ -14,7 +14,7 @@
      the scrollport; the fallbacks carry the first paint before its observer
      fires. */
   --turn-rail-band: calc(
-    var(--dsh-conversation-viewport-height, 100dvh) - var(--dsh-composer-height, 152px)
+    var(--dao-conversation-viewport-height, 100dvh) - var(--dao-composer-height, 152px)
   );
   --turn-preview-height: 100px;
 
@@ -22,7 +22,7 @@
   top: calc(var(--turn-rail-band) / 2);
   /* Flush with the scrollport edge: the slot sits inside the transcript's side
      padding, so the rail gives that inset back and keeps 12px of its own. */
-  right: calc(12px - (var(--dsh-composer-side-clearance) + 16px));
+  right: calc(12px - (var(--dao-composer-side-clearance) + 16px));
   width: 28px;
   /* Never taller than the band it centers in: a short window (a tall composer,
      a low viewport) shrinks the rail instead of pushing marks under the
@@ -51,7 +51,7 @@
   height: 10px;
   transform: translateY(-50%);
   transition: top 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
-  animation: dsh-turn-mark-enter 150ms ease-out;
+  animation: dao-turn-mark-enter 150ms ease-out;
 }
 
 /* The rail owns pointer input for the whole column, so a mark is a keyboard
@@ -130,7 +130,7 @@
   background: var(--dsw-alias-bg-layer-1);
   box-shadow: var(--dsw-shadow-lv2);
   pointer-events: none;
-  animation: dsh-turn-preview-enter 120ms ease-out;
+  animation: dao-turn-preview-enter 120ms ease-out;
   transition: top 140ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -153,12 +153,12 @@
   -webkit-line-clamp: 2;
 }
 
-@keyframes dsh-turn-mark-enter {
+@keyframes dao-turn-mark-enter {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-@keyframes dsh-turn-preview-enter {
+@keyframes dao-turn-preview-enter {
   from { opacity: 0; transform: translateX(4px); }
   to { opacity: 1; transform: translateX(0); }
 }

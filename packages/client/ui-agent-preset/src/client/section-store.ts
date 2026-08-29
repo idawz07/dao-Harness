@@ -14,8 +14,8 @@
  * more than the row it targeted.
  */
 
-import type { ClientRemote } from '@deepseek-ai/dsh-api-remotes/client'
-import { createSnapshotStore, type SnapshotStore } from '@deepseek-ai/dsh-client-store'
+import type { ClientRemote } from '@daoai/dao-api-remotes/client'
+import { createSnapshotStore, type SnapshotStore } from '@daoai/dao-client-store'
 import { beginRosterRead, messageOf, writeDefaultPreset } from './settings-store.ts'
 
 /** Ids a preset directory may be named, mirroring the host's own rule. */

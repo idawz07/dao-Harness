@@ -5,41 +5,41 @@ import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import * as yaml from 'js-yaml'
 import { describe, expect, it } from 'vitest'
-import { entryListSchema } from '@deepseek-ai/cordis-plugin-include'
+import { entryListSchema } from '@daoai/cordis-plugin-include'
 
-describe('dsh-sdk-minimal bundle', () => {
+describe('dao-sdk-minimal bundle', () => {
   it('declares one standalone allowlisted tree with every row dependency', () => {
     const root = fileURLToPath(new URL('..', import.meta.url))
     const manifest = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8')) as {
       dependencies?: Record<string, string>
-      dsh?: { bundle?: { patch?: string } }
+      dao?: { bundle?: { patch?: string } }
     }
-    expect(manifest.dsh?.bundle?.patch).toBe('./cordis.patch.yml')
+    expect(manifest.dao?.bundle?.patch).toBe('./cordis.patch.yml')
     const patches = yaml.load(
-      readFileSync(resolve(root, manifest.dsh!.bundle!.patch!), 'utf8'),
+      readFileSync(resolve(root, manifest.dao!.bundle!.patch!), 'utf8'),
       { schema: entryListSchema },
     ) as Array<{ insert?: Array<{ id?: string; inject?: string[]; name?: string; config?: Record<string, unknown>; disabled?: unknown }> }>
     expect(patches).toHaveLength(1)
     const rows = patches[0]?.insert ?? []
     expect(rows.map(row => [row.id, row.name])).toEqual([
-      ['sdk-app-startup', '@deepseek-ai/dsh-sdk-app'],
-      ['sdk-jsonrpc-server', '@deepseek-ai/dsh-sdk-jsonrpc-server'],
-      ['deepseek-llm-api-extensions', '@deepseek-ai/dsh-deepseek-llm-api-extensions'],
-      ['session-log-deepseek', '@deepseek-ai/dsh-session-log-deepseek'],
-      ['plugin-package-inventory-deepseek', '@deepseek-ai/dsh-plugin-package-inventory-deepseek'],
-      ['llm-deepseek', '@deepseek-ai/dsh-llm-deepseek'],
-      ['sandbox', '@deepseek-ai/dsh-sandbox-local'],
-      ['sandbox-policy', '@deepseek-ai/dsh-sandbox-policy'],
-      ['subprocess', '@deepseek-ai/dsh-subprocess-local'],
-      ['pty', '@deepseek-ai/dsh-terminal'],
-      ['terminal-bash', '@deepseek-ai/dsh-terminal-bash'],
-      ['terminal-pwsh', '@deepseek-ai/dsh-terminal-bash'],
-      ['fs-local', '@deepseek-ai/dsh-fs-local'],
-      ['agent-spine', '@deepseek-ai/dsh-agent-spine-demo'],
-      ['persistent-bash', '@deepseek-ai/dsh-tool-bash-persistent'],
-      ['persistent-pwsh', '@deepseek-ai/dsh-tool-pwsh-persistent'],
-      ['str-replace-editor', '@deepseek-ai/dsh-tool-str-replace-editor'],
-      ['sessions', '@deepseek-ai/dsh-session-persistence-jsonl'],
+      ['sdk-app-startup', '@daoai/dao-sdk-app'],
+      ['sdk-jsonrpc-server', '@daoai/dao-sdk-jsonrpc-server'],
+      ['deepseek-llm-api-extensions', '@daoai/dao-deepseek-llm-api-extensions'],
+      ['session-log-deepseek', '@daoai/dao-session-log-deepseek'],
+      ['plugin-package-inventory-deepseek', '@daoai/dao-plugin-package-inventory-deepseek'],
+      ['llm-deepseek', '@daoai/dao-llm-deepseek'],
+      ['sandbox', '@daoai/dao-sandbox-local'],
+      ['sandbox-policy', '@daoai/dao-sandbox-policy'],
+      ['subprocess', '@daoai/dao-subprocess-local'],
+      ['pty', '@daoai/dao-terminal'],
+      ['terminal-bash', '@daoai/dao-terminal-bash'],
+      ['terminal-pwsh', '@daoai/dao-terminal-bash'],
+      ['fs-local', '@daoai/dao-fs-local'],
+      ['agent-spine', '@daoai/dao-agent-spine-demo'],
+      ['persistent-bash', '@daoai/dao-tool-bash-persistent'],
+      ['persistent-pwsh', '@daoai/dao-tool-pwsh-persistent'],
+      ['str-replace-editor', '@daoai/dao-tool-str-replace-editor'],
+      ['sessions', '@daoai/dao-session-persistence-jsonl'],
     ])
     expect(rows.find(row => row.id === 'sdk-app-startup')?.config).toEqual({ profile: 'sdk-minimal' })
     expect(rows.find(row => row.id === 'sdk-jsonrpc-server')).toMatchObject({
@@ -48,7 +48,7 @@ describe('dsh-sdk-minimal bundle', () => {
     })
     expect(rows.find(row => row.id === 'llm-deepseek')?.config).toEqual({
       apiKeyEnv: 'DEEPSEEK_API_KEY',
-      defaultContextWindow: { __jsExpr: 'Number(process.env.DSH_CONTEXT_WINDOW ?? 1000000)' },
+      defaultContextWindow: { __jsExpr: 'Number(process.env.DAO_CONTEXT_WINDOW ?? 1000000)' },
       streamIdleTimeoutMs: 172800000,
     })
     expect(rows.find(row => row.id === 'agent-spine')?.config).toMatchObject({

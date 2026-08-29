@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { ReasoningEffortId } from '@deepseek-ai/dsh-llm'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import SubagentRuntime from '@deepseek-ai/dsh-subagent'
-import type { SubagentStartRequest } from '@deepseek-ai/dsh-subagent'
-import { Session, SessionId } from '@deepseek-ai/dsh-session'
+import { Context } from '@daoai/cordis'
+import { ReasoningEffortId } from '@daoai/dao-llm'
+import SystemPrompt from '@daoai/dao-system-prompt'
+import ToolRuntime from '@daoai/dao-tools'
+import type { Agent } from '@daoai/dao-agent'
+import SubagentRuntime from '@daoai/dao-subagent'
+import type { SubagentStartRequest } from '@daoai/dao-subagent'
+import { Session, SessionId } from '@daoai/dao-session'
 import { MockAdapter } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import * as mock from './scripted-provider.ts'
 import * as tool from '../src/index.ts'
@@ -36,7 +36,7 @@ function parentWithRoute(
   return { id, options, session: Session.create(id) } as unknown as Agent
 }
 
-describe('dsh-tool-subagent model selection', () => {
+describe('dao-tool-subagent model selection', () => {
   it('rejects empty route ids at the configuration boundary', () => {
     expect(() => { assertAllowedModelRoutes([{ provider: '', model: 'model' }]) })
       .toThrow('requires non-empty provider and model ids')

@@ -10,38 +10,38 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { createElement, type ComponentProps, type FC, type ReactNode } from 'react'
-import { bindSnapshotSelector, SlotTestRuntime } from '@deepseek-ai/dsh-client-test-runtime'
-import { resolveSlotLabel } from '@deepseek-ai/dsh-client-ui-slots'
+import { bindSnapshotSelector, SlotTestRuntime } from '@daoai/dao-client-test-runtime'
+import { resolveSlotLabel } from '@daoai/dao-client-ui-slots'
 import {
   EMPTY_CONVERSATION_SNAPSHOT, UiConversation,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@daoai/dao-client-ui-conversation/client'
 import type {
   ConversationBinding, ConversationSnapshot, ConversationViewSnapshotMap, ConvViewProps,
   InputActions, InputState, RequestView, ViewTab,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import { EMPTY_CHAT_SNAPSHOT } from '@deepseek-ai/dsh-client-ui-chat/client'
+} from '@daoai/dao-client-ui-conversation/client'
+import { EMPTY_CHAT_SNAPSHOT } from '@daoai/dao-client-ui-chat/client'
 import type {
   ChatSnapshot, LegacyConversationSlice,
-} from '@deepseek-ai/dsh-client-ui-chat/client'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
+} from '@daoai/dao-client-ui-chat/client'
+import { SlotRegistry } from '@daoai/dao-client-ui-renderer/client'
+import { createSnapshotStore } from '@daoai/dao-client-store'
+import type { ObservableSnapshot } from '@daoai/dao-client-store'
 import type {
   SessionBinding, SessionListState, SessionProjectionMap, SessionSnapshot, UseProjection,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import type { WorkspaceSnapshot } from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { SessionPendingInteractionSnapshot } from '@deepseek-ai/dsh-client-ui-session/client'
+} from '@daoai/dao-api-session-controller/client'
+import type { WorkspaceSnapshot } from '@daoai/dao-api-workspace-controller/client'
+import type { SessionId } from '@daoai/dao-session/types'
+import type { SessionPendingInteractionSnapshot } from '@daoai/dao-client-ui-session/client'
 import {
   ConversationSession, ConversationSessionHeader,
   type ConversationSessionHeaderProps, type ConversationSessionProps,
-} from '@deepseek-ai/dsh-client-ui-conversation/src/client/skeleton/ConversationSession.tsx'
-import { createConversationStore } from '@deepseek-ai/dsh-client-ui-conversation/src/client/stores.ts'
-import { zh as conversationZh } from '@deepseek-ai/dsh-client-ui-conversation/src/client/locales.ts'
-import { apply as localeApply, inject as localeInject } from '@deepseek-ai/dsh-client-locale/client'
-import { stubSettingsScope } from '@deepseek-ai/dsh-client-test-runtime'
-import { apply, inject } from '@deepseek-ai/dsh-client-ui-trajectory/client'
-import { apply as nodeApply } from '@deepseek-ai/dsh-client-ui-trajectory'
+} from '@daoai/dao-client-ui-conversation/src/client/skeleton/ConversationSession.tsx'
+import { createConversationStore } from '@daoai/dao-client-ui-conversation/src/client/stores.ts'
+import { zh as conversationZh } from '@daoai/dao-client-ui-conversation/src/client/locales.ts'
+import { apply as localeApply, inject as localeInject } from '@daoai/dao-client-locale/client'
+import { stubSettingsScope } from '@daoai/dao-client-test-runtime'
+import { apply, inject } from '@daoai/dao-client-ui-trajectory/client'
+import { apply as nodeApply } from '@daoai/dao-client-ui-trajectory'
 import type { TrajectoryTurnModel } from '../src/client/layout.ts'
 import { TrajectoryTimeline as LocalizedTrajectoryTimeline } from '../src/client/TrajectoryTimeline.tsx'
 import {
@@ -462,8 +462,8 @@ describe('plugin registration', () => {
     expect(second.hooks.duration).toBe(first.hooks.duration)
     first.setActualDuration(true)
     expect(second.hooks.duration.getSnapshot()).toBe(true)
-    expect(localStorage.getItem('dsh.trajectory.duration')).toBe('true')
-    expect(localStorage.getItem(`dsh.trajectory.duration.${SID}`)).toBeNull()
+    expect(localStorage.getItem('dao.trajectory.duration')).toBe('true')
+    expect(localStorage.getItem(`dao.trajectory.duration.${SID}`)).toBeNull()
   })
 
   it('reports whether loading older history changed the Trajectory snapshot', async () => {
@@ -1279,7 +1279,7 @@ describe('TrajectoryView state', () => {
 
     expect(duration.getAttribute('aria-pressed')).toBe('false')
     fireEvent.click(duration)
-    expect(localStorage.getItem('dsh.trajectory.duration')).toBe('true')
+    expect(localStorage.getItem('dao.trajectory.duration')).toBe('true')
     first.unmount()
 
     const restoredDuration = createTrajectoryDurationStore()

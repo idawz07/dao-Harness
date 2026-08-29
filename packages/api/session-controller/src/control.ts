@@ -1,11 +1,11 @@
 /** Live Session queue, jobs, and projection state with reconnect baselines. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type { JobSnapshot } from '@deepseek-ai/dsh-jobs'
+import type { Context } from '@daoai/cordis'
+import type { Agent } from '@daoai/dao-agent'
+import type { JobSnapshot } from '@daoai/dao-jobs'
 import type {
   JsonValue, Session, SessionEvent, SessionEventMap, SessionId, UserMessage,
-} from '@deepseek-ai/dsh-session'
+} from '@daoai/dao-session'
 import type {
   SessionControlBaseline,
   SessionControlFrame,

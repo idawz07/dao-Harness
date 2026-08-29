@@ -1,5 +1,5 @@
-import { Context } from '@deepseek-ai/cordis'
-import InvariantRegistry from '@deepseek-ai/dsh-invariants'
+import { Context } from '@daoai/cordis'
+import InvariantRegistry from '@daoai/dao-invariants'
 import { describe, expect, it } from 'vitest'
 import * as StoreInvariant from '../src/invariant.ts'
 

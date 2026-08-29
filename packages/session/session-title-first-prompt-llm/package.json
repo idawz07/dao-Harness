@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-session-title-first-prompt-llm",
-  "description": "First-message LLM provider plugin for DeepSeek Harness session titles",
+  "name": "@daoai/dao-session-title-first-prompt-llm",
+  "description": "First-message LLM provider plugin for Dao session titles",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -27,25 +27,25 @@
   "files": ["lib/index.js", "lib/invariant.js", "lib/types/**/*.d.ts"],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-title": "workspace:^",
-    "@deepseek-ai/dsh-session-title-llm": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-title": "workspace:^",
+    "@daoai/dao-session-title-llm": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-llm-deepseek": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-title": "workspace:^",
-    "@deepseek-ai/dsh-session-title-llm": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/cordis-plugin-include": "workspace:^",
+    "@daoai/cordis-plugin-loader": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-llm-deepseek": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-title": "workspace:^",
+    "@daoai/dao-session-title-llm": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

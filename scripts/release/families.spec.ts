@@ -27,9 +27,9 @@ function write(path: string, content: string): void {
 }
 
 function buildFixture(environment: Record<string, string>): string {
-  const root = mkdtempSync(join(tmpdir(), 'dsh-release-build-'))
+  const root = mkdtempSync(join(tmpdir(), 'dao-release-build-'))
   roots.push(root)
-  write(join(root, 'package.json'), `${JSON.stringify({ version: environment.DSH_CLIENT_VERSION ?? '0.0.1' })}\n`)
+  write(join(root, 'package.json'), `${JSON.stringify({ version: environment.DAO_CLIENT_VERSION ?? '0.0.1' })}\n`)
   write(join(root, 'apps/web/dist/index.html'), '<main></main>')
   write(join(root, 'packages/client/example/lib/client.js'), 'module.exports = {}\n')
   writeClientBuildRecord(root, environment)
@@ -42,38 +42,38 @@ afterEach(() => {
 })
 
 describe('release families', () => {
-  it('excludes private experimental packages from the dsh release', () => {
-    const members = releaseFamily('dsh').members(resolve(import.meta.dirname, '../..'))
+  it('excludes private experimental packages from the dao release', () => {
+    const members = releaseFamily('dao').members(resolve(import.meta.dirname, '../..'))
 
     expect(members.some(member => member.directory.startsWith('packages/experimental/'))).toBe(false)
-    expect(members.map(member => member.name)).not.toContain('@deepseek-ai/dsh-experimental-agent-team')
+    expect(members.map(member => member.name)).not.toContain('@daoai/dao-experimental-agent-team')
   })
 
-  it('bumps private dsh packages without adding release tags', () => {
-    const root = mkdtempSync(join(tmpdir(), 'dsh-release-version-'))
+  it('bumps private dao packages without adding release tags', () => {
+    const root = mkdtempSync(join(tmpdir(), 'dao-release-version-'))
     roots.push(root)
     write(join(root, 'package.json'), '{"version":"0.0.1"}\n')
     write(join(root, 'packages/experimental/prototype/package.json'), '{"version":"0.0.1","private":true}\n')
     write(join(root, 'packages/core/unselected/package.json'), '{"version":"0.0.1"}\n')
 
-    const dsh = releaseFamily('dsh')
-    const published = member('packages/core/published', '@deepseek-ai/dsh-published')
-    const { planned } = planShared(dsh, root, [published], '0.0.2')
+    const dao = releaseFamily('dao')
+    const published = member('packages/core/published', '@daoai/dao-published')
+    const { planned } = planShared(dao, root, [published], '0.0.2')
 
     expect(planned.map(entry => ({ path: entry.manifestPath, tag: entry.tag }))).toEqual([
       { path: 'package.json', tag: undefined },
-      { path: 'packages/core/published/package.json', tag: 'dsh-v0.0.2' },
+      { path: 'packages/core/published/package.json', tag: 'dao-v0.0.2' },
       { path: 'packages/experimental/prototype/package.json', tag: undefined },
     ])
   })
 
-  it('names one tag for the whole dsh family and one per vendored package', () => {
-    const dsh = releaseFamily('dsh')
+  it('names one tag for the whole dao family and one per vendored package', () => {
+    const dao = releaseFamily('dao')
     const vendor = releaseFamily('vendor')
-    const cli = member('apps/cli', '@deepseek-ai/dsh')
-    const cordis = { ...member('vendor/cordis', '@deepseek-ai/cordis'), version: '4.0.1' }
+    const cli = member('apps/cli', '@daoai/dao')
+    const cordis = { ...member('vendor/cordis', '@daoai/cordis'), version: '4.0.1' }
 
-    expect(dsh.tagFor(cli)).toBe('dsh-v0.0.1')
+    expect(dao.tagFor(cli)).toBe('dao-v0.0.1')
     expect(vendor.tagFor(cordis)).toBe('vendor-cordis-v4.0.1')
     // The prefix is constructed, not recovered from a tag: a version with a
     // hyphen would defeat any suffix-stripping.
@@ -82,168 +82,168 @@ describe('release families', () => {
   })
 
   it('rejects a family whose members disagree on the shared version', () => {
-    const dsh = releaseFamily('dsh')
-    const members = [member('apps/cli', '@deepseek-ai/dsh'), { ...member('apps/web', '@deepseek-ai/dsh-web-frontend'), version: '0.0.2' }]
+    const dao = releaseFamily('dao')
+    const members = [member('apps/cli', '@daoai/dao'), { ...member('apps/web', '@daoai/dao-web-frontend'), version: '0.0.2' }]
 
-    expect(() => { dsh.verifyVersions(members) }).toThrow(/must share one version/)
-    expect(() => { dsh.verifyVersions([members[0]!]) }).not.toThrow()
+    expect(() => { dao.verifyVersions(members) }).toThrow(/must share one version/)
+    expect(() => { dao.verifyVersions([members[0]!]) }).not.toThrow()
   })
 
   it('accepts independent vendored versions and rejects an unpublishable one', () => {
     const vendor = releaseFamily('vendor')
     const members = [
-      { ...member('vendor/cordis', '@deepseek-ai/cordis'), version: '4.0.1' },
-      { ...member('vendor/cosmokit', '@deepseek-ai/cosmokit'), version: '1.8.2' },
+      { ...member('vendor/cordis', '@daoai/cordis'), version: '4.0.1' },
+      { ...member('vendor/cosmokit', '@daoai/cosmokit'), version: '1.8.2' },
     ]
 
     expect(() => { vendor.verifyVersions(members) }).not.toThrow()
     expect(() => { vendor.verifyVersions([{ ...members[0]!, version: 'latest' }]) }).toThrow(/unpublishable version/)
   })
 
-  it('requires a current official client build only for dsh artifacts', () => {
-    const dsh = releaseFamily('dsh')
+  it('requires a current official client build only for dao artifacts', () => {
+    const dao = releaseFamily('dao')
     const vendor = releaseFamily('vendor')
     const officialEnvironment = officialClientBuildEnvironment(resolve(import.meta.dirname, '../..'))
-    vi.stubEnv('DSH_CLIENT_COMMIT_HASH', officialEnvironment.DSH_CLIENT_COMMIT_HASH)
+    vi.stubEnv('DAO_CLIENT_COMMIT_HASH', officialEnvironment.DAO_CLIENT_COMMIT_HASH)
     const official = buildFixture(officialEnvironment)
     const defaultBuild = buildFixture({})
     const missing = join(defaultBuild, 'missing')
-    write(join(missing, 'package.json'), `${JSON.stringify({ version: officialEnvironment.DSH_CLIENT_VERSION })}\n`)
+    write(join(missing, 'package.json'), `${JSON.stringify({ version: officialEnvironment.DAO_CLIENT_VERSION })}\n`)
 
-    expect(() => { dsh.verifyBuildArtifacts(official) }).not.toThrow()
-    expect(() => { dsh.verifyBuildArtifacts(defaultBuild) }).toThrow(/DSH_CLIENT_TITLE/)
-    expect(() => { dsh.verifyBuildArtifacts(missing) }).toThrow(/record.*missing/)
+    expect(() => { dao.verifyBuildArtifacts(official) }).not.toThrow()
+    expect(() => { dao.verifyBuildArtifacts(defaultBuild) }).toThrow(/DAO_CLIENT_TITLE/)
+    expect(() => { dao.verifyBuildArtifacts(missing) }).toThrow(/record.*missing/)
     expect(() => { vendor.verifyBuildArtifacts(missing) }).not.toThrow()
 
     write(join(official, 'packages/client/example/lib/client.js'), 'module.exports = { changed: true }\n')
-    expect(() => { dsh.verifyBuildArtifacts(official) }).toThrow(/artifacts differ/)
+    expect(() => { dao.verifyBuildArtifacts(official) }).toThrow(/artifacts differ/)
   })
 
   it('publishes a dependency before its consumer, and orders ties by name', () => {
-    const dsh = releaseFamily('dsh')
+    const dao = releaseFamily('dao')
     const members = [
-      member('packages/a/consumer', '@deepseek-ai/dsh-consumer', { dependencies: { '@deepseek-ai/dsh-library': 'workspace:^' } }),
-      member('packages/a/library', '@deepseek-ai/dsh-library'),
-      member('packages/a/zebra', '@deepseek-ai/dsh-zebra'),
+      member('packages/a/consumer', '@daoai/dao-consumer', { dependencies: { '@daoai/dao-library': 'workspace:^' } }),
+      member('packages/a/library', '@daoai/dao-library'),
+      member('packages/a/zebra', '@daoai/dao-zebra'),
     ]
 
-    expect(dsh.publishOrder(members).order.map(entry => entry.name)).toEqual([
-      '@deepseek-ai/dsh-library',
-      '@deepseek-ai/dsh-consumer',
-      '@deepseek-ai/dsh-zebra',
+    expect(dao.publishOrder(members).order.map(entry => entry.name)).toEqual([
+      '@daoai/dao-library',
+      '@daoai/dao-consumer',
+      '@daoai/dao-zebra',
     ])
   })
 
   it('reports a runtime dependency cycle instead of emitting an arbitrary order', () => {
-    const dsh = releaseFamily('dsh')
+    const dao = releaseFamily('dao')
     const members = [
-      member('packages/a/left', '@deepseek-ai/dsh-left', { dependencies: { '@deepseek-ai/dsh-right': 'workspace:^' } }),
-      member('packages/a/right', '@deepseek-ai/dsh-right', { dependencies: { '@deepseek-ai/dsh-left': 'workspace:^' } }),
+      member('packages/a/left', '@daoai/dao-left', { dependencies: { '@daoai/dao-right': 'workspace:^' } }),
+      member('packages/a/right', '@daoai/dao-right', { dependencies: { '@daoai/dao-left': 'workspace:^' } }),
     ]
 
-    expect(() => { dsh.publishOrder(members) }).toThrow(/dependency cycle/)
+    expect(() => { dao.publishOrder(members) }).toThrow(/dependency cycle/)
   })
 
   it('publishes a peer before its consumer', () => {
-    const dsh = releaseFamily('dsh')
+    const dao = releaseFamily('dao')
     const members = [
-      member('packages/a/consumer', '@deepseek-ai/dsh-consumer', { peerDependencies: { '@deepseek-ai/dsh-zebra': 'workspace:^' } }),
-      member('packages/a/zebra', '@deepseek-ai/dsh-zebra'),
+      member('packages/a/consumer', '@daoai/dao-consumer', { peerDependencies: { '@daoai/dao-zebra': 'workspace:^' } }),
+      member('packages/a/zebra', '@daoai/dao-zebra'),
     ]
 
     // Name order alone would place the consumer first; the peer edge moves it.
-    expect(dsh.publishOrder(members).order.map(entry => entry.name)).toEqual([
-      '@deepseek-ai/dsh-zebra',
-      '@deepseek-ai/dsh-consumer',
+    expect(dao.publishOrder(members).order.map(entry => entry.name)).toEqual([
+      '@daoai/dao-zebra',
+      '@daoai/dao-consumer',
     ])
   })
 
   it('orders around a peer cycle rather than refusing to publish, and reports the edge it dropped', () => {
-    const dsh = releaseFamily('dsh')
+    const dao = releaseFamily('dao')
     const members = [
-      member('packages/a/left', '@deepseek-ai/dsh-left', { peerDependencies: { '@deepseek-ai/dsh-right': 'workspace:^' } }),
-      member('packages/a/right', '@deepseek-ai/dsh-right', { peerDependencies: { '@deepseek-ai/dsh-left': 'workspace:^' } }),
+      member('packages/a/left', '@daoai/dao-left', { peerDependencies: { '@daoai/dao-right': 'workspace:^' } }),
+      member('packages/a/right', '@daoai/dao-right', { peerDependencies: { '@daoai/dao-left': 'workspace:^' } }),
     ]
 
     // Sibling packages declare each other as peers, and npm treats an unmet peer
     // as a warning, so this pair has to publish rather than fail the release.
-    const plan = dsh.publishOrder(members)
+    const plan = dao.publishOrder(members)
     expect(plan.order.map(entry => entry.name)).toEqual([
-      '@deepseek-ai/dsh-right',
-      '@deepseek-ai/dsh-left',
+      '@daoai/dao-right',
+      '@daoai/dao-left',
     ])
     // One of the two edges has to give, and which one it is belongs in the log.
     expect(plan.droppedPeerEdges).toEqual([
-      { consumer: '@deepseek-ai/dsh-right', peer: '@deepseek-ai/dsh-left' },
+      { consumer: '@daoai/dao-right', peer: '@daoai/dao-left' },
     ])
   })
 
   it('honours an install edge even when a peer cycle surrounds it', () => {
-    const dsh = releaseFamily('dsh')
+    const dao = releaseFamily('dao')
     const members = [
-      member('packages/a/base', '@deepseek-ai/dsh-base', { peerDependencies: { '@deepseek-ai/dsh-consumer': 'workspace:^' } }),
-      member('packages/a/consumer', '@deepseek-ai/dsh-consumer', {
-        dependencies: { '@deepseek-ai/dsh-base': 'workspace:^' },
-        peerDependencies: { '@deepseek-ai/dsh-base': 'workspace:^' },
+      member('packages/a/base', '@daoai/dao-base', { peerDependencies: { '@daoai/dao-consumer': 'workspace:^' } }),
+      member('packages/a/consumer', '@daoai/dao-consumer', {
+        dependencies: { '@daoai/dao-base': 'workspace:^' },
+        peerDependencies: { '@daoai/dao-base': 'workspace:^' },
       }),
     ]
 
     // The install edge is absolute: base publishes first, and the peer edge that
     // would reverse it is the one dropped.
-    const plan = dsh.publishOrder(members)
+    const plan = dao.publishOrder(members)
     expect(plan.order.map(entry => entry.name)).toEqual([
-      '@deepseek-ai/dsh-base',
-      '@deepseek-ai/dsh-consumer',
+      '@daoai/dao-base',
+      '@daoai/dao-consumer',
     ])
     expect(plan.droppedPeerEdges).toEqual([
-      { consumer: '@deepseek-ai/dsh-base', peer: '@deepseek-ai/dsh-consumer' },
+      { consumer: '@daoai/dao-base', peer: '@daoai/dao-consumer' },
     ])
   })
 
   it('refuses an order that would publish a consumer before a dependency it installs', () => {
-    const dsh = releaseFamily('dsh')
+    const dao = releaseFamily('dao')
     const members = [
-      member('packages/a/alpha', '@deepseek-ai/dsh-alpha', { peerDependencies: { '@deepseek-ai/dsh-bravo': 'workspace:^' } }),
-      member('packages/a/bravo', '@deepseek-ai/dsh-bravo', { peerDependencies: { '@deepseek-ai/dsh-charlie': 'workspace:^' } }),
-      member('packages/a/charlie', '@deepseek-ai/dsh-charlie', { dependencies: { '@deepseek-ai/dsh-alpha': 'workspace:^' } }),
+      member('packages/a/alpha', '@daoai/dao-alpha', { peerDependencies: { '@daoai/dao-bravo': 'workspace:^' } }),
+      member('packages/a/bravo', '@daoai/dao-bravo', { peerDependencies: { '@daoai/dao-charlie': 'workspace:^' } }),
+      member('packages/a/charlie', '@daoai/dao-charlie', { dependencies: { '@daoai/dao-alpha': 'workspace:^' } }),
     ]
 
     // A cycle of two peer edges closed by one install edge: dropping a peer edge
     // would order this, and the traversal drops the install edge instead. That
     // order would publish charlie before the alpha it installs, so it is refused
     // here rather than published.
-    expect(() => { dsh.publishOrder(members) }).toThrow(/no publish order honours @deepseek-ai\/dsh-charlie -> @deepseek-ai\/dsh-alpha/)
+    expect(() => { dao.publishOrder(members) }).toThrow(/no publish order honours @daoai\/dao-charlie -> @daoai\/dao-alpha/)
   })
 
   it('ignores devDependencies when ordering', () => {
-    const dsh = releaseFamily('dsh')
+    const dao = releaseFamily('dao')
     const members = [
-      member('packages/a/alpha', '@deepseek-ai/dsh-alpha', { devDependencies: { '@deepseek-ai/dsh-zebra': 'workspace:^' } }),
-      member('packages/a/zebra', '@deepseek-ai/dsh-zebra'),
+      member('packages/a/alpha', '@daoai/dao-alpha', { devDependencies: { '@daoai/dao-zebra': 'workspace:^' } }),
+      member('packages/a/zebra', '@daoai/dao-zebra'),
     ]
 
     // A dev dependency is absent from the published package, so it must not move
     // the consumer behind it.
-    expect(dsh.publishOrder(members).order.map(entry => entry.name)).toEqual([
-      '@deepseek-ai/dsh-alpha',
-      '@deepseek-ai/dsh-zebra',
+    expect(dao.publishOrder(members).order.map(entry => entry.name)).toEqual([
+      '@daoai/dao-alpha',
+      '@daoai/dao-zebra',
     ])
   })
 
-  it('applies the harness payload policy to dsh and keeps upstream payloads for vendored packages', () => {
-    const dsh = releaseFamily('dsh')
+  it('applies the harness payload policy to dao and keeps upstream payloads for vendored packages', () => {
+    const dao = releaseFamily('dao')
     const vendor = releaseFamily('vendor')
-    const harness = member('packages/a/library', '@deepseek-ai/dsh-library')
-    const vendored = member('vendor/cordis', '@deepseek-ai/cordis')
+    const harness = member('packages/a/library', '@daoai/dao-library')
+    const vendored = member('vendor/cordis', '@daoai/cordis')
 
-    expect(() => { dsh.validatePayload(harness, ['package/lib/index.js', 'package/src/index.ts']) })
+    expect(() => { dao.validatePayload(harness, ['package/lib/index.js', 'package/src/index.ts']) })
       .toThrow(/publishes source file/)
     expect(() => { vendor.validatePayload(vendored, ['package/lib/index.js', 'package/src/index.ts']) }).not.toThrow()
     expect(() => { vendor.validatePayload(vendored, []) }).toThrow(/empty tarball/)
   })
 
   it('drives the installed entry only for the family that publishes one', () => {
-    expect(releaseFamily('dsh').installedEntry).toEqual({ packageName: '@deepseek-ai/dsh', binPath: 'lib/bin.js' })
+    expect(releaseFamily('dao').installedEntry).toEqual({ packageName: '@daoai/dao', binPath: 'lib/bin.js' })
     expect(releaseFamily('vendor').installedEntry).toBeUndefined()
   })
 
@@ -298,10 +298,10 @@ describe('version precedence', () => {
 })
 
 describe('payload change judgement', () => {
-  const sourceShipping = member('vendor/cosmokit', '@deepseek-ai/cosmokit', {
+  const sourceShipping = member('vendor/cosmokit', '@daoai/cosmokit', {
     files: ['lib/index.js', 'lib/types/**/*.d.ts', 'src'],
   })
-  const buildOutputOnly = member('vendor/cordis', '@deepseek-ai/cordis', {
+  const buildOutputOnly = member('vendor/cordis', '@daoai/cordis', {
     files: ['lib/index.js', 'lib/types/**/*.d.ts', 'bin.js'],
   })
 
@@ -326,7 +326,7 @@ describe('payload change judgement', () => {
     // unnecessary patch bump, while under-reporting fails the next publish on a
     // version whose bytes moved.
     expect(reachesPayload(sourceShipping, 'vendor/cosmokit/README.i18n.yaml')).toBe(true)
-    expect(reachesPayload(member('packages/a/library', '@deepseek-ai/dsh-library', { files: ['lib/index.js'] }),
+    expect(reachesPayload(member('packages/a/library', '@daoai/dao-library', { files: ['lib/index.js'] }),
       'packages/a/library/tests/library.spec.ts')).toBe(false)
   })
 })

@@ -1,14 +1,14 @@
 /** Registers the target-neutral Conversation assembly, shell, input, and docks. */
-import type { Context } from '@deepseek-ai/cordis'
-import type { ISessions } from '@deepseek-ai/dsh-api-session-controller/client'
-import { createSnapshotStore, type BoundActions } from '@deepseek-ai/dsh-client-store'
-import { resolveSlotLabel } from '@deepseek-ai/dsh-client-ui-slots'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { Context } from '@daoai/cordis'
+import type { ISessions } from '@daoai/dao-api-session-controller/client'
+import { createSnapshotStore, type BoundActions } from '@daoai/dao-client-store'
+import { resolveSlotLabel } from '@daoai/dao-client-ui-slots'
+import type { SessionId } from '@daoai/dao-session/types'
 // Type-only service and declaration merges used by this assembly.
-import type {} from '@deepseek-ai/dsh-client-locale/client'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
-import type {} from '@deepseek-ai/dsh-client-ui-session/client'
-import type {} from '@deepseek-ai/dsh-client-ui-settings/client'
+import type {} from '@daoai/dao-client-locale/client'
+import type {} from '@daoai/dao-client-ui-renderer/client'
+import type {} from '@daoai/dao-client-ui-session/client'
+import type {} from '@daoai/dao-client-ui-settings/client'
 import { UiConversation } from './conversation/assembly.ts'
 import type { ViewTab } from './contract/views.ts'
 import type {
@@ -33,7 +33,7 @@ import { todoDockEntry } from './skeleton/TodoPanel.tsx'
 import { en, NS, zh, type ConversationKey } from './locales.ts'
 import { CONVERSATION_SETTINGS_NAMESPACE, type ConversationSettings } from '../submission-settings.ts'
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@daoai/dao-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Conversation shell, composer, queue, and dock copy. */
     conversation: ConversationKey

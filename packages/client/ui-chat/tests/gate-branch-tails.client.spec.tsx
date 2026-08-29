@@ -2,21 +2,21 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, render } from '@testing-library/react'
-import { bindSnapshotSelector } from '@deepseek-ai/dsh-client-test-runtime'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
+import { bindSnapshotSelector } from '@daoai/dao-client-test-runtime'
+import { createSnapshotStore } from '@daoai/dao-client-store'
 import type {
   SessionListState, SessionSnapshot,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import type { WorkspaceSnapshot } from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { SessionProviderComponent } from '@deepseek-ai/dsh-client-ui-slots'
-import type { SessionPendingInteractionSnapshot } from '@deepseek-ai/dsh-client-ui-session/client'
-import { EMPTY_CONVERSATION_SNAPSHOT } from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@daoai/dao-api-session-controller/client'
+import type { WorkspaceSnapshot } from '@daoai/dao-api-workspace-controller/client'
+import type { SessionId } from '@daoai/dao-session/types'
+import type { SessionProviderComponent } from '@daoai/dao-client-ui-slots'
+import type { SessionPendingInteractionSnapshot } from '@daoai/dao-client-ui-session/client'
+import { EMPTY_CONVERSATION_SNAPSHOT } from '@daoai/dao-client-ui-conversation/client'
 import type {
   DetailsSlotProps, DetailsToolOwnerProps, RunningToolCall, SelectionTarget,
-} from '@deepseek-ai/dsh-client-ui-chat/client'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import { zh as commonZh } from '@deepseek-ai/dsh-client-locale/src/locales/zh.ts'
+} from '@daoai/dao-client-ui-chat/client'
+import { makeTranslate } from '@daoai/dao-client-test-runtime'
+import { zh as commonZh } from '@daoai/dao-client-locale/src/locales/zh.ts'
 import { createChatStore } from '../src/client/stores.ts'
 import { AssistantMarkdown, type AssistantMarkdownProps } from '../src/client/chat/AssistantMarkdown.tsx'
 import { StatsLine } from '../src/client/chat/StatsLine.tsx'

@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-session-telemetry`.
- * @module @deepseek-ai/dsh-session-telemetry/invariant
+ * Package-owned invariant companion for `@daoai/dao-session-telemetry`.
+ * @module @daoai/dao-session-telemetry/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-session-telemetry'
+const PACKAGE_NAME = '@daoai/dao-session-telemetry'
 
 /** Cordis companion plugin name. */
 export const name = 'session-telemetry-invariant'

@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context, type Plugin } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import { remoteMethods } from '@deepseek-ai/dsh-typert-protocol'
+import { Context, type Plugin } from '@daoai/cordis'
+import Loader from '@daoai/cordis-plugin-loader'
+import { remoteMethods } from '@daoai/dao-typert-protocol'
 import PluginInventoryGateway from '../src/index.ts'
 
 const contexts: Context[] = []

@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-schedule",
+  "name": "@daoai/dao-schedule",
   "description": "Agent-scoped durable after, at, and fixed-rate reminders over the session event log",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
@@ -32,28 +32,28 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-brand": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-persistence": "workspace:^",
+    "@daoai/dao-tools": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:^",
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence-jsonl": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/cordis-plugin-loader": "workspace:^",
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-agent-loop": "workspace:^",
+    "@daoai/dao-agent-loop-testkit": "workspace:^",
+    "@daoai/dao-brand": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-persistence": "workspace:^",
+    "@daoai/dao-session-persistence-jsonl": "workspace:^",
+    "@daoai/dao-system-prompt": "workspace:^",
+    "@daoai/dao-tools": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

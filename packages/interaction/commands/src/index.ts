@@ -1,18 +1,18 @@
 /**
  * Plugin-owned human-command registry shared by interactive UI adapters.
- * @module @deepseek-ai/dsh-commands
+ * @module @daoai/dao-commands
  */
 
-import { Context } from '@deepseek-ai/cordis'
-import { randomUUID } from '@deepseek-ai/dsh-util-crypto'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { AttachmentError, admitEncodedImages } from '@deepseek-ai/dsh-attachment'
-import type { EncodedImageAttachment } from '@deepseek-ai/dsh-attachment/types'
-import type { ImageBlock } from '@deepseek-ai/dsh-llm'
-import { NamedEntries, ScopedLayers } from '@deepseek-ai/dsh-scope'
-import type { ScopeKey, ScopeLayer } from '@deepseek-ai/dsh-scope'
-import type { Session, SessionEvent, SessionEventMap } from '@deepseek-ai/dsh-session'
-import { TypertRemoteService, Remote } from '@deepseek-ai/dsh-typert-protocol'
+import { Context } from '@daoai/cordis'
+import { randomUUID } from '@daoai/dao-util-crypto'
+import type { Agent } from '@daoai/dao-agent'
+import { AttachmentError, admitEncodedImages } from '@daoai/dao-attachment'
+import type { EncodedImageAttachment } from '@daoai/dao-attachment/types'
+import type { ImageBlock } from '@daoai/dao-llm'
+import { NamedEntries, ScopedLayers } from '@daoai/dao-scope'
+import type { ScopeKey, ScopeLayer } from '@daoai/dao-scope'
+import type { Session, SessionEvent, SessionEventMap } from '@daoai/dao-session'
+import { TypertRemoteService, Remote } from '@daoai/dao-typert-protocol'
 import { CommandId } from './brand.ts'
 import type {
   CommandDescriptor,
@@ -102,7 +102,7 @@ class CommandLayer implements ScopeLayer {
   }
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@daoai/cordis' {
   interface Context {
     commands: CommandRuntime
   }

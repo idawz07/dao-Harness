@@ -8,15 +8,15 @@
  * (and the reverse), the one-shared-state contract of the dual entry.
  * Scope disposal drops the directory (HMR safety).
  */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@daoai/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { createScope } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { createSnapshotStore, type SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { TestRemote } from '@deepseek-ai/dsh-client-test-runtime'
-import type { ModelSelection, ModelSelectionProjection } from '@deepseek-ai/dsh-api-session-controller/types'
-import type { CommandContribution, SelectOption } from '@deepseek-ai/dsh-client-ui-commands/client'
+import { createScope } from '@daoai/dao-api-session-controller/client'
+import type { SessionId } from '@daoai/dao-session/types'
+import { LocaleRuntime } from '@daoai/dao-client-locale/client'
+import { createSnapshotStore, type SnapshotStore } from '@daoai/dao-client-store'
+import { TestRemote } from '@daoai/dao-client-test-runtime'
+import type { ModelSelection, ModelSelectionProjection } from '@daoai/dao-api-session-controller/types'
+import type { CommandContribution, SelectOption } from '@daoai/dao-client-ui-commands/client'
 import type { ModelSelectInjected } from '../src/client/slots.ts'
 import { apply, inject } from '../src/client/index.ts'
 import { zh } from '../src/client/locales.ts'

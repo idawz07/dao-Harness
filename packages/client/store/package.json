@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-store",
+  "name": "@daoai/dao-client-store",
   "description": "React-free observable and snapshot-store contracts with the shared Zustand/Immer engine",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
@@ -31,12 +31,12 @@
     "zustand": "~4.4.7"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^"
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^"
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^"
   },
   "files": [
     "lib/index.js",

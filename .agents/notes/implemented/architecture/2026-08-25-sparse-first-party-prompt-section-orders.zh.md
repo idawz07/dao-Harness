@@ -14,7 +14,7 @@ Status: implemented
 
 ## 决策
 
-`@deepseek-ai/dsh-system-prompt` 导出 `FIRST_PARTY_SECTION_ORDER`，作为仓库自带提示词段的唯一分配表。每个 first-party 贡献方都导入具名位置，不再声明数字字面量。所有值都是互不相同的整数，相邻已分配值之差至少为十。
+`@daoai/dao-system-prompt` 导出 `FIRST_PARTY_SECTION_ORDER`，作为仓库自带提示词段的唯一分配表。每个 first-party 贡献方都导入具名位置，不再声明数字字面量。所有值都是互不相同的整数，相邻已分配值之差至少为十。
 
 除两项有意调整外，该分配保留既有 first-party 顺序：Bash，或 Windows 组合中的 PowerShell，位于逐工具指导的首位；原先共享 order 的段获得明确顺序。分组如下：
 

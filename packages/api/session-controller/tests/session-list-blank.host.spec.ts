@@ -8,15 +8,15 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import SessionStore from '@deepseek-ai/dsh-session'
-import type { Session } from '@deepseek-ai/dsh-session'
-import { CommandId } from '@deepseek-ai/dsh-commands/brand'
+import { Context } from '@daoai/cordis'
+import AgentRegistry from '@daoai/dao-agent'
+import type { Agent } from '@daoai/dao-agent'
+import SessionStore from '@daoai/dao-session'
+import type { Session } from '@daoai/dao-session'
+import { CommandId } from '@daoai/dao-commands/brand'
 // Side-effect type imports: the configuration-event SessionEventMap merges.
-import type {} from '@deepseek-ai/dsh-permission-presets'
-import type {} from '@deepseek-ai/dsh-sandbox-policy'
+import type {} from '@daoai/dao-permission-presets'
+import type {} from '@daoai/dao-sandbox-policy'
 import { createSessionTestRemote, type TestSessionRemote } from './test-remote.ts'
 
 async function harness(): Promise<{ ctx: Context; remote: TestSessionRemote; attach: (session: Session) => void }> {

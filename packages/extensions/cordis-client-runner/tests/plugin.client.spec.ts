@@ -8,17 +8,17 @@
  */
 /* oxlint-disable typescript/no-unsafe-assignment -- Vitest asymmetric matchers are typed as any. */
 
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@daoai/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import InvariantService from '@deepseek-ai/dsh-invariants'
+import InvariantService from '@daoai/dao-invariants'
 import type {
   ApprovalRequestId, CordisDynamicPackageId, CordisDynamicPluginId, CordisDynamicPluginRunId,
-} from '@deepseek-ai/dsh-api-remotes/client'
-import type { SessionId } from '@deepseek-ai/dsh-client-connection/client'
-import type { DynamicCordisInvokeResult } from '@deepseek-ai/dsh-api-remotes/client'
+} from '@daoai/dao-api-remotes/client'
+import type { SessionId } from '@daoai/dao-client-connection/client'
+import type { DynamicCordisInvokeResult } from '@daoai/dao-api-remotes/client'
 // Type-only: resolves the `ctx.remote.$on` surface.
-import type {} from '@deepseek-ai/dsh-api-gateway/client'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
+import type {} from '@daoai/dao-api-gateway/client'
+import { SlotRegistry } from '@daoai/dao-client-ui-renderer/client'
 import * as NodeHalf from '../src/index.ts'
 import * as Invariant from '../src/invariant.ts'
 import * as ClientHalf from '../src/client/index.ts'

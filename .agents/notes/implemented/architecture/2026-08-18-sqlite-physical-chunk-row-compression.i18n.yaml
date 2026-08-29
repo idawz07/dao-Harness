@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/architecture/2026-08-18-sqlite-physical-chunk-row-compression.md
-2026-08-18-sqlite-physical-chunk-row-compression.md: 34aac2f183d386ffe22f86a6b62fe5e3105b3dfa
-2026-08-18-sqlite-physical-chunk-row-compression.zh.md: 1845185d543f565b55ace6adac973dad5535ad7b
+2026-08-18-sqlite-physical-chunk-row-compression.md: 7f8148f942c84040fdf5eda960d198470cefb0df
+2026-08-18-sqlite-physical-chunk-row-compression.zh.md: cdc1a59879d791fceb4d3be0d4e4b45975056f63

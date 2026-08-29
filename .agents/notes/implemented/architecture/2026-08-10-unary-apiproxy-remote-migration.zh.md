@@ -12,7 +12,7 @@ Host API Proxy 曾在业务 Service、API Proxy interface、Zod schema、路由�
 
 ## 决策
 
-简单一元操作归属其自然的业务 Remote owner。业务包持有 Remote 签名与 Host 适配；`@deepseek-ai/dsh-api-remotes/client` 选择其生成贡献；Client 包持有呈现联接。Connection 持有传输 envelope 与精确 Fetch 路由注册表，不再存在 API Proxy 服务。
+简单一元操作归属其自然的业务 Remote owner。业务包持有 Remote 签名与 Host 适配；`@daoai/dao-api-remotes/client` 选择其生成贡献；Client 包持有呈现联接。Connection 持有传输 envelope 与精确 Fetch 路由注册表，不再存在 API Proxy 服务。
 
 | 原 API Proxy 操作 | 目标 | Owner 与保留行为 |
 |---|---|---|
@@ -36,7 +36,7 @@ Host API Proxy 曾在业务 Service、API Proxy interface、Zod schema、路由�
 
 共享 Agent 与 Session resolver 仍是接收这些对象的 endpoint 的权威。它提供与旧 API Proxy 调用相同的 live 复用、冷恢复、并发去重、preset setup、持久化失败与 subagent ownership fence。`TypertLookupFailure` 保留 resolver 持有的 RPC error，而不把它们归并为 `internal`。
 
-原生路径实现在 `@deepseek-ai/dsh-native-command` 中。Settings controller 选择 Host 持有的目标，Session-aware Client 则在调用 `SessionController` 前解析 workspace 路径；该工具仅负责平台探测、WSL 转换、浏览器偏好、文本编辑器意图与无 shell 命令执行。
+原生路径实现在 `@daoai/dao-native-command` 中。Settings controller 选择 Host 持有的目标，Session-aware Client 则在调用 `SessionController` 前解析 workspace 路径；该工具仅负责平台探测、WSL 转换、浏览器偏好、文本编辑器意图与无 shell 命令执行。
 
 ## 浏览器认证
 

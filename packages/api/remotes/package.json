@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-api-remotes",
+  "name": "@daoai/dao-api-remotes",
   "description": "Remote BFF assembly for application-selected Host capabilities",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
@@ -33,10 +33,10 @@
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "dsh": {
+  "dao": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-api-gateway"
+        "@daoai/dao-api-gateway"
       ],
       "platform": "web",
       "immediately": true
@@ -55,53 +55,53 @@
     "lib/types/**/*.d.ts"
   ],
   "dependencies": {
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^"
+    "@daoai/dao-scope": "workspace:^",
+    "@daoai/dao-typert-protocol": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-agent-presets": "workspace:^",
-    "@deepseek-ai/dsh-api-gateway": "workspace:^",
-    "@deepseek-ai/dsh-api-session-controller": "workspace:^",
-    "@deepseek-ai/dsh-api-settings-controller": "workspace:^",
-    "@deepseek-ai/dsh-api-workspace-controller": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-cordis-host-runner": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-file-reference": "workspace:^",
-    "@deepseek-ai/dsh-goal": "workspace:^",
-    "@deepseek-ai/dsh-host-plugin-inventory": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-message-feedback": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-reference": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-subagent": "workspace:^",
-    "@deepseek-ai/dsh-user-approval": "workspace:^",
-    "@deepseek-ai/dsh-user-questions": "workspace:^"
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-agent-presets": "workspace:^",
+    "@daoai/dao-api-gateway": "workspace:^",
+    "@daoai/dao-api-session-controller": "workspace:^",
+    "@daoai/dao-api-settings-controller": "workspace:^",
+    "@daoai/dao-api-workspace-controller": "workspace:^",
+    "@daoai/dao-commands": "workspace:^",
+    "@daoai/dao-cordis-host-runner": "workspace:^",
+    "@daoai/dao-credentials": "workspace:^",
+    "@daoai/dao-file-reference": "workspace:^",
+    "@daoai/dao-goal": "workspace:^",
+    "@daoai/dao-host-plugin-inventory": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-message-feedback": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-reference": "workspace:^",
+    "@daoai/dao-settings": "workspace:^",
+    "@daoai/dao-subagent": "workspace:^",
+    "@daoai/dao-user-approval": "workspace:^",
+    "@daoai/dao-user-questions": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-agent-presets": "workspace:^",
-    "@deepseek-ai/dsh-api-gateway": "workspace:^",
-    "@deepseek-ai/dsh-api-session-controller": "workspace:^",
-    "@deepseek-ai/dsh-api-settings-controller": "workspace:^",
-    "@deepseek-ai/dsh-api-workspace-controller": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-cordis-host-runner": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-file-reference": "workspace:^",
-    "@deepseek-ai/dsh-goal": "workspace:^",
-    "@deepseek-ai/dsh-host-plugin-inventory": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-message-feedback": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-reference": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-subagent": "workspace:^",
-    "@deepseek-ai/dsh-user-approval": "workspace:^",
-    "@deepseek-ai/dsh-user-questions": "workspace:^"
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-agent-presets": "workspace:^",
+    "@daoai/dao-api-gateway": "workspace:^",
+    "@daoai/dao-api-session-controller": "workspace:^",
+    "@daoai/dao-api-settings-controller": "workspace:^",
+    "@daoai/dao-api-workspace-controller": "workspace:^",
+    "@daoai/dao-commands": "workspace:^",
+    "@daoai/dao-cordis-host-runner": "workspace:^",
+    "@daoai/dao-credentials": "workspace:^",
+    "@daoai/dao-file-reference": "workspace:^",
+    "@daoai/dao-goal": "workspace:^",
+    "@daoai/dao-host-plugin-inventory": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-message-feedback": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-reference": "workspace:^",
+    "@daoai/dao-settings": "workspace:^",
+    "@daoai/dao-subagent": "workspace:^",
+    "@daoai/dao-user-approval": "workspace:^",
+    "@daoai/dao-user-questions": "workspace:^"
   }
 }

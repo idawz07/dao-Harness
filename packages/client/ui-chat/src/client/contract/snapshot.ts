@@ -1,6 +1,6 @@
 import type {
   ConversationNode, ConversationTimelineSnapshot, PartialAssistant, RunningToolCall,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@daoai/dao-client-ui-conversation/client'
 import type { ChatConversationViewNode } from './chat-nodes.ts'
 
 export type {
@@ -9,7 +9,7 @@ export type {
   ModelRetryNode, PartialAssistant, RunningToolCall, SteeringMessageNode, TodoItem,
   ToolCallBlock, ToolResultNode, TurnErrorNode, TurnMaxTokensNode, UnknownSurfaceNode,
   UserMessageNode,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@daoai/dao-client-ui-conversation/client'
 /** Stable live per-key reader for Chat nodes. */
 export interface ChatNodeStore {
   /** @param key - stable Conversation Context key. @returns current Node, when visible or hidden. */
@@ -67,7 +67,7 @@ export interface ChatSnapshot {
   readonly legacy: LegacyConversationSlice
 }
 
-declare module '@deepseek-ai/dsh-client-ui-conversation/client' {
+declare module '@daoai/dao-client-ui-conversation/client' {
   interface ConversationViewSnapshotMap {
     chat: ChatSnapshot
   }

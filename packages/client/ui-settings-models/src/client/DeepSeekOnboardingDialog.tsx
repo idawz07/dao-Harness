@@ -8,8 +8,8 @@
 
 import { useEffect } from 'react'
 import type { ReactNode } from 'react'
-import type { SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { InjectFace, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
+import type { SnapshotStore } from '@daoai/dao-client-store'
+import type { InjectFace, PropsRuntime } from '@daoai/dao-client-ui-slots'
 import type { ModelsSettingsState, ModelsSettingsStore, ModelsWire } from './store.ts'
 import { onboardingReadiness } from './store.ts'
 import type { SettingsSchemaOperations } from './schema-operations.ts'

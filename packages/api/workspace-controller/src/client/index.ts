@@ -1,11 +1,11 @@
 /** Workspace-specific adapter for the Gateway-owned snapshot stream lifecycle. */
 
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@daoai/cordis'
 import {
   RemoteSnapshotStream,
   RemoteStreamCarrierError,
   type ClientRemote,
-} from '@deepseek-ai/dsh-api-gateway/client'
+} from '@daoai/dao-api-gateway/client'
 import type { WorkspaceFollowFrame, WorkspaceFollowIncrement } from '../types.ts'
 import type { WorkspaceFollowSink, WorkspaceRemote } from './model.ts'
 import { ClientWorkspaceModel } from './model.ts'
@@ -31,7 +31,7 @@ export type WorkspaceStateStream = RemoteSnapshotStream<
   WorkspaceFollowIncrement
 >
 
-declare module '@deepseek-ai/cordis' {
+declare module '@daoai/cordis' {
   interface Context {
     /** React-free Client Workspace state and commands. */
     workspaces: import('./service.ts').IWorkspaces

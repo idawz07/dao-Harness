@@ -1,11 +1,11 @@
 /**
  * Disposable live timer projection for one exact root agent.
- * @module @deepseek-ai/dsh-schedule
+ * @module @daoai/dao-schedule
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
+import type { Context } from '@daoai/cordis'
+import type { Agent } from '@daoai/dao-agent'
+import { createUserMessage } from '@daoai/dao-llm'
 import type { EveryScheduleRecord, OneShotScheduleRecord } from './types.ts'
 import {
   foldScheduleEvents,

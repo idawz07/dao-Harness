@@ -5,19 +5,19 @@ import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import * as yaml from 'js-yaml'
 import { describe, expect, it } from 'vitest'
-import { entryListSchema } from '@deepseek-ai/cordis-plugin-include'
+import { entryListSchema } from '@daoai/cordis-plugin-include'
 
-describe('dsh-acp-app bundle', () => {
+describe('dao-acp-app bundle', () => {
   it('declares startup-gated ACP serving without overriding base HMR policy', () => {
     const root = fileURLToPath(new URL('..', import.meta.url))
     const manifest = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8')) as {
       dependencies?: Record<string, string>
-      dsh?: { bundle?: { patch?: string } }
+      dao?: { bundle?: { patch?: string } }
     }
-    expect(manifest.dsh?.bundle?.patch).toBe('./cordis.patch.yml')
-    expect(manifest.dependencies).toHaveProperty('@deepseek-ai/dsh-acp')
+    expect(manifest.dao?.bundle?.patch).toBe('./cordis.patch.yml')
+    expect(manifest.dependencies).toHaveProperty('@daoai/dao-acp')
     const patches = yaml.load(
-      readFileSync(resolve(root, manifest.dsh!.bundle!.patch!), 'utf8'),
+      readFileSync(resolve(root, manifest.dao!.bundle!.patch!), 'utf8'),
       { schema: entryListSchema },
     ) as Array<{
       id?: string
@@ -27,7 +27,7 @@ describe('dsh-acp-app bundle', () => {
     expect(patches.find(patch => patch.id === 'hmr')).toBeUndefined()
     expect(patches.find(patch => patch.id === 'session-title-llm')).toMatchObject({ disabled: true })
     const rows = patches.flatMap(patch => patch.insert ?? [])
-    expect(rows.find(row => row.id === 'acp-app-startup')?.name).toBe('@deepseek-ai/dsh-acp-app')
+    expect(rows.find(row => row.id === 'acp-app-startup')?.name).toBe('@daoai/dao-acp-app')
     expect(rows.find(row => row.id === 'acp')).toMatchObject({
       inject: ['acpAppStartup'],
       config: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },

@@ -1,11 +1,11 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
+import { makeTranslate } from '@daoai/dao-client-test-runtime'
 import type {
   SessionListState, SessionSummary, SubagentCatalogSnapshot,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+} from '@daoai/dao-api-session-controller/client'
+import type { SessionId } from '@daoai/dao-session/types'
 import {
   SubagentHeaderLineage, type SubagentHeaderLineageProps,
 } from '../src/client/SubagentHeaderLineage.tsx'

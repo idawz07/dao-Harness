@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-tool-fs",
-  "description": "Model-facing filesystem tools (read, write, edit) over the DeepSeek Harness filesystem seam (ctx.fs)",
+  "name": "@daoai/dao-tool-fs",
+  "description": "Model-facing filesystem tools (read, write, edit) over the Dao filesystem seam (ctx.fs)",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -33,38 +33,38 @@
   "license": "MIT",
   "dependencies": {
     "diff": "^9.0.0",
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-attachment": "workspace:^",
-    "@deepseek-ai/dsh-fs": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/dsh-user-approval": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-attachment": "workspace:^",
+    "@daoai/dao-fs": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-sandbox": "workspace:^",
+    "@daoai/dao-sandbox-policy": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-system-prompt": "workspace:^",
+    "@daoai/dao-tools": "workspace:^",
+    "@daoai/dao-user-approval": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:^",
-    "@deepseek-ai/dsh-attachment": "workspace:^",
-    "@deepseek-ai/dsh-fs": "workspace:^",
-    "@deepseek-ai/dsh-fs-local": "workspace:^",
-    "@deepseek-ai/dsh-fs-observation-policy": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-llm-deepseek": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/dsh-user-approval": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-agent-loop": "workspace:^",
+    "@daoai/dao-agent-loop-testkit": "workspace:^",
+    "@daoai/dao-attachment": "workspace:^",
+    "@daoai/dao-fs": "workspace:^",
+    "@daoai/dao-fs-local": "workspace:^",
+    "@daoai/dao-fs-observation-policy": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-llm-deepseek": "workspace:^",
+    "@daoai/dao-sandbox": "workspace:^",
+    "@daoai/dao-sandbox-policy": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-system-prompt": "workspace:^",
+    "@daoai/dao-tools": "workspace:^",
+    "@daoai/dao-user-approval": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

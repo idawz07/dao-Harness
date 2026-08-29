@@ -3,10 +3,10 @@
 // TestSessions mints tagged scopes through the production createScope, so the
 // service's scopeOf/binding path runs against production resolution (no local
 // tag probe).
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@daoai/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { makeTranslate, SlotTestRuntime } from '@deepseek-ai/dsh-client-test-runtime'
-import type { QueuedMessage } from '@deepseek-ai/dsh-api-session-controller/client'
+import { makeTranslate, SlotTestRuntime } from '@daoai/dao-client-test-runtime'
+import type { QueuedMessage } from '@daoai/dao-api-session-controller/client'
 import { ComposerBlockRegistry } from '../src/client/input/blocks.ts'
 import { InputHub } from '../src/client/input/hub.ts'
 import { ConversationController, UnsupportedImageMediaTypeError } from '../src/client/service.ts'

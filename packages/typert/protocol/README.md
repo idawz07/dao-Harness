@@ -3,13 +3,13 @@ description: "The shared Typert Remote protocol: decorators, wire descriptors, c
 kind: "package-library"
 ---
 
-# @deepseek-ai/dsh-typert-protocol
+# @daoai/dao-typert-protocol
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-With `dsh-typert-protocol`, business packages can expose Host methods to Remote clients: mark a method with `@Remote` (or `@RemoteScope` for scoped receivers), bind the service to a wire namespace, and associate Host objects and scoped Contexts with wire identities through the merge-extensible protocol maps. Generated artifacts, the Host Gateway, and the Client API consume the same invocation descriptors, codecs, and provider contracts, so one declaration set stays in sync across every face. The package registers no Cordis service and runs no TypeScript analysis; it declares types and decorator markers only.
+With `dao-typert-protocol`, business packages can expose Host methods to Remote clients: mark a method with `@Remote` (or `@RemoteScope` for scoped receivers), bind the service to a wire namespace, and associate Host objects and scoped Contexts with wire identities through the merge-extensible protocol maps. Generated artifacts, the Host Gateway, and the Client API consume the same invocation descriptors, codecs, and provider contracts, so one declaration set stays in sync across every face. The package registers no Cordis service and runs no TypeScript analysis; it declares types and decorator markers only.
 
 ## Table of Contents
 
@@ -32,7 +32,7 @@ This package is for business-package and assembly maintainers who expose Host ca
 A business package marks a public instance method with `@Remote` (or `@RemoteScope(key)` when the receiver comes from a scoped Context), and the owning service either extends `TypertRemoteService` or declares a `typertRemote` binding through `bindTypertRemote()`:
 
 ```text
-import { Remote, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
+import { Remote, TypertRemoteService } from '@daoai/dao-typert-protocol'
 
 export class GoalService extends TypertRemoteService {
   @Remote

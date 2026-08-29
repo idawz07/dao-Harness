@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-session-title-all-prompts-llm",
-  "description": "All-user-messages LLM provider plugin for DeepSeek Harness session titles",
+  "name": "@daoai/dao-session-title-all-prompts-llm",
+  "description": "All-user-messages LLM provider plugin for Dao session titles",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -27,22 +27,22 @@
   "files": ["lib/index.js", "lib/invariant.js", "lib/types/**/*.d.ts"],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-title": "workspace:^",
-    "@deepseek-ai/dsh-session-title-llm": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-title": "workspace:^",
+    "@daoai/dao-session-title-llm": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-title": "workspace:^",
-    "@deepseek-ai/dsh-session-title-llm": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-title": "workspace:^",
+    "@daoai/dao-session-title-llm": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

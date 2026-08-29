@@ -1,12 +1,12 @@
 /** Cold Session history pagination and live-event source. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import { isAppendSurfaceEvent } from '@deepseek-ai/dsh-session'
-import { isChunkRow, packChunkRuns, type ChunkRow } from '@deepseek-ai/dsh-session/chunk-rows'
-import type { SessionEvent, SessionHeader, SessionId } from '@deepseek-ai/dsh-session'
-import { SessionQueryError, type SessionObservation } from '@deepseek-ai/dsh-session-query'
-import type {} from '@deepseek-ai/dsh-subagent'
-import { TypertRemoteFailure } from '@deepseek-ai/dsh-typert-protocol'
+import type { Context } from '@daoai/cordis'
+import { isAppendSurfaceEvent } from '@daoai/dao-session'
+import { isChunkRow, packChunkRuns, type ChunkRow } from '@daoai/dao-session/chunk-rows'
+import type { SessionEvent, SessionHeader, SessionId } from '@daoai/dao-session'
+import { SessionQueryError, type SessionObservation } from '@daoai/dao-session-query'
+import type {} from '@daoai/dao-subagent'
+import { TypertRemoteFailure } from '@daoai/dao-typert-protocol'
 import type {
   SessionAddress,
   SessionChunkRun,

@@ -1,13 +1,13 @@
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@daoai/cordis'
 import { describe, expect, it, vi } from 'vitest'
 import {
   RemoteStream,
   RemoteStreamCarrierError,
   type RemoteStreamOptions,
-} from '@deepseek-ai/dsh-api-gateway/client'
-import type { ConnectionHandle } from '@deepseek-ai/dsh-client-connection/client'
-import { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
+} from '@daoai/dao-api-gateway/client'
+import type { ConnectionHandle } from '@daoai/dao-client-connection/client'
+import { SessionId } from '@daoai/dao-session/types'
+import type { RemoteResult } from '@daoai/dao-typert-protocol'
 import * as WorkspaceClientPlugin from '../src/client/index.ts'
 import {
   ClientWorkspaceModel,

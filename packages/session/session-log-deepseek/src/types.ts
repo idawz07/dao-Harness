@@ -1,6 +1,6 @@
 /** Wire types for lossless incremental DeepSeek session-log upload. */
 
-import type { SessionEvent, SessionHeader } from '@deepseek-ai/dsh-session'
+import type { SessionEvent, SessionHeader } from '@daoai/dao-session'
 
 /** Versioned incremental session-log field carried by an official DeepSeek request. */
 export interface DeepSeekSessionLogExtension {
@@ -14,18 +14,18 @@ export interface DeepSeekSessionLogExtension {
   readonly events: readonly SessionEvent[]
 }
 
-declare module '@deepseek-ai/dsh-deepseek-llm-api-extensions/types' {
+declare module '@daoai/dao-deepseek-llm-api-extensions/types' {
   interface DeepSeekLlmApiExtensionMap {
     dsh_session_log: DeepSeekSessionLogExtension
   }
 }
 
-declare module '@deepseek-ai/dsh-session/types' {
+declare module '@daoai/dao-session/types' {
   interface SessionEventMap {
     /** Records that the configured endpoint accepted one delivery through `throughSeq`. */
     'session-log-deepseek/delivery-accepted': {
       /** Session identity the accepted delivery carried; inherited fork markers retain the parent's id. */
-      sessionId: import('@deepseek-ai/dsh-session/types').SessionId
+      sessionId: import('@daoai/dao-session/types').SessionId
       /** Last canonical event included in the accepted request. */
       throughSeq: number
     }

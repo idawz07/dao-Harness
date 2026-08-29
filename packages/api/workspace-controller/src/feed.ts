@@ -1,13 +1,13 @@
 /** Reconnect-safe Workspace baseline and increment producer. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { DomainChanged } from '@deepseek-ai/dsh-storage-domain'
-import type { Workspace, WorkspaceRecord } from '@deepseek-ai/dsh-workspace'
+import type { Context } from '@daoai/cordis'
+import type { DomainChanged } from '@daoai/dao-storage-domain'
+import type { Workspace, WorkspaceRecord } from '@daoai/dao-workspace'
 import {
   workspaceDomainState,
   workspaceRecord,
   WorkspaceId,
-} from '@deepseek-ai/dsh-workspace'
+} from '@daoai/dao-workspace'
 import type {
   WorkspaceBaseline,
   WorkspaceFollowFrame,

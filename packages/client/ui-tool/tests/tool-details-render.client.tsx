@@ -1,12 +1,12 @@
 /** Test adapter for the production conversation.details.tool registration. */
-import type { ConnectionGeneration } from '@deepseek-ai/dsh-client-connection/client'
-import type { SessionLiveEventEntry } from '@deepseek-ai/dsh-api-session-controller/client'
-import { isJsonValue, type JsonValue } from '@deepseek-ai/dsh-session'
+import type { ConnectionGeneration } from '@daoai/dao-client-connection/client'
+import type { SessionLiveEventEntry } from '@daoai/dao-api-session-controller/client'
+import { isJsonValue, type JsonValue } from '@daoai/dao-session'
 import type {
   ChatConversationViewNode, ChatSnapshot, ConversationNode, DetailsSlotProps,
   DetailsToolOwnerProps, RunningToolCall, ToolResultNode,
-} from '@deepseek-ai/dsh-client-ui-chat/client'
-import type { TranslateNS } from '@deepseek-ai/dsh-client-ui-slots'
+} from '@daoai/dao-client-ui-chat/client'
+import type { TranslateNS } from '@daoai/dao-client-ui-slots'
 import { ToolDetails } from '../src/client/tool/ToolDetails.tsx'
 
 type TrajectorySnapshot = Parameters<Parameters<DetailsSlotProps['useTrajectory']>[0]>[0]

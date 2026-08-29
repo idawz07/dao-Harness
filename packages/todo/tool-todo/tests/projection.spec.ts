@@ -8,18 +8,18 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import SessionStore from '@deepseek-ai/dsh-session'
-import type { Session } from '@deepseek-ai/dsh-session'
-import type { TodoItem } from '@deepseek-ai/dsh-tool-todo'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import UserQuestionService from '@deepseek-ai/dsh-user-questions'
-import * as ToolTodo from '@deepseek-ai/dsh-tool-todo'
+import { Context } from '@daoai/cordis'
+import AgentRegistry from '@daoai/dao-agent'
+import type { Agent } from '@daoai/dao-agent'
+import { createUserMessage } from '@daoai/dao-llm'
+import SessionStore from '@daoai/dao-session'
+import type { Session } from '@daoai/dao-session'
+import type { TodoItem } from '@daoai/dao-tool-todo'
+import SystemPrompt from '@daoai/dao-system-prompt'
+import ToolRuntime from '@daoai/dao-tools'
+import SessionProjectionRegistry from '@daoai/dao-session-projection'
+import UserQuestionService from '@daoai/dao-user-questions'
+import * as ToolTodo from '@daoai/dao-tool-todo'
 
 interface Bench {
   ctx: Context

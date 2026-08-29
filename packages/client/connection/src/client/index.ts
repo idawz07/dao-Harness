@@ -2,7 +2,7 @@
  * Browser wire client. The plugin selects fixture or HTTP transport, provides
  * the shared API client, and lets API Gateway own the connection loop.
  */
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@daoai/cordis'
 import {
   ConnectionController,
   type ConnectionConfig,
@@ -15,7 +15,7 @@ import { createWebConnectionRpc, type RpcFetch, type RpcStreamOpen } from './rpc
 import { isLoopbackHostname } from '../loopback-hostname.ts'
 import type { ClientConnectionRpc } from '../rpc.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@daoai/cordis' {
   interface Events {
     /**
      * A connection generation was established. Wire-derived caches must
@@ -94,7 +94,7 @@ export interface ClientTransportHooks {
 
 /** Page global carrying {@link ClientTransportHooks}; absent in the served web app. */
 interface ClientTransportGlobal {
-  __DSH_TRANSPORT__?: ClientTransportHooks
+  __DAO_TRANSPORT__?: ClientTransportHooks
 }
 
 /**
@@ -144,7 +144,7 @@ export function apply(ctx: Context): void {
   const pageLocation = typeof location === 'undefined' ? undefined : location
   const fixture = pageLocation !== undefined && new URLSearchParams(pageLocation.search).has('fixture')
   const fixtureRpc = fixture ? createFixtureConnectionRpc() : undefined
-  const transport = (globalThis as ClientTransportGlobal).__DSH_TRANSPORT__
+  const transport = (globalThis as ClientTransportGlobal).__DAO_TRANSPORT__
   const rpc = fixtureRpc ?? createWebConnectionRpc(transport?.fetch, transport?.openStream)
   let generationSource: ConnectionGenerationSource | undefined
   let owner: ConnectionOwner | undefined

@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/simplification/2026-07-28-local-json-tree-renderer.md
-2026-07-28-local-json-tree-renderer.md: 5e8e6d6968319ada53e65a48e9e03b297dc0141c
-2026-07-28-local-json-tree-renderer.zh.md: 1c83ac319f0b1dbeac31feddf01887519c671e9c
+2026-07-28-local-json-tree-renderer.md: 0b868b4c180a73a3ef98a76f7425262fd1474e12
+2026-07-28-local-json-tree-renderer.zh.md: d6dfb61b9a2e67a7509d6e0b17309d0481a742de

@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-pwsh-sandbox",
-  "description": "Sandbox-consuming implementation of the DeepSeek Harness PowerShell executor seam (confines every command via ctx.sandbox, reports denial/enforcement result facts)",
+  "name": "@daoai/dao-pwsh-sandbox",
+  "description": "Sandbox-consuming implementation of the Dao PowerShell executor seam (confines every command via ctx.sandbox, reports denial/enforcement result facts)",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,21 +32,21 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-shell": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-pwsh-local": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-shell": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-pwsh-local": "workspace:^",
+    "@daoai/dao-sandbox": "workspace:^",
+    "@daoai/dao-sandbox-policy": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-shell": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-pwsh-local": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-local": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-subprocess-local": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-shell": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-pwsh-local": "workspace:^",
+    "@daoai/dao-sandbox": "workspace:^",
+    "@daoai/dao-sandbox-local": "workspace:^",
+    "@daoai/dao-sandbox-policy": "workspace:^",
+    "@daoai/dao-subprocess-local": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

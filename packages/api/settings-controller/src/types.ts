@@ -1,10 +1,10 @@
 /**
  * Browser-safe failure vocabulary of the configuration surfaces this package
  * serves. The redacted views themselves live with their seam in
- * `@deepseek-ai/dsh-settings/types`, whose Cordis event declarations already
+ * `@daoai/dao-settings/types`, whose Cordis event declarations already
  * register that file for the Client compilation face.
  *
- * @module @deepseek-ai/dsh-api-settings-controller/types
+ * @module @daoai/dao-api-settings-controller/types
  */
 
 /** Stable settings failure details returned by the `settings` namespace. */

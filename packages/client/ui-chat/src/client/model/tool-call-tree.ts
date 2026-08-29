@@ -1,5 +1,5 @@
-import type { SessionEvent } from '@deepseek-ai/dsh-session/types'
-import type {} from '@deepseek-ai/dsh-tools/types'
+import type { SessionEvent } from '@daoai/dao-session/types'
+import type {} from '@daoai/dao-tools/types'
 import type {
   ConversationNode, RunningToolCall, ToolCallBlock, ToolResultNode,
 } from '../contract/snapshot.ts'

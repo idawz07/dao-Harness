@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-jobs-local",
-  "description": "Process-local implementation of the DeepSeek Harness background job registry seam",
+  "name": "@daoai/dao-jobs-local",
+  "description": "Process-local implementation of the Dao background job registry seam",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,26 +32,26 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-jobs": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-scope": "workspace:^",
+    "@daoai/dao-jobs": "workspace:^",
+    "@daoai/dao-timeout": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-jobs": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/cordis-plugin-include": "workspace:^",
+    "@daoai/cordis-plugin-loader": "workspace:^",
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-brand": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-scope": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-jobs": "workspace:^",
+    "@daoai/dao-timeout": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

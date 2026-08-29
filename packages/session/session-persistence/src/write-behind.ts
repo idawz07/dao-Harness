@@ -1,9 +1,9 @@
 /**
  * Bounded per-session write batching for the shared persistence coordinator.
- * @module @deepseek-ai/dsh-session-persistence/write-behind
+ * @module @daoai/dao-session-persistence/write-behind
  */
 
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
+import type { SessionEvent } from '@daoai/dao-session'
 
 /** Dependencies and scheduling policy for one live session's write controller. */
 export interface SessionWriteBehindOptions {

@@ -3,13 +3,13 @@ description: "Global send_message, interrupt_agent, and list_agents tools for us
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-tool-subagent-control
+# @daoai/dao-tool-subagent-control
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-tool-subagent-control` adds the global control tools for continuable children: `send_message` delivers a follow-up message that becomes the child's next turn, `interrupt_agent` stops a child's current turn while keeping its queue and descendants intact, and `list_agents` (from the separately loadable `list-agents` plugin) lists continuable children by durable id and label. The tools are global, so any number of delegation tools never duplicates them. These tools cover only the parent-to-child direction; the child-to-parent direction belongs to the independently installed `dsh-tool-subagent-report`. No tool's presence decides whether a delegation tool starts continuable work.
+`dao-tool-subagent-control` adds the global control tools for continuable children: `send_message` delivers a follow-up message that becomes the child's next turn, `interrupt_agent` stops a child's current turn while keeping its queue and descendants intact, and `list_agents` (from the separately loadable `list-agents` plugin) lists continuable children by durable id and label. The tools are global, so any number of delegation tools never duplicates them. These tools cover only the parent-to-child direction; the child-to-parent direction belongs to the independently installed `dao-tool-subagent-report`. No tool's presence decides whether a delegation tool starts continuable work.
 
 ## Table of Contents
 
@@ -32,14 +32,14 @@ Mount this package in any composition with continuable children the model should
 Load the subagent service, a backend, the delegation tool, and this package. Adding the separate list plugin exposes all three tools:
 
 ```yaml
-- name: '@deepseek-ai/dsh-subagent'
-- name: '@deepseek-ai/dsh-subagent-spawn-in-process'
-- name: '@deepseek-ai/dsh-tool-subagent'
+- name: '@daoai/dao-subagent'
+- name: '@daoai/dao-subagent-spawn-in-process'
+- name: '@daoai/dao-tool-subagent'
   config:
     provider: spawn
     backgroundMode: continuable
-- name: '@deepseek-ai/dsh-tool-subagent-control'
-- name: '@deepseek-ai/dsh-tool-subagent-control/list-agents'
+- name: '@daoai/dao-tool-subagent-control'
+- name: '@daoai/dao-tool-subagent-control/list-agents'
 ```
 
 This package takes no configuration: the root plugin provides `send_message` and `interrupt_agent`, and the list plugin provides `list_agents`.
@@ -96,9 +96,9 @@ The tool forwards its execution signal, which owns admission only until inbox ac
 Read these pages when the package-level contract is not enough; they move from the tool schemas to the continuation service behind them.
 
 - [Subagent subsystem](../../../docs/subsystems/subagent.md) — continuable children, activations, inbox, interrupt, and follow-up authority.
-- [dsh-tool-subagent](../tool-subagent/README.md) — the delegation tool that starts continuable children.
-- [dsh-tool-subagent-report](../tool-subagent-report/README.md) — the child-to-parent report channel.
-- [Generated tool catalog](../../../docs/tool-catalog.md#deepseek-aidsh-tool-subagent-control) — the three tool schemas.
+- [dao-tool-subagent](../tool-subagent/README.md) — the delegation tool that starts continuable children.
+- [dao-tool-subagent-report](../tool-subagent-report/README.md) — the child-to-parent report channel.
+- [Generated tool catalog](../../../docs/tool-catalog.md#daoaidao-tool-subagent-control) — the three tool schemas.
 
 -----
 
@@ -109,7 +109,7 @@ Read these pages when the package-level contract is not enough; they move from t
 
 #### What the model sees
 
-The generated [schemas](../../../docs/tool-catalog.md#deepseek-aidsh-tool-subagent-control): `send_message` takes `subagent_id` and `message`; `interrupt_agent` takes `agent_id`; `list_agents` takes the optional `scope` enum.
+The generated [schemas](../../../docs/tool-catalog.md#daoaidao-tool-subagent-control): `send_message` takes `subagent_id` and `message`; `interrupt_agent` takes `agent_id`; `list_agents` takes the optional `scope` enum.
 
 #### Token effect
 

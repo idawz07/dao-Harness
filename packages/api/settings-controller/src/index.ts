@@ -4,30 +4,30 @@
  * `ctx.settings`, owned by the class below; and `credentials`, mounted from
  * here as its own plugin.
  *
- * @module @deepseek-ai/dsh-api-settings-controller
+ * @module @daoai/dao-api-settings-controller
  */
 
 import { dirname } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import Schema from '@deepseek-ai/schemastery'
+import { Context } from '@daoai/cordis'
+import Schema from '@daoai/schemastery'
 import {
   InvalidPresetIdError,
   PresetExistsError,
   PresetNotWritableError,
   UnknownPresetError,
-} from '@deepseek-ai/dsh-agent-presets'
+} from '@daoai/dao-agent-presets'
 import {
   canOpenNativePath,
   openNativePath,
   openNativeTextFile,
-} from '@deepseek-ai/dsh-native-command'
-import { SettingsConflictError, settingsNamespace } from '@deepseek-ai/dsh-settings'
-import type { SettingsDescriptor, SettingsPathOp, SettingsProvider } from '@deepseek-ai/dsh-settings'
+} from '@daoai/dao-native-command'
+import { SettingsConflictError, settingsNamespace } from '@daoai/dao-settings'
+import type { SettingsDescriptor, SettingsPathOp, SettingsProvider } from '@daoai/dao-settings'
 import type {
   SettingsDescribeValue, SettingsNamespaceView, SettingsPathOpView,
-} from '@deepseek-ai/dsh-settings/types'
-import type { JsonValue } from '@deepseek-ai/dsh-session/types'
-import { Remote, TypertRemoteFailure, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
+} from '@daoai/dao-settings/types'
+import type { JsonValue } from '@daoai/dao-session/types'
+import { Remote, TypertRemoteFailure, TypertRemoteService } from '@daoai/dao-typert-protocol'
 import { z } from 'zod'
 import { CredentialsController } from './credentials.ts'
 import type { AgentPresetDirectoryOpenValue, SettingsDocumentOpenValue } from './types.ts'
@@ -76,7 +76,7 @@ function namespaceView(descriptor: SettingsDescriptor): SettingsNamespaceView {
   }
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@daoai/cordis' {
   interface Context {
     /** Host owner of the `settings` Remote namespace. */
     settingsController: SettingsController
@@ -314,7 +314,7 @@ export class SettingsController extends TypertRemoteService {
     if (settings === undefined) {
       throw new TypertRemoteFailure({
         code: 'internal',
-        message: 'settings service is absent: this deployment does not mount a settings provider (e.g. @deepseek-ai/dsh-settings-file) in its composition',
+        message: 'settings service is absent: this deployment does not mount a settings provider (e.g. @daoai/dao-settings-file) in its composition',
         details: {},
       })
     }

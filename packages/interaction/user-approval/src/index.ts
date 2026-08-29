@@ -1,25 +1,25 @@
 /**
  * Service Definition for the approval capability seam, covering requests, cancellation, audit, and per-session policy. Missing
  * answerers fail closed; grants apply only to the requested action.
- * @module @deepseek-ai/dsh-user-approval
+ * @module @daoai/dao-user-approval
  */
 
 import { randomUUID } from 'node:crypto'
-import { Context, Service } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { createUserMessage, type ToolCallId } from '@deepseek-ai/dsh-llm'
-import { scopeTarget } from '@deepseek-ai/dsh-scope'
-import type { Session, SessionEvent } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-system-prompt'
+import { Context, Service } from '@daoai/cordis'
+import z from '@daoai/schemastery'
+import type { Agent } from '@daoai/dao-agent'
+import { createUserMessage, type ToolCallId } from '@daoai/dao-llm'
+import { scopeTarget } from '@daoai/dao-scope'
+import type { Session, SessionEvent } from '@daoai/dao-session'
+import type {} from '@daoai/dao-system-prompt'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@daoai/cordis' {
   interface Context {
     approval: ApprovalService
   }
 }
 
-declare module '@deepseek-ai/dsh-session/types' {
+declare module '@daoai/dao-session/types' {
   interface SessionEventMap {
     /**
      * The session's approval policy was switched — log-only, durable,

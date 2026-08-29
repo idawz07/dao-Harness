@@ -1,9 +1,9 @@
-/** Package-owned invariant companion for the subprocess seam. @module @deepseek-ai/dsh-subprocess/invariant */
+/** Package-owned invariant companion for the subprocess seam. @module @daoai/dao-subprocess/invariant */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-subprocess'
+const PACKAGE_NAME = '@daoai/dao-subprocess'
 
 /** Cordis companion plugin name. */
 export const name = 'subprocess-invariant'

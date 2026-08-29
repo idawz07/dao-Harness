@@ -1,12 +1,12 @@
 import { readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import { normalizeSessionSnapshot, type NormalizeContext } from '@deepseek-ai/dsh-session-snapshot'
-import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@deepseek-ai/dsh-loader-smoke'
-import { createUserMessage, ToolCallId , createMessage } from '@deepseek-ai/dsh-llm'
-import SessionStore, { SESSION_FORMAT_VERSION, SessionId, type SessionEvent, type SessionHeader } from '@deepseek-ai/dsh-session'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
+import { Context } from '@daoai/cordis'
+import { normalizeSessionSnapshot, type NormalizeContext } from '@daoai/dao-session-snapshot'
+import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@daoai/dao-loader-smoke'
+import { createUserMessage, ToolCallId , createMessage } from '@daoai/dao-llm'
+import SessionStore, { SESSION_FORMAT_VERSION, SessionId, type SessionEvent, type SessionHeader } from '@daoai/dao-session'
+import JsonlSessionPersistence from '@daoai/dao-session-persistence-jsonl'
 import { describe, expect, it } from 'vitest'
 
 const fixtureDir = join(dirname(fileURLToPath(import.meta.url)), 'expected/semantic-checkpoint')
@@ -17,7 +17,7 @@ const configPath = fileURLToPath(new URL('../semantic-checkpoint.cordis.snapshot
 const binScript = fileURLToPath(new URL('../../../../../../packages/test-support/loader-smoke/tests/fixtures/headless-driver.ts', import.meta.url))
 const tsconfigPath = fileURLToPath(new URL('../../../../../../tsconfig.json', import.meta.url))
 const sessionId = SessionId('semantic-checkpoint-unknown-outcome')
-const refreshing = process.env.DSH_SNAPSHOT === 'refresh'
+const refreshing = process.env.DAO_SNAPSHOT === 'refresh'
 const task = 'Continue safely from the interrupted operation.'
 
 async function seedInterruptedSession(root: string, cwd: string): Promise<string> {
@@ -85,15 +85,15 @@ describe('semantic checkpoint recovery snapshot', () => {
     let sessionPath = ''
     const result = await runLoaderSmoke({
       label: 'semantic checkpoint headless stream-json snapshot',
-      tempDirPrefix: 'dsh-semantic-snapshot-',
+      tempDirPrefix: 'dao-semantic-snapshot-',
       binScript,
       libBinScript: binScript,
       configPath,
       binArgs: [configPath, task],
       tsconfigPath,
       env: {
-        DSH_SNAPSHOT_FILE: replayFixture,
-        DSH_SNAPSHOT_OVERRIDE: replayOverride,
+        DAO_SNAPSHOT_FILE: replayFixture,
+        DAO_SNAPSHOT_OVERRIDE: replayOverride,
       },
       prepare: async (runCwd) => {
         cwd = runCwd

@@ -9,23 +9,23 @@
  * workspace is not the current one. A session is dated from the Host session
  * list, so the `@` menu and the session list never disagree about its age.
  *
- * @module @deepseek-ai/dsh-client-ui-reference/client
+ * @module @daoai/dao-client-ui-reference/client
  */
 // Type-only: pulls the generated Remote API and ctx.remote merge through the Client assembly boundary.
-import type {} from '@deepseek-ai/dsh-api-remotes/client'
+import type {} from '@daoai/dao-api-remotes/client'
 // Type-only: pulls the locale plugin's Context merge (ctx.locale).
-import type {} from '@deepseek-ai/dsh-client-locale/client'
-import type { Context as ClientContext } from '@deepseek-ai/cordis'
-import type { ISessions } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { ConnectionHandle } from '@deepseek-ai/dsh-client-connection/client'
-import { relativeTime } from '@deepseek-ai/dsh-client-ui-primitives'
+import type {} from '@daoai/dao-client-locale/client'
+import type { Context as ClientContext } from '@daoai/cordis'
+import type { ISessions } from '@daoai/dao-api-session-controller/client'
+import type { ConnectionHandle } from '@daoai/dao-client-connection/client'
+import { relativeTime } from '@daoai/dao-client-ui-primitives'
 import type {
   ClientSessionContext, InputTriggerCrumb, InputTriggerServiceContract, InputTriggerSource,
-} from '@deepseek-ai/dsh-client-ui-input-trigger/client'
-import { formatFileMention } from '@deepseek-ai/dsh-file-reference/grammar'
-import type { FileReferenceCandidate } from '@deepseek-ai/dsh-file-reference/types'
-import type { SessionReferenceMentionCandidate } from '@deepseek-ai/dsh-session-reference/types'
-import { abbreviateHomePath } from '@deepseek-ai/dsh-util-workspace-path'
+} from '@daoai/dao-client-ui-input-trigger/client'
+import { formatFileMention } from '@daoai/dao-file-reference/grammar'
+import type { FileReferenceCandidate } from '@daoai/dao-file-reference/types'
+import type { SessionReferenceMentionCandidate } from '@daoai/dao-session-reference/types'
+import { abbreviateHomePath } from '@daoai/dao-util-workspace-path'
 import { en, NS, zh, type ReferenceKey } from './locales.ts'
 
 /** Required services: the trigger registry, the Remote namespaces, and the copy. */

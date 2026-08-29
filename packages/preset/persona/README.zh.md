@@ -3,13 +3,13 @@ description: "preset 挂载的可组装人设行，让单个 agent 拥有自己�
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-persona
+# @daoai/dao-persona
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-persona` 让单个 agent（智能体）拥有自己的人设：preset 挂载这一可组装的行来注册 `deployment:persona` 系统提示词段落，为该会话遮蔽部署级人设。它还可以把人设变成该会话的完整系统提示词、抑制所有其他段落，并可为该会话关闭动态 runtime-context 快照。请把它挂在 preset 组装内部——全局挂载会与提示词注册表自身的人设注册相撞并明确报错。没有这一行，preset 能改变 agent 的工具，却永远改不了它的身份。
+`dao-persona` 让单个 agent（智能体）拥有自己的人设：preset 挂载这一可组装的行来注册 `deployment:persona` 系统提示词段落，为该会话遮蔽部署级人设。它还可以把人设变成该会话的完整系统提示词、抑制所有其他段落，并可为该会话关闭动态 runtime-context 快照。请把它挂在 preset 组装内部——全局挂载会与提示词注册表自身的人设注册相撞并明确报错。没有这一行，preset 能改变 agent 的工具，却永远改不了它的身份。
 
 ## 目录
 
@@ -30,7 +30,7 @@ kind: "package-reference"
 ### 配置
 
 ```yaml
-- name: '@deepseek-ai/dsh-persona'
+- name: '@daoai/dao-persona'
   config:
     text: You are a terse systems engineer who answers in short commands.
 ```
@@ -41,7 +41,7 @@ kind: "package-reference"
 | `complete` | `false` | 组装后将此人设恢复为唯一的系统提示词段落 |
 | `includeRuntimeContext` | `true` | 是否为此 agent 作用域包含动态 runtime-context 快照；false 会抑制所有上下文贡献，但不禁用拥有它们的服务 |
 
-生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-persona)是每个受支持字段及其 JSDoc 的穷尽式真源。
+生成的[配置目录](../../../docs/config-catalog.zh.md#daoaidao-persona)是每个受支持字段及其 JSDoc 的穷尽式真源。
 
 ### 人设行为
 
@@ -49,7 +49,7 @@ kind: "package-reference"
 
 ### 何时使用
 
-当 preset 必须改变 agent 的身份、而不只是工具时，使用本行。部署级人设本身配置在 `dsh-system-prompt` 行上，不在这里；本行只用于为某一个 agent 遮蔽或替换它。
+当 preset 必须改变 agent 的身份、而不只是工具时，使用本行。部署级人设本身配置在 `dao-system-prompt` 行上，不在这里；本行只用于为某一个 agent 遮蔽或替换它。
 
 -----
 
@@ -61,11 +61,11 @@ kind: "package-reference"
 
 ### 本行如何注册
 
-`apply` 在挂载上下文的 scope 内通过 `ctx.systemPrompt.section({ name: PERSONA_SECTION, order: PERSONA_ORDER, text, complete? })` 注册一个提示词段落，因此该段落落在 order 0——紧随 harness 身份开场白之后——且只对加入该 preset 的 agent 生效。`PERSONA_SECTION` 与 `PERSONA_ORDER` 从 `dsh-system-prompt` 导入而非重述，因此 preset 人设总是遮蔽部署人设，而不是落在它旁边。`includeRuntimeContext: false` 会调用 `ctx.systemPrompt.suppressRuntimeContext()`。
+`apply` 在挂载上下文的 scope 内通过 `ctx.systemPrompt.section({ name: PERSONA_SECTION, order: PERSONA_ORDER, text, complete? })` 注册一个提示词段落，因此该段落落在 order 0——紧随 harness 身份开场白之后——且只对加入该 preset 的 agent 生效。`PERSONA_SECTION` 与 `PERSONA_ORDER` 从 `dao-system-prompt` 导入而非重述，因此 preset 人设总是遮蔽部署人设，而不是落在它旁边。`includeRuntimeContext: false` 会调用 `ctx.systemPrompt.suppressRuntimeContext()`。
 
 ### 本行为何仅限 scope 内使用
 
-`dsh-system-prompt` 以自身配置持有全局人设并无条件注册 `deployment:persona`，因此一个进程只有一份。本行在 agent scope 之外与该项注册相撞，这是刻意的：本行的存在是因为 preset 无法自行挂载提示词注册表。
+`dao-system-prompt` 以自身配置持有全局人设并无条件注册 `deployment:persona`，因此一个进程只有一份。本行在 agent scope 之外与该项注册相撞，这是刻意的：本行的存在是因为 preset 无法自行挂载提示词注册表。
 
 ### 源码地图
 
@@ -85,7 +85,7 @@ kind: "package-reference"
 
 - [agent-presets 包](../agent-presets/README.zh.md)——本行挂载进的 preset 组装。
 - [系统提示词子系统](../../../docs/subsystems/system-prompt.zh.md)——段落、组装，以及本行所遮蔽的人设槽位。
-- [生成的配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-persona)——每个受支持配置字段及其源声明。
+- [生成的配置目录](../../../docs/config-catalog.zh.md#daoaidao-persona)——每个受支持配置字段及其源声明。
 
 -----
 

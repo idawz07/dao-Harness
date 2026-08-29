@@ -1,6 +1,6 @@
 import { execFileSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@daoai/cordis'
 import { describe, expect, expectTypeOf, it } from 'vitest'
 import {
   bindTypertRemote,
@@ -14,7 +14,7 @@ import {
   type TypertForwardableEventEntry,
   type TypertLookup,
   type TypertRemoteEvent,
-} from '@deepseek-ai/dsh-typert-protocol'
+} from '@daoai/dao-typert-protocol'
 
 interface MetaFixtureSubject {
   readonly subjectId: string
@@ -27,7 +27,7 @@ interface MetaFixtureRequest {
   readonly transform: (subject: MetaFixtureSubject) => Promise<MetaFixtureSubject | undefined>
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@daoai/cordis' {
   interface Events {
     /**
      * Test-only one-way event: bound to no Scope and returning nothing.
@@ -59,7 +59,7 @@ declare module '@deepseek-ai/cordis' {
   }
 }
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@daoai/dao-typert-protocol' {
   interface TypertLookupMap {
     metaFixture: TypertLookup<MetaFixtureSubject, string>
   }

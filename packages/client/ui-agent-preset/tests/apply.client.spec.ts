@@ -5,15 +5,15 @@
  * that are already showing, so a default set from one converges the other.
  */
 
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@daoai/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { resolveSlotLabel } from '@deepseek-ai/dsh-client-ui-slots'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { TestRemote } from '@deepseek-ai/dsh-client-test-runtime'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import { apply as settingsApply, inject as settingsInject } from '@deepseek-ai/dsh-client-ui-settings/client'
-import { apply, inject } from '@deepseek-ai/dsh-client-ui-agent-preset/client'
+import { resolveSlotLabel } from '@daoai/dao-client-ui-slots'
+import { SlotRegistry } from '@daoai/dao-client-ui-renderer/client'
+import { LocaleRuntime } from '@daoai/dao-client-locale/client'
+import { TestRemote } from '@daoai/dao-client-test-runtime'
+import { SessionId } from '@daoai/dao-session'
+import { apply as settingsApply, inject as settingsInject } from '@daoai/dao-client-ui-settings/client'
+import { apply, inject } from '@daoai/dao-client-ui-agent-preset/client'
 import { AgentPresetLabel } from '../src/client/AgentPresetLabel.tsx'
 import type { AgentPresetLabelInjected } from '../src/client/AgentPresetLabel.tsx'
 import { AgentPresetRow } from '../src/client/AgentPresetRow.tsx'
@@ -621,7 +621,7 @@ describe('AgentPresetSeatController reconciliation', () => {
   })
 
   it('keeps the bare cause of a mount failure, not the frame that names the preset again', async () => {
-    const reason = 'failed to import loader entry ctx (@deepseek-ai/dsh-gone): Cannot find package'
+    const reason = 'failed to import loader entry ctx (@daoai/dao-gone): Cannot find package'
     const controller = new AgentPresetSeatController({
       agentPresets: {
         select: () => Promise.resolve({

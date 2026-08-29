@@ -1,10 +1,10 @@
-/** Package invariant companion for `@deepseek-ai/dsh-session-log-export`. */
+/** Package invariant companion for `@daoai/dao-session-log-export`. */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-session-log-export'
+const PACKAGE_NAME = '@daoai/dao-session-log-export'
 
 export const name = 'session-export-invariant'
 export const inject = ['invariants']

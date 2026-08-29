@@ -6,20 +6,20 @@
  *
  * Per-session storage follows the client service pattern (InputTriggerService /
  * CommandUiRuntime): a lazy service-internal map whose entry is deleted by the
- * owning scope's disposer. The host `dsh-scope` ScopedLayers registry does
+ * owning scope's disposer. The host `dao-scope` ScopedLayers registry does
  * does not belong here: it derives scope from the host carrier mechanism
  * (object-keyed), while client scopes tag contexts with branded SessionId
  * strings, and it models global+shadow named registries — this is a
  * per-session singleton with no global layer to merge.
  */
-import { Service } from '@deepseek-ai/cordis'
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import { Service } from '@daoai/cordis'
+import type { Context } from '@daoai/cordis'
+import type {} from '@daoai/dao-api-session-controller/client'
+import type { SessionId } from '@daoai/dao-session/types'
 import { ModelCatalogDirectory } from './catalog.ts'
 import { ModelDirectory } from './directory.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@daoai/cordis' {
   interface Context {
     modelDirectories: ModelDirectoryResolver
   }

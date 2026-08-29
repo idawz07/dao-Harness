@@ -2,17 +2,17 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup } from '@testing-library/react'
-import type { ISession } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { ISession } from '@daoai/dao-api-session-controller/client'
+import type { SessionId } from '@daoai/dao-session/types'
 import {
   apply as applyChat, inject as injectChat, type ToolResultNode,
-} from '@deepseek-ai/dsh-client-ui-chat/client'
-import type { PropsRenderSlots } from '@deepseek-ai/dsh-client-ui-slots'
-import { SlotTestRuntime, TestRemote, stubSettingsScope } from '@deepseek-ai/dsh-client-test-runtime'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { apply as applyConversation, inject as injectConversation } from '@deepseek-ai/dsh-client-ui-conversation/client'
-import { apply as applyTool, inject as injectTool } from '@deepseek-ai/dsh-client-ui-tool/client'
-import type { ToolCallViewProps } from '@deepseek-ai/dsh-client-ui-tool/client'
+} from '@daoai/dao-client-ui-chat/client'
+import type { PropsRenderSlots } from '@daoai/dao-client-ui-slots'
+import { SlotTestRuntime, TestRemote, stubSettingsScope } from '@daoai/dao-client-test-runtime'
+import { LocaleRuntime } from '@daoai/dao-client-locale/client'
+import { apply as applyConversation, inject as injectConversation } from '@daoai/dao-client-ui-conversation/client'
+import { apply as applyTool, inject as injectTool } from '@daoai/dao-client-ui-tool/client'
+import type { ToolCallViewProps } from '@daoai/dao-client-ui-tool/client'
 import { toolSessionEvents } from './tool-details-render.client.tsx'
 
 const SID = 's1' as SessionId

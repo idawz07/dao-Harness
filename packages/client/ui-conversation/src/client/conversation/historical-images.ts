@@ -1,9 +1,9 @@
 /** Session-scoped durable image URL cache shared by Conversation targets. */
-import type { Context } from '@deepseek-ai/cordis'
-import type { ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
-import type { ISessions } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { bytesToBase64 } from '@deepseek-ai/dsh-util-crypto'
+import type { Context } from '@daoai/cordis'
+import type { ImageAttachmentRef } from '@daoai/dao-attachment'
+import type { ISessions } from '@daoai/dao-api-session-controller/client'
+import type { SessionId } from '@daoai/dao-session/types'
+import { bytesToBase64 } from '@daoai/dao-util-crypto'
 
 interface ImageUrlEntry {
   readonly sessionId: SessionId

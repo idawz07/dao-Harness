@@ -3,7 +3,7 @@ description: "当前 Cordis Loader 插件状态的只读投影：面向 web GUI 
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-host-plugin-inventory
+# @daoai/dao-host-plugin-inventory
 
 [English](README.md) | 中文
 

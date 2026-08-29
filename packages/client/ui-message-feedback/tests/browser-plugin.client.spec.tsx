@@ -8,14 +8,14 @@
  * fiber (HMR safety). The node half and the invariant companion are exercised
  * over the same Context.
  */
-import { Context, Service } from '@deepseek-ai/cordis'
+import { Context, Service } from '@daoai/cordis'
 import { afterEach, describe, expect, it } from 'vitest'
 import { cleanup } from '@testing-library/react'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import type { MessageId } from '@deepseek-ai/dsh-client-connection/client'
-import type { MessageFeedbackItem, MessageFeedbackVersion } from '@deepseek-ai/dsh-message-feedback/types'
+import { SlotRegistry } from '@daoai/dao-client-ui-renderer/client'
+import type { SessionId } from '@daoai/dao-session/types'
+import { LocaleRuntime } from '@daoai/dao-client-locale/client'
+import type { MessageId } from '@daoai/dao-client-connection/client'
+import type { MessageFeedbackItem, MessageFeedbackVersion } from '@daoai/dao-message-feedback/types'
 import type { MessageFeedbackInjected } from '../src/client/slots.ts'
 import { apply, inject } from '../src/client/index.ts'
 import { apply as nodeApply } from '../src/index.ts'

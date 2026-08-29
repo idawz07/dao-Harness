@@ -2,15 +2,15 @@
  * Live Typert Remote dispatch over Cordis Services and registered providers.
  * Unary transport and response envelopes belong to Connection; live Remote
  * streams use the Gateway-owned WebSocket mux.
- * @module @deepseek-ai/dsh-api-gateway
+ * @module @daoai/dao-api-gateway
  */
 
 import { randomUUID } from 'node:crypto'
-import { Context, Service, symbols } from '@deepseek-ai/cordis'
-import type { ConnectionRpcHandler } from '@deepseek-ai/dsh-client-connection'
-import type { WebUpgradeRoute } from '@deepseek-ai/dsh-host-webserver'
-import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
-import z from '@deepseek-ai/schemastery'
+import { Context, Service, symbols } from '@daoai/cordis'
+import type { ConnectionRpcHandler } from '@daoai/dao-client-connection'
+import type { WebUpgradeRoute } from '@daoai/dao-host-webserver'
+import { MAX_TIMER_DELAY_MS } from '@daoai/dao-timeout'
+import z from '@daoai/schemastery'
 import {
   remoteMethods,
   TypertLookupFailure,
@@ -19,7 +19,7 @@ import {
   type InvocationParameterDescriptor,
   type TypertCodec,
   type TypertGatewayBinding,
-} from '@deepseek-ai/dsh-typert-protocol'
+} from '@daoai/dao-typert-protocol'
 import type {
   InvokeRemoteRequest,
   TypertGateway,

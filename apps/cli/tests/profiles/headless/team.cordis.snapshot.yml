@@ -1,30 +1,30 @@
 # Keyless Agent Teams composition over the real headless app and deterministic fixture adapter.
 - id: base
-  name: '@deepseek-ai/cordis-plugin-include'
+  name: '@daoai/cordis-plugin-include'
   config:
     path: ./cordis.yml
     patches:
       - id: llm-deepseek
-        name: '@deepseek-ai/dsh-llm-deepseek'
+        name: '@daoai/dao-llm-deepseek'
         disabled: true
       - id: tool-subagent-control
-        name: '@deepseek-ai/dsh-tool-subagent-control'
+        name: '@daoai/dao-tool-subagent-control'
         disabled: true
       - id: tool-subagent-list-agents
-        name: '@deepseek-ai/dsh-tool-subagent-control/list-agents'
+        name: '@daoai/dao-tool-subagent-control/list-agents'
         disabled: true
       - id: tool-subagent-report
-        name: '@deepseek-ai/dsh-tool-subagent-report'
+        name: '@daoai/dao-tool-subagent-report'
         disabled: true
       - id: tool-subagent
-        name: '@deepseek-ai/dsh-tool-subagent'
+        name: '@daoai/dao-tool-subagent'
         config:
           provider: spawn
           toolName: subagent
           backgroundMode: one-shot
           maxDepth: 1
       - id: tool-subagent-fork
-        name: '@deepseek-ai/dsh-tool-subagent'
+        name: '@daoai/dao-tool-subagent'
         config:
           provider: fork
           toolName: subagent_fork
@@ -33,7 +33,7 @@
           maxDepth: 1
       - insert:
           - id: agent-team
-            name: '@deepseek-ai/dsh-experimental-agent-team'
+            name: '@daoai/dao-experimental-agent-team'
             config:
               maxMembers: 8
               maxTasks: 256
@@ -41,7 +41,7 @@
               maxMessageBytes: 65536
               disposalTimeoutMs: 5000
           - id: tool-agent-team
-            name: '@deepseek-ai/dsh-experimental-tool-agent-team'
+            name: '@daoai/dao-experimental-tool-agent-team'
             config:
               freshProvider: spawn
               forkProvider: fork

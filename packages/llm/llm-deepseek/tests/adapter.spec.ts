@@ -2,10 +2,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import { AttachmentId, ImageVariantId } from '@deepseek-ai/dsh-attachment'
-import type { AttachmentStore, ImageAttachmentRef, RequestImageAttachment } from '@deepseek-ai/dsh-attachment'
-import { createLaunchEnvironmentSnapshot } from '@deepseek-ai/dsh-launch-environment'
+import { Context } from '@daoai/cordis'
+import { AttachmentId, ImageVariantId } from '@daoai/dao-attachment'
+import type { AttachmentStore, ImageAttachmentRef, RequestImageAttachment } from '@daoai/dao-attachment'
+import { createLaunchEnvironmentSnapshot } from '@daoai/dao-launch-environment'
 import LlmRuntime, { ToolCallId, createUserMessage,
   CONTEXT_WINDOW_EXCEEDED_CODE,
   LlmError,
@@ -13,14 +13,14 @@ import LlmRuntime, { ToolCallId, createUserMessage,
   QUOTA_EXCEEDED_CODE,
   ReasoningEffortId,
   userAgent,
-} from '@deepseek-ai/dsh-llm'
-import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
-import { getOrCreateAnonymousUserId, type AnonymousUserId } from '@deepseek-ai/dsh-anonymous-user-id'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import DeepSeekLlmApiExtensionRegistry from '@deepseek-ai/dsh-deepseek-llm-api-extensions'
-import type { PreparedDeepSeekLlmApiExtensions } from '@deepseek-ai/dsh-deepseek-llm-api-extensions'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek'
-import { DeepSeekAdapter, resolveAdapterOptions } from '@deepseek-ai/dsh-llm-deepseek'
+} from '@daoai/dao-llm'
+import { MAX_TIMER_DELAY_MS } from '@daoai/dao-timeout'
+import { getOrCreateAnonymousUserId, type AnonymousUserId } from '@daoai/dao-anonymous-user-id'
+import { SessionId } from '@daoai/dao-session'
+import DeepSeekLlmApiExtensionRegistry from '@daoai/dao-deepseek-llm-api-extensions'
+import type { PreparedDeepSeekLlmApiExtensions } from '@daoai/dao-deepseek-llm-api-extensions'
+import * as LlmDeepSeek from '@daoai/dao-llm-deepseek'
+import { DeepSeekAdapter, resolveAdapterOptions } from '@daoai/dao-llm-deepseek'
 import { httpErrorCode } from '../src/adapter.ts'
 import { resolveRequestImagePolicy } from '../src/request-pricing.ts'
 import { assemble } from './assemble.ts'
@@ -31,8 +31,8 @@ const TEST_USER_ID = '00000000-0000-4000-8000-000000000001' as AnonymousUserId
 let testHome: string
 
 beforeEach(() => {
-  testHome = mkdtempSync(join(tmpdir(), 'dsh-llm-deepseek-'))
-  vi.stubEnv('DSH_HOME', testHome)
+  testHome = mkdtempSync(join(tmpdir(), 'dao-llm-deepseek-'))
+  vi.stubEnv('DAO_HOME', testHome)
 })
 
 afterEach(async () => {
@@ -403,7 +403,7 @@ describe('DeepSeekAdapter against a mock server', () => {
     expect(server.fileRequests).toEqual([{
       method: 'POST',
       path: '/files',
-      filename: `dsh-${'a'.repeat(16)}-${'b'.repeat(8)}.png`,
+      filename: `dao-${'a'.repeat(16)}-${'b'.repeat(8)}.png`,
       bytes: 3,
     }])
     expect(signalSeen[0]).toBeInstanceOf(AbortSignal)
@@ -2195,7 +2195,7 @@ describe('plugin registration and config', () => {
 
   it('takes DEEPSEEK_BASE_URL from any environment layer, with explicit config still on top', () => {
     const trusted = createLaunchEnvironmentSnapshot([
-      { source: 'user-env', path: '/home/.dsh/.env', values: { DEEPSEEK_BASE_URL: 'https://user.example' } },
+      { source: 'user-env', path: '/home/.dao/.env', values: { DEEPSEEK_BASE_URL: 'https://user.example' } },
     ])
     expect(resolveAdapterOptions({}, trusted).baseURL).toBe('https://user.example')
     // The product trusts the project it is launched in, so a checkout can

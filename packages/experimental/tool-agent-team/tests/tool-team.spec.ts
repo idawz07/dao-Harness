@@ -2,21 +2,21 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { ToolCallId } from '@deepseek-ai/dsh-llm'
-import { scopeOf } from '@deepseek-ai/dsh-scope'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import SessionQueryEngine from '@deepseek-ai/dsh-session-query'
-import SubagentService from '@deepseek-ai/dsh-subagent'
-import * as SubagentFork from '@deepseek-ai/dsh-subagent-fork-in-process'
-import * as SubagentSpawn from '@deepseek-ai/dsh-subagent-spawn-in-process'
-import { renderPrompt } from '@deepseek-ai/dsh-system-prompt'
-import * as ToolSubagentControl from '@deepseek-ai/dsh-tool-subagent-control'
-import { defineContentToolFixture } from '@deepseek-ai/dsh-tools'
+import { Context } from '@daoai/cordis'
+import type { Agent } from '@daoai/dao-agent'
+import AgentLoop from '@daoai/dao-agent-loop'
+import { mountAgentLoopTestDependencies } from '@daoai/dao-agent-loop-testkit'
+import { ToolCallId } from '@daoai/dao-llm'
+import { scopeOf } from '@daoai/dao-scope'
+import { SessionId } from '@daoai/dao-session'
+import JsonlSessionPersistence from '@daoai/dao-session-persistence-jsonl'
+import SessionQueryEngine from '@daoai/dao-session-query'
+import SubagentService from '@daoai/dao-subagent'
+import * as SubagentFork from '@daoai/dao-subagent-fork-in-process'
+import * as SubagentSpawn from '@daoai/dao-subagent-spawn-in-process'
+import { renderPrompt } from '@daoai/dao-system-prompt'
+import * as ToolSubagentControl from '@daoai/dao-tool-subagent-control'
+import { defineContentToolFixture } from '@daoai/dao-tools'
 import { MockAdapter, textResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import TeamService from '../../agent-team/src/index.ts'
 import * as toolTeam from '../src/index.ts'
@@ -56,7 +56,7 @@ afterEach(() => {
 async function setup(script: ConstructorParameters<typeof MockAdapter>[0], legacyControl = false) {
   const ctx = new Context()
   await mountAgentLoopTestDependencies(ctx)
-  const storageRoot = mkdtempSync(join(tmpdir(), 'dsh-tool-team-'))
+  const storageRoot = mkdtempSync(join(tmpdir(), 'dao-tool-team-'))
   roots.push(storageRoot)
   await ctx.plugin(JsonlSessionPersistence, { root: storageRoot })
   await ctx.plugin(TestSessionQuery)
@@ -123,7 +123,7 @@ async function waitNoAgent(ctx: Context, id: SessionId): Promise<void> {
   await vi.waitFor(() => { expect(ctx.agents.get(id)).toBeUndefined() }, { timeout: 5_000 })
 }
 
-describe('dsh-tool-team', () => {
+describe('dao-tool-team', () => {
   it('installs the complete scoped schema and shared-checkout policy for roots and teammates', async () => {
     const { ctx, lead } = await setup(['hang'])
     const leadAssembly = await assembly(ctx, lead)

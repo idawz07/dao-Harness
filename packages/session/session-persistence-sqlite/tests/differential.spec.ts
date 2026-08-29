@@ -1,15 +1,15 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import fc from 'fast-check'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@daoai/cordis'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
-import { ToolCallId, type StreamChunk } from '@deepseek-ai/dsh-llm'
-import SessionStore, { type SessionEvent } from '@deepseek-ai/dsh-session'
-import type { SessionPersistence } from '@deepseek-ai/dsh-session-persistence'
-import SessionPersistenceJsonl from '@deepseek-ai/dsh-session-persistence-jsonl'
-import SessionPersistenceSqlite from '@deepseek-ai/dsh-session-persistence-sqlite'
+import { ToolCallId, type StreamChunk } from '@daoai/dao-llm'
+import SessionStore, { type SessionEvent } from '@daoai/dao-session'
+import type { SessionPersistence } from '@daoai/dao-session-persistence'
+import SessionPersistenceJsonl from '@daoai/dao-session-persistence-jsonl'
+import SessionPersistenceSqlite from '@daoai/dao-session-persistence-sqlite'
 import { meta } from '../../session-persistence/tests/contract.ts'
 import { testSql } from './test-sql.ts'
 
@@ -199,7 +199,7 @@ describe('SQLite cross-backend differential behavior', () => {
   it('matches JSONL/Zstandard for every packed kind, scalar fallback, suffix, partition, and reopen', async () => {
     const events = packingMatrixLog()
     for (const [partitionIndex, sizes] of [[events.length], [1], [2, 1, 5, 3]].entries()) {
-      const directory = await freshDirectory(`dsh-sqlite-matrix-${partitionIndex}-`)
+      const directory = await freshDirectory(`dao-sqlite-matrix-${partitionIndex}-`)
       for (const name of ['jsonl-zstd', 'sqlite'] as const) {
         const root = join(directory, name)
         await verifyBackend(name, root, events, sizes)
@@ -229,7 +229,7 @@ describe('SQLite cross-backend differential behavior', () => {
 
   it('matches JSONL/Zstandard across randomized logical logs and append partitions', async () => {
     await fc.assert(fc.asyncProperty(randomWorkload, async ({ events, batchSizes }) => {
-      const directory = await freshDirectory('dsh-sqlite-property-')
+      const directory = await freshDirectory('dao-sqlite-property-')
       for (const name of ['jsonl-zstd', 'sqlite'] as const) {
         await verifyBackend(name, join(directory, name), events, batchSizes)
       }

@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-command-compact`.
- * @module @deepseek-ai/dsh-command-compact/invariant
+ * Package-owned invariant companion for `@daoai/dao-command-compact`.
+ * @module @daoai/dao-command-compact/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-command-compact'
+const PACKAGE_NAME = '@daoai/dao-command-compact'
 
 /** Cordis companion plugin name. */
 export const name = 'command-compact-invariant'

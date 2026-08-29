@@ -3,21 +3,21 @@
  * (`goToDefinition`/`findReferences`/`goToImplementation`/`hover`); it converts one-based UTF-16
  * cursor coordinates to the seam's zero-based positions, requires the session workspace with no
  * fallback, caps and renders results, and attaches a configurable timeout budget for
- * `dsh-tool-call-timeout-policy` to enforce. It runtime-injects only `tools`, `lsp`, and `systemPrompt` and
+ * `dao-tool-call-timeout-policy` to enforce. It runtime-injects only `tools`, `lsp`, and `systemPrompt` and
  * imports no provider.
  *
  * Namespace plugin (named exports, no default export).
- * @module @deepseek-ai/dsh-tool-lsp
+ * @module @daoai/dao-tool-lsp
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import { assertNever } from '@deepseek-ai/dsh-llm'
-import { LspError } from '@deepseek-ai/dsh-lsp'
-import type {} from '@deepseek-ai/dsh-lsp'
-import { FIRST_PARTY_SECTION_ORDER } from '@deepseek-ai/dsh-system-prompt'
-import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
+import type { Context } from '@daoai/cordis'
+import z from '@daoai/schemastery'
+import { defineTool } from '@daoai/dao-tools'
+import { assertNever } from '@daoai/dao-llm'
+import { LspError } from '@daoai/dao-lsp'
+import type {} from '@daoai/dao-lsp'
+import { FIRST_PARTY_SECTION_ORDER } from '@daoai/dao-system-prompt'
+import { MAX_TIMER_DELAY_MS } from '@daoai/dao-timeout'
 import {
   DEFAULT_MAX_LOCATIONS,
   DEFAULT_MAX_RESULT_CHARS,

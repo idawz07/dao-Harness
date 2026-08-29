@@ -2,15 +2,15 @@ import { describe, expect, it, vi } from 'vitest'
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { join, sep } from 'node:path'
 import { tmpdir } from 'node:os'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import { renderPrompt, TOOL_ORDER_REST } from '@deepseek-ai/dsh-system-prompt'
+import { Context } from '@daoai/cordis'
+import Loader from '@daoai/cordis-plugin-loader'
+import { renderPrompt, TOOL_ORDER_REST } from '@daoai/dao-system-prompt'
 import * as agentCore from '../src/index.ts'
-import { agentEvents, type Agent } from '@deepseek-ai/dsh-agent'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import LocalBashExecutor from '@deepseek-ai/dsh-bash-local'
-import LocalFileSystem from '@deepseek-ai/dsh-fs-local'
-import * as ToolFs from '@deepseek-ai/dsh-tool-fs'
+import { agentEvents, type Agent } from '@daoai/dao-agent'
+import { SessionId } from '@daoai/dao-session'
+import LocalBashExecutor from '@daoai/dao-bash-local'
+import LocalFileSystem from '@daoai/dao-fs-local'
+import * as ToolFs from '@daoai/dao-tool-fs'
 import { MockAdapter, textResponse, toolCallResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import {
   createUserMessage,
@@ -22,16 +22,16 @@ import {
   type Message,
   type ResolvedRetryPolicy,
   type StreamChunk,
-} from '@deepseek-ai/dsh-llm'
-import type { ToolExecution } from '@deepseek-ai/dsh-tools'
-import * as sessionInvariant from '@deepseek-ai/dsh-session/invariant'
-import * as agentInvariant from '@deepseek-ai/dsh-agent/invariant'
-import * as scopeInvariant from '@deepseek-ai/dsh-scope/invariant'
-import * as agentLoopInvariant from '@deepseek-ai/dsh-agent-loop/invariant'
+} from '@daoai/dao-llm'
+import type { ToolExecution } from '@daoai/dao-tools'
+import * as sessionInvariant from '@daoai/dao-session/invariant'
+import * as agentInvariant from '@daoai/dao-agent/invariant'
+import * as scopeInvariant from '@daoai/dao-scope/invariant'
+import * as agentLoopInvariant from '@daoai/dao-agent-loop/invariant'
 
 const testToolSignal = new AbortController().signal
 
-declare module '@deepseek-ai/dsh-jobs' {
+declare module '@daoai/dao-jobs' {
   interface JobKindMap {
     probe: 'probe'
   }
@@ -53,7 +53,7 @@ async function composePrefix(ctx: Context, cwd: string): Promise<Message[]> {
 }
 
 /**
- * Unit coverage for the @deepseek-ai/dsh-agent-spine-demo bundle: mounting it brings
+ * Unit coverage for the @daoai/dao-agent-spine-demo bundle: mounting it brings
  * up the whole default spine in one `ctx.plugin`, and the forwarded
  * `agents` config reaches the loop (default `[]`, or a pre-created agent).
  *
@@ -63,10 +63,10 @@ async function composePrefix(ctx: Context, cwd: string): Promise<Message[]> {
  * bin smokes; here we assert the composition + config forwarding.
  */
 async function mount(config: agentCore.Config, withBash = false): Promise<Context> {
-  const oldDshHome = process.env.DSH_HOME
-  const oldAgentsHome = process.env.DSH_AGENTS_HOME
-  process.env.DSH_HOME = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-home-'))
-  process.env.DSH_AGENTS_HOME = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-agents-'))
+  const oldDshHome = process.env.DAO_HOME
+  const oldAgentsHome = process.env.DAO_AGENTS_HOME
+  process.env.DAO_HOME = await mkdtemp(join(tmpdir(), 'dao-agent-spine-demo-home-'))
+  process.env.DAO_AGENTS_HOME = await mkdtemp(join(tmpdir(), 'dao-agent-spine-demo-agents-'))
   const ctx = new Context()
   if (withBash) {
     ctx.provide('shell', {
@@ -84,35 +84,35 @@ async function mount(config: agentCore.Config, withBash = false): Promise<Contex
     return ctx
   } finally {
     if (oldDshHome === undefined) {
-      delete process.env.DSH_HOME
+      delete process.env.DAO_HOME
     } else {
-      process.env.DSH_HOME = oldDshHome
+      process.env.DAO_HOME = oldDshHome
     }
     if (oldAgentsHome === undefined) {
-      delete process.env.DSH_AGENTS_HOME
+      delete process.env.DAO_AGENTS_HOME
     } else {
-      process.env.DSH_AGENTS_HOME = oldAgentsHome
+      process.env.DAO_AGENTS_HOME = oldAgentsHome
     }
   }
 }
 
 async function withIsolatedSkillHomes<T>(run: () => Promise<T>): Promise<T> {
-  const oldDshHome = process.env.DSH_HOME
-  const oldAgentsHome = process.env.DSH_AGENTS_HOME
-  process.env.DSH_HOME = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-home-'))
-  process.env.DSH_AGENTS_HOME = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-agents-'))
+  const oldDshHome = process.env.DAO_HOME
+  const oldAgentsHome = process.env.DAO_AGENTS_HOME
+  process.env.DAO_HOME = await mkdtemp(join(tmpdir(), 'dao-agent-spine-demo-home-'))
+  process.env.DAO_AGENTS_HOME = await mkdtemp(join(tmpdir(), 'dao-agent-spine-demo-agents-'))
   try {
     return await run()
   } finally {
     if (oldDshHome === undefined) {
-      delete process.env.DSH_HOME
+      delete process.env.DAO_HOME
     } else {
-      process.env.DSH_HOME = oldDshHome
+      process.env.DAO_HOME = oldDshHome
     }
     if (oldAgentsHome === undefined) {
-      delete process.env.DSH_AGENTS_HOME
+      delete process.env.DAO_AGENTS_HOME
     } else {
-      process.env.DSH_AGENTS_HOME = oldAgentsHome
+      process.env.DAO_AGENTS_HOME = oldAgentsHome
     }
   }
 }
@@ -144,7 +144,7 @@ class TransientOnceAdapter extends LlmAdapter {
   }
 }
 
-describe('dsh-agent-spine-demo bundle', () => {
+describe('dao-agent-spine-demo bundle', () => {
   it('brings up the full default spine', async () => {
     const ctx = await mount({ workspaceContext: false })
     // One service from each layer of the spine proves the children loaded.
@@ -227,8 +227,8 @@ describe('dsh-agent-spine-demo bundle', () => {
 
     for (const invariants of [
       { enabled: false },
-      { package_allowlist: ['^@deepseek-ai/dsh-agent$'] },
-      { package_blocklist: ['^@deepseek-ai/dsh-session$'] },
+      { package_allowlist: ['^@daoai/dao-agent$'] },
+      { package_blocklist: ['^@daoai/dao-session$'] },
     ]) {
       const filtered = await mount({ workspaceContext: false, invariants })
       expect(() => { nestedTurn(filtered) }).not.toThrow()
@@ -353,7 +353,7 @@ describe('dsh-agent-spine-demo bundle', () => {
   })
 
   it('loads workspace instructions into requests through the bundled spine', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-workspace-context-'))
+    const root = await mkdtemp(join(tmpdir(), 'dao-agent-spine-demo-workspace-context-'))
     try {
       await mkdir(join(root, '.git'), { recursive: true })
       await writeFile(join(root, 'AGENTS.md'), 'bundled project rule')
@@ -375,7 +375,7 @@ describe('dsh-agent-spine-demo bundle', () => {
       const firstRequestText = adapter.requests[0]?.messages.map(messageText).join('\n')
       expect(firstRequestText).toContain('hi')
       expect(firstRequestText).toContain('bundled project rule')
-      expect(adapter.requests[0]?.system).toContain('You are an AI agent powered by DeepSeek Harness.')
+      expect(adapter.requests[0]?.system).toContain('You are an AI agent powered by Dao.')
       expect(adapter.requests[0]?.system).not.toContain('bundled project rule')
       await handle.dispose()
       await ctx.fiber.dispose()
@@ -385,7 +385,7 @@ describe('dsh-agent-spine-demo bundle', () => {
   })
 
   it('forwards agent-instructions config to the bundled loader', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-workspace-context-disabled-'))
+    const root = await mkdtemp(join(tmpdir(), 'dao-agent-spine-demo-workspace-context-disabled-'))
     try {
       await mkdir(join(root, '.git'), { recursive: true })
       await writeFile(join(root, 'AGENTS.md'), 'must not be injected')
@@ -415,9 +415,9 @@ describe('dsh-agent-spine-demo bundle', () => {
   })
 
   it('forwards skill config to the registry, local provider, and model-facing consumer', async () => {
-    const home = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-skill-home-'))
-    const agentsHome = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-skill-agents-'))
-    const custom = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-skill-custom-'))
+    const home = await mkdtemp(join(tmpdir(), 'dao-agent-spine-demo-skill-home-'))
+    const agentsHome = await mkdtemp(join(tmpdir(), 'dao-agent-spine-demo-skill-agents-'))
+    const custom = await mkdtemp(join(tmpdir(), 'dao-agent-spine-demo-skill-custom-'))
     await mkdir(custom, { recursive: true })
     await writeFile(join(custom, 'custom-skill.md'), '---\nname: custom-skill\ndescription: Custom skill\n---\n\nCustom body.\n')
     const ctx = await mount({
@@ -426,7 +426,7 @@ describe('dsh-agent-spine-demo bundle', () => {
       skills: {
         registry: { collectCacheMaxEntries: 4 },
         filesystem: {
-          dshHome: join(home, '.dsh'),
+          daoHome: join(home, '.dao'),
           agentsHome: join(agentsHome, '.agents'),
           customSkillDirs: [custom],
         },
@@ -439,8 +439,8 @@ describe('dsh-agent-spine-demo bundle', () => {
   })
 
   it('snapshots a created project skill through catalog refresh and progressive loading', { timeout: 15_000 }, async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-skill-refresh-'))
-    const home = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-skill-refresh-home-'))
+    const root = await mkdtemp(join(tmpdir(), 'dao-agent-spine-demo-skill-refresh-'))
+    const home = await mkdtemp(join(tmpdir(), 'dao-agent-spine-demo-skill-refresh-home-'))
     try {
       await mkdir(join(root, '.git'), { recursive: true })
       const skillPath = '.agents/skills/hot-skill/SKILL.md'
@@ -461,7 +461,7 @@ describe('dsh-agent-spine-demo bundle', () => {
         workspaceContext: false,
         skills: {
           filesystem: {
-            dshHome: join(home, '.dsh'),
+            daoHome: join(home, '.dao'),
             agentsHome: join(home, '.agents'),
             watchStabilityThresholdMs: 20,
             watchPollIntervalMs: 10,
@@ -589,14 +589,14 @@ describe('dsh-agent-spine-demo bundle', () => {
     }
   })
 
-  it('shares top-level dshHome between local skills and the managed bash environment', async () => {
-    const home = await mkdtemp(join(tmpdir(), 'dsh-agent-core-shared-home-'))
-    const agentsHome = await mkdtemp(join(tmpdir(), 'dsh-agent-core-shared-agents-'))
+  it('shares top-level daoHome between local skills and the managed bash environment', async () => {
+    const home = await mkdtemp(join(tmpdir(), 'dao-agent-core-shared-home-'))
+    const agentsHome = await mkdtemp(join(tmpdir(), 'dao-agent-core-shared-agents-'))
     await mkdir(join(home, 'skills'), { recursive: true })
     await writeFile(join(home, 'skills', 'shared-skill.md'), '---\nname: shared-skill\ndescription: Shared home skill\n---\n\nShared body.\n')
 
     const ctx = await mount({
-      dshHome: home,
+      daoHome: home,
       workspaceContext: false,
       skills: { filesystem: { agentsHome } },
     }, true)
@@ -604,28 +604,28 @@ describe('dsh-agent-spine-demo bundle', () => {
     expect((await ctx.skills.list()).map(skill => skill.name)).toEqual(['shared-skill'])
     const execution: ToolExecution = {
       signal: testToolSignal,
-      token: Symbol('agent-core-dsh-home-test') as ToolExecution['token'],
-      callId: ToolCallId('agent-core-dsh-home'),
-      rootCallId: ToolCallId('agent-core-dsh-home'),
+      token: Symbol('agent-core-dao-home-test') as ToolExecution['token'],
+      callId: ToolCallId('agent-core-dao-home'),
+      rootCallId: ToolCallId('agent-core-dao-home'),
       name: 'bash',
       arguments: { command: 'true' },
     }
-    expect(ctx.shellEnv.collect(execution)).toMatchObject({ DSH_HOME: home, DSH_SHELL: '1' })
+    expect(ctx.shellEnv.collect(execution)).toMatchObject({ DAO_HOME: home, DAO_SHELL: '1' })
     await ctx.fiber.dispose()
   })
 
-  it('rejects conflicting global and nested DSH home directories', () => {
+  it('rejects conflicting global and nested DAO home directories', () => {
     expect(() => {
       agentCore.apply(new Context(), {
-        dshHome: '/global-dsh-home',
+        daoHome: '/global-dao-home',
         workspaceContext: false,
-        skills: { filesystem: { dshHome: '/nested-dsh-home' } },
+        skills: { filesystem: { daoHome: '/nested-dao-home' } },
       })
-    }).toThrow('agent-spine-demo: dshHome and skills.filesystem.dshHome must resolve to the same directory')
+    }).toThrow('agent-spine-demo: daoHome and skills.filesystem.daoHome must resolve to the same directory')
   })
 
   it('delivers workspace instructions ahead of the first-step skill catalog', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-agent-spine-demo-prefix-order-'))
+    const root = await mkdtemp(join(tmpdir(), 'dao-agent-spine-demo-prefix-order-'))
     try {
       await mkdir(join(root, '.git'), { recursive: true })
       await writeFile(join(root, 'AGENTS.md'), 'workspace rule before skills')
@@ -738,7 +738,7 @@ describe('dsh-agent-spine-demo bundle', () => {
       persona: 'You are merged.',
       toolOrder: ['zulu'],
       tools: { mode: 'native' as const },
-      dshHome: '/tmp/dsh-home',
+      daoHome: '/tmp/dao-home',
       sessionTitle: { fallbackMaxWords: 3, fallbackMaxBytes: 24, maxTitleBytes: 60 },
       workspaceContext: false as const,
       skills: { enabled: false },
@@ -756,7 +756,7 @@ describe('dsh-agent-spine-demo bundle', () => {
       persona: appConfig.persona,
       toolOrder: appConfig.toolOrder,
       tools: appConfig.tools,
-      dshHome: appConfig.dshHome,
+      daoHome: appConfig.daoHome,
       sessionTitle: appConfig.sessionTitle,
       workspaceContext: false,
       skills: appConfig.skills,

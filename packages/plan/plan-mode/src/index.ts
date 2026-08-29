@@ -20,22 +20,22 @@
  * Agent Note:
  * - .agents/notes/implemented/simplification/2026-07-22-plan-specific-collaboration-state.md
  *
- * @module @deepseek-ai/dsh-plan-mode
+ * @module @daoai/dao-plan-mode
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
+import { Context, Service } from '@daoai/cordis'
 import { z as zod } from 'zod'
 import type { ZodType } from 'zod'
-import type { Agent, PreStepDecision } from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { Session, SessionEvent, UserMessage } from '@deepseek-ai/dsh-session'
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import { FIRST_PARTY_SECTION_ORDER } from '@deepseek-ai/dsh-system-prompt'
-import { UserQuestionError } from '@deepseek-ai/dsh-user-questions'
+import type { Agent, PreStepDecision } from '@daoai/dao-agent'
+import { createUserMessage } from '@daoai/dao-llm'
+import type { Session, SessionEvent, UserMessage } from '@daoai/dao-session'
+import { defineTool } from '@daoai/dao-tools'
+import { FIRST_PARTY_SECTION_ORDER } from '@daoai/dao-system-prompt'
+import { UserQuestionError } from '@daoai/dao-user-questions'
 // Type-only edge: resolves `ctx.commands` for the optional command child.
-import type { CommandId } from '@deepseek-ai/dsh-commands'
+import type { CommandId } from '@daoai/dao-commands'
 // Type-only: resolves ctx.sessionProjections for the optional unit child.
-import type {} from '@deepseek-ai/dsh-session-projection'
+import type {} from '@daoai/dao-session-projection'
 import type { PlanProjection } from './types.ts'
 // The `plan` projection-key declaration lives in src/types.ts (its one home);
 // this re-export projects the type face onto the package root AND keeps the
@@ -43,7 +43,7 @@ import type { PlanProjection } from './types.ts'
 // declarations still receive the SessionProjectionMap merge.
 export type * from './types.ts'
 
-declare module '@deepseek-ai/dsh-session/types' {
+declare module '@daoai/dao-session/types' {
   interface SessionEventMap {
     /**
      * Whether plan mode is in force from this point on: log-only, non-surface,
@@ -54,7 +54,7 @@ declare module '@deepseek-ai/dsh-session/types' {
   }
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@daoai/cordis' {
   interface Context {
     planMode: PlanModeController
   }
@@ -151,7 +151,7 @@ interface PlanUnitState {
   running: { commandId: CommandId; wanted: boolean } | null
 }
 
-declare module '@deepseek-ai/dsh-session-projection/types' {
+declare module '@daoai/dao-session-projection/types' {
   interface SessionProjectionStateMap {
     plan: PlanUnitState
   }
@@ -231,14 +231,14 @@ export class PlanModeController extends Service {
       try {
         this.onBoundary(agent.session)
       } catch (error) {
-        ctx.logger.warn('dsh-plan-mode: failed to append selected plan mode at step start: %o', error)
+        ctx.logger.warn('dao-plan-mode: failed to append selected plan mode at step start: %o', error)
         return decision
       }
       return !pending.narrate || narration === undefined
         ? decision
         : { ...decision, messages: [...decision.messages, narration] }
     })
-    ctx.effect(() => () => { disposed = true }, 'dsh-plan-mode: close service lifetime')
+    ctx.effect(() => () => { disposed = true }, 'dao-plan-mode: close service lifetime')
 
     ctx.systemPrompt.section({
       name: 'plan:policy',

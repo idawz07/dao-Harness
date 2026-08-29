@@ -4,19 +4,19 @@
  * producers. It also delivers unreported completions to the owning agent:
  * injected into a busy owner's next step, or opening a turn on an idle one
  * under the default `wakeup` delivery, bounded per owner.
- * @module @deepseek-ai/dsh-tool-jobs
+ * @module @daoai/dao-tool-jobs
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { boundContextSummary, createUserMessage, type ContentBlock } from '@deepseek-ai/dsh-llm'
-import { TextRetainer } from '@deepseek-ai/dsh-output-retention'
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import type { GenericCallView, ToolDefinition, ToolExecution } from '@deepseek-ai/dsh-tools'
-import { JobId } from '@deepseek-ai/dsh-jobs'
-import type { JobSnapshot } from '@deepseek-ai/dsh-jobs'
-import { FIRST_PARTY_SECTION_ORDER } from '@deepseek-ai/dsh-system-prompt'
-import type { Agent } from '@deepseek-ai/dsh-agent'
+import type { Context } from '@daoai/cordis'
+import z from '@daoai/schemastery'
+import { boundContextSummary, createUserMessage, type ContentBlock } from '@daoai/dao-llm'
+import { TextRetainer } from '@daoai/dao-output-retention'
+import { defineTool } from '@daoai/dao-tools'
+import type { GenericCallView, ToolDefinition, ToolExecution } from '@daoai/dao-tools'
+import { JobId } from '@daoai/dao-jobs'
+import type { JobSnapshot } from '@daoai/dao-jobs'
+import { FIRST_PARTY_SECTION_ORDER } from '@daoai/dao-system-prompt'
+import type { Agent } from '@daoai/dao-agent'
 
 export const name = 'tool-jobs'
 export const inject = ['tools', 'jobs', 'systemPrompt']

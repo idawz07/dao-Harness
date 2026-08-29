@@ -1,8 +1,8 @@
 /** Host registration for the browser theme preference and pre-plugin palette. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-host-webserver'
-import { settingsNamespace } from '@deepseek-ai/dsh-settings'
+import type { Context } from '@daoai/cordis'
+import type {} from '@daoai/dao-host-webserver'
+import { settingsNamespace } from '@daoai/dao-settings'
 import { bootThemeInjection } from './boot-theme.ts'
 import {
   DEFAULT_FONT_SIZE, DEFAULT_PREFERENCE, THEME_SETTINGS_NAMESPACE, ThemeSettingsSchema,

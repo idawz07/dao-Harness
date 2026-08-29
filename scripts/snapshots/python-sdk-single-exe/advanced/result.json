@@ -81,17 +81,17 @@
         "content": [
           {
             "type": "text",
-            "text": "Current runtime context. This snapshot supersedes earlier runtime-context snapshots.\n\nCurrent DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.\n\nApproval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`)."
+            "text": "Current runtime context. This snapshot supersedes earlier runtime-context snapshots.\n\nCurrent DAO file policy: danger-full-access. The DAO file sandbox does not restrict file modifications by available operations.\n\nApproval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`)."
           }
         ],
         "source": {
           "kind": "plugin",
-          "plugin": "@deepseek-ai/dsh-system-prompt",
+          "plugin": "@daoai/dao-system-prompt",
           "form": "snapshot",
           "sections": [
             {
               "name": "sandbox:policy",
-              "text": "Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations."
+              "text": "Current DAO file policy: danger-full-access. The DAO file sandbox does not restrict file modifications by available operations."
             },
             {
               "name": "approval:policy",
@@ -1744,17 +1744,17 @@
             "content": [
               {
                 "type": "text",
-                "text": "Current runtime context. This snapshot supersedes earlier runtime-context snapshots.\n\nCurrent DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.\n\nApproval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`)."
+                "text": "Current runtime context. This snapshot supersedes earlier runtime-context snapshots.\n\nCurrent DAO file policy: danger-full-access. The DAO file sandbox does not restrict file modifications by available operations.\n\nApproval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`)."
               }
             ],
             "source": {
               "kind": "plugin",
-              "plugin": "@deepseek-ai/dsh-system-prompt",
+              "plugin": "@daoai/dao-system-prompt",
               "form": "snapshot",
               "sections": [
                 {
                   "name": "sandbox:policy",
-                  "text": "Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations."
+                  "text": "Current DAO file policy: danger-full-access. The DAO file sandbox does not restrict file modifications by available operations."
                 },
                 {
                   "name": "approval:policy",
@@ -3070,17 +3070,17 @@
             "content": [
               {
                 "type": "text",
-                "text": "Current runtime context. This snapshot supersedes earlier runtime-context snapshots.\n\nCurrent DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.\n\nApproval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).\n\nYou are a delegated subagent: your permission scope was fixed when you were started and cannot be widened from inside this session — operations that require approval are rejected automatically. When the task needs access beyond that scope, do not retry the denied operation; state the limitation in your reply so the delegating agent can handle it."
+                "text": "Current runtime context. This snapshot supersedes earlier runtime-context snapshots.\n\nCurrent DAO file policy: danger-full-access. The DAO file sandbox does not restrict file modifications by available operations.\n\nApproval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).\n\nYou are a delegated subagent: your permission scope was fixed when you were started and cannot be widened from inside this session — operations that require approval are rejected automatically. When the task needs access beyond that scope, do not retry the denied operation; state the limitation in your reply so the delegating agent can handle it."
               }
             ],
             "source": {
               "kind": "plugin",
-              "plugin": "@deepseek-ai/dsh-system-prompt",
+              "plugin": "@daoai/dao-system-prompt",
               "form": "snapshot",
               "sections": [
                 {
                   "name": "sandbox:policy",
-                  "text": "Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations."
+                  "text": "Current DAO file policy: danger-full-access. The DAO file sandbox does not restrict file modifications by available operations."
                 },
                 {
                   "name": "approval:policy",
@@ -3847,17 +3847,17 @@
             "content": [
               {
                 "type": "text",
-                "text": "Current runtime context. This snapshot supersedes earlier runtime-context snapshots.\n\nCurrent DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.\n\nApproval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).\n\nYou are a delegated subagent: your permission scope was fixed when you were started and cannot be widened from inside this session — operations that require approval are rejected automatically. When the task needs access beyond that scope, do not retry the denied operation; state the limitation in your reply so the delegating agent can handle it."
+                "text": "Current runtime context. This snapshot supersedes earlier runtime-context snapshots.\n\nCurrent DAO file policy: danger-full-access. The DAO file sandbox does not restrict file modifications by available operations.\n\nApproval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).\n\nYou are a delegated subagent: your permission scope was fixed when you were started and cannot be widened from inside this session — operations that require approval are rejected automatically. When the task needs access beyond that scope, do not retry the denied operation; state the limitation in your reply so the delegating agent can handle it."
               }
             ],
             "source": {
               "kind": "plugin",
-              "plugin": "@deepseek-ai/dsh-system-prompt",
+              "plugin": "@daoai/dao-system-prompt",
               "form": "snapshot",
               "sections": [
                 {
                   "name": "sandbox:policy",
-                  "text": "Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations."
+                  "text": "Current DAO file policy: danger-full-access. The DAO file sandbox does not restrict file modifications by available operations."
                 },
                 {
                   "name": "approval:policy",

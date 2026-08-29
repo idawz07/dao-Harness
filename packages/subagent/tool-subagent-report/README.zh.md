@@ -3,13 +3,13 @@ description: "子级作用域 report 工具，供用户与维护者组合或排�
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-tool-subagent-report
+# @daoai/dao-tool-subagent-report
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-tool-subagent-report` 为每个可继续的进程内子级提供一条返回通道，指向启动它的 agent（智能体）：它安装子级作用域的 `report` 工具，以及指示子级使用该工具的提示词指导。工具及其指导只存在于这些子级内部——根 agent、一次性 subagent、远程提供方与同级作用域永远看不到它们。被接受的报告会以普通父级消息到达父级，前缀为 `Background subagent <child-id> reported:`。可继续模式不依赖本包，也不依赖控制包；本包只负责子到父方向。
+`dao-tool-subagent-report` 为每个可继续的进程内子级提供一条返回通道，指向启动它的 agent（智能体）：它安装子级作用域的 `report` 工具，以及指示子级使用该工具的提示词指导。工具及其指导只存在于这些子级内部——根 agent、一次性 subagent、远程提供方与同级作用域永远看不到它们。被接受的报告会以普通父级消息到达父级，前缀为 `Background subagent <child-id> reported:`。可继续模式不依赖本包，也不依赖控制包；本包只负责子到父方向。
 
 ## 目录
 
@@ -32,20 +32,20 @@ kind: "package-reference"
 先加载 subagent 服务、一个后端、处于 `continuable` 模式的委派工具与本包：
 
 ```yaml
-- name: '@deepseek-ai/dsh-subagent'
-- name: '@deepseek-ai/dsh-subagent-spawn-in-process'
-- name: '@deepseek-ai/dsh-tool-subagent'
+- name: '@daoai/dao-subagent'
+- name: '@daoai/dao-subagent-spawn-in-process'
+- name: '@daoai/dao-tool-subagent'
   config:
     provider: spawn
     backgroundMode: continuable
-- name: '@deepseek-ai/dsh-tool-subagent-report'
+- name: '@daoai/dao-tool-subagent-report'
 ```
 
 | 字段 | 默认值 | 含义 |
 |---|---|---|
 | `reportDelivery` | `next-step` | 已接受报告的父级调度：`next-step` 在最近 step 边界唤醒父级；`quiet` 添加相同上下文但不唤醒 |
 
-生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-tool-subagent-report)是每个受支持字段及其 JSDoc 的穷尽式真源。
+生成的[配置目录](../../../docs/config-catalog.zh.md#daoaidao-tool-subagent-report)是每个受支持字段及其 JSDoc 的穷尽式真源。
 
 ### 子级获得什么
 
@@ -98,10 +98,10 @@ kind: "package-reference"
 当包级约定不够用时阅读以下页面；它们从上报通道进入其背后的继续执行服务与面向父级的工具。
 
 - [Subagent 子系统](../../../docs/subsystems/subagent.zh.md)——可继续子级、Activation 与 `reportFrom`/`reportDelivery` 约定。
-- [dsh-tool-subagent-control](../tool-subagent-control/README.zh.md)——父到子的控制工具。
-- [dsh-tool-subagent](../tool-subagent/README.zh.md)——启动可继续子级的委派工具。
-- [生成工具目录](../../../docs/tool-catalog.zh.md#deepseek-aidsh-tool-subagent-report)——`report` 的 schema。
-- [生成配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-tool-subagent-report)——每个受支持配置字段。
+- [dao-tool-subagent-control](../tool-subagent-control/README.zh.md)——父到子的控制工具。
+- [dao-tool-subagent](../tool-subagent/README.zh.md)——启动可继续子级的委派工具。
+- [生成工具目录](../../../docs/tool-catalog.zh.md#daoaidao-tool-subagent-report)——`report` 的 schema。
+- [生成配置目录](../../../docs/config-catalog.zh.md#daoaidao-tool-subagent-report)——每个受支持配置字段。
 
 -----
 
@@ -112,7 +112,7 @@ kind: "package-reference"
 
 #### 模型看到什么
 
-已生成的 [`report` schema](../../../docs/tool-catalog.zh.md#deepseek-aidsh-tool-subagent-report)：一个必填 `output` 字符串。其描述说明子级必须在结束前上报一次，上报只会到达启动该子级的 Agent，并且不会结束轮次。它不包含接收方或投递模式参数。独立的 `tool:report` 提示词 section 在 schema 之外重申该义务。
+已生成的 [`report` schema](../../../docs/tool-catalog.zh.md#daoaidao-tool-subagent-report)：一个必填 `output` 字符串。其描述说明子级必须在结束前上报一次，上报只会到达启动该子级的 Agent，并且不会结束轮次。它不包含接收方或投递模式参数。独立的 `tool:report` 提示词 section 在 schema 之外重申该义务。
 
 #### Token 影响
 

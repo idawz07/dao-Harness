@@ -63,9 +63,9 @@ export const PAGE_ASSETS: readonly string[] = [
  * `worker-host.ts`.
  */
 export const IMAGE_ENTRY_SEEDS: readonly string[] = [
-  '@deepseek-ai/dsh-app-boot',
-  '@deepseek-ai/dsh-cmdline',
-  '@deepseek-ai/cordis',
-  '@deepseek-ai/cordis-plugin-include',
+  '@daoai/dao-app-boot',
+  '@daoai/dao-cmdline',
+  '@daoai/cordis',
+  '@daoai/cordis-plugin-include',
   'js-yaml',
 ]

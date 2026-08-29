@@ -1,8 +1,8 @@
 /** Package-owned invariant companion for the Chat UI target. */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-client-ui-chat'
+const PACKAGE_NAME = '@daoai/dao-client-ui-chat'
 
 /** Cordis companion plugin name. */
 export const name = 'client-ui-chat-invariant'

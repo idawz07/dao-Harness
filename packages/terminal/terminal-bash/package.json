@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-terminal-bash",
-  "description": "Persistent shell PTY backend over the DeepSeek Harness subprocess terminal primitive",
+  "name": "@daoai/dao-terminal-bash",
+  "description": "Persistent shell PTY backend over the Dao subprocess terminal primitive",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,29 +32,29 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-terminal": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-subprocess": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-terminal": "workspace:^",
+    "@daoai/dao-sandbox": "workspace:^",
+    "@daoai/dao-sandbox-policy": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-subprocess": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-pwsh-local": "workspace:^",
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@daoai/dao-pwsh-local": "workspace:^",
+    "@daoai/schemastery": "workspace:^",
     "@xterm/headless": "^6.0.0"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-terminal": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-subprocess": "workspace:^",
-    "@deepseek-ai/dsh-subprocess-local": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-terminal": "workspace:^",
+    "@daoai/dao-sandbox": "workspace:^",
+    "@daoai/dao-sandbox-policy": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-subprocess": "workspace:^",
+    "@daoai/dao-subprocess-local": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

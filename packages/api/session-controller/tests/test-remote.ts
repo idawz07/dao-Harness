@@ -1,22 +1,22 @@
 /** Test-only direct Remote face over the Session Controller's internal controllers. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { ModelSelection as AgentModelSelection } from '@deepseek-ai/dsh-agent'
-import type { SessionId } from '@deepseek-ai/dsh-session'
+import type { Context } from '@daoai/cordis'
+import type { ModelSelection as AgentModelSelection } from '@daoai/dao-agent'
+import type { SessionId } from '@daoai/dao-session'
 import {
   SessionPersistenceCorruptionError,
   SessionPersistenceNotFoundError,
   SessionPersistenceRevision,
   type BorrowedSessionSource,
   type SessionInspection,
-} from '@deepseek-ai/dsh-session-persistence'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SessionQueryEngine from '@deepseek-ai/dsh-session-query'
+} from '@daoai/dao-session-persistence'
+import SessionProjectionRegistry from '@daoai/dao-session-projection'
+import SessionQueryEngine from '@daoai/dao-session-query'
 import { vi } from 'vitest'
 import {
   TypertRemoteFailure,
   type RemoteResult,
-} from '@deepseek-ai/dsh-typert-protocol'
+} from '@daoai/dao-typert-protocol'
 import SessionController from '../src/index.ts'
 import type {
   ModelCatalog,

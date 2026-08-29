@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-experimental-webworker-packer",
+  "name": "@daoai/dao-experimental-webworker-packer",
   "description": "Build-time packer for the browser runtime's base VFS image and ordered data-overlay archives",
   "version": "0.1.2-alpha.1",
   "private": true,
@@ -12,7 +12,7 @@
   "main": "lib/index.js",
   "types": "lib/types/index.d.ts",
   "bin": {
-    "dsh-pack-vfs-image": "./bin.js"
+    "dao-pack-vfs-image": "./bin.js"
   },
   "exports": {
     ".": {
@@ -36,20 +36,20 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/dsh-experimental-webworker-runtime": "workspace:^",
-    "@deepseek-ai/dsh-home-paths": "workspace:^",
+    "@daoai/cordis-plugin-include": "workspace:^",
+    "@daoai/dao-experimental-webworker-runtime": "workspace:^",
+    "@daoai/dao-home-paths": "workspace:^",
     "js-yaml": "^4.2.0",
     "picomatch": "^4.0.4"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
     "@types/js-yaml": "^4.0.9",
     "@types/picomatch": "^3.0.2"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^"
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^"
   }
 }

@@ -9,8 +9,8 @@
 
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { bindSnapshotSelector } from '@deepseek-ai/dsh-client-test-runtime'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
+import { bindSnapshotSelector } from '@daoai/dao-client-test-runtime'
+import { createSnapshotStore } from '@daoai/dao-client-store'
 import { AgentPresetLabel } from '../src/client/AgentPresetLabel.tsx'
 import type { AgentPresetLabelProps } from '../src/client/AgentPresetLabel.tsx'
 import { AgentPresetRow } from '../src/client/AgentPresetRow.tsx'
@@ -290,7 +290,7 @@ describe('a refused switch', () => {
     // lifetime assertion below would wait out its real nine seconds.
     vi.useFakeTimers({ shouldAdvanceTime: true })
     try {
-      const reason = 'failed to import loader entry live-on-mac (@deepseek-ai/dsh-also-gone)'
+      const reason = 'failed to import loader entry live-on-mac (@daoai/dao-also-gone)'
       renderSeat({}, () => Promise.resolve(reason))
 
       fireEvent.click(screen.getByRole('button'))

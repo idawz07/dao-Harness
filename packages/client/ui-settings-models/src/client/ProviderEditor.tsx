@@ -25,7 +25,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import type {
   CredentialInfo, JsonValue, SettingsNamespaceView, SettingsPathOpView,
-} from '@deepseek-ai/dsh-api-remotes/client'
+} from '@daoai/dao-api-remotes/client'
 import {
   DeepSeekModelsEditor, modelDrafts, validateDeepSeekModels,
 } from './DeepSeekModelsEditor.tsx'

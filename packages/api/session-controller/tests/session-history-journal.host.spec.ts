@@ -1,19 +1,19 @@
 /** Raw Session journal transport and message-aligned pagination coverage. */
 
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import SessionStore from '@deepseek-ai/dsh-session'
-import { decodeStorageRecord, type ChunkRow } from '@deepseek-ai/dsh-session/chunk-rows'
-import { ToolCallId, createMessage, createToolResultMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { Session, SessionEvent, SessionId } from '@deepseek-ai/dsh-session'
-import { SessionHistoryController } from '@deepseek-ai/dsh-api-session-controller/src/history.ts'
+import { Context } from '@daoai/cordis'
+import AgentRegistry from '@daoai/dao-agent'
+import SessionStore from '@daoai/dao-session'
+import { decodeStorageRecord, type ChunkRow } from '@daoai/dao-session/chunk-rows'
+import { ToolCallId, createMessage, createToolResultMessage, createUserMessage } from '@daoai/dao-llm'
+import type { Session, SessionEvent, SessionId } from '@daoai/dao-session'
+import { SessionHistoryController } from '@daoai/dao-api-session-controller/src/history.ts'
 import type {
   ChunkRowEvent,
   SessionFollowFrame,
   SessionPage,
   SessionWireEvent,
-} from '@deepseek-ai/dsh-api-session-controller/types'
+} from '@daoai/dao-api-session-controller/types'
 import { createSessionTestRemote, installSessionReadTestServices } from './test-remote.ts'
 
 /** Append a production-shaped human prompt to the session surface. */

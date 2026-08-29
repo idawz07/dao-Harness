@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-acp-app",
-  "description": "The dsh ACP profile bundle: automation-only JSON-RPC stdio and process lifecycle over dsh-base",
+  "name": "@daoai/dao-acp-app",
+  "description": "The dao ACP profile bundle: automation-only JSON-RPC stdio and process lifecycle over dao-base",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -33,23 +33,23 @@
     "lib/types/**/*.d.ts"
   ],
   "license": "MIT",
-  "dsh": {
+  "dao": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
   },
   "dependencies": {
-    "@deepseek-ai/dsh-acp": "workspace:^",
-    "@deepseek-ai/dsh-cmdline": "workspace:^",
+    "@daoai/dao-acp": "workspace:^",
+    "@daoai/dao-cmdline": "workspace:^",
     "commander": "^15.0.0"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/cordis-plugin-include": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

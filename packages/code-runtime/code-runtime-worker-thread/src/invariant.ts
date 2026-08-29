@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-code-runtime-worker-thread`.
- * @module @deepseek-ai/dsh-code-runtime-worker-thread/invariant
+ * Package-owned invariant companion for `@daoai/dao-code-runtime-worker-thread`.
+ * @module @daoai/dao-code-runtime-worker-thread/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-code-runtime-worker-thread'
+const PACKAGE_NAME = '@daoai/dao-code-runtime-worker-thread'
 
 /** Cordis companion plugin name. */
 export const name = 'code-runtime-worker-thread-invariant'

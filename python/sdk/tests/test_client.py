@@ -9,8 +9,8 @@ from pathlib import Path
 
 import pytest
 
-from deepseek_harness import DeepSeekHarness, HarnessClient, HarnessConfig, Notification, RunResult, SdkProtocolError
-from deepseek_harness.errors import JsonRpcError
+from dao import DeepSeekHarness, HarnessClient, HarnessConfig, Notification, RunResult, SdkProtocolError
+from dao.errors import JsonRpcError
 
 
 def test_high_level_sdk_runs_turn_and_collects_final_response(tmp_path: Path) -> None:
@@ -27,9 +27,9 @@ env_dump = os.environ["ENV_DUMP"]
 json.dump({
     "DEEPSEEK_API_KEY": os.environ.get("DEEPSEEK_API_KEY"),
     "DEEPSEEK_BASE_URL": os.environ.get("DEEPSEEK_BASE_URL"),
-    "DSH_CWD": os.environ.get("DSH_CWD"),
-    "DSH_SESSION_ROOT": os.environ.get("DSH_SESSION_ROOT"),
-    "DSH_CORDIS_CONFIG": os.environ.get("DSH_CORDIS_CONFIG"),
+    "DAO_CWD": os.environ.get("DAO_CWD"),
+    "DAO_SESSION_ROOT": os.environ.get("DAO_SESSION_ROOT"),
+    "DAO_CORDIS_CONFIG": os.environ.get("DAO_CORDIS_CONFIG"),
 }, open(env_dump, "w"))
 
 for line in sys.stdin:
@@ -113,9 +113,9 @@ for line in sys.stdin:
     dumped_env = json.loads(env_dump.read_text())
     assert dumped_env["DEEPSEEK_API_KEY"] == "env-key"
     assert dumped_env["DEEPSEEK_BASE_URL"] == "http://127.0.0.1:4321"
-    assert dumped_env["DSH_CWD"] is None
-    assert dumped_env["DSH_SESSION_ROOT"] is None
-    assert dumped_env["DSH_CORDIS_CONFIG"] is None
+    assert dumped_env["DAO_CWD"] is None
+    assert dumped_env["DAO_SESSION_ROOT"] is None
+    assert dumped_env["DAO_CORDIS_CONFIG"] is None
     assert json.loads(init_dump.read_text()) == {
         "cwd": str(tmp_path),
         "provider": "deepseek-official",
@@ -213,7 +213,7 @@ import sys
 for line in sys.stdin:
     msg = json.loads(line)
     if msg.get("method") == "initialize":
-        json.dump({"process": os.getcwd(), "environment": os.environ.get("DSH_CWD"), "wire": msg["params"]["cwd"]}, open(os.environ["CAPTURE"], "w"))
+        json.dump({"process": os.getcwd(), "environment": os.environ.get("DAO_CWD"), "wire": msg["params"]["cwd"]}, open(os.environ["CAPTURE"], "w"))
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-runtime"}}}), flush=True)
     elif msg.get("method") == "shutdown":
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {}}), flush=True)
@@ -462,7 +462,7 @@ for line in sys.stdin:
     msg = json.loads(line)
     method = msg.get("method")
     if method == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dao"}}}), flush=True)
     elif method == "session/prompt":
         params = msg.get("params") or {}
         print(json.dumps({"jsonrpc": "2.0", "method": "llm/request", "params": {"requestId": "req-1", "sessionId": params["sessionId"], "model": "dsagent", "messages": []}}), flush=True)
@@ -475,7 +475,7 @@ for line in sys.stdin:
 
     with HarnessClient(_launch_args=(sys.executable, str(script))) as client:
         init = client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
-        assert init.serverInfo.name == "fake-dsh"
+        assert init.serverInfo.name == "fake-dao"
 
         client.session_prompt("main", [{"type": "text", "text": "fix it"}])
         notification = client.next_notification()
@@ -597,7 +597,7 @@ for line in sys.stdin:
     msg = json.loads(line)
     method = msg.get("method")
     if method == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dao"}}}), flush=True)
     elif method in {"emit-first", "emit-second"}:
         print(json.dumps({"jsonrpc": "2.0", "method": "tick", "params": {"source": method}}), flush=True)
     elif method == "session/prompt":
@@ -639,7 +639,7 @@ for line in sys.stdin:
     msg = json.loads(line)
     method = msg.get("method")
     if method == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dao"}}}), flush=True)
     elif method == "session/prompt":
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"accepted": False}}), flush=True)
     elif method == "shutdown":
@@ -665,7 +665,7 @@ for line in sys.stdin:
     msg = json.loads(line)
     method = msg.get("method")
     if method == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dao"}}}), flush=True)
         print(json.dumps({"jsonrpc": "2.0", "id": "bridge-req-1", "method": "llm.request", "params": {"requestId": "req-1", "sessionId": "main", "model": "dsagent", "messages": []}}), flush=True)
     elif "id" in msg and "method" not in msg:
         print(json.dumps({"jsonrpc": "2.0", "method": "response/seen", "params": {"result": msg.get("result")}}), flush=True)
@@ -700,7 +700,7 @@ print("node warning: experimental loader", flush=True)
 for line in sys.stdin:
     msg = json.loads(line)
     if msg.get("method") == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dao"}}}), flush=True)
     elif msg.get("method") == "shutdown":
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {}}), flush=True)
         break
@@ -709,7 +709,7 @@ for line in sys.stdin:
 
     with HarnessClient(_launch_args=(sys.executable, str(script))) as client:
         init = client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
-        assert init.serverInfo.name == "fake-dsh"
+        assert init.serverInfo.name == "fake-dao"
 
 
 def test_client_request_times_out_when_bridge_does_not_respond(tmp_path: Path) -> None:
@@ -756,7 +756,7 @@ signal.signal(signal.SIGTERM, signal.SIG_IGN)
 for line in sys.stdin:
     msg = json.loads(line)
     if msg.get("method") == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dao"}}}), flush=True)
     elif msg.get("method") == "shutdown":
         time.sleep(60)
 """.strip()
@@ -793,7 +793,7 @@ import time
 for line in sys.stdin:
     msg = json.loads(line)
     if msg.get("method") == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dao"}}}), flush=True)
     elif msg.get("method") == "shutdown":
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {}}), flush=True)
 
@@ -849,7 +849,7 @@ for line in sys.stdin:
 
 
 def test_public_signatures_omit_unsupported_wire_parameters() -> None:
-    from deepseek_harness import DeepSeekHarnessConfig, Session
+    from dao import DeepSeekHarnessConfig, Session
 
     assert "session_root" not in inspect.signature(HarnessClient.initialize).parameters
     assert "system_prompt" not in inspect.signature(HarnessClient.initialize).parameters
@@ -892,7 +892,7 @@ import sys
 for line in sys.stdin:
     msg = json.loads(line)
     if msg.get("method") == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dao"}}}), flush=True)
     elif msg.get("method") == "shutdown":
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {}}), flush=True)
         break
@@ -942,7 +942,7 @@ with open(os.environ["SEEN"], "w") as seen:
         seen.flush()
         msg = json.loads(line)
         if "id" in msg and msg.get("method") == "initialize":
-            print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+            print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dao"}}}), flush=True)
         elif "id" in msg and msg.get("method") == "shutdown":
             print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {}}), flush=True)
             break
@@ -972,8 +972,8 @@ with open(os.environ["SEEN"], "w") as seen:
 def _install_fake_bundled_dsh(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    """Install a fake runtime package that records dsh argv and serves lifecycle calls."""
-    runtime = tmp_path / "dsh.py"
+    """Install a fake runtime package that records dao argv and serves lifecycle calls."""
+    runtime = tmp_path / "dao.py"
     runtime.write_text(
         """
 import json
@@ -982,8 +982,8 @@ import sys
 
 json.dump({
     "argv": sys.argv[1:],
-    "DSH_HOME": os.environ.get("DSH_HOME"),
-    "DSH_CORDIS_CONFIG": os.environ.get("DSH_CORDIS_CONFIG"),
+    "DAO_HOME": os.environ.get("DAO_HOME"),
+    "DAO_CORDIS_CONFIG": os.environ.get("DAO_CORDIS_CONFIG"),
 }, open(os.environ["ENV_DUMP"], "w"))
 for line in sys.stdin:
     msg = json.loads(line)
@@ -995,7 +995,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    module_dir = tmp_path / "deepseek_harness_runtime"
+    module_dir = tmp_path / "dao_runtime"
     module_dir.mkdir()
     (module_dir / "__init__.py").write_text(
         f"""
@@ -1005,7 +1005,7 @@ def resolve_bundled_launch_args(mode=None):
     )
 
     monkeypatch.syspath_prepend(str(tmp_path))
-    monkeypatch.delitem(sys.modules, "deepseek_harness_runtime", raising=False)
+    monkeypatch.delitem(sys.modules, "dao_runtime", raising=False)
 
 
 def test_client_default_launch_uses_bundled_dsh_sdk_profile_and_explicit_home(
@@ -1017,22 +1017,22 @@ def test_client_default_launch_uses_bundled_dsh_sdk_profile_and_explicit_home(
     patch.write_text("[]\n")
     _install_fake_bundled_dsh(tmp_path, monkeypatch)
     monkeypatch.chdir(tmp_path)
-    monkeypatch.setenv("DSH_HOME", str(tmp_path / "ambient-home"))
-    monkeypatch.delenv("DSH_CORDIS_CONFIG", raising=False)
+    monkeypatch.setenv("DAO_HOME", str(tmp_path / "ambient-home"))
+    monkeypatch.delenv("DAO_CORDIS_CONFIG", raising=False)
 
     with HarnessClient(HarnessConfig(
         profile="sdk",
         patches=("sdk.patch.yml",),
         dsh_home=str(home),
-        env={"ENV_DUMP": str(env_dump), "DSH_HOME": str(tmp_path / "env-home")},
+        env={"ENV_DUMP": str(env_dump), "DAO_HOME": str(tmp_path / "env-home")},
     )) as client:
         init = client.initialize(provider="deepseek-official", cwd="/workspace", model="deepseek-v4-pro")
 
     assert init.serverInfo.name == "bundled-runtime"
     assert json.loads(env_dump.read_text()) == {
         "argv": ["--profile", "sdk", "--patch", str(patch)],
-        "DSH_HOME": str(home),
-        "DSH_CORDIS_CONFIG": None,
+        "DAO_HOME": str(home),
+        "DAO_CORDIS_CONFIG": None,
     }
 
 
@@ -1044,14 +1044,14 @@ def test_client_accepts_explicit_environment_dsh_home(
     _install_fake_bundled_dsh(tmp_path, monkeypatch)
 
     with HarnessClient(
-        HarnessConfig(profile="custom", env={"ENV_DUMP": str(env_dump), "DSH_HOME": str(home)})
+        HarnessConfig(profile="custom", env={"ENV_DUMP": str(env_dump), "DAO_HOME": str(home)})
     ) as client:
         client.initialize(provider="deepseek-official", cwd="/workspace", model="deepseek-v4-pro")
 
     assert json.loads(env_dump.read_text()) == {
         "argv": ["--profile", "custom"],
-        "DSH_HOME": str(home),
-        "DSH_CORDIS_CONFIG": None,
+        "DAO_HOME": str(home),
+        "DAO_CORDIS_CONFIG": None,
     }
 
 
@@ -1059,15 +1059,15 @@ def test_client_rejects_an_implicit_default_dsh_home(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     _install_fake_bundled_dsh(tmp_path, monkeypatch)
-    monkeypatch.delenv("DSH_HOME", raising=False)
+    monkeypatch.delenv("DAO_HOME", raising=False)
 
-    with pytest.raises(ValueError, match="explicit dsh_home or non-empty DSH_HOME"):
+    with pytest.raises(ValueError, match="explicit dsh_home or non-empty DAO_HOME"):
         HarnessClient(HarnessConfig(env={})).start()
 
 
 def test_client_reports_missing_bundled_runtime_dependency(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.delitem(sys.modules, "deepseek_harness_runtime", raising=False)
+    monkeypatch.delitem(sys.modules, "dao_runtime", raising=False)
     monkeypatch.setattr(sys, "path", [])
 
-    with pytest.raises(FileNotFoundError, match="Install deepseek-harness-runtime-bin"):
+    with pytest.raises(FileNotFoundError, match="Install dao-runtime-bin"):
         HarnessClient(HarnessConfig(dsh_home="/explicit/home")).start()

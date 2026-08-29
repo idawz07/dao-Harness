@@ -1,15 +1,15 @@
 ---
-description: "dsh Web 客户端的设置外壳、无特定功能归属文案与持久化产品引导命名空间：「通用」分区、触发控件界面框架与引导账本投影。"
+description: "dao Web 客户端的设置外壳、无特定功能归属文案与持久化产品引导命名空间：「通用」分区、触发控件界面框架与引导账本投影。"
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-settings-general
+# @daoai/dao-client-ui-settings-general
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-client-ui-settings-general` 是 dsh Web 客户端的设置外壳：Settings 面板从侧边栏底部的控件打开，带触发控件与模态外壳；导航由各功能贡献的分区构建；首次运行的用户一次只走一个引导步骤。它还注册设置页面上所有不属于单一功能的内容：触发器、标题栏与关闭控件界面框架、「本地配置文件」操作、「通用」分区及其 `settings.general.item` slot，以及 `settings` 字典。归具体功能所有的行（「权限」、「语言」、「外观」）、分区（「模型」）与条件式首次使用引导步骤仍由各自的功能包提供；外壳本身不自带任何引导文案。
+`dao-client-ui-settings-general` 是 dao Web 客户端的设置外壳：Settings 面板从侧边栏底部的控件打开，带触发控件与模态外壳；导航由各功能贡献的分区构建；首次运行的用户一次只走一个引导步骤。它还注册设置页面上所有不属于单一功能的内容：触发器、标题栏与关闭控件界面框架、「本地配置文件」操作、「通用」分区及其 `settings.general.item` slot，以及 `settings` 字典。归具体功能所有的行（「权限」、「语言」、「外观」）、分区（「模型」）与条件式首次使用引导步骤仍由各自的功能包提供；外壳本身不自带任何引导文案。
 
 ## 目录
 

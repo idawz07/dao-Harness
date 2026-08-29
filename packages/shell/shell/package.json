@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-shell",
-  "description": "Abstract bash executor seam (ctx.shell) for the DeepSeek Harness",
+  "name": "@daoai/dao-shell",
+  "description": "Abstract bash executor seam (ctx.shell) for the Dao",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,17 +32,17 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-subprocess": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-subprocess": "workspace:^",
+    "@daoai/dao-sandbox": "workspace:^",
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-settings": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-subprocess": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-subprocess": "workspace:^",
+    "@daoai/dao-sandbox": "workspace:^",
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-settings": "workspace:^"
   }
 }

@@ -41,8 +41,8 @@
     },
     "packages/host/directory-picker-auto": {
       "ignoreDependencies": [
-        "@deepseek-ai/dsh-client-ui-directory-picker-browse",
-        "@deepseek-ai/dsh-client-ui-directory-picker-native"
+        "@daoai/dao-client-ui-directory-picker-browse",
+        "@daoai/dao-client-ui-directory-picker-native"
       ]
     },
     "packages/experimental/inspector": {
@@ -104,17 +104,17 @@
         "tests/**/*.{ts,tsx}"
       ],
       "ignoreDependencies": [
-        "@deepseek-ai/dsh-client-ui-workspace"
+        "@daoai/dao-client-ui-workspace"
       ]
     },
     "packages/client/ui-sidebar": {
       "ignoreDependencies": [
-        "@deepseek-ai/dsh-client-ui-workspace"
+        "@daoai/dao-client-ui-workspace"
       ]
     },
     "packages/client/ui-subagent": {
       "ignoreDependencies": [
-        "@deepseek-ai/dsh-client-ui-input-trigger"
+        "@daoai/dao-client-ui-input-trigger"
       ]
     },
     "packages/client/ui-primitives": {
@@ -221,7 +221,7 @@
       ],
       "ignoreDependencies": [
         "buffer",
-        "@deepseek-ai/dsh-client-modules"
+        "@daoai/dao-client-modules"
       ]
     },
     "packages/typert/generator": {
@@ -277,11 +277,11 @@
         "tests/**/*.ts"
       ],
       "ignoreDependencies": [
-        "@deepseek-ai/dsh-agent-spine-demo",
-        "@deepseek-ai/dsh-bash-local",
-        "@deepseek-ai/dsh-session-checkpoint-policy",
-        "@deepseek-ai/dsh-session-persistence-jsonl",
-        "@deepseek-ai/dsh-subprocess-local"
+        "@daoai/dao-agent-spine-demo",
+        "@daoai/dao-bash-local",
+        "@daoai/dao-session-checkpoint-policy",
+        "@daoai/dao-session-persistence-jsonl",
+        "@daoai/dao-subprocess-local"
       ]
     },
     "packages/lsp/lsp-stdio": {
@@ -319,12 +319,12 @@
         "tests/**/*.ts"
       ],
       "ignoreDependencies": [
-        "@deepseek-ai/cordis-plugin-logger-console",
-        "@deepseek-ai/dsh-agent-spine-demo",
-        "@deepseek-ai/dsh-bash-local",
-        "@deepseek-ai/dsh-session-checkpoint-policy",
-        "@deepseek-ai/dsh-session-persistence-jsonl",
-        "@deepseek-ai/dsh-subprocess-local"
+        "@daoai/cordis-plugin-logger-console",
+        "@daoai/dao-agent-spine-demo",
+        "@daoai/dao-bash-local",
+        "@daoai/dao-session-checkpoint-policy",
+        "@daoai/dao-session-persistence-jsonl",
+        "@daoai/dao-subprocess-local"
       ]
     },
     "packages/util/brand": {
@@ -378,11 +378,11 @@
         "tests/**/*.ts"
       ],
       "ignoreDependencies": [
-        "@deepseek-ai/dsh-agent-spine-demo",
-        "@deepseek-ai/dsh-bash-local",
-        "@deepseek-ai/dsh-session-checkpoint-policy",
-        "@deepseek-ai/dsh-session-persistence-jsonl",
-        "@deepseek-ai/dsh-subprocess-local"
+        "@daoai/dao-agent-spine-demo",
+        "@daoai/dao-bash-local",
+        "@daoai/dao-session-checkpoint-policy",
+        "@daoai/dao-session-persistence-jsonl",
+        "@daoai/dao-subprocess-local"
       ]
     },
     "packages/session-query/session-query-sqlite": {
@@ -569,10 +569,10 @@
         "tests/**/*.ts"
       ],
       "ignoreDependencies": [
-        "@deepseek-ai/dsh-agent-spine-demo",
-        "@deepseek-ai/dsh-session-checkpoint-policy",
-        "@deepseek-ai/dsh-session-persistence-jsonl",
-        "@deepseek-ai/dsh-tool-subagent"
+        "@daoai/dao-agent-spine-demo",
+        "@daoai/dao-session-checkpoint-policy",
+        "@daoai/dao-session-persistence-jsonl",
+        "@daoai/dao-tool-subagent"
       ]
     },
     "packages/subagent/subagent-codex": {
@@ -586,10 +586,10 @@
         "tests/**/*.ts"
       ],
       "ignoreDependencies": [
-        "@deepseek-ai/dsh-agent-spine-demo",
-        "@deepseek-ai/dsh-session-checkpoint-policy",
-        "@deepseek-ai/dsh-session-persistence-jsonl",
-        "@deepseek-ai/dsh-tool-subagent"
+        "@daoai/dao-agent-spine-demo",
+        "@daoai/dao-session-checkpoint-policy",
+        "@daoai/dao-session-persistence-jsonl",
+        "@daoai/dao-tool-subagent"
       ]
     },
     "packages/subagent/subagent-claude-code": {
@@ -603,11 +603,11 @@
         "tests/**/*.ts"
       ],
       "ignoreDependencies": [
-        "@deepseek-ai/dsh-agent-spine-demo",
-        "@deepseek-ai/dsh-session-checkpoint-policy",
-        "@deepseek-ai/dsh-session-persistence-jsonl",
-        "@deepseek-ai/dsh-subagent-codex",
-        "@deepseek-ai/dsh-tool-subagent"
+        "@daoai/dao-agent-spine-demo",
+        "@daoai/dao-session-checkpoint-policy",
+        "@daoai/dao-session-persistence-jsonl",
+        "@daoai/dao-subagent-codex",
+        "@daoai/dao-tool-subagent"
       ]
     },
     "packages/fs/tool-fs": {
@@ -665,9 +665,9 @@
         "tests/**/*.ts"
       ],
       "ignoreDependencies": [
-        "@deepseek-ai/dsh-client-store",
-        "@deepseek-ai/dsh-client-ui-primitives",
-        "@deepseek-ai/dsh-client-ui-slots",
+        "@daoai/dao-client-store",
+        "@daoai/dao-client-ui-primitives",
+        "@daoai/dao-client-ui-slots",
         "@types/react",
         "@types/react-dom",
         "react",
@@ -686,10 +686,10 @@
         "tests/**/*.ts"
       ],
       "ignoreDependencies": [
-        "@deepseek-ai/.+"
+        "@daoai/.+"
       ]
     },
-    "packages/subagent/subagent-dsh-sdk": {
+    "packages/subagent/subagent-dao-sdk": {
       "entry": [
         "tests/**/*.spec.ts",
         "tests/**/*.e2e.ts",
@@ -700,12 +700,12 @@
         "tests/**/*.ts"
       ],
       "ignoreDependencies": [
-        "@deepseek-ai/dsh-agent-instructions",
-        "@deepseek-ai/dsh-agent-spine-demo",
-        "@deepseek-ai/dsh-llm-deepseek",
-        "@deepseek-ai/dsh-session-checkpoint-policy",
-        "@deepseek-ai/dsh-session-persistence-jsonl",
-        "@deepseek-ai/dsh-skill-filesystem"
+        "@daoai/dao-agent-instructions",
+        "@daoai/dao-agent-spine-demo",
+        "@daoai/dao-llm-deepseek",
+        "@daoai/dao-session-checkpoint-policy",
+        "@daoai/dao-session-persistence-jsonl",
+        "@daoai/dao-skill-filesystem"
       ]
     },
     "packages/shell/tool-pwsh": {
@@ -730,33 +730,33 @@
     },
     "packages/experimental/agent-team-profile": {
       "ignoreDependencies": [
-        "@deepseek-ai/dsh-experimental-agent-team",
-        "@deepseek-ai/dsh-experimental-tool-agent-team"
+        "@daoai/dao-experimental-agent-team",
+        "@daoai/dao-experimental-tool-agent-team"
       ]
     },
     "packages/bundle/base": {
       "ignoreDependencies": [
-        "@deepseek-ai/.+"
+        "@daoai/.+"
       ]
     },
     "packages/bundle/headless": {
       "ignoreDependencies": [
-        "@deepseek-ai/dsh-code-runtime-worker-thread"
+        "@daoai/dao-code-runtime-worker-thread"
       ]
     },
     "packages/bundle/acp-app": {
       "ignoreDependencies": [
-        "@deepseek-ai/dsh-acp"
+        "@daoai/dao-acp"
       ]
     },
     "packages/bundle/sdk-app": {
       "ignoreDependencies": [
-        "@deepseek-ai/dsh-sdk-jsonrpc-server"
+        "@daoai/dao-sdk-jsonrpc-server"
       ]
     },
     "packages/bundle/sdk-minimal": {
       "ignoreDependencies": [
-        "@deepseek-ai/.+"
+        "@daoai/.+"
       ]
     },
     "packages/experimental/agent-team": {
@@ -767,12 +767,12 @@
     },
     "packages/experimental/agent-team-web-profile": {
       "ignoreDependencies": [
-        "@deepseek-ai/dsh-experimental-client-ui-agent-team"
+        "@daoai/dao-experimental-client-ui-agent-team"
       ]
     },
     "packages/bundle/web-app": {
       "ignoreDependencies": [
-        "@deepseek-ai/.+"
+        "@daoai/.+"
       ]
     }
   }

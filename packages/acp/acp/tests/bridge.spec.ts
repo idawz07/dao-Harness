@@ -4,10 +4,10 @@ import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { AttachmentError } from '@deepseek-ai/dsh-attachment'
-import { ToolCallId, type StreamChunk } from '@deepseek-ai/dsh-llm'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import { defineContentToolFixture } from '@deepseek-ai/dsh-tools'
+import { AttachmentError } from '@daoai/dao-attachment'
+import { ToolCallId, type StreamChunk } from '@daoai/dao-llm'
+import { SessionId } from '@daoai/dao-session'
+import { defineContentToolFixture } from '@daoai/dao-tools'
 import { makeBridgeHarness, textResponse, type BridgeHarness } from './harness.ts'
 import { startHttpMcpFixture } from '../../../mcp/mcp-client/tests/http-fixture.ts'
 
@@ -41,7 +41,7 @@ describe('automation-only ACP bridge', () => {
 
     expect(response).toEqual({
       protocolVersion: PROTOCOL_VERSION,
-      agentInfo: { name: 'deepseek-harness-acp', version: '0.0.1' },
+      agentInfo: { name: 'dao-acp', version: '0.0.1' },
       agentCapabilities: {
         mcpCapabilities: { http: true },
         promptCapabilities: { image: false, audio: false, embeddedContext: false },
@@ -463,7 +463,7 @@ describe('automation-only ACP bridge', () => {
   })
 
   it('lists and resumes persisted sessions after an equivalent process restart', async () => {
-    const persistenceRoot = await mkdtemp(join(tmpdir(), 'dsh-acp-restart-'))
+    const persistenceRoot = await mkdtemp(join(tmpdir(), 'dao-acp-restart-'))
     try {
       harness = await makeBridgeHarness({ persistenceRoot, script: [textResponse('before restart')] })
       await harness.client.initialize({ protocolVersion: PROTOCOL_VERSION, clientCapabilities: {} })

@@ -1,6 +1,6 @@
-/** Durable attachment storage seam (`ctx.attachments`). @module @deepseek-ai/dsh-attachment */
+/** Durable attachment storage seam (`ctx.attachments`). @module @daoai/dao-attachment */
 
-import { Context, Service } from '@deepseek-ai/cordis'
+import { Context, Service } from '@daoai/cordis'
 import { AttachmentError } from './error.ts'
 import type {
   ImageAttachmentLimits,
@@ -28,7 +28,7 @@ export type {
   StoredImageAttachment,
 } from './types.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@daoai/cordis' {
   interface Context {
     attachments: AttachmentStore
   }

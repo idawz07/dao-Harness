@@ -18,23 +18,23 @@
  * agent factory's `setup(agentCtx)` hook is the one supported call site,
  * because only there is the join installed while the agent is still
  * unpublished, so a rejected composition rolls the whole creation back.
- * @module @deepseek-ai/dsh-agent-presets
+ * @module @daoai/dao-agent-presets
  */
 
 import { stat } from 'node:fs/promises'
-import { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { Remote, TypertRemoteFailure, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
-import { bindScopeParent, createScope, scopeOf, type Scope, type ScopeKey, type ScopeParentBinding } from '@deepseek-ai/dsh-scope'
+import { Context } from '@daoai/cordis'
+import z from '@daoai/schemastery'
+import { Remote, TypertRemoteFailure, TypertRemoteService } from '@daoai/dao-typert-protocol'
+import { bindScopeParent, createScope, scopeOf, type Scope, type ScopeKey, type ScopeParentBinding } from '@daoai/dao-scope'
 // Type-only: resolves the `agent/created` lifecycle event this service watches.
-import type {} from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
+import type {} from '@daoai/dao-agent'
+import type { Agent } from '@daoai/dao-agent'
 import type { AgentPresetDocument, AgentPresetErrorDetailsMap, AgentPresetRoster } from './types.ts'
-import type {} from '@deepseek-ai/dsh-session-projection'
+import type {} from '@daoai/dao-session-projection'
 // Type-only: resolves the registry notification emitted after scope reparenting.
-import type {} from '@deepseek-ai/dsh-tools'
-import { settingsNamespace, type SettingsScope, type default as SettingsService } from '@deepseek-ai/dsh-settings'
-import { dshHomePath } from '@deepseek-ai/dsh-home-paths'
+import type {} from '@daoai/dao-tools'
+import { settingsNamespace, type SettingsScope, type default as SettingsService } from '@daoai/dao-settings'
+import { daoHomePath } from '@daoai/dao-home-paths'
 import { discoverPresets, SHIPPED_PRESET_ROOT, USER_PRESET_DIR } from './discovery.ts'
 import {
   copyComposition, deleteComposition, readComposition,
@@ -139,7 +139,7 @@ export { agentPresetProjectionDefinition } from './session.ts'
 export { PresetLockedError, PresetMountError, UnknownPresetError } from './preset.ts'
 export type { AgentPreset, Config, PresetRoot, PresetTrust } from './preset.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@daoai/cordis' {
   interface Context {
     agentPresets: AgentPresets
   }
@@ -233,7 +233,7 @@ export class AgentPresets extends TypertRemoteService {
     this.resolvedRoots = [
       ...config.includeShippedRoot ? [{ path: SHIPPED_PRESET_ROOT, trust: 'system' } satisfies PresetRoot] : [],
       ...config.roots,
-      ...config.includeUserRoot ? [{ path: dshHomePath(USER_PRESET_DIR), trust: 'user' } satisfies PresetRoot] : [],
+      ...config.includeUserRoot ? [{ path: daoHomePath(USER_PRESET_DIR), trust: 'user' } satisfies PresetRoot] : [],
     ]
     // Deliberately not `installSettingsSection`: that helper exists to re-judge
     // what a consumer DERIVED from the source — memoized resolutions,
@@ -383,7 +383,7 @@ export class AgentPresets extends TypertRemoteService {
 
   /**
    * Parent bindings of the agents this roster composed, keyed by the agent's
-   * scope key. The binding is dsh-scope's only re-link capability; holding it
+   * scope key. The binding is dao-scope's only re-link capability; holding it
    * here makes this service the sole authority that can move an agent between
    * standing compositions. WeakMap: entries die with their agents.
    */
@@ -640,7 +640,7 @@ export class AgentPresets extends TypertRemoteService {
    * new one is ensured BEFORE the link moves. An unknown or unusable preset
    * therefore throws with the agent exactly as it was — there is no torn-down
    * state to restore. The re-link runs through the binding this roster kept
-   * from the agent's mount — dsh-scope's only re-link authority. An agent
+   * from the agent's mount — dao-scope's only re-link authority. An agent
    * that never composed one has nothing to re-link: the switch is then the
    * agent's first bind, exactly a mount. A committed re-link emits
    * `tools/change` because changing the parent scope changes the Agent's
@@ -755,7 +755,7 @@ export class AgentPresets extends TypertRemoteService {
       const current = await compositionStamp(preset.path)
       if (current === undefined || sameStamp(mounted.stamp, current)) return mounted
       // TODO: reclaim the superseded generation once the last agent joined to
-      // it is gone. The subtree is not inert — `dsh-skill-filesystem` watches its
+      // it is gone. The subtree is not inert — `dao-skill-filesystem` watches its
       // roots — and the settings-page authoring flow turns "a composition
       // changed" into a per-save event. This needs a joined-agent count on
       // StandingMount, incremented in `mount`/`composeFrom`/`recompose` and

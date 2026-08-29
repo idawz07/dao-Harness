@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-llm-pi-ai`.
- * @module @deepseek-ai/dsh-llm-pi-ai/invariant
+ * Package-owned invariant companion for `@daoai/dao-llm-pi-ai`.
+ * @module @daoai/dao-llm-pi-ai/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-llm-pi-ai'
+const PACKAGE_NAME = '@daoai/dao-llm-pi-ai'
 
 /** Cordis companion plugin name. */
 export const name = 'llm-pi-ai-invariant'

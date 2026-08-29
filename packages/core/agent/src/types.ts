@@ -1,12 +1,12 @@
 /**
  * Durable agent session-event vocabulary shared with type-only consumers.
  *
- * @module @deepseek-ai/dsh-agent/types
+ * @module @daoai/dao-agent/types
  */
 
-import type { UserMessage } from '@deepseek-ai/dsh-llm/types'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { TypertContext, TypertLookup } from '@deepseek-ai/dsh-typert-protocol'
+import type { UserMessage } from '@daoai/dao-llm/types'
+import type { SessionId } from '@daoai/dao-session/types'
+import type { TypertContext, TypertLookup } from '@daoai/dao-typert-protocol'
 
 /** Public live-agent handle; the runtime face augments its live capabilities. */
 export interface Agent {
@@ -14,7 +14,7 @@ export interface Agent {
   readonly id: SessionId
 }
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@daoai/dao-typert-protocol' {
   interface TypertLookupMap {
     agent: TypertLookup<Agent, SessionId>
   }
@@ -28,7 +28,7 @@ declare module '@deepseek-ai/dsh-typert-protocol' {
 /** One of the two ordered pending-message lists owned by an agent. */
 export type InboxTarget = 'next-turn' | 'next-step'
 
-declare module '@deepseek-ai/dsh-session/types' {
+declare module '@daoai/dao-session/types' {
   interface SessionEventMap {
     /**
      * One normalized mutation of an agent's durable pending-message lists.

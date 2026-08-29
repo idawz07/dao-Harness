@@ -1,15 +1,15 @@
 ---
-description: "dsh Web 客户端的共享 Workspace 浏览器与选择器插件：分组或扁平的会话行、添加/重命名/重排序、搜索、fork、归档，以及目录流选取子 slot。"
+description: "dao Web 客户端的共享 Workspace 浏览器与选择器插件：分组或扁平的会话行、添加/重命名/重排序、搜索、fork、归档，以及目录流选取子 slot。"
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-workspace
+# @daoai/dao-client-ui-workspace
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-client-ui-workspace` 是 dsh Web 客户端的共享 Workspace 浏览器与选择器：用户在侧边栏浏览分组或扁平的 Session 行，在 Session Intent 主视觉区为新会话选择 Workspace，并可用添加、重命名、重排序、搜索、fork 与归档操作管理 Workspace 与 Session；两个界面共用同一套 Workspace 菜单与添加流程。待处理的用户交互以琥珀色警告点呈现，共享侧边栏投影会隐藏 subagent 来源的会话。不同的规范化路径仍作为由 id 区分的独立 Workspace；添加文件夹走目录流子 slot，由组合的选择器包 client half 填充。
+`dao-client-ui-workspace` 是 dao Web 客户端的共享 Workspace 浏览器与选择器：用户在侧边栏浏览分组或扁平的 Session 行，在 Session Intent 主视觉区为新会话选择 Workspace，并可用添加、重命名、重排序、搜索、fork 与归档操作管理 Workspace 与 Session；两个界面共用同一套 Workspace 菜单与添加流程。待处理的用户交互以琥珀色警告点呈现，共享侧边栏投影会隐藏 subagent 来源的会话。不同的规范化路径仍作为由 id 区分的独立 Workspace；添加文件夹走目录流子 slot，由组合的选择器包 client half 填充。
 
 ## 目录
 

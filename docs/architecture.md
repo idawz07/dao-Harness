@@ -1,4 +1,4 @@
-# DeepSeek Harness Architecture
+# Dao Architecture
 
 English | [中文](architecture.zh.md)
 
@@ -8,21 +8,21 @@ We recommend using an agent to explore the codebase and understand its architect
 
 ## Cordis
 
-[Cordis](cordis-primer.md) is the framework under dsh: plugins contribute services, typed events, and reversible effects to a shared context. Every part of the product is a plugin, including the model adapter, the tool registry, the session log, and the agent loop itself, so each is replaceable from configuration.
+[Cordis](cordis-primer.md) is the framework under dao: plugins contribute services, typed events, and reversible effects to a shared context. Every part of the product is a plugin, including the model adapter, the tool registry, the session log, and the agent loop itself, so each is replaceable from configuration.
 
-There is no privileged core to patch: you extend dsh by mounting a plugin beside the others, and registrations are effects that unwind when their plugin unloads.
+There is no privileged core to patch: you extend dao by mounting a plugin beside the others, and registrations are effects that unwind when their plugin unloads.
 
 ## Profiles and bundles
 
-A running `dsh` is a plugin tree composed at boot from ordered layers.
+A running `dao` is a plugin tree composed at boot from ordered layers.
 
 A **profile** is a named composition stored in the Harness home. It lists the bundles it stacks, holds any out-of-tree plugins it installs, and keeps the user's own `cordis.patch.yml`. `web`, `headless`, `sdk`, `sdk-minimal`, and `acp` ship as templates.
 
 A **bundle** is a distribution format for Cordis config rows and the code they mount, so whatever it inserts stays patchable by the layers above it.
 
-Each declares itself in its own `package.json` under a `dsh` field: `dsh.profile` lists a profile's bundles, and `dsh.bundle` points at a bundle's patch file.
+Each declares itself in its own `package.json` under a `dao` field: `dao.profile` lists a profile's bundles, and `dao.bundle` points at a bundle's patch file.
 
-[`dsh-base`](../packages/bundle/base/README.md) is the shared first layer of the `web`, `headless`, `sdk`, and `acp` profiles: model adapters, tools, persistence, sandbox and approval policy, settings, credentials, telemetry. [`dsh-web-app`](../packages/bundle/web-app/README.md) adds the browser application, [`dsh-headless`](../packages/bundle/headless/README.md) adds a one-shot runner with no server, [`dsh-sdk-app`](../packages/bundle/sdk-app/README.md) adds the SDK JSON-RPC server, and [`dsh-acp-app`](../packages/bundle/acp-app/README.md) adds the automation-only ACP server. [`dsh-sdk-minimal`](../packages/bundle/sdk-minimal/README.md) is the deliberate exception: one bundle owns its complete explicit SDK tree and does not apply `dsh-base`.
+[`dao-base`](../packages/bundle/base/README.md) is the shared first layer of the `web`, `headless`, `sdk`, and `acp` profiles: model adapters, tools, persistence, sandbox and approval policy, settings, credentials, telemetry. [`dao-web-app`](../packages/bundle/web-app/README.md) adds the browser application, [`dao-headless`](../packages/bundle/headless/README.md) adds a one-shot runner with no server, [`dao-sdk-app`](../packages/bundle/sdk-app/README.md) adds the SDK JSON-RPC server, and [`dao-acp-app`](../packages/bundle/acp-app/README.md) adds the automation-only ACP server. [`dao-sdk-minimal`](../packages/bundle/sdk-minimal/README.md) is the deliberate exception: one bundle owns its complete explicit SDK tree and does not apply `dao-base`.
 
 Layers apply to an empty entry list in this order: each bundle in the profile's listed order, then the profile's `cordis.patch.yml`, then the home-level one, then any `--patch` overlay. A patch targets a row by id and replaces its whole config, or inserts new rows.
 
@@ -31,7 +31,7 @@ Custom profiles default to live patch reload. The shipped `web` profile is live;
 To see the tree your machine boots:
 
 ```sh
-dsh --profile web --dump-config
+dao --profile web --dump-config
 ```
 
 Any row it prints can be replaced by a patch of your own.
@@ -40,11 +40,11 @@ Composition mechanics are in [app-boot](../packages/boot/app-boot/README.md#prof
 
 ## Application launch
 
-Every supported Node application starts at the `dsh` CLI with a named profile. The shipped applications are `dsh web` (the deliberate alias for `--profile web`), `dsh --profile headless`, `dsh --profile sdk`, `dsh --profile sdk-minimal`, and `dsh --profile acp`. The TypeScript SDK resolves its same-version `dsh` dependency and selects `sdk`; custom plugin composition remains a profile plus ordered patch files, not another executable or inline application tree. `sdk-minimal` is a repository-owned standalone bundle behind the same launcher, not a caller-supplied Cordis tree.
+Every supported Node application starts at the `dao` CLI with a named profile. The shipped applications are `dao web` (the deliberate alias for `--profile web`), `dao --profile headless`, `dao --profile sdk`, `dao --profile sdk-minimal`, and `dao --profile acp`. The TypeScript SDK resolves its same-version `dao` dependency and selects `sdk`; custom plugin composition remains a profile plus ordered patch files, not another executable or inline application tree. `sdk-minimal` is a repository-owned standalone bundle behind the same launcher, not a caller-supplied Cordis tree.
 
-Vendored CLIs, build-only and test-only executables, direct in-process plugin mounting, and the private browser WebWorker preview are not Harness application launchers. [`verify-application-entrypoints`](../scripts/verify-application-entrypoints.ts) keeps every package bin, executable source, and root demo in an explicit class and rejects a Node application path that bypasses `dsh`.
+Vendored CLIs, build-only and test-only executables, direct in-process plugin mounting, and the private browser WebWorker preview are not Harness application launchers. [`verify-application-entrypoints`](../scripts/verify-application-entrypoints.ts) keeps every package bin, executable source, and root demo in an explicit class and rejects a Node application path that bypasses `dao`.
 
-The Python SDK follows the same application architecture. Its runtime wheel packages the normal `dsh` CLI as `deepseek-harness-sdk-runtime-<platform>-<arch>`, and the client launches `dsh --profile sdk` with an explicit Harness home by default. The minimal example selects the shipped `sdk-minimal` profile. Python exposes profile selection and ordered patch files rather than a complete Cordis tree; persistent external plugins are installed through `dsh plugin`. The removed private direct-config carrier has no compatibility bin or fallback parser.
+The Python SDK follows the same application architecture. Its runtime wheel packages the normal `dao` CLI as `dao-sdk-runtime-<platform>-<arch>`, and the client launches `dao --profile sdk` with an explicit Harness home by default. The minimal example selects the shipped `sdk-minimal` profile. Python exposes profile selection and ordered patch files rather than a complete Cordis tree; persistent external plugins are installed through `dao plugin`. The removed private direct-config carrier has no compatibility bin or fallback parser.
 
 ## Core packages
 
@@ -124,7 +124,7 @@ New behavior attaches to a documented extension point. Changing the loop itself 
 | Add a model-facing capability | register on `ctx.tools`; its schema joins prompt assembly |
 | Give one session a different capability set | compose an agent preset; a service row there needs an `isolate` realm |
 | Add shell execution | register a `ctx.shell` backend; the local one spawns through `ctx.subprocess` |
-| Add persistent terminal execution | register a `ctx.terminals` backend plus `dsh-tool-terminal` |
+| Add persistent terminal execution | register a `ctx.terminals` backend plus `dao-tool-terminal` |
 | Add a human command | register on `ctx.commands`; it dispatches without a model turn |
 | Add background work | register on `ctx.jobs`; `job_*` tools collect or stop it |
 | Start a Session from an external webhook | register a trusted rule on `ctx.webhookRuntime` and mount a provider adapter |

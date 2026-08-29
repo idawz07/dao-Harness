@@ -8,22 +8,22 @@
  */
 
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@daoai/cordis'
 import { z } from 'zod'
-import AgentRegistry, { Inbox } from '@deepseek-ai/dsh-agent'
-import { AttachmentStore } from '@deepseek-ai/dsh-attachment'
-import { agentPresetProjectionDefinition } from '@deepseek-ai/dsh-agent-presets'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
-import type { Session } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import type { ProjectionDefinition } from '@deepseek-ai/dsh-session-projection'
-import { SessionControlController } from '@deepseek-ai/dsh-api-session-controller/src/control.ts'
-import type { SessionControlFrame, SessionFollowFrame } from '@deepseek-ai/dsh-api-session-controller/types'
+import AgentRegistry, { Inbox } from '@daoai/dao-agent'
+import { AttachmentStore } from '@daoai/dao-attachment'
+import { agentPresetProjectionDefinition } from '@daoai/dao-agent-presets'
+import type { Agent } from '@daoai/dao-agent'
+import { createUserMessage } from '@daoai/dao-llm'
+import SessionStore, { SessionId } from '@daoai/dao-session'
+import type { Session } from '@daoai/dao-session'
+import SessionProjectionRegistry from '@daoai/dao-session-projection'
+import type { ProjectionDefinition } from '@daoai/dao-session-projection'
+import { SessionControlController } from '@daoai/dao-api-session-controller/src/control.ts'
+import type { SessionControlFrame, SessionFollowFrame } from '@daoai/dao-api-session-controller/types'
 import { createSessionTestRemote, type TestSessionRemote } from './test-remote.ts'
 
-declare module '@deepseek-ai/dsh-session-projection/types' {
+declare module '@daoai/dao-session-projection/types' {
   interface SessionProjectionStateMap {
     'test/last-user': LastUserState
     'test/internal-count': number

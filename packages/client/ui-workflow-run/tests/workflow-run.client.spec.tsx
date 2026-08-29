@@ -1,25 +1,25 @@
 // @vitest-environment jsdom
-import { Context, Service } from '@deepseek-ai/cordis'
+import { Context, Service } from '@daoai/cordis'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   ConversationNodeAssembler, UiConversation,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@daoai/dao-client-ui-conversation/client'
 import type {
   ConversationMatch, ConversationNodeDefinition, ConversationStartMatch,
   ConversationViewDefinition,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { ChatConversationViewNode } from '@deepseek-ai/dsh-client-ui-chat/client'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
+} from '@daoai/dao-client-ui-conversation/client'
+import type { ChatConversationViewNode } from '@daoai/dao-client-ui-chat/client'
+import { SlotRegistry } from '@daoai/dao-client-ui-renderer/client'
 import type {
   SessionListState, SessionLiveEventEntry,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionEvent, SessionId } from '@deepseek-ai/dsh-session/types'
-import { apply as applyLocale, inject as localeInject } from '@deepseek-ai/dsh-client-locale/client'
+} from '@daoai/dao-api-session-controller/client'
+import type { SessionEvent, SessionId } from '@daoai/dao-session/types'
+import { apply as applyLocale, inject as localeInject } from '@daoai/dao-client-locale/client'
 import {
   chatSnapshot as emptyChatSnapshot, conversationSnapshot, makeTranslate, sessionSnapshot,
   stubSettingsScope, workspaceSnapshot,
-} from '@deepseek-ai/dsh-client-test-runtime'
+} from '@daoai/dao-client-test-runtime'
 import {
   WorkflowRunPanel, type WorkflowRunInjected, type WorkflowRunPanelProps,
 } from '../src/client/WorkflowRunPanel.tsx'
@@ -915,6 +915,6 @@ describe('plugin lifecycle', () => {
       register: (pkg: string) => { registered.push(pkg); return () => {} },
     } as never)
     await applyInvariant(ctx)
-    expect(registered).toEqual(['@deepseek-ai/dsh-client-ui-workflow-run'])
+    expect(registered).toEqual(['@daoai/dao-client-ui-workflow-run'])
   })
 })

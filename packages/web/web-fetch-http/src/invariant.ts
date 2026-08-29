@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-web-fetch-http`.
- * @module @deepseek-ai/dsh-web-fetch-http/invariant
+ * Package-owned invariant companion for `@daoai/dao-web-fetch-http`.
+ * @module @daoai/dao-web-fetch-http/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-web-fetch-http'
+const PACKAGE_NAME = '@daoai/dao-web-fetch-http'
 
 /** Cordis companion plugin name. */
 export const name = 'web-fetch-http-invariant'

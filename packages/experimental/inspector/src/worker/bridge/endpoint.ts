@@ -103,7 +103,7 @@ export class InspectorEndpoint {
     }
     if (pathname === '/json/version') {
       this.json(response, {
-        Browser: 'dsh-experimental-inspector/0',
+        Browser: 'dao-experimental-inspector/0',
         'Protocol-Version': '1.3',
         webSocketDebuggerUrl: this.cdpUrl(),
       })
@@ -145,7 +145,7 @@ export class InspectorEndpoint {
     }
     const session = new CdpSession(
       transport,
-      { targetId: this.config.targetId, title: 'DeepSeek Harness Host' },
+      { targetId: this.config.targetId, title: 'Dao Host' },
       this.sources,
       this.network,
       this.realms,
@@ -224,9 +224,9 @@ export class InspectorEndpoint {
     return {
       id: this.config.targetId,
       type: 'page',
-      title: 'DeepSeek Harness Host',
+      title: 'Dao Host',
       description: 'Experimental cross-realm Inspector target',
-      url: 'dsh://host',
+      url: 'dao://host',
       webSocketDebuggerUrl: this.cdpUrl(),
       devtoolsFrontendUrl: `devtools://devtools/bundled/devtools_app.html?ws=${this.config.host}:${this.boundPort()}/devtools/page/${this.config.targetId}&panel=elements&noJavaScriptCompletion=true`,
     }

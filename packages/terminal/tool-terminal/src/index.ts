@@ -1,22 +1,22 @@
 /**
  * Six model-facing persistent terminal tools. Owner identity comes from the exact
  * tool execution Agent; generic `ctx.jobs` owns background ids and collection.
- * @module @deepseek-ai/dsh-tool-terminal
+ * @module @daoai/dao-tool-terminal
  */
 
-import { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import { TerminalSessionId } from '@deepseek-ai/dsh-terminal'
-import type { TerminalSendResult, TerminalSessionId as TerminalSessionIdType, TerminalSignal } from '@deepseek-ai/dsh-terminal'
-import type {} from '@deepseek-ai/dsh-jobs'
-import { FIRST_PARTY_SECTION_ORDER } from '@deepseek-ai/dsh-system-prompt'
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import type { ToolDefinition } from '@deepseek-ai/dsh-tools'
+import { Context } from '@daoai/cordis'
+import z from '@daoai/schemastery'
+import type { Agent } from '@daoai/dao-agent'
+import type { ContentBlock } from '@daoai/dao-llm'
+import { TerminalSessionId } from '@daoai/dao-terminal'
+import type { TerminalSendResult, TerminalSessionId as TerminalSessionIdType, TerminalSignal } from '@daoai/dao-terminal'
+import type {} from '@daoai/dao-jobs'
+import { FIRST_PARTY_SECTION_ORDER } from '@daoai/dao-system-prompt'
+import { defineTool } from '@daoai/dao-tools'
+import type { ToolDefinition } from '@daoai/dao-tools'
 import { boundTerminalText, renderList, renderRead, renderSend, renderSendRead, renderSpawn } from './render.ts'
 
-declare module '@deepseek-ai/dsh-jobs' {
+declare module '@daoai/dao-jobs' {
   interface JobKindMap {
     'pty-send': 'pty-send'
   }
@@ -251,7 +251,7 @@ export function apply(ctx: Context, config: Config = {}): void {
       if (args.run_in_background === true) {
         if (!enableRunInBackground) throw new Error('background terminal sends are disabled by tool-terminal configuration')
         const jobs = ctx.get('jobs')
-        if (jobs === undefined) throw new Error('background terminal sends require @deepseek-ai/dsh-jobs and @deepseek-ai/dsh-tool-jobs')
+        if (jobs === undefined) throw new Error('background terminal sends require @daoai/dao-jobs and @daoai/dao-tool-jobs')
         let cancelRequested = false
         const jobId = jobs.start({
           kind: 'pty-send',

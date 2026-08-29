@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-sdk-app",
-  "description": "The dsh SDK profile bundle: stdio JSON-RPC serving and process lifecycle over dsh-base",
+  "name": "@daoai/dao-sdk-app",
+  "description": "The dao SDK profile bundle: stdio JSON-RPC serving and process lifecycle over dao-base",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -33,24 +33,24 @@
     "lib/types/**/*.d.ts"
   ],
   "license": "MIT",
-  "dsh": {
+  "dao": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
   },
   "dependencies": {
-    "@deepseek-ai/dsh-cmdline": "workspace:^",
-    "@deepseek-ai/dsh-sdk-jsonrpc-server": "workspace:^",
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@daoai/dao-cmdline": "workspace:^",
+    "@daoai/dao-sdk-jsonrpc-server": "workspace:^",
+    "@daoai/schemastery": "workspace:^",
     "commander": "^15.0.0"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/cordis-plugin-include": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

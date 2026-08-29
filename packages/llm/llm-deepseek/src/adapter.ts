@@ -5,10 +5,10 @@
  * operation and the bearer token through a per-request resolver, so the
  * registering plugin owns validation, layering, and credential policy.
  *
- * @module dsh-llm-deepseek/adapter
+ * @module dao-llm-deepseek/adapter
  */
 
-import { attributionHeaders, contentHasImage, CONTEXT_WINDOW_EXCEEDED_CODE, isContextWindowExceededError, isQuotaExceededError, LlmAdapter, LlmError, offloadedImageText, offloadRequestImagesWithPolicy, ProviderRequestId, QUOTA_EXCEEDED_CODE, ReasoningEffortId } from '@deepseek-ai/dsh-llm'
+import { attributionHeaders, contentHasImage, CONTEXT_WINDOW_EXCEEDED_CODE, isContextWindowExceededError, isQuotaExceededError, LlmAdapter, LlmError, offloadedImageText, offloadRequestImagesWithPolicy, ProviderRequestId, QUOTA_EXCEEDED_CODE, ReasoningEffortId } from '@daoai/dao-llm'
 import type {
   ContentBlock,
   GenerateOptions,
@@ -20,21 +20,21 @@ import type {
   ModelModality,
   ResolvedRetryPolicy,
   StreamChunk,
-} from '@deepseek-ai/dsh-llm'
+} from '@daoai/dao-llm'
 import type {
   AttachmentId,
   AttachmentStore,
   ImageAttachmentRef,
   RequestImageAttachment,
-} from '@deepseek-ai/dsh-attachment'
-import type { CredentialRef } from '@deepseek-ai/dsh-credentials'
-import { deadline, idleWatchdog, timeoutOf } from '@deepseek-ai/dsh-timeout'
-import type { AnonymousUserId } from '@deepseek-ai/dsh-anonymous-user-id'
+} from '@daoai/dao-attachment'
+import type { CredentialRef } from '@daoai/dao-credentials'
+import { deadline, idleWatchdog, timeoutOf } from '@daoai/dao-timeout'
+import type { AnonymousUserId } from '@daoai/dao-anonymous-user-id'
 import type {
   DeepSeekLlmApiExtensionRequest,
   DeepSeekLlmApiJson,
   PreparedDeepSeekLlmApiExtensions,
-} from '@deepseek-ai/dsh-deepseek-llm-api-extensions'
+} from '@daoai/dao-deepseek-llm-api-extensions'
 import { serializeRequest, serializeRequestWithImages } from './serialize.ts'
 import type { ImageWireLocation, RequestDefaults } from './serialize.ts'
 import { deepSeekImageRequestPricing, resolveRequestImagePolicy } from './request-pricing.ts'

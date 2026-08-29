@@ -1,26 +1,26 @@
 /**
- * @deepseek-ai/dsh-headless — one-shot direct Agent driver. The bundle patch
- * rides over dsh-base without Host, HTTP, or browser plugins; this runner
+ * @daoai/dao-headless — one-shot direct Agent driver. The bundle patch
+ * rides over dao-base without Host, HTTP, or browser plugins; this runner
  * creates one Agent through the core registry, drives the task to quiescence,
  * streams provider reasoning to stderr, flushes its Session, prints the final
  * assistant text to stdout, and exits.
  *
- * @module @deepseek-ai/dsh-headless
+ * @module @daoai/dao-headless
  */
 
 import { randomUUID } from 'node:crypto'
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { installModelSelection } from '@deepseek-ai/dsh-agent'
-import type { Agent, ModelSelectionRef } from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-agent-default-model'
-import { assertNever, createUserMessage } from '@deepseek-ai/dsh-llm'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
+import type { Context } from '@daoai/cordis'
+import z from '@daoai/schemastery'
+import { installModelSelection } from '@daoai/dao-agent'
+import type { Agent, ModelSelectionRef } from '@daoai/dao-agent'
+import type {} from '@daoai/dao-agent-default-model'
+import { assertNever, createUserMessage } from '@daoai/dao-llm'
+import { SessionId } from '@daoai/dao-session'
+import type { SessionEvent } from '@daoai/dao-session'
 // Empty type imports carry the loader Context merge for the settlement await
 // and the cmdline Context merge for the appExit host value.
-import type {} from '@deepseek-ai/cordis-plugin-loader'
-import type {} from '@deepseek-ai/dsh-cmdline'
+import type {} from '@daoai/cordis-plugin-loader'
+import type {} from '@daoai/dao-cmdline'
 
 /** Stable Cordis plugin name. */
 export const name = 'headless-runner'
@@ -117,7 +117,7 @@ function streamReasoning(
       case 'reasoning-delta':
         if (chunk.text === '') return
         if (!open) {
-          stderr.write('dsh: reasoning:\n')
+          stderr.write('dao: reasoning:\n')
           open = true
         }
         stderr.write(chunk.text)
@@ -149,7 +149,7 @@ function streamReasoning(
 
 /** Report an unexpected direct-driver failure and request a failing exit. */
 function fail(io: HeadlessIo, error: unknown): void {
-  io.stderr.write(`dsh: ${error instanceof Error ? error.message : String(error)}\n`)
+  io.stderr.write(`dao: ${error instanceof Error ? error.message : String(error)}\n`)
   io.exit(1)
 }
 
@@ -173,7 +173,7 @@ async function run(ctx: Context, task: string, io: HeadlessIo): Promise<void> {
   // This bundle composes no preset roster, so the model-facing rows sit in the
   // host plane and the agent reads them from the global layer. A deployment
   // that DOES configure one has to join it here first
-  // (@deepseek-ai/dsh-agent-presets README, "Composing a child agent").
+  // (@daoai/dao-agent-presets README, "Composing a child agent").
   const { agent } = await agents.create({
     sessionId: SessionId(`session-${randomUUID()}`),
     meta: { cwd: process.cwd() },
@@ -199,7 +199,7 @@ async function run(ctx: Context, task: string, io: HeadlessIo): Promise<void> {
   const outcome = summarize(agent.session.events, firstSeq)
   io.stdout.write(outcome.text + '\n')
   if (outcome.reason?.kind === 'error') {
-    io.stderr.write(`dsh: ${outcome.reason.error.code}: ${outcome.reason.error.message}\n`)
+    io.stderr.write(`dao: ${outcome.reason.error.code}: ${outcome.reason.error.message}\n`)
   }
   io.exit(outcome.reason?.kind === 'completed' ? 0 : 1)
 }

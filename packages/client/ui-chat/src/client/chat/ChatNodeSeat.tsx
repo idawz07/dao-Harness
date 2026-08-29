@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
-import { JsonBlock } from '@deepseek-ai/dsh-client-ui-primitives'
+import { JsonBlock } from '@daoai/dao-client-ui-primitives'
 import type { ChatNodeOwnerProps, ChatViewSlotProps } from '../contract/slots.ts'
 import type { ChatNode } from '../contract/chat-nodes.ts'
 import type { ChatNodeStore } from '../contract/snapshot.ts'

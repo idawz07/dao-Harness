@@ -2,7 +2,7 @@
 
 English | [中文](deepseek-llm-api-wire-extensions.zh.md)
 
-This reference defines every DeepSeek Harness-specific HTTP header and additive JSON field sent by [`@deepseek-ai/dsh-llm-deepseek`](../packages/llm/llm-deepseek/README.md) on `deepseek-official` chat-completion requests. It does not redefine fields owned by the upstream DeepSeek API. The provider-neutral LLM interface and `llm-pi-ai` do not implement these additions.
+This reference defines every Dao-specific HTTP header and additive JSON field sent by [`@daoai/dao-llm-deepseek`](../packages/llm/llm-deepseek/README.md) on `deepseek-official` chat-completion requests. It does not redefine fields owned by the upstream DeepSeek API. The provider-neutral LLM interface and `llm-pi-ai` do not implement these additions.
 
 The adapter sends the additions to its resolved `baseURL`, including a configured gateway. They remain outside `messages`, system prompts, and tool schemas, so they do not add model-input tokens or alter the model-visible prefix.
 
@@ -12,7 +12,7 @@ The adapter sends the additions to its resolved `baseURL`, including a configure
 |---|---|---|
 | HTTP field names | Lowercase kebab-case; HTTP matching remains case-insensitive | `user-agent`, `x-deepseek-harness-session-id` |
 | DeepSeek request-body extension fields | Snake case with the reserved `dsh_` prefix | `dsh_plugin_packages`, `dsh_session_log` |
-| DSH-owned nested JSON members | Camel case | `afterSeq`, `throughSeq`, `sessionId` |
+| DAO-owned nested JSON members | Camel case | `afterSeq`, `throughSeq`, `sessionId` |
 | Tagged values | Kebab-case strings; durable events use `domain/action` | `session-log-deepseek/delivery-accepted` |
 
 Each body extension owns its `version` independently. A version applies only to the object that contains it; no compatibility or ordering relationship exists between versions of different fields. JSON member order is not part of the protocol.
@@ -40,7 +40,7 @@ After the configured endpoint returns HTTP 2xx, the adapter runs the prepared `a
 
 ## `dsh_plugin_packages`
 
-[`@deepseek-ai/dsh-plugin-package-inventory-deepseek`](../packages/llm/plugin-package-inventory-deepseek/README.md) contributes the complete active Loader-backed plugin package inventory. The field is enabled by default.
+[`@daoai/dao-plugin-package-inventory-deepseek`](../packages/llm/plugin-package-inventory-deepseek/README.md) contributes the complete active Loader-backed plugin package inventory. The field is enabled by default.
 
 ```json
 {
@@ -48,7 +48,7 @@ After the configured endpoint returns HTTP 2xx, the adapter runs the prepared `a
     "version": 1,
     "packages": [
       {
-        "name": "@deepseek-ai/dsh-example",
+        "name": "@daoai/dao-example",
         "version": "0.1.1-rc.2"
       }
     ]
@@ -73,7 +73,7 @@ An enabled inventory with no qualifying entries sends `packages: []`; disabling 
 
 ## `dsh_session_log`
 
-[`@deepseek-ai/dsh-session-log-deepseek`](../packages/session/session-log-deepseek/README.md) contributes one contiguous suffix of the canonical Session log. The field is disabled by default. When enabled, it applies to a request with a live Session and at least one event; a direct request, a stale Session id, or an empty log omits the field.
+[`@daoai/dao-session-log-deepseek`](../packages/session/session-log-deepseek/README.md) contributes one contiguous suffix of the canonical Session log. The field is disabled by default. When enabled, it applies to a request with a live Session and at least one event; a direct request, a stale Session id, or an empty log omits the field.
 
 ```json
 {

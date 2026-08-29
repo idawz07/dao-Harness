@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-api-settings-controller",
+  "name": "@daoai/dao-api-settings-controller",
   "description": "Remote owner for the configuration surfaces over the settings-domain seams",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
@@ -49,27 +49,27 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@daoai/schemastery": "workspace:^",
     "zod": "^4.4.3"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-agent-presets": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-native-command": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^"
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-agent-presets": "workspace:^",
+    "@daoai/dao-credentials": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-native-command": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-settings": "workspace:^",
+    "@daoai/dao-typert-protocol": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-agent-presets": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-native-command": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^"
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-agent-presets": "workspace:^",
+    "@daoai/dao-credentials": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-native-command": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-settings": "workspace:^",
+    "@daoai/dao-typert-protocol": "workspace:^"
   }
 }

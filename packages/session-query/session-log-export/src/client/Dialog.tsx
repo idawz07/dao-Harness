@@ -1,7 +1,7 @@
-import type { ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { Button, Modal } from '@deepseek-ai/dsh-client-ui-primitives'
-import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
+import type { ObservableSnapshot } from '@daoai/dao-client-store'
+import type { SessionId } from '@daoai/dao-session/types'
+import { Button, Modal } from '@daoai/dao-client-ui-primitives'
+import type { InjectFace, PropsLocale, PropsRuntime } from '@daoai/dao-client-ui-slots'
 import type { SessionLogDownloadState } from './controller.ts'
 import { NS } from './locales.ts'
 

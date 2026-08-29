@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { renderPrompt } from '@deepseek-ai/dsh-system-prompt'
+import { Context } from '@daoai/cordis'
+import AgentLoop from '@daoai/dao-agent-loop'
+import { renderPrompt } from '@daoai/dao-system-prompt'
 import { mountAgentLoopTestDependencies } from '../src/index.ts'
 
-describe('dsh-agent-loop-testkit', () => {
+describe('dao-agent-loop-testkit', () => {
   it('mounts a configurable prerequisite spine that can activate AgentLoop', async () => {
     const ctx = new Context()
     await mountAgentLoopTestDependencies(ctx, {

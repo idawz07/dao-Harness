@@ -1,18 +1,18 @@
 /** Agent activation, composition, and model-selection policy owned by API Session. */
 
 import { mkdir } from 'node:fs/promises'
-import type { Context } from '@deepseek-ai/cordis'
-import { installModelSelection } from '@deepseek-ai/dsh-agent'
+import type { Context } from '@daoai/cordis'
+import { installModelSelection } from '@daoai/dao-agent'
 import type {
   Agent, AgentOptions, AgentSetup, ModelSelection as AgentModelSelection, ModelSelectionRef,
-} from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-agent-default-model'
-import type {} from '@deepseek-ai/dsh-agent-presets'
-import { ReasoningEffortId } from '@deepseek-ai/dsh-llm'
-import type { Session, SessionEvent, SessionHeader, SessionId } from '@deepseek-ai/dsh-session'
-import { SessionQueryError, type SessionObservation } from '@deepseek-ai/dsh-session-query'
-import { TypertLookupFailure } from '@deepseek-ai/dsh-typert-protocol'
-import type {} from '@deepseek-ai/dsh-typert-registry'
+} from '@daoai/dao-agent'
+import type {} from '@daoai/dao-agent-default-model'
+import type {} from '@daoai/dao-agent-presets'
+import { ReasoningEffortId } from '@daoai/dao-llm'
+import type { Session, SessionEvent, SessionHeader, SessionId } from '@daoai/dao-session'
+import { SessionQueryError, type SessionObservation } from '@daoai/dao-session-query'
+import { TypertLookupFailure } from '@daoai/dao-typert-protocol'
+import type {} from '@daoai/dao-typert-registry'
 import type { ModelSelection, SessionError } from './types.ts'
 
 /** Cold Session identity absent from persistence. */

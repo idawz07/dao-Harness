@@ -3,13 +3,13 @@ description: "The subagent delegation seam for users and maintainers choosing a 
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-subagent
+# @daoai/dao-subagent
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-subagent` is the service behind child-agent delegation: an agent hands a task to a named child, collects the finished result, and — for continuable children — keeps sending follow-up work across turns. Multiple providers coexist under one contract, so a single composition can offer in-process children, out-of-process ACP or SDK children, and real Codex or Claude Code children side by side. Children come in two shapes: one-shot runs that settle with a single result, and continuable children whose durable session accepts later messages and can be interrupted. The same service answers discovery questions — which children exist, their mode, activity, and lineage — without loading or resuming them. Mount it with at least one provider backend and a delegation tool; the backends and the model-facing tools live in sibling packages.
+`dao-subagent` is the service behind child-agent delegation: an agent hands a task to a named child, collects the finished result, and — for continuable children — keeps sending follow-up work across turns. Multiple providers coexist under one contract, so a single composition can offer in-process children, out-of-process ACP or SDK children, and real Codex or Claude Code children side by side. Children come in two shapes: one-shot runs that settle with a single result, and continuable children whose durable session accepts later messages and can be interrupted. The same service answers discovery questions — which children exist, their mode, activity, and lineage — without loading or resuming them. Mount it with at least one provider backend and a delegation tool; the backends and the model-facing tools live in sibling packages.
 
 ## Table of Contents
 
@@ -32,9 +32,9 @@ This package is the contract every delegation setup shares. You enable it by mou
 Mount the service with a provider and the delegation tool. The provider registers under the name you configure (the in-process spawn backend defaults to `spawn`); the tool row names that provider so the model sees a static tool. A minimal one-shot setup:
 
 ```yaml
-- name: '@deepseek-ai/dsh-subagent'
-- name: '@deepseek-ai/dsh-subagent-spawn-in-process'
-- name: '@deepseek-ai/dsh-tool-subagent'
+- name: '@daoai/dao-subagent'
+- name: '@daoai/dao-subagent-spawn-in-process'
+- name: '@daoai/dao-tool-subagent'
   config:
     provider: spawn
     toolName: subagent
@@ -86,7 +86,7 @@ This section explains how the service is built and where the observable behavior
 
 ### One-shot flow
 
-A request is validated against the provider's advertised capabilities, a durable descriptor is snapshotted, and the provider builds the child. Both in-process providers advertise `agentOptions`: child creation merges requested fields over the provider, model, and reasoning effort in the parent's latest logged request, falls back to creation options before the first request, and retains the configured token limit. A route change without an explicit effort clears the inherited route-owned effort so the selected model resolves its default. DSH SDK also advertises this capability and publishes immutable `agentRouteDefaults`, which supply its instance provider/model defaults before exact-route preflight; `start()` still owns direct callers and the output cap. ACP, Codex, and Claude Code reject agent-route overrides rather than silently ignoring them. On success the run is published and ownership transfers to the caller; on failure the provider rolls back every unpublished resource. The result carries the child's final output, an optional structured value, a stop reason, and an optional safe diagnostic.
+A request is validated against the provider's advertised capabilities, a durable descriptor is snapshotted, and the provider builds the child. Both in-process providers advertise `agentOptions`: child creation merges requested fields over the provider, model, and reasoning effort in the parent's latest logged request, falls back to creation options before the first request, and retains the configured token limit. A route change without an explicit effort clears the inherited route-owned effort so the selected model resolves its default. DAO SDK also advertises this capability and publishes immutable `agentRouteDefaults`, which supply its instance provider/model defaults before exact-route preflight; `start()` still owns direct callers and the output cap. ACP, Codex, and Claude Code reject agent-route overrides rather than silently ignoring them. On success the run is published and ownership transfers to the caller; on failure the provider rolls back every unpublished resource. The result carries the child's final output, an optional structured value, a stop reason, and an optional safe diagnostic.
 
 ### Continuable flow
 
@@ -124,7 +124,7 @@ Read these pages when the package-level contract is not enough. They move from t
 
 #### What the model sees
 
-One user-role parent message opening with the outcome — `Background subagent <child-id> finished and will do no further work unless you send it more.`, or the matching line for a child that was stopped, ran out of room, declined, or failed — followed by `Its closing message:` and the child's final assistant content, or `It left no closing message.` when it produced none. This is the service's only direct parent-side contribution; delegation schemas, parent continuation and discovery, and the child-scoped `report` belong to `dsh-tool-subagent`, `dsh-tool-subagent-control`, and `dsh-tool-subagent-report`.
+One user-role parent message opening with the outcome — `Background subagent <child-id> finished and will do no further work unless you send it more.`, or the matching line for a child that was stopped, ran out of room, declined, or failed — followed by `Its closing message:` and the child's final assistant content, or `It left no closing message.` when it produced none. This is the service's only direct parent-side contribution; delegation schemas, parent continuation and discovery, and the child-scoped `report` belong to `dao-tool-subagent`, `dao-tool-subagent-control`, and `dao-tool-subagent-report`.
 
 #### Token effect
 

@@ -3,14 +3,14 @@
  * stable wire failure vocabulary over the `ctx.directoryPicker` seam.
  */
 
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@daoai/cordis'
 import { z } from 'zod'
-import { DirectoryPickerError } from '@deepseek-ai/dsh-host-directory-picker'
-import type { DirectoryPickerCapabilities } from '@deepseek-ai/dsh-host-directory-picker'
+import { DirectoryPickerError } from '@daoai/dao-host-directory-picker'
+import type { DirectoryPickerCapabilities } from '@daoai/dao-host-directory-picker'
 // The seam owns the listing declaration; the generator requires the reference
 // site to name that package rather than this package's re-export of it.
-import type { DirectoryListing } from '@deepseek-ai/dsh-host-directory-picker/types'
-import { Remote, TypertRemoteFailure, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
+import type { DirectoryListing } from '@daoai/dao-host-directory-picker/types'
+import { Remote, TypertRemoteFailure, TypertRemoteService } from '@daoai/dao-typert-protocol'
 import type { DirectoryPickerErrorDetailsMap } from './types.ts'
 
 const createDirectoryRequestSchema = z.object({
@@ -22,7 +22,7 @@ const createDirectoryRequestSchema = z.object({
   { message: 'host.createDirectory requires a single non-blank path segment name' },
 )
 
-declare module '@deepseek-ai/cordis' {
+declare module '@daoai/cordis' {
   interface Context {
     /** Host directory-picking Remote namespace owner. */
     directoryPickerController: DirectoryPickerController

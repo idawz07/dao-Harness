@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-anonymous-user-id",
-  "description": "Shared anonymous user identity for DeepSeek Harness telemetry and feedback correlation",
+  "name": "@daoai/dao-anonymous-user-id",
+  "description": "Shared anonymous user identity for Dao telemetry and feedback correlation",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,15 +32,15 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-home-paths": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-brand": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-home-paths": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-home-paths": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-brand": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-home-paths": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

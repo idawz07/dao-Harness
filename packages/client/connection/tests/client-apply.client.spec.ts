@@ -2,7 +2,7 @@
  * Connection plugin browser-half apply: ctx.connection handle mounting, mode
  * selection off the page URL, and single-consumer connection-loop ownership.
  */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@daoai/cordis'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   apply,
@@ -13,12 +13,12 @@ import {
 
 type Win = {
   location?: { hostname: string; search: string; origin?: string }
-  __DSH_TRANSPORT__?: ClientTransportHooks
+  __DAO_TRANSPORT__?: ClientTransportHooks
 }
 
 afterEach(() => {
   delete (globalThis as Win).location
-  delete (globalThis as Win).__DSH_TRANSPORT__
+  delete (globalThis as Win).__DAO_TRANSPORT__
 })
 
 class GenerationProbe {
@@ -275,7 +275,7 @@ describe('connection client apply', () => {
       vi.unstubAllGlobals()
     }
     expect(seen).toHaveLength(1)
-    expect(seen[0]?.url).toBe('http://dsh.internal/api/goals/create')
+    expect(seen[0]?.url).toBe('http://dao.internal/api/goals/create')
     expect(seen[0]?.body).toMatchObject({
       type: 'client-request',
       rpcId: '00000000-0000-4000-8000-000000000000',
@@ -292,7 +292,7 @@ describe('connection client apply', () => {
         yield { endpoint, payload }
       })(),
     )
-    ;(globalThis as Win).__DSH_TRANSPORT__ = {
+    ;(globalThis as Win).__DAO_TRANSPORT__ = {
       fetch: vi.fn<ClientTransportHooks['fetch']>(),
       openStream,
       ownsHost: true,
@@ -345,7 +345,7 @@ describe('connection client apply', () => {
       }))
       await expect(handle.rpc.call('/api', 'goals/create', {})).rejects.toThrow('rpcId mismatch')
       const fetch = vi.mocked(globalThis.fetch)
-      expect(fetch.mock.calls[0]?.[0]).toEqual(new URL('http://dsh.internal/api/goals/create'))
+      expect(fetch.mock.calls[0]?.[0]).toEqual(new URL('http://dao.internal/api/goals/create'))
       expect(fetch.mock.calls[0]?.[1]).not.toHaveProperty('signal')
 
       const respond = (result: unknown): void => {

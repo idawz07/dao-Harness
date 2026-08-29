@@ -1,6 +1,6 @@
 import { describe, expect, expectTypeOf, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { createUserMessage, ToolCallId, createMessage, createToolResultMessage, MessageId, ReasoningEffortId } from '@deepseek-ai/dsh-llm'
+import { Context } from '@daoai/cordis'
+import { createUserMessage, ToolCallId, createMessage, createToolResultMessage, MessageId, ReasoningEffortId } from '@daoai/dao-llm'
 import SessionStore, {
   adoptSessionEvent,
   SESSION_FORMAT_VERSION,
@@ -8,8 +8,8 @@ import SessionStore, {
   SessionEvent,
   SessionId,
   snapshotSessionEvent,
-} from '@deepseek-ai/dsh-session'
-import type { CreateSessionOptions, SessionEventType, SessionHeader, SessionSurface } from '@deepseek-ai/dsh-session'
+} from '@daoai/dao-session'
+import type { CreateSessionOptions, SessionEventType, SessionHeader, SessionSurface } from '@daoai/dao-session'
 
 describe('Session', () => {
   it('exposes one stable readonly surface view', () => {

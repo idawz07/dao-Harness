@@ -8,19 +8,19 @@
  * anything, while an in-flight stream keeps the facts it started with. The
  * one registration-captured fact — the retry policy — re-registers the route
  * in place when it changes.
- * @module @deepseek-ai/dsh-llm-deepseek
+ * @module @daoai/dao-llm-deepseek
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { assertUsableApiKey, LlmError, resolveImageAttachmentAccess, resolveRetryPolicy, RetryPolicySchema } from '@deepseek-ai/dsh-llm'
-import type { ModelModality, RetryPolicyConfig } from '@deepseek-ai/dsh-llm'
-import type {} from '@deepseek-ai/dsh-fs'
-import { credentialRef } from '@deepseek-ai/dsh-credentials'
-import { launchEnvironmentOf, type LaunchEnvironmentSnapshot } from '@deepseek-ai/dsh-launch-environment'
-import { deepEqualJson, installSettingsSection, settingsNamespace } from '@deepseek-ai/dsh-settings'
-import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
-import { getOrCreateAnonymousUserId, type AnonymousUserId } from '@deepseek-ai/dsh-anonymous-user-id'
+import type { Context } from '@daoai/cordis'
+import z from '@daoai/schemastery'
+import { assertUsableApiKey, LlmError, resolveImageAttachmentAccess, resolveRetryPolicy, RetryPolicySchema } from '@daoai/dao-llm'
+import type { ModelModality, RetryPolicyConfig } from '@daoai/dao-llm'
+import type {} from '@daoai/dao-fs'
+import { credentialRef } from '@daoai/dao-credentials'
+import { launchEnvironmentOf, type LaunchEnvironmentSnapshot } from '@daoai/dao-launch-environment'
+import { deepEqualJson, installSettingsSection, settingsNamespace } from '@daoai/dao-settings'
+import { MAX_TIMER_DELAY_MS } from '@daoai/dao-timeout'
+import { getOrCreateAnonymousUserId, type AnonymousUserId } from '@daoai/dao-anonymous-user-id'
 import {
   DEFAULT_CONTEXT_WINDOW,
   DEFAULT_FILE_EXPIRY_SECONDS,

@@ -1,15 +1,15 @@
 ---
-description: "dsh Web 客户端设置中的只读 Cordis Loader 清单标签页：可搜索的插件目录，含启停状态与配置。"
+description: "dao Web 客户端设置中的只读 Cordis Loader 清单标签页：可搜索的插件目录，含启停状态与配置。"
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-settings-plugin-inventory
+# @daoai/dao-client-ui-settings-plugin-inventory
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-client-ui-settings-plugin-inventory` 向 Web 设置的「插件」分区贡献只读的**插件列表**标签页。该标签页在首次被选择时懒调用 `ctx.remote.pluginInventory.list()`，并以可搜索的双列紧凑折叠卡片展示清单：每张收起的卡片显示模块短名称、有效启停标签，以及（对已启用条目）彩色根 fiber 状态圆点；展开卡片会显示 Loader 树条目 id、有效配置与 Cordis 状态。加载、空结果、无匹配与通用失败状态只属于已挂载组件，读取失败后可以重试，且不会暴露传输细节。
+`dao-client-ui-settings-plugin-inventory` 向 Web 设置的「插件」分区贡献只读的**插件列表**标签页。该标签页在首次被选择时懒调用 `ctx.remote.pluginInventory.list()`，并以可搜索的双列紧凑折叠卡片展示清单：每张收起的卡片显示模块短名称、有效启停标签，以及（对已启用条目）彩色根 fiber 状态圆点；展开卡片会显示 Loader 树条目 id、有效配置与 Cordis 状态。加载、空结果、无匹配与通用失败状态只属于已挂载组件，读取失败后可以重试，且不会暴露传输细节。
 
 ## 目录
 

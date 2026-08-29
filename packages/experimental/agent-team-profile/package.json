@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-experimental-agent-team-profile",
-  "description": "Private profile bundle enabling Agent Teams over dsh-base",
+  "name": "@daoai/dao-experimental-agent-team-profile",
+  "description": "Private profile bundle enabling Agent Teams over dao-base",
   "version": "0.1.2-alpha.1",
   "private": true,
   "repository": {
@@ -31,23 +31,23 @@
     "lib/types/**/*.d.ts"
   ],
   "license": "MIT",
-  "dsh": {
+  "dao": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
   },
   "dependencies": {
-    "@deepseek-ai/dsh-experimental-agent-team": "workspace:^",
-    "@deepseek-ai/dsh-experimental-tool-agent-team": "workspace:^"
+    "@daoai/dao-experimental-agent-team": "workspace:^",
+    "@daoai/dao-experimental-tool-agent-team": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
+    "@daoai/cordis-plugin-include": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^",
     "js-yaml": "^4.2.0"
   }
 }

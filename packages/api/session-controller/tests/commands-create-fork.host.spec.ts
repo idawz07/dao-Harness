@@ -1,10 +1,10 @@
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent, AgentHandle, CreateAgentOptions } from '@deepseek-ai/dsh-agent'
-import { PresetMountError } from '@deepseek-ai/dsh-agent-presets'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
-import type { Workspace, WorkspaceId } from '@deepseek-ai/dsh-workspace'
+import { Context } from '@daoai/cordis'
+import AgentRegistry from '@daoai/dao-agent'
+import type { Agent, AgentHandle, CreateAgentOptions } from '@daoai/dao-agent'
+import { PresetMountError } from '@daoai/dao-agent-presets'
+import { createUserMessage } from '@daoai/dao-llm'
+import SessionStore, { SessionId } from '@daoai/dao-session'
+import type { Workspace, WorkspaceId } from '@daoai/dao-workspace'
 import { describe, expect, it, vi } from 'vitest'
 import {
   ApiSessionAgentController,

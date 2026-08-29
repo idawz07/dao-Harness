@@ -3,10 +3,10 @@
  */
 
 import { z } from 'zod'
-import type { TokenUsage } from '@deepseek-ai/dsh-llm'
-import type {} from '@deepseek-ai/dsh-llm-retry/types'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
-import type { ProjectionDefinition } from '@deepseek-ai/dsh-session-projection'
+import type { TokenUsage } from '@daoai/dao-llm'
+import type {} from '@daoai/dao-llm-retry/types'
+import type { SessionEvent } from '@daoai/dao-session'
+import type { ProjectionDefinition } from '@daoai/dao-session-projection'
 import type { ContextPressureProjection, TokenUsageProjection } from './projection.ts'
 import { foldSurfaceProjection } from './surface-projection.ts'
 
@@ -85,7 +85,7 @@ const usageOf = (event: SessionEvent): TokenUsage | undefined =>
       ? event.data.usage
       : undefined
 
-declare module '@deepseek-ai/dsh-session-projection/types' {
+declare module '@daoai/dao-session-projection/types' {
   interface SessionProjectionStateMap {
     tokenUsage: TokenUsageState
     contextPressure: ContextPressureState

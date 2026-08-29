@@ -2,8 +2,8 @@
   "organization": "deepseek-harness",
   "repository": "deepseek-harness",
   "projectNumber": 1,
-  "projectTitle": "DSH Issue Management",
-  "lifecycleActor": "dsh-issue-management",
+  "projectTitle": "DAO Issue Management",
+  "lifecycleActor": "dao-issue-management",
   "priorityField": "Priority",
   "allowUnassignedOwner": true,
   "statuses": [

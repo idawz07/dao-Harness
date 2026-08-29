@@ -12,7 +12,7 @@ A physical row that represents several events affects append contiguity, crash r
 
 ## Decision
 
-`@deepseek-ai/dsh-session-persistence-sqlite` uses the packed schema-18 implementation. It is the only SQLite persistence package and provider; the predecessor scalar layout and the temporary versioned sibling are not retained. SQLite remains an opt-in switch, while shipped default compositions continue to use JSONL. Both backends implement the same `SessionPersistence` service through `PersistenceCoordinator`, so physical packing changes neither live event delivery nor the logical session API.
+`@daoai/dao-session-persistence-sqlite` uses the packed schema-18 implementation. It is the only SQLite persistence package and provider; the predecessor scalar layout and the temporary versioned sibling are not retained. SQLite remains an opt-in switch, while shipped default compositions continue to use JSONL. Both backends implement the same `SessionPersistence` service through `PersistenceCoordinator`, so physical packing changes neither live event delivery nor the logical session API.
 
 Schema 18 keeps ordinary ROWID tables and the composite `events(session_id, seq)` primary-key index. Scalar rows represent one logical event. Packed rows use the storage tags `text-chunks`, `reasoning-chunks`, and `tool-call-chunks`; the SQL `seq` and `time` columns hold the first logical member, and `data` holds the packed payload. Packed rows set `is_packed=1`, while scalar rows set `is_packed=0`; the explicit discriminator prevents a scalar event whose type matches a storage tag from being decoded as packed. The tags are storage vocabulary, not `SessionEventMap` members.
 

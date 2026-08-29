@@ -1,31 +1,31 @@
 # Test-only composition: the ACP subagent backend on the real Loader/app path.
 # The scripted model delegates once. The driving e2e selects either the cwd
-# echo or a remote-limit diagnostic through DSH_TEST_ACP_MODE. `cwd` is
+# echo or a remote-limit diagnostic through DAO_TEST_ACP_MODE. `cwd` is
 # deliberately omitted so both paths exercise parent-session inheritance. The
 # child command path is machine-absolute and arrives through
-# DSH_TEST_MOCK_ACP_SERVER.
+# DAO_TEST_MOCK_ACP_SERVER.
 - id: mock-llm
   name: './mock-delegating-llm.ts'
 
 - id: subagent
-  name: '@deepseek-ai/dsh-subagent'
+  name: '@daoai/dao-subagent'
 
 # The out-of-process ACP backend spawns its child through the subprocess seam.
 - id: subprocess
-  name: '@deepseek-ai/dsh-subprocess-local'
+  name: '@daoai/dao-subprocess-local'
 
 - id: subagent-acp
-  name: '@deepseek-ai/dsh-subagent-acp'
+  name: '@daoai/dao-subagent-acp'
   config:
     providerName: acp
     command: !!js process.execPath
     args:
-      - !!js process.env.DSH_TEST_MOCK_ACP_SERVER
+      - !!js process.env.DAO_TEST_MOCK_ACP_SERVER
     permission: reject
-    env: !!js "process.env.DSH_TEST_ACP_MODE === 'diagnostic' ? { MOCK_TEXT: 'partial loader answer', MOCK_STOP: 'max_turn_requests' } : { MOCK_ECHO_CWD: '1' }"
+    env: !!js "process.env.DAO_TEST_ACP_MODE === 'diagnostic' ? { MOCK_TEXT: 'partial loader answer', MOCK_STOP: 'max_turn_requests' } : { MOCK_ECHO_CWD: '1' }"
 
 - id: tool-subagent
-  name: '@deepseek-ai/dsh-tool-subagent'
+  name: '@daoai/dao-tool-subagent'
   config:
     provider: acp
     toolName: subagent
@@ -34,7 +34,7 @@
     maxDepth: 'provider-managed'
 
 - id: agent-spine
-  name: '@deepseek-ai/dsh-agent-spine-demo'
+  name: '@daoai/dao-agent-spine-demo'
   config:
     agents:
       - id: main
@@ -45,10 +45,10 @@
     workspaceContext: false
 
 - id: persistence
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@daoai/dao-session-persistence-jsonl'
   config:
     root: './.sessions'
     compression: 'none'
 
 - id: checkpoint-policy
-  name: '@deepseek-ai/dsh-session-checkpoint-policy'
+  name: '@daoai/dao-session-checkpoint-policy'

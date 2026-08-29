@@ -2,9 +2,9 @@
 // dispatch entry + list state, constructed and held by ClientSessions (one per browser client).
 // List data never enters zustand; React connects via subscribe/getListSnapshot.
 
-import type { SubagentAddress, SubagentCatalog } from '@deepseek-ai/dsh-subagent/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { WorkspaceId } from '@deepseek-ai/dsh-workspace/types'
+import type { SubagentAddress, SubagentCatalog } from '@daoai/dao-subagent/client'
+import type { SessionId } from '@daoai/dao-session/types'
+import type { WorkspaceId } from '@daoai/dao-workspace/types'
 import type {
   SessionControlBaseline,
   SessionControlFrame,
@@ -21,7 +21,7 @@ import { flattenLineage } from './lineage.ts'
 // Type-only merge edge: the title domain's client-namespace outlet declares
 // the 'title' projection key this manager projects into list rows (and any
 // useProjection('title') consumer reads). Zero value imports by construction.
-import type {} from '@deepseek-ai/dsh-session-title/client'
+import type {} from '@daoai/dao-session-title/client'
 import { Notifier } from './notifier.ts'
 import { ProjectionValueStore } from './projection-store.ts'
 import { Session } from './session.ts'
@@ -1016,7 +1016,7 @@ function workspaceAttachSessionId(error: ClientFailure): SessionId | undefined {
 
 /** Narrow a generated Session Remote failure to its service-owned error vocabulary. */
 function toSessionResult<T>(
-  result: import('@deepseek-ai/dsh-typert-protocol').RemoteResult<T>,
+  result: import('@daoai/dao-typert-protocol').RemoteResult<T>,
 ): ClientResult<T> {
   return result.ok ? result : { ok: false, error: result.error as SessionError }
 }

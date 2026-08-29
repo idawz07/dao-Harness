@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { SessionEvent, SurfaceEvent, SurfaceEventType } from '@deepseek-ai/dsh-session'
+import type { SessionEvent, SurfaceEvent, SurfaceEventType } from '@daoai/dao-session'
 import {
   Session,
   SessionId,
@@ -8,8 +8,8 @@ import {
   isReplacementSurfaceEvent,
   isSurfaceEligibleType,
   isSurfaceEvent,
-} from '@deepseek-ai/dsh-session'
-import { SurfaceManager } from '@deepseek-ai/dsh-session/surface'
+} from '@daoai/dao-session'
+import { SurfaceManager } from '@daoai/dao-session/surface'
 import {
   createMessage,
   createToolResultMessage,
@@ -17,7 +17,7 @@ import {
   freezeMessage,
   ToolCallId,
   MessageId,
-} from '@deepseek-ai/dsh-llm'
+} from '@daoai/dao-llm'
 
 /** Build a minimal session with turn boundaries and a single user message. */
 function surfaceSession(): Session {

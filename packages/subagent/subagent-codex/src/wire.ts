@@ -4,13 +4,13 @@
  * product methods, current thread/turn association, unattended approval
  * responses, and terminal-answer selection.
  *
- * @module @deepseek-ai/dsh-subagent-codex/wire
+ * @module @daoai/dao-subagent-codex/wire
  */
 
 import type { Readable, Writable } from 'node:stream'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { SubagentResult } from '@deepseek-ai/dsh-subagent'
-import { JsonRpcLineTransport } from '@deepseek-ai/dsh-sdk-protocol'
+import type { ContentBlock } from '@daoai/dao-llm'
+import type { SubagentResult } from '@daoai/dao-subagent'
+import { JsonRpcLineTransport } from '@daoai/dao-sdk-protocol'
 import type { CodexPermissionMode } from './run.ts'
 
 type JsonObject = Record<string, unknown>
@@ -268,7 +268,7 @@ export class CodexAppServerWire {
     object(await this.guarded(this.transport.request('initialize', {
       clientInfo: {
         name: 'deepseek-harness',
-        title: 'DeepSeek Harness',
+        title: 'Dao',
         version: '0.0.1',
       },
       capabilities: {

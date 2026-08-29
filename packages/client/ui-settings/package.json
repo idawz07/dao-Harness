@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-ui-settings",
+  "name": "@daoai/dao-client-ui-settings",
   "description": "Settings domain base plugin: the settings-namespace scope service and the canonical settings slot-type contract",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
@@ -29,11 +29,11 @@
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "dsh": {
+  "dao": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-client-connection",
-        "@deepseek-ai/dsh-api-remotes"
+        "@daoai/dao-client-connection",
+        "@daoai/dao-api-remotes"
       ],
       "platform": "web"
     }
@@ -44,26 +44,26 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-api-remotes": "workspace:^",
-    "@deepseek-ai/dsh-client-connection": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^"
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-api-remotes": "workspace:^",
+    "@daoai/dao-client-connection": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-settings": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-api-remotes": "workspace:^",
-    "@deepseek-ai/dsh-client-store": "workspace:^",
-    "@deepseek-ai/dsh-client-test-runtime": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-api-remotes": "workspace:^",
+    "@daoai/dao-client-store": "workspace:^",
+    "@daoai/dao-client-test-runtime": "workspace:^",
+    "@daoai/dao-client-ui-slots": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-settings": "workspace:^",
     "@types/react": "~18.3.1",
     "react": "^18.2.0",
-    "@deepseek-ai/dsh-client-connection": "workspace:^"
+    "@daoai/dao-client-connection": "workspace:^"
   },
   "files": [
     "lib/index.js",

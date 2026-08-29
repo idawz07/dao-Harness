@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-ui-settings-models",
+  "name": "@daoai/dao-client-ui-settings-models",
   "description": "Models settings and shared product-onboarding dialogs over existing settings and credential joins",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
@@ -29,12 +29,12 @@
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "dsh": {
+  "dao": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-client-ui-settings",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-api-remotes"
+        "@daoai/dao-client-ui-settings",
+        "@daoai/dao-client-locale",
+        "@daoai/dao-api-remotes"
       ],
       "platform": "web"
     }
@@ -45,26 +45,26 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-api-remotes": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-client-locale": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-settings": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-renderer": "workspace:^"
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-api-remotes": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-client-locale": "workspace:^",
+    "@daoai/dao-client-ui-settings": "workspace:^",
+    "@daoai/dao-client-ui-renderer": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-api-remotes": "workspace:^",
-    "@deepseek-ai/dsh-client-locale": "workspace:^",
-    "@deepseek-ai/dsh-client-store": "workspace:^",
-    "@deepseek-ai/dsh-client-test-runtime": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-primitives": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-settings": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
+    "@daoai/dao-api-remotes": "workspace:^",
+    "@daoai/dao-client-locale": "workspace:^",
+    "@daoai/dao-client-store": "workspace:^",
+    "@daoai/dao-client-test-runtime": "workspace:^",
+    "@daoai/dao-client-ui-primitives": "workspace:^",
+    "@daoai/dao-client-ui-settings": "workspace:^",
+    "@daoai/dao-client-ui-slots": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
     "@types/react": "~18.3.1",
-    "@deepseek-ai/cordis": "workspace:^",
+    "@daoai/cordis": "workspace:^",
     "react": "^18.2.0",
-    "@deepseek-ai/dsh-client-ui-renderer": "workspace:^"
+    "@daoai/dao-client-ui-renderer": "workspace:^"
   },
   "files": [
     "lib/index.js",

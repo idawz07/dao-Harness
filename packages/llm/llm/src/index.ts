@@ -3,11 +3,11 @@
  * API. Exports the `LlmRuntime` default, the abstract `LlmAdapter` for
  * provider backends, and `BlockAssembler` for chunk assembly.
  *
- * @module @deepseek-ai/dsh-llm
+ * @module @daoai/dao-llm
  */
 
-import { Context } from '@deepseek-ai/cordis'
-import { Remote, TypertRemoteFailure, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
+import { Context } from '@daoai/cordis'
+import { Remote, TypertRemoteFailure, TypertRemoteService } from '@daoai/dao-typert-protocol'
 import type {
   GenerateOptions,
   LlmConfigurableProvider,
@@ -46,7 +46,7 @@ export { BlockAssembler } from './assembler.ts'
 export { callConfigEquals, deepFreeze, isAgentLoopRequest, markAgentLoopRequest } from './call-config.ts'
 export type { LlmCallConfig, LlmCallConfigAdapterDefaults } from './call-config.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@daoai/cordis' {
   interface Context {
     llm: LlmRuntime
   }

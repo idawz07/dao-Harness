@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-permission-presets",
-  "description": "User-facing permission presets (ctx.permissionPresets) for the DeepSeek Harness: one product-level Permissions select bundling the sandbox-mode and approval-policy knobs, written through to their own session events",
+  "name": "@daoai/dao-permission-presets",
+  "description": "User-facing permission presets (ctx.permissionPresets) for the Dao: one product-level Permissions select bundling the sandbox-mode and approval-policy knobs, written through to their own session events",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -41,31 +41,31 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-shell": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-user-approval": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-shell": "workspace:^",
+    "@daoai/dao-commands": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-sandbox": "workspace:^",
+    "@daoai/dao-sandbox-policy": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-projection": "workspace:^",
+    "@daoai/dao-settings": "workspace:^",
+    "@daoai/dao-user-approval": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@daoai/schemastery": "workspace:^",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-shell": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-user-approval": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-shell": "workspace:^",
+    "@daoai/dao-commands": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-sandbox": "workspace:^",
+    "@daoai/dao-sandbox-policy": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-projection": "workspace:^",
+    "@daoai/dao-settings": "workspace:^",
+    "@daoai/dao-user-approval": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

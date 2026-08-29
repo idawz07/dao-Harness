@@ -1,4 +1,4 @@
-# Private Agent Teams profile layer. Apply after dsh-base so these replacements
+# Private Agent Teams profile layer. Apply after dao-base so these replacements
 # remove the global continuable-child controls before the scoped Team tools
 # register the overlapping list_agents, send_message, and interrupt_agent names.
 
@@ -25,7 +25,7 @@
 
 - insert:
     - id: agent-team
-      name: '@deepseek-ai/dsh-experimental-agent-team'
+      name: '@daoai/dao-experimental-agent-team'
       config:
         maxMembers: 8
         maxTasks: 256
@@ -34,7 +34,7 @@
         disposalTimeoutMs: 5000
 
     - id: tool-agent-team
-      name: '@deepseek-ai/dsh-experimental-tool-agent-team'
+      name: '@daoai/dao-experimental-tool-agent-team'
       config:
         freshProvider: spawn
         forkProvider: fork

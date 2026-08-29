@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-agent-loop-testkit`.
- * @module @deepseek-ai/dsh-agent-loop-testkit/invariant
+ * Package-owned invariant companion for `@daoai/dao-agent-loop-testkit`.
+ * @module @daoai/dao-agent-loop-testkit/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-agent-loop-testkit'
+const PACKAGE_NAME = '@daoai/dao-agent-loop-testkit'
 
 /** Cordis companion plugin name. */
 export const name = 'agent-loop-testkit-invariant'

@@ -1,11 +1,11 @@
 /** Deterministic source for the filesystem tree bundled into the WebWorker preview. */
 
 import { fileURLToPath } from 'node:url'
-import { SessionId, type SessionEvent, type SessionHeader } from '@deepseek-ai/dsh-session'
+import { SessionId, type SessionEvent, type SessionHeader } from '@daoai/dao-session'
 import {
   eventLines, projectKey, toHeaderLine,
-} from '@deepseek-ai/dsh-session-persistence-jsonl/src/format.ts'
-import { snapshotSubagentDescriptor } from '@deepseek-ai/dsh-subagent'
+} from '@daoai/dao-session-persistence-jsonl/src/format.ts'
+import { snapshotSubagentDescriptor } from '@daoai/dao-subagent'
 
 /** Root copied by the preview image's repository adapter. */
 export const VFS_EXAMPLE_ROOT = fileURLToPath(new URL('./fixtures/vfs-example', import.meta.url))
@@ -26,7 +26,7 @@ export const VFS_EXAMPLE_OLDEST_MESSAGE = 'History checkpoint 01: verify determi
 /** Settled tail marker used by browser acceptance and the demonstration GIF. */
 export const VFS_EXAMPLE_TAIL_MESSAGE = 'Preview tour complete'
 
-const WORKSPACE = '/dsh/workspace'
+const WORKSPACE = '/dao/workspace'
 const CREATED_AT = 1_787_472_000_000
 const HISTORICAL_TURNS = 28
 

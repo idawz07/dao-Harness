@@ -1,15 +1,15 @@
 import { describe, expect, it, vi } from 'vitest'
 import type {
   SessionEventLike, SessionEventLikeEntry, SessionLiveEventEntry,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import type { ChunkRowEvent } from '@deepseek-ai/dsh-api-session-controller/types'
-import type { ChunkRow } from '@deepseek-ai/dsh-session/chunk-rows'
-import type { SessionEvent } from '@deepseek-ai/dsh-session/types'
-import { ConversationNodeAssembler } from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@daoai/dao-api-session-controller/client'
+import type { ChunkRowEvent } from '@daoai/dao-api-session-controller/types'
+import type { ChunkRow } from '@daoai/dao-session/chunk-rows'
+import type { SessionEvent } from '@daoai/dao-session/types'
+import { ConversationNodeAssembler } from '@daoai/dao-client-ui-conversation/client'
 import type {
   ConversationMatch, ConversationNodeContext,
   ConversationNodeDefinition, ConversationViewDefinition, ConversationViewNode,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@daoai/dao-client-ui-conversation/client'
 
 interface ScopeProbeStepData {
   readonly value: number
@@ -19,7 +19,7 @@ interface ScopeProbeTurnData {
   readonly valueSeenFromStep: number
 }
 
-declare module '@deepseek-ai/dsh-client-ui-conversation/client' {
+declare module '@daoai/dao-client-ui-conversation/client' {
   interface ConversationStepDataMap {
     'scope-probe': ScopeProbeStepData
   }

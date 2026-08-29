@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-sandbox-windows-acl",
-  "description": "Windows ACL write-restriction sandbox backend (restricted-token spawn with capability-SID write allowlist) for the DeepSeek Harness sandbox seam",
+  "name": "@daoai/dao-sandbox-windows-acl",
+  "description": "Windows ACL write-restriction sandbox backend (restricted-token spawn with capability-SID write allowlist) for the Dao sandbox seam",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -38,17 +38,17 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-win32-process": "workspace:^",
+    "@daoai/dao-win32-process": "workspace:^",
     "koffi": "^3.1.0"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-pwsh-local": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-local": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-pwsh-local": "workspace:^",
+    "@daoai/dao-sandbox-local": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

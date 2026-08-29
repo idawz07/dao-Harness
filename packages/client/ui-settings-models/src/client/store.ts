@@ -9,10 +9,10 @@
 
 import type {
   ClientRemote, CredentialInfo, LlmConfigurableProvider, LlmProviderInfo, SettingsNamespaceView,
-} from '@deepseek-ai/dsh-api-remotes/client'
-import type { SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { SettingsDescribeFace, SettingsRemote } from '@deepseek-ai/dsh-client-ui-settings/client'
+} from '@daoai/dao-api-remotes/client'
+import type { SnapshotStore } from '@daoai/dao-client-store'
+import { createSnapshotStore } from '@daoai/dao-client-store'
+import type { SettingsDescribeFace, SettingsRemote } from '@daoai/dao-client-ui-settings/client'
 import type { SettingsSchemaOperations } from './schema-operations.ts'
 
 /**

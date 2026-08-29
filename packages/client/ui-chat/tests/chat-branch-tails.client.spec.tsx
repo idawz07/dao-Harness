@@ -2,12 +2,12 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { bindSnapshotSelector } from '@deepseek-ai/dsh-client-test-runtime'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import { zh as commonZh } from '@deepseek-ai/dsh-client-locale/src/locales/zh.ts'
+import { bindSnapshotSelector } from '@daoai/dao-client-test-runtime'
+import { makeTranslate } from '@daoai/dao-client-test-runtime'
+import { zh as commonZh } from '@daoai/dao-client-locale/src/locales/zh.ts'
 import type {
   ChatConversationViewNode, ConversationNode,
-} from '@deepseek-ai/dsh-client-ui-chat/client'
+} from '@daoai/dao-client-ui-chat/client'
 import type { ChatNodeViewProps } from '../src/client/contract/slots.ts'
 import {
   formatMessageClock, msUntilNextLocalMidnight, startOfLocalDay,
@@ -649,16 +649,16 @@ describe('MessageItem arms', () => {
         content: [{ type: 'text', text: 'Current runtime context.\n\nsandbox\n\nworkspace' }],
         source: {
           kind: 'plugin',
-          plugin: '@deepseek-ai/dsh-system-prompt',
+          plugin: '@daoai/dao-system-prompt',
           form: 'snapshot',
           sections: [{ name: 'sandbox:policy', text: 'workspace-write' }, { name: 'workspace', text: '/repo' }],
         },
-        provenance: { role: 'inject', label: '@deepseek-ai/dsh-system-prompt' },
+        provenance: { role: 'inject', label: '@daoai/dao-system-prompt' },
         form: 'snapshot',
       } as never}
       />,
     )
-    fireEvent.click(view.getByRole('button', { name: /^上下文注入\s*@deepseek-ai\/dsh-system-prompt$/ }))
+    fireEvent.click(view.getByRole('button', { name: /^上下文注入\s*@daoai\/dao-system-prompt$/ }))
     const rows = [...view.container.querySelectorAll('[data-context-sections] div')].map(node => node.textContent)
     expect(rows).toEqual(['sandbox:policyworkspace-write', 'workspace/repo'])
   })

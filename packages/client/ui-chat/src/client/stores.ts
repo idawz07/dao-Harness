@@ -1,5 +1,5 @@
 /** Per-Session Chat selection store shared by the transcript and details panel. */
-import { defineStore, type EngineStoreHandle } from '@deepseek-ai/dsh-client-store'
+import { defineStore, type EngineStoreHandle } from '@daoai/dao-client-store'
 import type { TurnProcessGeneration } from './contract/turn-process.ts'
 import type { ChatStoreState, SelectionTarget, TurnProcessViewEntry } from './contract/store.ts'
 

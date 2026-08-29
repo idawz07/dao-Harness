@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-api-gateway",
+  "name": "@daoai/dao-api-gateway",
   "description": "Typert Remote Host dispatcher and Client API endpoint",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
@@ -33,11 +33,11 @@
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "dsh": {
+  "dao": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-typert-registry",
-        "@deepseek-ai/dsh-client-connection"
+        "@daoai/dao-typert-registry",
+        "@daoai/dao-client-connection"
       ],
       "platform": "web",
       "immediately": true
@@ -56,28 +56,28 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@daoai/dao-timeout": "workspace:^",
+    "@daoai/dao-typert-protocol": "workspace:^",
+    "@daoai/schemastery": "workspace:^",
     "ws": "^8.21.0"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-client-connection": "workspace:^",
-    "@deepseek-ai/dsh-host-webserver": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-typert-registry": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-brand": "workspace:^",
+    "@daoai/dao-client-connection": "workspace:^",
+    "@daoai/dao-host-webserver": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-typert-registry": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-client-connection": "workspace:^",
-    "@deepseek-ai/dsh-host-webserver": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-typert-registry": "workspace:^",
-    "@deepseek-ai/dsh-util-crypto": "workspace:^",
+    "@daoai/dao-brand": "workspace:^",
+    "@daoai/dao-client-connection": "workspace:^",
+    "@daoai/dao-host-webserver": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-typert-registry": "workspace:^",
+    "@daoai/dao-util-crypto": "workspace:^",
     "@types/ws": "^8.18.1",
-    "@deepseek-ai/cordis": "workspace:^",
+    "@daoai/cordis": "workspace:^",
     "zod": "^4.4.3"
   }
 }

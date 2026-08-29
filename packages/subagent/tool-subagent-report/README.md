@@ -3,13 +3,13 @@ description: "Child-scoped report tool for users and maintainers composing or de
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-tool-subagent-report
+# @daoai/dao-tool-subagent-report
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-tool-subagent-report` gives every continuable in-process child a return channel to the agent that started it: it installs a child-scoped `report` tool plus the prompt guidance that tells the child to use it. The tool and its guidance exist only inside those children — roots, one-shot subagents, remote providers, and sibling scopes never see them. Accepted reports reach the parent as ordinary parent messages, framed as `Background subagent <child-id> reported:`. Continuable mode depends on neither this package nor the control package; this one owns only the child-to-parent direction.
+`dao-tool-subagent-report` gives every continuable in-process child a return channel to the agent that started it: it installs a child-scoped `report` tool plus the prompt guidance that tells the child to use it. The tool and its guidance exist only inside those children — roots, one-shot subagents, remote providers, and sibling scopes never see them. Accepted reports reach the parent as ordinary parent messages, framed as `Background subagent <child-id> reported:`. Continuable mode depends on neither this package nor the control package; this one owns only the child-to-parent direction.
 
 ## Table of Contents
 
@@ -32,20 +32,20 @@ Mount this package in a composition with continuable in-process children whose f
 Load the subagent service, a backend, the delegation tool in `continuable` mode, and this package:
 
 ```yaml
-- name: '@deepseek-ai/dsh-subagent'
-- name: '@deepseek-ai/dsh-subagent-spawn-in-process'
-- name: '@deepseek-ai/dsh-tool-subagent'
+- name: '@daoai/dao-subagent'
+- name: '@daoai/dao-subagent-spawn-in-process'
+- name: '@daoai/dao-tool-subagent'
   config:
     provider: spawn
     backgroundMode: continuable
-- name: '@deepseek-ai/dsh-tool-subagent-report'
+- name: '@daoai/dao-tool-subagent-report'
 ```
 
 | Field | Default | Meaning |
 |---|---|---|
 | `reportDelivery` | `next-step` | Parent scheduling for accepted reports: `next-step` wakes the parent at its nearest step boundary; `quiet` adds the same context without waking it |
 
-The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-tool-subagent-report) is the exhaustive source for every accepted field and its JSDoc.
+The generated [configuration catalog](../../../docs/config-catalog.md#daoaidao-tool-subagent-report) is the exhaustive source for every accepted field and its JSDoc.
 
 ### What the child gets
 
@@ -98,10 +98,10 @@ The package registers a continuable-child setup contribution rather than a globa
 Read these pages when the package-level contract is not enough; they move from the report channel to the continuation service behind it and the parent-facing tools.
 
 - [Subagent subsystem](../../../docs/subsystems/subagent.md) — continuable children, activations, and the `reportFrom`/`reportDelivery` contract.
-- [dsh-tool-subagent-control](../tool-subagent-control/README.md) — the parent-to-child control tools.
-- [dsh-tool-subagent](../tool-subagent/README.md) — the delegation tool that starts continuable children.
-- [Generated tool catalog](../../../docs/tool-catalog.md#deepseek-aidsh-tool-subagent-report) — the `report` schema.
-- [Generated configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-tool-subagent-report) — every accepted config field.
+- [dao-tool-subagent-control](../tool-subagent-control/README.md) — the parent-to-child control tools.
+- [dao-tool-subagent](../tool-subagent/README.md) — the delegation tool that starts continuable children.
+- [Generated tool catalog](../../../docs/tool-catalog.md#daoaidao-tool-subagent-report) — the `report` schema.
+- [Generated configuration catalog](../../../docs/config-catalog.md#daoaidao-tool-subagent-report) — every accepted config field.
 
 -----
 
@@ -112,7 +112,7 @@ Read these pages when the package-level contract is not enough; they move from t
 
 #### What the model sees
 
-The generated [`report` schema](../../../docs/tool-catalog.md#deepseek-aidsh-tool-subagent-report): one required `output` string. Its description states that the child must report once before finishing, that reporting reaches only the Agent that started the child, and that it does not end the turn. It carries no recipient or delivery-mode parameter. The separate `tool:report` prompt section repeats the obligation outside the schema.
+The generated [`report` schema](../../../docs/tool-catalog.md#daoaidao-tool-subagent-report): one required `output` string. Its description states that the child must report once before finishing, that reporting reaches only the Agent that started the child, and that it does not end the turn. It carries no recipient or delivery-mode parameter. The separate `tool:report` prompt section repeats the obligation outside the schema.
 
 #### Token effect
 

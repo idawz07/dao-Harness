@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { decodeSeqRanges, encodeSeqRanges } from '@deepseek-ai/dsh-session'
+import { decodeSeqRanges, encodeSeqRanges } from '@daoai/dao-session'
 
 describe('sourceEventSeqs ranges', () => {
   it.each([

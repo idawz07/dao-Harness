@@ -12,7 +12,7 @@ Agent-bound calls require particular care. Shared lookup policy reuses live Agen
 
 ## Decision
 
-Simple unary operations live on their natural business Remote owner. The business package owns the Remote signature and Host adaptation; `@deepseek-ai/dsh-api-remotes/client` selects its generated contribution; the Client package owns presentation joins. Connection owns the transport envelope and exact Fetch route registry, and no API Proxy service remains.
+Simple unary operations live on their natural business Remote owner. The business package owns the Remote signature and Host adaptation; `@daoai/dao-api-remotes/client` selects its generated contribution; the Client package owns presentation joins. Connection owns the transport envelope and exact Fetch route registry, and no API Proxy service remains.
 
 | Former API Proxy operation | Destination | Owner and preserved behavior |
 |---|---|---|
@@ -36,7 +36,7 @@ Simple unary operations live on their natural business Remote owner. The busines
 
 The shared Agent and Session resolver remains the authority for endpoints that accept those objects. It provides the same live reuse, cold restoration, concurrent deduplication, preset setup, persistence failures, and subagent ownership fence that legacy API Proxy calls used. `TypertLookupFailure` preserves resolver-owned RPC errors instead of collapsing them into `internal`.
 
-The native path implementation lives in `@deepseek-ai/dsh-native-command`. Settings controllers select Host-owned targets, while Session-aware Clients resolve workspace paths before calling `SessionController`; the utility only performs platform detection, WSL translation, browser preference, text-editor intent, and shell-free command execution.
+The native path implementation lives in `@daoai/dao-native-command`. Settings controllers select Host-owned targets, while Session-aware Clients resolve workspace paths before calling `SessionController`; the utility only performs platform detection, WSL translation, browser preference, text-editor intent, and shell-free command execution.
 
 ## Browser authentication
 

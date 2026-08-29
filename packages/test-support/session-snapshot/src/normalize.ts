@@ -3,7 +3,7 @@
  * timestamps, goal lifecycle clocks, and hook duration while preserving semantic payload values.
  * Request-header scrubbers stay composable so one scenario per header class can pin prompt and
  * tool-schema sidecars.
- * @module @deepseek-ai/dsh-session-snapshot/normalize
+ * @module @daoai/dao-session-snapshot/normalize
  */
 
 import {
@@ -11,7 +11,7 @@ import {
   decodeStorageRecord,
   packChunkRuns,
   type SessionEvent,
-} from '@deepseek-ai/dsh-session'
+} from '@daoai/dao-session'
 import { redactSessionSnapshotIds } from './identity.ts'
 
 const SESSION_ID = '{{sessionId}}'
@@ -54,7 +54,7 @@ const LOCAL_SPILL_PATH_RE = new RegExp(
   'g',
 )
 const SNAPSHOT_SPILL_PATH_RE = new RegExp(
-  String.raw`(?:[A-Za-z]:)?[\\/](?:tmp|t)[\\/](?:dsh-acp-snap-[0-9a-f]{9}|dsh-acp-snapshot-spill)[\\/]session-[0-9a-f]{12}[\\/][0-9a-f]{12}-([A-Za-z0-9._~-]+?)`
+  String.raw`(?:[A-Za-z]:)?[\\/](?:tmp|t)[\\/](?:dao-acp-snap-[0-9a-f]{9}|dao-acp-snapshot-spill)[\\/]session-[0-9a-f]{12}[\\/][0-9a-f]{12}-([A-Za-z0-9._~-]+?)`
   + String.raw`(?=\. Use read with offset/limit|[\s)]|$)`,
   'g',
 )

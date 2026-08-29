@@ -1,5 +1,5 @@
 /** Per-session Conversation store shared by the shell body and header. */
-import { defineStore, type EngineStoreHandle } from '@deepseek-ai/dsh-client-store'
+import { defineStore, type EngineStoreHandle } from '@daoai/dao-client-store'
 import type { ConversationStoreState } from './contract/views.ts'
 
 /** Declared write set for the Conversation shell. */
@@ -17,7 +17,7 @@ type ConversationActions = {
 export function createConversationStore(): EngineStoreHandle<ConversationStoreState, ConversationActions> {
   return defineStore({
     init: (): ConversationStoreState => ({ draft: '', view: null, viewRequest: null }),
-    persist: 'dsh.conversation',
+    persist: 'dao.conversation',
     actions: {
       setDraft: (d, text: string) => { d.draft = text },
       setView: (d, view: string) => { d.view = view },

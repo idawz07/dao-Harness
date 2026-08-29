@@ -1,0 +1,29 @@
+# SDK-profile patch for the child runtime in the cwd-inheritance proof.
+
+- id: llm-deepseek
+  name: '@daoai/dao-llm-deepseek'
+  disabled: true
+
+- id: system-prompt
+  name: '@daoai/dao-system-prompt'
+  config:
+    persona: 'Echo where you run.'
+
+- id: agent-instructions
+  name: '@daoai/dao-agent-instructions'
+  disabled: true
+
+- id: skill-filesystem
+  name: '@daoai/dao-skill-filesystem'
+  config:
+    includeDefaultRoots: false
+
+- id: session-persistence-jsonl
+  name: '@daoai/dao-session-persistence-jsonl'
+  config:
+    root: !!js daoHomePath('sessions')
+    compression: none
+
+- insert:
+    - id: child-mock-llm
+      name: './child-mock-llm.ts'

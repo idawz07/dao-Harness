@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/cordis-plugin-include",
+  "name": "@daoai/cordis-plugin-include",
   "description": "Include files in cordis configurations",
   "version": "1.0.6",
   "publishConfig": {
@@ -30,11 +30,11 @@
   "author": "Shigma <shigma10826@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/cordis-plugin-loader": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/cosmokit": "workspace:^",
+    "@daoai/cosmokit": "workspace:^",
     "js-yaml": "^4.1.0"
   }
 }

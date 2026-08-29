@@ -14,7 +14,7 @@ The shell guidance also followed filesystem guidance even though shell commands 
 
 ## Decision
 
-`@deepseek-ai/dsh-system-prompt` exports `FIRST_PARTY_SECTION_ORDER` as the single allocation for repository-owned sections. Every first-party contributor imports its named placement instead of declaring a numeric literal. Values are unique integers, and adjacent allocated values differ by at least ten.
+`@daoai/dao-system-prompt` exports `FIRST_PARTY_SECTION_ORDER` as the single allocation for repository-owned sections. Every first-party contributor imports its named placement instead of declaring a numeric literal. Values are unique integers, and adjacent allocated values differ by at least ten.
 
 The allocation preserves the established first-party sequence except for two deliberate changes: Bash, or PowerShell in the Windows composition, leads per-tool guidance; and sections that shared an order receive an explicit sequence. The groups are:
 

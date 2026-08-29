@@ -1,10 +1,10 @@
-/** Package-owned invariant companion for `@deepseek-ai/dsh-win32-process`. */
+/** Package-owned invariant companion for `@daoai/dao-win32-process`. */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-win32-process'
+const PACKAGE_NAME = '@daoai/dao-win32-process'
 
 export const name = 'win32-process-invariant'
 export const inject = ['invariants']

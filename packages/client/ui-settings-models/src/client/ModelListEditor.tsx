@@ -16,8 +16,8 @@
 
 import { useState } from 'react'
 import type { ReactNode } from 'react'
-import type { LlmDiscoveredModel } from '@deepseek-ai/dsh-api-remotes/client'
-import { Button, Modal } from '@deepseek-ai/dsh-client-ui-primitives'
+import type { LlmDiscoveredModel } from '@daoai/dao-api-remotes/client'
+import { Button, Modal } from '@daoai/dao-client-ui-primitives'
 import { formatCapacity, parseCapacity } from './DeepSeekModelsEditor.tsx'
 import type { DeepSeekModelDraft } from './DeepSeekModelsEditor.tsx'
 import { messageOf, type ModelsWire } from './store.ts'

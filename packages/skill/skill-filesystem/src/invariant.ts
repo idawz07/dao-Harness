@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-skill-filesystem`.
- * @module @deepseek-ai/dsh-skill-filesystem/invariant
+ * Package-owned invariant companion for `@daoai/dao-skill-filesystem`.
+ * @module @daoai/dao-skill-filesystem/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-skill-filesystem'
+const PACKAGE_NAME = '@daoai/dao-skill-filesystem'
 
 /** Cordis companion plugin name. */
 export const name = 'skill-filesystem-invariant'

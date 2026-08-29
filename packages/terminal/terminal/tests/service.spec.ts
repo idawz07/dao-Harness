@@ -1,9 +1,9 @@
 import { describe, expect, expectTypeOf, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { Session, SessionId } from '@deepseek-ai/dsh-session'
-import AgentRegistry, { Inbox } from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import TerminalSessionService, { TerminalBackendCleanupError, TerminalError, TerminalSessionId } from '@deepseek-ai/dsh-terminal'
+import { Context } from '@daoai/cordis'
+import { Session, SessionId } from '@daoai/dao-session'
+import AgentRegistry, { Inbox } from '@daoai/dao-agent'
+import type { Agent } from '@daoai/dao-agent'
+import TerminalSessionService, { TerminalBackendCleanupError, TerminalError, TerminalSessionId } from '@daoai/dao-terminal'
 import type {
   TerminalBackend,
   TerminalBackendSession,
@@ -13,7 +13,7 @@ import type {
   TerminalSessionId as TerminalSessionIdType,
   TerminalSessionStatus,
   TerminalSignal,
-} from '@deepseek-ai/dsh-terminal'
+} from '@daoai/dao-terminal'
 
 const agentScopeDisposers = new WeakMap<Agent, () => Promise<void>>()
 const ptyServiceDisposers = new WeakMap<Context, () => Promise<void>>()

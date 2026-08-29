@@ -13,7 +13,7 @@
  * expectations to make a change pass — agree the new text with the worker host first.
  */
 import { expect, test } from 'vitest'
-import { WorkerTunnel } from '@deepseek-ai/dsh-experimental-webworker-runtime/src/client/client.ts'
+import { WorkerTunnel } from '@daoai/dao-experimental-webworker-runtime/src/client/client.ts'
 
 // Both sides are serialized here, at call time, rather than inside the case: the
 // blocks below reuse and clear the `warnings` array, so a captured reference
@@ -203,14 +203,14 @@ function stubWorker(): {
   })
   const failure = await pending.then(() => undefined, (error: unknown) => error as {
     message: string
-    dshRemoteStreamFailure: unknown
+    daoRemoteStreamFailure: unknown
   })
   check('a logical Host failure retains its structural marker', {
     message: failure?.message,
-    dshRemoteStreamFailure: failure?.dshRemoteStreamFailure,
+    daoRemoteStreamFailure: failure?.daoRemoteStreamFailure,
   }, {
     message: 'fixture Session is absent',
-    dshRemoteStreamFailure: {
+    daoRemoteStreamFailure: {
       kind: 'remote', code: 'session-not-found', details: { sessionId: 'session-1' },
     },
   })
@@ -241,13 +241,13 @@ function stubWorker(): {
   fail('worker crashed')
   const failure = await pending.then(() => undefined, (error: unknown) => error as {
     message: string
-    dshRemoteStreamFailure: unknown
+    daoRemoteStreamFailure: unknown
   })
   check('worker failure carries the carrier marker', {
     message: failure?.message,
-    dshRemoteStreamFailure: failure?.dshRemoteStreamFailure,
+    daoRemoteStreamFailure: failure?.daoRemoteStreamFailure,
   }, {
     message: 'web-preview tunnel: worker failed: worker crashed',
-    dshRemoteStreamFailure: { kind: 'carrier' },
+    daoRemoteStreamFailure: { kind: 'carrier' },
   })
 }

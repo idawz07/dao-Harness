@@ -13,13 +13,13 @@
  * projections. Direct driving is deliberate: this spec owns only the
  * source's own contract.
  */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@daoai/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
-import { InputTriggerService } from '@deepseek-ai/dsh-client-ui-input-trigger/client'
-import { TestRemote } from '@deepseek-ai/dsh-client-test-runtime'
-import type { ClientSessionContext, InputTriggerSource } from '@deepseek-ai/dsh-client-ui-input-trigger/client'
+import type { SessionId } from '@daoai/dao-session/types'
+import { SlotRegistry } from '@daoai/dao-client-ui-renderer/client'
+import { InputTriggerService } from '@daoai/dao-client-ui-input-trigger/client'
+import { TestRemote } from '@daoai/dao-client-test-runtime'
+import type { ClientSessionContext, InputTriggerSource } from '@daoai/dao-client-ui-input-trigger/client'
 import { apply, inject } from '../src/client/index.ts'
 import { SkillRow as SkillToolRow } from '../src/client/SkillRow.tsx'
 

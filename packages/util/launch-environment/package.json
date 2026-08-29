@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-launch-environment",
-  "description": "Immutable DeepSeek Harness launch environment that records which layer supplied each value",
+  "name": "@daoai/dao-launch-environment",
+  "description": "Immutable Dao launch environment that records which layer supplied each value",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,11 +32,11 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

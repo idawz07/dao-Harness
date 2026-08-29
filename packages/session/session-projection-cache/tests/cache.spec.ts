@@ -14,24 +14,24 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@daoai/cordis'
 import { z } from 'zod'
-import SessionStore, { Session, SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import type { ProjectionDefinition } from '@deepseek-ai/dsh-session-projection'
-import Storage from '@deepseek-ai/dsh-storage'
+import SessionStore, { Session, SessionId } from '@daoai/dao-session'
+import type { SessionEvent } from '@daoai/dao-session'
+import SessionProjectionRegistry from '@daoai/dao-session-projection'
+import type { ProjectionDefinition } from '@daoai/dao-session-projection'
+import Storage from '@daoai/dao-storage'
 import {
   apply as storageJsonApply, Config as storageJsonConfig, inject as storageJsonInject, name as storageJsonName,
-} from '@deepseek-ai/dsh-storage-json'
+} from '@daoai/dao-storage-json'
 import {
   apply as storageDomainApply, Config as storageDomainConfig, inject as storageDomainInject, name as storageDomainName,
-} from '@deepseek-ai/dsh-storage-domain'
+} from '@daoai/dao-storage-domain'
 import SessionProjectionCache from '../src/index.ts'
 import { checkpointRecord, projectionCacheDomainSpec } from '../src/spec.ts'
 import type { CheckpointRecord } from '../src/spec.ts'
 
-declare module '@deepseek-ai/dsh-session-projection/types' {
+declare module '@daoai/dao-session-projection/types' {
   interface SessionProjectionStateMap {
     'cache-test/marks': MarksState
     'cache-test/marks2': Map<string, string>
@@ -42,7 +42,7 @@ declare module '@deepseek-ai/dsh-session-projection/types' {
   }
 }
 
-declare module '@deepseek-ai/dsh-session/types' {
+declare module '@daoai/dao-session/types' {
   interface SessionEventMap {
     'cache-test/mark': { marks: string[] }
   }
@@ -83,7 +83,7 @@ const contexts: Context[] = []
 const roots: string[] = []
 
 async function harness(options: HarnessOptions = {}) {
-  const root = options.root ?? await mkdtemp(join(tmpdir(), 'dsh-projcache-'))
+  const root = options.root ?? await mkdtemp(join(tmpdir(), 'dao-projcache-'))
   roots.push(root)
   const ctx = new Context()
   contexts.push(ctx)
@@ -242,7 +242,7 @@ describe('SessionProjectionCache write policy', () => {
   })
 
   it('contains a durable write failure: logs a warning, event path unharmed, next write self-heals', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-projcache-'))
+    const root = await mkdtemp(join(tmpdir(), 'dao-projcache-'))
     roots.push(root)
     const ctx = new Context()
     contexts.push(ctx)
@@ -275,7 +275,7 @@ describe('SessionProjectionCache write policy', () => {
 
 describe('SessionProjectionCache listing read', () => {
   it('serves identity-matching rows with the cut watermark and refuses unrelated ones', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-projcache-'))
+    const root = await mkdtemp(join(tmpdir(), 'dao-projcache-'))
     roots.push(root)
     await seedRecord(root, 'listed', { 'cache-test/marks': { ver: 1, seq: 4, val: { marks: ['t'] } } })
     const { cache } = await harness({ root })
@@ -289,7 +289,7 @@ describe('SessionProjectionCache listing read', () => {
   })
 
   it('returns undefined when the stored record is version-mismatched', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-projcache-'))
+    const root = await mkdtemp(join(tmpdir(), 'dao-projcache-'))
     roots.push(root)
     // A stale version-stamped document is discarded at open: absent record.
     const path = recordPath(root, SessionId('all-stale'))
@@ -303,7 +303,7 @@ describe('SessionProjectionCache listing read', () => {
   })
 
   it('returns undefined when every stored row is version-mismatched', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-projcache-'))
+    const root = await mkdtemp(join(tmpdir(), 'dao-projcache-'))
     roots.push(root)
     // A current document whose rows all fail the live unit's stateVersion:
     // the listing view is empty, so no block is served.
@@ -313,7 +313,7 @@ describe('SessionProjectionCache listing read', () => {
   })
 
   it('binds identity on cwd too: a matching cwd serves, a moved session does not', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-projcache-'))
+    const root = await mkdtemp(join(tmpdir(), 'dao-projcache-'))
     roots.push(root)
     await seedRecord(root, 'homed', { 'cache-test/marks': { ver: 1, seq: 2, val: { marks: ['w'] } } }, { createdAt: 0, cwd: '/work' })
     const { cache } = await harness({ root })
@@ -324,7 +324,7 @@ describe('SessionProjectionCache listing read', () => {
   })
 
   it('returns undefined for a malformed record document (refold from the log on the caller side)', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-projcache-'))
+    const root = await mkdtemp(join(tmpdir(), 'dao-projcache-'))
     roots.push(root)
     const path = recordPath(root, SessionId('malformed'))
     await mkdir(dirname(path), { recursive: true })
@@ -348,7 +348,7 @@ describe('SessionProjectionCache cold-read seeding', () => {
   }
 
   it('hydratePrepared seeds from a matching row and retries from the exact log on a malformed one', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-projcache-'))
+    const root = await mkdtemp(join(tmpdir(), 'dao-projcache-'))
     roots.push(root)
     // Records land on disk before the domain opens, so the in-memory table
     // picks them up at init.
@@ -388,7 +388,7 @@ describe('SessionProjectionCache cold-read seeding', () => {
   })
 
   it('coldSnapshot traverses the full log but applies only the events after each cached watermark', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-projcache-'))
+    const root = await mkdtemp(join(tmpdir(), 'dao-projcache-'))
     roots.push(root)
     // A cached row covering the prefix through seq 2 (three applies folded).
     await seedRecord(root, 'cold-snap', {
@@ -427,7 +427,7 @@ describe('SessionProjectionCache cold-read seeding', () => {
   })
 
   it('coldSnapshot write-back is fail-soft: a failed durable write logs and never throws', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-projcache-'))
+    const root = await mkdtemp(join(tmpdir(), 'dao-projcache-'))
     roots.push(root)
     const ctx = new Context()
     contexts.push(ctx)

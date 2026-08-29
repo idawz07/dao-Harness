@@ -5,7 +5,7 @@
  * `includeShippedRoot: false` is how a deployment supplying purely its own
  * presets — or an embedder using the roster as bare machinery — opts out.
  *
- * `$DSH_HOME` is repointed per test for the same reason as the user-root
+ * `$DAO_HOME` is repointed per test for the same reason as the user-root
  * suite: the derived writable root is resolved in the constructor.
  */
 
@@ -13,12 +13,12 @@ import { mkdtemp, readFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include, { entryListSchema } from '@deepseek-ai/cordis-plugin-include'
+import { Context } from '@daoai/cordis'
+import Loader from '@daoai/cordis-plugin-loader'
+import Include, { entryListSchema } from '@daoai/cordis-plugin-include'
 import * as yaml from 'js-yaml'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import AgentPresets, { SHIPPED_PRESET_ROOT, type Config } from '@deepseek-ai/dsh-agent-presets'
+import AgentPresets, { SHIPPED_PRESET_ROOT, type Config } from '@daoai/dao-agent-presets'
 
 const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), 'fixtures')
 const SYSTEM_ROOT = join(FIXTURES, 'system')
@@ -26,13 +26,13 @@ const SYSTEM_ROOT = join(FIXTURES, 'system')
 let previousHome: string | undefined
 
 beforeEach(async () => {
-  previousHome = process.env.DSH_HOME
-  process.env.DSH_HOME = await mkdtemp(join(tmpdir(), 'dsh-shipped-root-'))
+  previousHome = process.env.DAO_HOME
+  process.env.DAO_HOME = await mkdtemp(join(tmpdir(), 'dao-shipped-root-'))
 })
 
 afterEach(() => {
-  if (previousHome === undefined) delete process.env.DSH_HOME
-  else process.env.DSH_HOME = previousHome
+  if (previousHome === undefined) delete process.env.DAO_HOME
+  else process.env.DAO_HOME = previousHome
 })
 
 /** Boot a roster with the shipped root left to the plugin's default. */

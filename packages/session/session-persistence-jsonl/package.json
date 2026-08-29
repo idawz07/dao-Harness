@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-session-persistence-jsonl",
-  "description": "JSONL durable session persistence backend for the DeepSeek Harness",
+  "name": "@daoai/dao-session-persistence-jsonl",
+  "description": "JSONL durable session persistence backend for the Dao",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,19 +32,19 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-persistence": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
     "koffi": "^3.1.0",
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-persistence": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

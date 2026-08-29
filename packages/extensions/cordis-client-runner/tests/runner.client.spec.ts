@@ -11,15 +11,15 @@
  */
 /* oxlint-disable typescript/no-unsafe-assignment -- Vitest asymmetric matchers are typed as any. */
 
-import { Context } from '@deepseek-ai/cordis'
-import type { Loader } from '@deepseek-ai/cordis-plugin-loader'
+import { Context } from '@daoai/cordis'
+import type { Loader } from '@daoai/cordis-plugin-loader'
 import { describe, expect, it, vi } from 'vitest'
 import type {
   CordisDynamicPackageId, CordisDynamicPluginId, CordisDynamicPluginRunId,
-} from '@deepseek-ai/dsh-api-remotes/client'
-import type { SessionId } from '@deepseek-ai/dsh-client-connection/client'
-import type { ClientModuleSystem } from '@deepseek-ai/dsh-client-modules/client'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
+} from '@daoai/dao-api-remotes/client'
+import type { SessionId } from '@daoai/dao-client-connection/client'
+import type { ClientModuleSystem } from '@daoai/dao-client-modules/client'
+import { SlotRegistry } from '@daoai/dao-client-ui-renderer/client'
 import { DYNAMIC_CLIENT_REDIRECTS } from '../src/client/evaluator.ts'
 import { DynamicCordisPackageRunner } from '../src/client/runtime.ts'
 import type { DynamicCordisClientHalf, DynamicCordisRenderFailure } from '../src/client/runtime.ts'

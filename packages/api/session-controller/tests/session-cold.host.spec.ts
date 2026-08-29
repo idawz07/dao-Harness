@@ -8,24 +8,24 @@ import { describe, expect, it, vi } from 'vitest'
 import { mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import SessionStore from '@deepseek-ai/dsh-session'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import { SessionHistoryController } from '@deepseek-ai/dsh-api-session-controller/src/history.ts'
-import { subagentIdentityProjectionDefinition } from '@deepseek-ai/dsh-subagent/src/projection.ts'
-import { TypertLookupFailure } from '@deepseek-ai/dsh-typert-protocol'
-import TypertRegistry from '@deepseek-ai/dsh-typert-registry'
-import { createUserMessage, MessageId } from '@deepseek-ai/dsh-llm'
-import { snapshotSubagentDescriptor } from '@deepseek-ai/dsh-subagent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type { Session, SessionEvent, SessionHeader, SessionId } from '@deepseek-ai/dsh-session'
+import { Context } from '@daoai/cordis'
+import SessionStore from '@daoai/dao-session'
+import AgentRegistry from '@daoai/dao-agent'
+import { SessionHistoryController } from '@daoai/dao-api-session-controller/src/history.ts'
+import { subagentIdentityProjectionDefinition } from '@daoai/dao-subagent/src/projection.ts'
+import { TypertLookupFailure } from '@daoai/dao-typert-protocol'
+import TypertRegistry from '@daoai/dao-typert-registry'
+import { createUserMessage, MessageId } from '@daoai/dao-llm'
+import { snapshotSubagentDescriptor } from '@daoai/dao-subagent'
+import type { Agent } from '@daoai/dao-agent'
+import type { Session, SessionEvent, SessionHeader, SessionId } from '@daoai/dao-session'
 import type { SessionPromptRequest, SessionRequestId } from '../src/types.ts'
 import {
   PersistenceCoordinator,
   SessionPersistenceRevision,
   type PersistenceBackend,
   type StoredPrefix,
-} from '@deepseek-ai/dsh-session-persistence'
+} from '@daoai/dao-session-persistence'
 import { ApiSessionList } from '../src/list.ts'
 import {
   createSessionTestRemote,
@@ -61,7 +61,7 @@ describe('sessions.list cold merge', () => {
   it('fully observes only small possibly-blank artifacts and treats unavailable probes as visible', async () => {
     const ctx = new Context()
     await ctx.plugin(SessionStore)
-    const root = mkdtempSync(join(tmpdir(), 'dsh-cold-'))
+    const root = mkdtempSync(join(tmpdir(), 'dao-cold-'))
     const smallPath = join(root, 'small.log')
     const largePath = join(root, 'large.log')
     writeFileSync(smallPath, 'x'.repeat(1024))
@@ -227,7 +227,7 @@ describe('sessions.list cold merge', () => {
     const ctx = new Context()
     await ctx.plugin(SessionStore)
     await ctx.plugin(AgentRegistry)
-    const root = mkdtempSync(join(tmpdir(), 'dsh-cold-race-'))
+    const root = mkdtempSync(join(tmpdir(), 'dao-cold-race-'))
     const path = join(root, 'small.log')
     writeFileSync(path, 'small')
     const meta = header('attached-during-probe', 100)
@@ -279,7 +279,7 @@ describe('sessions.list cold merge', () => {
     await ctx.plugin(SessionStore)
     await ctx.plugin(AgentRegistry)
     installSessionReadTestServices(ctx)
-    const root = mkdtempSync(join(tmpdir(), 'dsh-cold-unprojected-'))
+    const root = mkdtempSync(join(tmpdir(), 'dao-cold-unprojected-'))
     const path = join(root, 'small.log')
     writeFileSync(path, 'small')
     const meta = header('unprojected-small', 100)
@@ -432,7 +432,7 @@ describe('Remote Agent and Session lookup policy', () => {
       inspect,
       locate: () => undefined,
     })
-    const resumedSession = { id: sessionId, header: meta, events: [] } as unknown as import('@deepseek-ai/dsh-session').Session
+    const resumedSession = { id: sessionId, header: meta, events: [] } as unknown as import('@daoai/dao-session').Session
     const resumedAgent = { id: sessionId, session: resumedSession, status: 'idle', ctx } as Agent
     const release = Promise.withResolvers<undefined>()
     const resume = vi.spyOn(ctx.agents, 'resume').mockImplementation(async () => {

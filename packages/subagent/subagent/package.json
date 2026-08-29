@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-subagent",
+  "name": "@daoai/dao-subagent",
   "description": "Abstract subagent seam (ctx.subagents): named-provider registry for delegating to child agents",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
@@ -52,77 +52,77 @@
     "zod": "^4.4.3"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-presets": "workspace:^",
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-session-projection-cache": "workspace:^",
-    "@deepseek-ai/dsh-session-query": "workspace:^",
-    "@deepseek-ai/dsh-jobs": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/dsh-user-approval": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-agent-presets": "workspace:^",
+    "@daoai/dao-brand": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-sandbox": "workspace:^",
+    "@daoai/dao-sandbox-policy": "workspace:^",
+    "@daoai/dao-scope": "workspace:^",
+    "@daoai/dao-system-prompt": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-persistence": "workspace:^",
+    "@daoai/dao-session-projection": "workspace:^",
+    "@daoai/dao-session-projection-cache": "workspace:^",
+    "@daoai/dao-session-query": "workspace:^",
+    "@daoai/dao-jobs": "workspace:^",
+    "@daoai/dao-tools": "workspace:^",
+    "@daoai/dao-typert-protocol": "workspace:^",
+    "@daoai/dao-user-approval": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "peerDependenciesMeta": {
-    "@deepseek-ai/dsh-agent-presets": {
+    "@daoai/dao-agent-presets": {
       "optional": true
     },
-    "@deepseek-ai/dsh-sandbox": {
+    "@daoai/dao-sandbox": {
       "optional": true
     },
-    "@deepseek-ai/dsh-sandbox-policy": {
+    "@daoai/dao-sandbox-policy": {
       "optional": true
     },
-    "@deepseek-ai/dsh-session-persistence": {
+    "@daoai/dao-session-persistence": {
       "optional": true
     },
-    "@deepseek-ai/dsh-session-projection": {
+    "@daoai/dao-session-projection": {
       "optional": true
     },
-    "@deepseek-ai/dsh-session-projection-cache": {
+    "@daoai/dao-session-projection-cache": {
       "optional": true
     },
-    "@deepseek-ai/dsh-session-query": {
+    "@daoai/dao-session-query": {
       "optional": true
     },
-    "@deepseek-ai/dsh-jobs": {
+    "@daoai/dao-jobs": {
       "optional": true
     },
-    "@deepseek-ai/dsh-user-approval": {
+    "@daoai/dao-user-approval": {
       "optional": true
     }
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-presets": "workspace:^",
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-session-projection-cache": "workspace:^",
-    "@deepseek-ai/dsh-session-query": "workspace:^",
-    "@deepseek-ai/dsh-storage": "workspace:^",
-    "@deepseek-ai/dsh-storage-domain": "workspace:^",
-    "@deepseek-ai/dsh-storage-json": "workspace:^",
-    "@deepseek-ai/dsh-jobs": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/dsh-user-approval": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-agent-presets": "workspace:^",
+    "@daoai/dao-brand": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-sandbox": "workspace:^",
+    "@daoai/dao-sandbox-policy": "workspace:^",
+    "@daoai/dao-scope": "workspace:^",
+    "@daoai/dao-system-prompt": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-persistence": "workspace:^",
+    "@daoai/dao-session-projection": "workspace:^",
+    "@daoai/dao-session-projection-cache": "workspace:^",
+    "@daoai/dao-session-query": "workspace:^",
+    "@daoai/dao-storage": "workspace:^",
+    "@daoai/dao-storage-domain": "workspace:^",
+    "@daoai/dao-storage-json": "workspace:^",
+    "@daoai/dao-jobs": "workspace:^",
+    "@daoai/dao-tools": "workspace:^",
+    "@daoai/dao-typert-protocol": "workspace:^",
+    "@daoai/dao-user-approval": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

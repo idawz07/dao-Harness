@@ -7,18 +7,18 @@ import { readFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
 import { afterEach, expect, it } from 'vitest'
-import { ToolCallId } from '@deepseek-ai/dsh-llm'
-import { canonicalPath, writableRoots } from '@deepseek-ai/dsh-sandbox'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import { settingsNamespace } from '@deepseek-ai/dsh-settings'
+import { ToolCallId } from '@daoai/dao-llm'
+import { canonicalPath, writableRoots } from '@daoai/dao-sandbox'
+import { SessionId } from '@daoai/dao-session'
+import { settingsNamespace } from '@daoai/dao-settings'
 // Empty type imports carry the tools/sandboxPolicy/approval Context merges.
-import type {} from '@deepseek-ai/dsh-tools'
-import type {} from '@deepseek-ai/dsh-sandbox-policy'
-import type {} from '@deepseek-ai/dsh-user-approval'
-import type {} from '@deepseek-ai/dsh-permission-presets'
-import type {} from '@deepseek-ai/dsh-agent-presets'
-import type {} from '@deepseek-ai/dsh-commands'
-import type {} from '@deepseek-ai/dsh-system-prompt'
+import type {} from '@daoai/dao-tools'
+import type {} from '@daoai/dao-sandbox-policy'
+import type {} from '@daoai/dao-user-approval'
+import type {} from '@daoai/dao-permission-presets'
+import type {} from '@daoai/dao-agent-presets'
+import type {} from '@daoai/dao-commands'
+import type {} from '@daoai/dao-system-prompt'
 import { launchWebScaffold, type WebScaffold } from './scaffold.ts'
 
 const FILE_REFERENCE_PROMPT = fileURLToPath(new URL(
@@ -62,7 +62,7 @@ const EXPECTED_TOOLS = [
 ]
 
 /**
- * `glob` and `grep` come from `dsh-tool-fs-search`, which spawns the PACKAGED
+ * `glob` and `grep` come from `dao-tool-fs-search`, which spawns the PACKAGED
  * ripgrep binary (`@vscode/ripgrep`) through the subprocess seam, so the pair
  * is always present on every host — asserted as fixed members, not a host
  * dependency.

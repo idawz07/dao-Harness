@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-session-telemetry-otel",
-  "description": "OpenTelemetry backend for the DeepSeek Harness telemetry seam: hands captured session records to the OTel JS SDK's log pipeline",
+  "name": "@daoai/dao-session-telemetry-otel",
+  "description": "OpenTelemetry backend for the Dao telemetry seam: hands captured session records to the OTel JS SDK's log pipeline",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -38,33 +38,33 @@
     "@opentelemetry/otlp-exporter-base": "^0.220.0",
     "@opentelemetry/resources": "^2.9.0",
     "@opentelemetry/sdk-logs": "^0.220.0",
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-command-feedback": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-telemetry": "workspace:^",
-    "@deepseek-ai/dsh-anonymous-user-id": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-command-feedback": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-telemetry": "workspace:^",
+    "@daoai/dao-anonymous-user-id": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-logger-console": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-agent-spine-demo": "workspace:^",
-    "@deepseek-ai/dsh-app-boot": "workspace:^",
-    "@deepseek-ai/dsh-bash-local": "workspace:^",
-    "@deepseek-ai/dsh-command-feedback": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-loader-smoke": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-checkpoint-policy": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence-jsonl": "workspace:^",
-    "@deepseek-ai/dsh-session-telemetry": "workspace:^",
-    "@deepseek-ai/dsh-subprocess-local": "workspace:^",
-    "@deepseek-ai/dsh-anonymous-user-id": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/cordis-plugin-logger-console": "workspace:^",
+    "@daoai/cordis-plugin-loader": "workspace:^",
+    "@daoai/dao-agent-spine-demo": "workspace:^",
+    "@daoai/dao-app-boot": "workspace:^",
+    "@daoai/dao-bash-local": "workspace:^",
+    "@daoai/dao-command-feedback": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-loader-smoke": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-checkpoint-policy": "workspace:^",
+    "@daoai/dao-session-persistence-jsonl": "workspace:^",
+    "@daoai/dao-session-telemetry": "workspace:^",
+    "@daoai/dao-subprocess-local": "workspace:^",
+    "@daoai/dao-anonymous-user-id": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

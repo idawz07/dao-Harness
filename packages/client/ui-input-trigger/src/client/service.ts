@@ -5,11 +5,11 @@
  * {@link InputTriggerController}; the service only registers sources, resolves
  * controllers by session scope, and relays roster changes.
  */
-import { Service } from '@deepseek-ai/cordis'
-import type { Context } from '@deepseek-ai/cordis'
-import type { Context as ClientContext } from '@deepseek-ai/cordis'
-import type { ISessions } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import { Service } from '@daoai/cordis'
+import type { Context } from '@daoai/cordis'
+import type { Context as ClientContext } from '@daoai/cordis'
+import type { ISessions } from '@daoai/dao-api-session-controller/client'
+import type { SessionId } from '@daoai/dao-session/types'
 import type { InputTriggerSource } from '../types.ts'
 import { InputTriggerController } from './controller.ts'
 import type { InputTriggerServiceContract } from './contract.ts'

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { ConnectionHandle } from '@deepseek-ai/dsh-api-remotes/client'
+import type { ConnectionHandle } from '@daoai/dao-api-remotes/client'
 import {
   RemoteStreamCarrierError,
   RemoteStream,

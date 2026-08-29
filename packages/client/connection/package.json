@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-connection",
+  "name": "@daoai/dao-client-connection",
   "description": "Authenticated RPC transport, generation lifecycle, and browser fixture",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
@@ -29,7 +29,7 @@
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "dsh": {
+  "dao": {
     "client": {
       "inject": [],
       "platform": "web",
@@ -38,7 +38,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@daoai/schemastery": "workspace:^",
     "zod": "^4.4.3"
   },
   "files": [
@@ -48,31 +48,31 @@
     "lib/types/**/*.d.ts"
   ],
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-attachment": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-host-directory-picker": "workspace:^",
-    "@deepseek-ai/dsh-host-webserver": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-tool-todo": "workspace:^"
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-attachment": "workspace:^",
+    "@daoai/dao-commands": "workspace:^",
+    "@daoai/dao-credentials": "workspace:^",
+    "@daoai/dao-brand": "workspace:^",
+    "@daoai/dao-host-directory-picker": "workspace:^",
+    "@daoai/dao-host-webserver": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-settings": "workspace:^",
+    "@daoai/dao-tool-todo": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-attachment": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-host-directory-picker": "workspace:^",
-    "@deepseek-ai/dsh-host-webserver": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-tool-todo": "workspace:^"
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-attachment": "workspace:^",
+    "@daoai/dao-commands": "workspace:^",
+    "@daoai/dao-credentials": "workspace:^",
+    "@daoai/dao-brand": "workspace:^",
+    "@daoai/dao-host-directory-picker": "workspace:^",
+    "@daoai/dao-host-webserver": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-settings": "workspace:^",
+    "@daoai/dao-tool-todo": "workspace:^"
   }
 }

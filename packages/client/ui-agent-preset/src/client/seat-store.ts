@@ -10,10 +10,10 @@
  * deployment default again, matching the workspace picker beside it.
  */
 
-import type { ClientRemote } from '@deepseek-ai/dsh-api-remotes/client'
-import type { SessionSummary } from '@deepseek-ai/dsh-api-session-controller/client'
-import { createSnapshotStore, type SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type {} from '@deepseek-ai/dsh-agent-presets/types'
+import type { ClientRemote } from '@daoai/dao-api-remotes/client'
+import type { SessionSummary } from '@daoai/dao-api-session-controller/client'
+import { createSnapshotStore, type SnapshotStore } from '@daoai/dao-client-store'
+import type {} from '@daoai/dao-agent-presets/types'
 import { messageOf, presetOptions, readRoster } from './settings-store.ts'
 import type { AgentPresetOption } from './settings-store.ts'
 

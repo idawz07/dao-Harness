@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-ui-slots",
+  "name": "@daoai/dao-client-ui-slots",
   "description": "Slot registry pure core: SlotMap declaration merging, single register composition API, four-share props types, store-seat types, renderer install seam",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
@@ -27,10 +27,10 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@deepseek-ai/dsh-client-store": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
+    "@daoai/dao-client-store": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
     "@types/react": "~18.3.1",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/cordis": "workspace:^"
   },
   "files": [
     "lib/index.js",
@@ -38,7 +38,7 @@
     "lib/types/**/*.d.ts"
   ],
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

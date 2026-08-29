@@ -10,10 +10,10 @@ import * as React from 'react'
 import * as ReactJsxRuntime from 'react/jsx-runtime'
 import * as ReactDom from 'react-dom'
 import * as ReactDomClient from 'react-dom/client'
-import * as Cordis from '@deepseek-ai/cordis'
-import * as ClientStore from '@deepseek-ai/dsh-client-store'
-import * as UiSlots from '@deepseek-ai/dsh-client-ui-slots'
-import * as UiPrimitives from '@deepseek-ai/dsh-client-ui-primitives'
+import * as Cordis from '@daoai/cordis'
+import * as ClientStore from '@daoai/dao-client-store'
+import * as UiSlots from '@daoai/dao-client-ui-slots'
+import * as UiPrimitives from '@daoai/dao-client-ui-primitives'
 import type { PlatformModule } from './platform.ts'
 
 /**
@@ -29,9 +29,9 @@ export function getStaticModules(): Record<string, unknown> {
     'react/jsx-runtime': ReactJsxRuntime,
     'react-dom': ReactDom,
     'react-dom/client': ReactDomClient,
-    '@deepseek-ai/cordis': Cordis,
-    '@deepseek-ai/dsh-client-store': ClientStore,
-    '@deepseek-ai/dsh-client-ui-slots': UiSlots,
-    '@deepseek-ai/dsh-client-ui-primitives': UiPrimitives,
+    '@daoai/cordis': Cordis,
+    '@daoai/dao-client-store': ClientStore,
+    '@daoai/dao-client-ui-slots': UiSlots,
+    '@daoai/dao-client-ui-primitives': UiPrimitives,
   } satisfies Record<PlatformModule, unknown>
 }

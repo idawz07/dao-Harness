@@ -1,27 +1,27 @@
 import { describe, expect, it, vi } from 'vitest'
 import { PassThrough } from 'node:stream'
 import { resolve } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import SessionStore, { Session, SessionId } from '@deepseek-ai/dsh-session'
-import AgentRegistry, { Inbox, type Agent } from '@deepseek-ai/dsh-agent'
-import SandboxProvider from '@deepseek-ai/dsh-sandbox'
-import type { ConfinedArgv, SandboxPolicy } from '@deepseek-ai/dsh-sandbox'
-import SandboxPolicyService, { setSandboxMode } from '@deepseek-ai/dsh-sandbox-policy'
-import TerminalSessionService, { TerminalBackendCleanupError, TerminalSessionId } from '@deepseek-ai/dsh-terminal'
-import type { TerminalSendRequest, TerminalWaitReason } from '@deepseek-ai/dsh-terminal'
-import { BashTerminalBackend, PWSH_PROMPT_SETUP } from '@deepseek-ai/dsh-terminal-bash'
-import { ENCODING_PREAMBLE } from '@deepseek-ai/dsh-pwsh-local'
-import * as ptyLocal from '@deepseek-ai/dsh-terminal-bash'
-import type { ResolvedConfig } from '@deepseek-ai/dsh-terminal-bash/src/config.ts'
-import type { LocalPtySession } from '@deepseek-ai/dsh-terminal-bash/src/session.ts'
-import { SubprocessRuntime } from '@deepseek-ai/dsh-subprocess'
+import { Context } from '@daoai/cordis'
+import Loader from '@daoai/cordis-plugin-loader'
+import SessionStore, { Session, SessionId } from '@daoai/dao-session'
+import AgentRegistry, { Inbox, type Agent } from '@daoai/dao-agent'
+import SandboxProvider from '@daoai/dao-sandbox'
+import type { ConfinedArgv, SandboxPolicy } from '@daoai/dao-sandbox'
+import SandboxPolicyService, { setSandboxMode } from '@daoai/dao-sandbox-policy'
+import TerminalSessionService, { TerminalBackendCleanupError, TerminalSessionId } from '@daoai/dao-terminal'
+import type { TerminalSendRequest, TerminalWaitReason } from '@daoai/dao-terminal'
+import { BashTerminalBackend, PWSH_PROMPT_SETUP } from '@daoai/dao-terminal-bash'
+import { ENCODING_PREAMBLE } from '@daoai/dao-pwsh-local'
+import * as ptyLocal from '@daoai/dao-terminal-bash'
+import type { ResolvedConfig } from '@daoai/dao-terminal-bash/src/config.ts'
+import type { LocalPtySession } from '@daoai/dao-terminal-bash/src/session.ts'
+import { SubprocessRuntime } from '@daoai/dao-subprocess'
 import type {
   SubprocessHandle,
   SubprocessSpawnSpec,
   SubprocessTerminalHandle,
   SubprocessTerminalSpawnSpec,
-} from '@deepseek-ai/dsh-subprocess'
+} from '@daoai/dao-subprocess'
 
 class EmptySandbox extends SandboxProvider {
   confine(_argv: readonly string[], _policy: SandboxPolicy): ConfinedArgv {
@@ -210,9 +210,9 @@ describe('BashTerminalBackend startup rollback', () => {
       cwd: '/work',
       graceMs: 10,
       env: {
-        TERM: 'dumb', PAGER: 'cat', GIT_PAGER: 'cat', PS1: 'dsh> ', BASH_SILENCE_DEPRECATION_WARNING: '1',
-        PROMPT_COMMAND: 'printf "\\033]133;D;%s\\007" "$?"; PS1=\'dsh> \'',
-        DSH_SHELL: '1', DSH_SESSION_ID: 'agent', DSH_PTY_SESSION_ID: 'pty-1',
+        TERM: 'dumb', PAGER: 'cat', GIT_PAGER: 'cat', PS1: 'dao> ', BASH_SILENCE_DEPRECATION_WARNING: '1',
+        PROMPT_COMMAND: 'printf "\\033]133;D;%s\\007" "$?"; PS1=\'dao> \'',
+        DAO_SHELL: '1', DAO_SESSION_ID: 'agent', DAO_PTY_SESSION_ID: 'pty-1',
       },
     })
     expect(spawned?.env?.PTY_TEST_SECRET).toBeUndefined()
@@ -338,7 +338,7 @@ describe('BashTerminalBackend startup rollback', () => {
       async () => terminal,
     )
     const session = await backend.spawn(spec(agent(ctx)))
-    expect(session.motd).toBe('dsh> ')
+    expect(session.motd).toBe('dao> ')
     await session.close('test complete')
   })
 
@@ -354,7 +354,7 @@ describe('BashTerminalBackend startup rollback', () => {
         sent = request
         return {
           done: Promise.resolve({
-            viewport: 'setup-echo dsh> ', waitReason: 'stdin_read' as const,
+            viewport: 'setup-echo dao> ', waitReason: 'stdin_read' as const,
             sessionStatus: { kind: 'running' as const }, truncated: false,
           }),
           readOutput: () => ({ delta: '', truncated: false }),
@@ -371,9 +371,9 @@ describe('BashTerminalBackend startup rollback', () => {
     )
     expect(await backend.spawn(spec(agent(ctx)))).toBe(session)
     expect(sent).toMatchObject({ text: ENCODING_PREAMBLE + PWSH_PROMPT_SETUP, submit: true })
-    expect(session.motd).toBe('setup-echo dsh> ')
+    expect(session.motd).toBe('setup-echo dao> ')
     expect(spawned?.env).toMatchObject({
-      TERM: 'dumb', NO_COLOR: '1', DSH_SHELL: '1', DSH_SESSION_ID: 'agent', DSH_PTY_SESSION_ID: 'pty-1',
+      TERM: 'dumb', NO_COLOR: '1', DAO_SHELL: '1', DAO_SESSION_ID: 'agent', DAO_PTY_SESSION_ID: 'pty-1',
     })
     expect(spawned?.env?.PS1).toBeUndefined()
     expect(spawned?.env?.PROMPT_COMMAND).toBeUndefined()
@@ -391,7 +391,7 @@ describe('BashTerminalBackend startup rollback', () => {
         const second = sends.length > 1
         return {
           done: Promise.resolve({
-            viewport: second ? 'dsh> ' : "function prompt { 'dsh> ' }\n",
+            viewport: second ? 'dao> ' : "function prompt { 'dao> ' }\n",
             waitReason: second ? 'stdin_read' as const : 'inferred_idle' as const,
             sessionStatus: { kind: 'running' as const }, truncated: false,
           }),
@@ -410,7 +410,7 @@ describe('BashTerminalBackend startup rollback', () => {
     await backend.spawn(spec(agent(ctx)))
     expect(sends).toHaveLength(2)
     expect(sends[1]).toMatchObject({ text: '', submit: false })
-    expect(session.motd).toBe('dsh> ')
+    expect(session.motd).toBe('dao> ')
   })
 
   it('rejects a pwsh bootstrap whose shell exits or times out', async () => {
@@ -500,7 +500,7 @@ describe('BashTerminalBackend startup rollback', () => {
         sends.push(request)
         return {
           done: Promise.resolve({
-            viewport: 'dsh> ', waitReason: 'stdin_read' as const,
+            viewport: 'dao> ', waitReason: 'stdin_read' as const,
             sessionStatus: { kind: 'running' as const }, truncated: false,
           }),
           readOutput: () => ({ delta: '', truncated: false }),
@@ -517,7 +517,7 @@ describe('BashTerminalBackend startup rollback', () => {
     )
     const signal = new AbortController().signal
     const spawned = await backend.spawn({ ...spec(agent(ctx)), signal })
-    expect(spawned.motd).toBe('dsh> ')
+    expect(spawned.motd).toBe('dao> ')
     expect(sends).toHaveLength(1)
     expect(sends[0]?.signal).toBe(signal)
   })

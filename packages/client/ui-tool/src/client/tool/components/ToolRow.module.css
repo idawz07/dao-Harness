@@ -3,7 +3,7 @@
    The Settings font-size preference rides the body-published axis: the shared
    DisclosureRow chrome scales the row height and leading glyph by the body px
    delta; the title and the summary texts here read the secondary tier
-   (--dsh-content-font-size-secondary: one step under the body — setting −1 at
+   (--dao-content-font-size-secondary: one step under the body — setting −1 at
    ≤14, setting −2 above), matching think text. */
 
 .root {
@@ -33,11 +33,11 @@
     color-mix(in srgb, var(--dsw-alias-bg-base) 60%, transparent) 55%,
     transparent 100%
   );
-  animation: dsh-tool-row-sweep 2.6s ease-out infinite;
+  animation: dao-tool-row-sweep 2.6s ease-out infinite;
   pointer-events: none;
 }
 
-@keyframes dsh-tool-row-sweep {
+@keyframes dao-tool-row-sweep {
   0% { left: -300px; }
   90%, 100% { left: 100%; }
 }
@@ -84,8 +84,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: var(--dsh-content-font-size-secondary, 13px);
-  line-height: calc(24px + var(--dsh-content-font-delta, 0px));
+  font-size: var(--dao-content-font-size-secondary, 13px);
+  line-height: calc(24px + var(--dao-content-font-delta, 0px));
   color: var(--dsw-alias-label-tertiary);
 }
 
@@ -98,8 +98,8 @@
   flex: none;
   margin-left: 4px;
   white-space: nowrap;
-  font-size: var(--dsh-content-font-size-secondary, 13px);
-  line-height: calc(24px + var(--dsh-content-font-delta, 0px));
+  font-size: var(--dao-content-font-size-secondary, 13px);
+  line-height: calc(24px + var(--dao-content-font-delta, 0px));
   color: var(--dsw-alias-label-tertiary);
 }
 
@@ -116,8 +116,8 @@
   background: none;
   font: inherit;
   text-align: left;
-  font-size: var(--dsh-content-font-size-secondary, 13px);
-  line-height: calc(24px + var(--dsh-content-font-delta, 0px));
+  font-size: var(--dao-content-font-size-secondary, 13px);
+  line-height: calc(24px + var(--dao-content-font-delta, 0px));
   color: var(--dsw-alias-label-secondary);
   text-decoration: underline;
   text-decoration-color: var(--dsw-alias-label-quaternary);

@@ -3,13 +3,13 @@ description: "面向部署方与维护者的 SQLite 会话持久化说明，用�
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-session-persistence-sqlite
+# @daoai/dao-session-persistence-sqlite
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-session-persistence-sqlite` 是 `SessionPersistence` 服务的可选存储后端：它不按会话各留一个文件，而是把所有会话的持久事件日志统一保存在同一个 SQLite 数据库中。它与 JSONL 后端提供完全相同的逻辑 `SessionEvent` 流，因此选择它不会改变 agent loop、模型或回放的任何行为——打包、压缩与恢复都是存储内部细节。仅当单一可查询数据库适合你的部署时才选择它；任何已发布的组合都不会默认启用它。这是预发布提供方：它拒绝而非迁移不属于自己的数据库文件，而且其同步 Node SQLite 驱动会在读写时阻塞 JavaScript 线程。设置、容量评估与迁移指引在前；实现内部细节放在下方可折叠的开发者章节中。
+`dao-session-persistence-sqlite` 是 `SessionPersistence` 服务的可选存储后端：它不按会话各留一个文件，而是把所有会话的持久事件日志统一保存在同一个 SQLite 数据库中。它与 JSONL 后端提供完全相同的逻辑 `SessionEvent` 流，因此选择它不会改变 agent loop、模型或回放的任何行为——打包、压缩与恢复都是存储内部细节。仅当单一可查询数据库适合你的部署时才选择它；任何已发布的组合都不会默认启用它。这是预发布提供方：它拒绝而非迁移不属于自己的数据库文件，而且其同步 Node SQLite 驱动会在读写时阻塞 JavaScript 线程。设置、容量评估与迁移指引在前；实现内部细节放在下方可折叠的开发者章节中。
 
 ## 目录
 
@@ -42,8 +42,8 @@ kind: "package-reference"
 先加载会话服务，再用数据库路径挂载提供方。除非位置允许依赖进程工作目录（相对路径从该目录解析），否则请使用绝对路径。`:memory:` 可用于进程内数据库，其内容随进程消失。
 
 ```yaml
-- name: '@deepseek-ai/dsh-session'
-- name: '@deepseek-ai/dsh-session-persistence-sqlite'
+- name: '@daoai/dao-session'
+- name: '@daoai/dao-session-persistence-sqlite'
   config:
     path: /absolute/path/to/sessions.db
 ```
@@ -56,7 +56,7 @@ kind: "package-reference"
 | `preparedSessionCacheSize` | `5` | 为恢复复用而保留的冷会话准备结果数量 |
 | `writeBatchMaxDelayMs` | `200` | 实时事件的固定聚合窗口，单位为毫秒 |
 
-生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-session-persistence-sqlite)是每个受支持字段及其 JSDoc 的穷尽式真源。
+生成的[配置目录](../../../docs/config-catalog.zh.md#daoaidao-session-persistence-sqlite)是每个受支持字段及其 JSDoc 的穷尽式真源。
 
 ### 迁移现有 JSONL 会话
 
@@ -143,7 +143,7 @@ await ctx.sessionPersistence.append(id, events)
 
 - [会话持久化子系统](../../../docs/subsystems/persistence.zh.md)——后端无关的服务语义与提供方关系。
 - [会话包映射](../README.zh.md)——相邻的持久化、投影、标题与遥测包。
-- [生成配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-session-persistence-sqlite)——每个受支持配置字段及其源声明。
+- [生成配置目录](../../../docs/config-catalog.zh.md#daoaidao-session-persistence-sqlite)——每个受支持配置字段及其源声明。
 - [SQLite 物理分片行决策](../../../.agents/notes/implemented/architecture/2026-08-18-sqlite-physical-chunk-row-compression.zh.md)——打包布局背后的理由、备选方案与测量。
 - [持久化延迟与 page size 决策](../../../.agents/notes/implemented/architecture/2026-08-25-persistence-latency-and-page-size.zh.md)——501 会话基准与 schema-19 存储取舍。
 

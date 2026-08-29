@@ -2,7 +2,7 @@
  * Fresh-process ACP subagent client. Drives one child session and owns cancellation and
  * quiescent disposal.
  *
- * @module @deepseek-ai/dsh-subagent-acp/run
+ * @module @daoai/dao-subagent-acp/run
  */
 
 import { randomUUID } from 'node:crypto'
@@ -16,11 +16,11 @@ import {
   type StopReason,
   type ToolKind,
 } from '@agentclientprotocol/sdk'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import { AssistantOutputFold, settleRunResult, subprocessRunHandle } from '@deepseek-ai/dsh-subagent'
-import type { SubagentResult, SubagentRun, SubagentStartRequest, SubagentStopReason } from '@deepseek-ai/dsh-subagent'
-import type { SubprocessHandle, SubprocessOutcome, SubprocessSpawnSpec } from '@deepseek-ai/dsh-subprocess'
+import type { ContentBlock } from '@daoai/dao-llm'
+import { SessionId } from '@daoai/dao-session'
+import { AssistantOutputFold, settleRunResult, subprocessRunHandle } from '@daoai/dao-subagent'
+import type { SubagentResult, SubagentRun, SubagentStartRequest, SubagentStopReason } from '@daoai/dao-subagent'
+import type { SubprocessHandle, SubprocessOutcome, SubprocessSpawnSpec } from '@daoai/dao-subprocess'
 
 /** Fixed response to child permission requests: reject by default, or select the first allow option. */
 export type PermissionPolicy = 'allow' | 'reject'
@@ -44,8 +44,8 @@ export interface AcpRunSpec {
    * `DEEPSEEK_API_KEY`). Merged on top of the subprocess seam's scrubbed
    * parent env. A value here is forwarded even if its name matches the
    * credential-scrub pattern (an explicit opt-in for the child's own creds).
-   * Explicit `DSH_*` entries are deployment-owned facts for the child harness
-   * (e.g. `DSH_PERMISSION_MODE`); they simply merge after the scrub that
+   * Explicit `DAO_*` entries are deployment-owned facts for the child harness
+   * (e.g. `DAO_PERMISSION_MODE`); they simply merge after the scrub that
    * dropped their stale ambient namesakes.
    */
   env: Record<string, string>
@@ -338,7 +338,7 @@ export async function startAcpRun(request: SubagentStartRequest, spec: AcpRunSpe
   const id = SessionId(randomUUID())
 
   // Keep diagnostics on parent stderr ('inherit'); only ACP output contributes
-  // to the result. The seam's scrub drops ambient credentials and DSH_* names
+  // to the result. The seam's scrub drops ambient credentials and DAO_* names
   // while spec.env (the child's own key, its deployment facts) merges after it.
   let child: SubprocessHandle
   try {
@@ -407,7 +407,7 @@ export async function startAcpRun(request: SubagentStartRequest, spec: AcpRunSpe
   const flags = { cancelled: false }
   let latestPermission: AcpPermissionDecision | undefined
 
-  const clientApp = createAcpClientApp({ name: 'deepseek-harness-subagent-acp' })
+  const clientApp = createAcpClientApp({ name: 'dao-subagent-acp' })
     .onNotification(methods.client.session.update, ({ params }) => {
       const update = params.update
       if (update.sessionUpdate === 'agent_message_chunk') {

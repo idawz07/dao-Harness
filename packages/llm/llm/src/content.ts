@@ -1,8 +1,8 @@
-/** Content-block structure helpers. @module @deepseek-ai/dsh-llm/content */
+/** Content-block structure helpers. @module @daoai/dao-llm/content */
 
 import type { ContentBlock } from './types.ts'
 import type { Message } from './message.ts'
-import type { AttachmentStore, ImageAttachmentRef, ImageMediaType, RequestImageAttachment } from '@deepseek-ai/dsh-attachment'
+import type { AttachmentStore, ImageAttachmentRef, ImageMediaType, RequestImageAttachment } from '@daoai/dao-attachment'
 import { assertNever } from './never.ts'
 
 /** Execution-world path that model tools can use to read one normalized attachment. */

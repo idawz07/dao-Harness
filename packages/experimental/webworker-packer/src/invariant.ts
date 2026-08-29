@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-experimental-webworker-packer`.
- * @module @deepseek-ai/dsh-experimental-webworker-packer/invariant
+ * Package-owned invariant companion for `@daoai/dao-experimental-webworker-packer`.
+ * @module @daoai/dao-experimental-webworker-packer/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-experimental-webworker-packer'
+const PACKAGE_NAME = '@daoai/dao-experimental-webworker-packer'
 
 /** Cordis companion plugin name. */
 export const name = 'webworker-packer-invariant'

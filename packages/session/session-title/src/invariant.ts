@@ -1,14 +1,14 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-session-title`.
- * @module @deepseek-ai/dsh-session-title/invariant
+ * Package-owned invariant companion for `@daoai/dao-session-title`.
+ * @module @daoai/dao-session-title/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantFailure, InvariantInstaller } from '@deepseek-ai/dsh-invariants'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
+import type { Context } from '@daoai/cordis'
+import type { InvariantFailure, InvariantInstaller } from '@daoai/dao-invariants'
+import type { SessionEvent } from '@daoai/dao-session'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-session-title'
+const PACKAGE_NAME = '@daoai/dao-session-title'
 
 /** Cordis companion plugin name. */
 export const name = 'session-title-invariant'

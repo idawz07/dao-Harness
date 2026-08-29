@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-mcp-client`.
- * @module @deepseek-ai/dsh-mcp-client/invariant
+ * Package-owned invariant companion for `@daoai/dao-mcp-client`.
+ * @module @daoai/dao-mcp-client/invariant
  */
 
 /* jscpd:ignore-start */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-mcp-client'
+const PACKAGE_NAME = '@daoai/dao-mcp-client'
 
 /** Cordis companion plugin name. */
 export const name = 'mcp-client-invariant'

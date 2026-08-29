@@ -5,17 +5,17 @@ import { fileURLToPath } from 'node:url'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import type { AgentHandle } from '@deepseek-ai/dsh-agent'
-import { ToolCallId, createUserMessage, LlmAdapter } from '@deepseek-ai/dsh-llm'
-import type { GenerateOptions, StreamChunk } from '@deepseek-ai/dsh-llm'
-import { SessionId, type SessionEvent } from '@deepseek-ai/dsh-session'
+import type { AgentHandle } from '@daoai/dao-agent'
+import { ToolCallId, createUserMessage, LlmAdapter } from '@daoai/dao-llm'
+import type { GenerateOptions, StreamChunk } from '@daoai/dao-llm'
+import { SessionId, type SessionEvent } from '@daoai/dao-session'
 import {
   ScheduleId,
   createEveryScheduleRecord,
   foldScheduleEvents,
   resolveEveryOccurrence,
   type EveryScheduleRecord,
-} from '@deepseek-ai/dsh-schedule'
+} from '@daoai/dao-schedule'
 import {
   assertFixtureInventory,
   captureStableAria,
@@ -233,7 +233,7 @@ describe.skipIf(MODE === 'record')('web e2e: conversational reminders', () => {
       locale: 'en-US',
       timezoneId: AT_BROWSER_ZONE,
     })
-    await page.addInitScript(() => { localStorage.setItem('dsh.locale', 'en') })
+    await page.addInitScript(() => { localStorage.setItem('dao.locale', 'en') })
     tripwire = watchConsole(page)
     await page.goto(scaffold.authenticatedUrl, { waitUntil: 'load' })
     await page.waitForSelector('[class*="frame"]', { timeout: 30_000 })

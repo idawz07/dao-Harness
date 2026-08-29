@@ -4,11 +4,11 @@
  * participates in method lookup, invocation, or type exposure.
  */
 
-import { Service } from '@deepseek-ai/cordis'
-import type { Context } from '@deepseek-ai/cordis'
+import { Service } from '@daoai/cordis'
+import type { Context } from '@daoai/cordis'
 import type {
   ConnectionHandle,
-} from '@deepseek-ai/dsh-client-connection/client'
+} from '@daoai/dao-client-connection/client'
 import type {
   InvocationDescriptor,
   TypertClientEventListener,
@@ -18,7 +18,7 @@ import type {
   TypertDisposer,
   TypertRemoteContribution,
   TypertRemoteEvent,
-} from '@deepseek-ai/dsh-typert-protocol'
+} from '@daoai/dao-typert-protocol'
 import {
   RemoteStreamCarrierError,
   RemoteStreamError,
@@ -106,7 +106,7 @@ export interface ClientRemote extends TypertClientRemote {
   $stream<Item>(options: RemoteStreamOptions<Item>): RemoteStream<Item>
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@daoai/cordis' {
   interface Context {
     /** Generated Remote namespaces selected by the Client assembly. */
     remote: ClientRemote
@@ -702,7 +702,7 @@ function internalFailure(message: string): Extract<RemoteResult<never>, { readon
 }
 
 type MarkedConnectionStreamFailure = Error & {
-  readonly dshRemoteStreamFailure?:
+  readonly daoRemoteStreamFailure?:
     | { readonly kind: 'remote'; readonly code: string; readonly details: object }
     | { readonly kind: 'carrier' }
 }
@@ -713,7 +713,7 @@ async function *normalizeConnectionStream(source: AsyncIterable<unknown>): Async
     yield * source
   } catch (error) {
     if (!(error instanceof Error)) throw error
-    const marker = (error as MarkedConnectionStreamFailure).dshRemoteStreamFailure
+    const marker = (error as MarkedConnectionStreamFailure).daoRemoteStreamFailure
     if (marker?.kind === 'remote') {
       throw new RemoteStreamError(marker.code, error.message, marker.details)
     }

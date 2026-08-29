@@ -1,7 +1,7 @@
 import {
   type SessionEventLike, type SessionEventLikeEntry,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionEvent } from '@deepseek-ai/dsh-session/types'
+} from '@daoai/dao-api-session-controller/client'
+import type { SessionEvent } from '@daoai/dao-session/types'
 import type {
   ConversationLocation, ConversationLocationData,
   ConversationLocationDataStore, ConversationStepDataMap, ConversationTimelineSnapshot,

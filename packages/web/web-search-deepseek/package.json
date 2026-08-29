@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-web-search-deepseek",
-  "description": "DeepSeek-backed search provider (native web_search via the Anthropic-compatible API) for the DeepSeek Harness web capability seam (ctx.web)",
+  "name": "@daoai/dao-web-search-deepseek",
+  "description": "DeepSeek-backed search provider (native web_search via the Anthropic-compatible API) for the Dao web capability seam (ctx.web)",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,27 +32,27 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-launch-environment": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-web": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-credentials": "workspace:^",
+    "@daoai/dao-launch-environment": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-web": "workspace:^",
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-settings": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-credentials-local": "workspace:^",
-    "@deepseek-ai/dsh-launch-environment": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-web": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^"
+    "@daoai/dao-agent": "workspace:^",
+    "@daoai/dao-credentials": "workspace:^",
+    "@daoai/dao-credentials-local": "workspace:^",
+    "@daoai/dao-launch-environment": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-web": "workspace:^",
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-settings": "workspace:^"
   }
 }

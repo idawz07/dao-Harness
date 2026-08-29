@@ -7,7 +7,7 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import type { ClientRemote } from '@deepseek-ai/dsh-api-remotes/client'
+import type { ClientRemote } from '@daoai/dao-api-remotes/client'
 import { AgentPresetSectionController, draftBlocker } from '../src/client/section-store.ts'
 import type { CopyDraft, PresetRow } from '../src/client/section-store.ts'
 

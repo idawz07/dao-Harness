@@ -1,12 +1,12 @@
 /**
- * Package-owned invariant companion for `@deepseek-ai/dsh-host-frontend-static`.
- * @module @deepseek-ai/dsh-host-frontend-static/invariant
+ * Package-owned invariant companion for `@daoai/dao-host-frontend-static`.
+ * @module @daoai/dao-host-frontend-static/invariant
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@daoai/cordis'
+import type { InvariantInstaller } from '@daoai/dao-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-host-frontend-static'
+const PACKAGE_NAME = '@daoai/dao-host-frontend-static'
 
 /** Cordis companion plugin name. */
 export const name = 'host-frontend-static-invariant'

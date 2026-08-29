@@ -7,19 +7,19 @@ import { createHash } from 'node:crypto'
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import { normalizeSessionSnapshot, type NormalizeContext } from '@deepseek-ai/dsh-session-snapshot'
-import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@deepseek-ai/dsh-loader-smoke'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
+import { Context } from '@daoai/cordis'
+import { normalizeSessionSnapshot, type NormalizeContext } from '@daoai/dao-session-snapshot'
+import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@daoai/dao-loader-smoke'
+import { createUserMessage } from '@daoai/dao-llm'
 import SessionStore, {
   SESSION_FORMAT_VERSION,
   SessionId,
   type SessionEvent,
   type SessionHeader,
-} from '@deepseek-ai/dsh-session'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import { renderWorkspaceContext } from '@deepseek-ai/dsh-agent-instructions'
-import { resolveConfig, workspaceBaselineIdentity } from '@deepseek-ai/dsh-agent-instructions/src/config.ts'
+} from '@daoai/dao-session'
+import JsonlSessionPersistence from '@daoai/dao-session-persistence-jsonl'
+import { renderWorkspaceContext } from '@daoai/dao-agent-instructions'
+import { resolveConfig, workspaceBaselineIdentity } from '@daoai/dao-agent-instructions/src/config.ts'
 import { describe, expect, it } from 'vitest'
 
 const fixtureDir = join(dirname(fileURLToPath(import.meta.url)), 'expected/workspace-context-resume/offline-edit')
@@ -31,7 +31,7 @@ const configPath = fileURLToPath(new URL('../workspace-context-resume.cordis.sna
 const binScript = fileURLToPath(new URL('../../../../../../packages/test-support/loader-smoke/tests/fixtures/headless-driver.ts', import.meta.url))
 const tsconfigPath = fileURLToPath(new URL('../../../../../../tsconfig.json', import.meta.url))
 const sessionId = SessionId('workspace-context-resume')
-const refreshing = process.env.DSH_SNAPSHOT === 'refresh'
+const refreshing = process.env.DAO_SNAPSHOT === 'refresh'
 const oldInstruction = 'Old workspace instruction.'
 const newInstruction = 'New workspace instruction after offline edit.'
 
@@ -62,7 +62,7 @@ async function seedVisibleBaseline(
     content: file.content,
   })), { maxBytes: 65536 })
   const config = resolveConfig({
-    dshHome: join(cwd, '.dsh'),
+    daoHome: join(cwd, '.dao'),
     maxBytes: 65536,
     ...options.instructionFileCandidates === undefined
       ? {}
@@ -117,15 +117,15 @@ describe('agent-instructions resume snapshot', () => {
     let sessionPath = ''
     const result = await runLoaderSmoke({
       label: 'agent-instructions resume headless stream-json snapshot',
-      tempDirPrefix: 'dsh-workspace-context-resume-',
+      tempDirPrefix: 'dao-workspace-context-resume-',
       binScript,
       libBinScript: binScript,
       configPath,
       binArgs: [configPath, 'Acknowledge the current workspace instruction.'],
       tsconfigPath,
       env: {
-        DSH_SNAPSHOT_FILE: replayFixture,
-        DSH_SNAPSHOT_OVERRIDE: replayOverride,
+        DAO_SNAPSHOT_FILE: replayFixture,
+        DAO_SNAPSHOT_OVERRIDE: replayOverride,
       },
       prepare: async (runCwd) => {
         cwd = runCwd
@@ -174,15 +174,15 @@ describe('agent-instructions resume snapshot', () => {
     let sessionPath = ''
     const result = await runLoaderSmoke({
       label: 'agent-instructions precedence-change resume snapshot',
-      tempDirPrefix: 'dsh-workspace-context-precedence-',
+      tempDirPrefix: 'dao-workspace-context-precedence-',
       binScript,
       libBinScript: binScript,
       configPath,
       binArgs: [configPath, 'Acknowledge the current workspace instruction.'],
       tsconfigPath,
       env: {
-        DSH_SNAPSHOT_FILE: replayFixture,
-        DSH_SNAPSHOT_OVERRIDE: replayOverride,
+        DAO_SNAPSHOT_FILE: replayFixture,
+        DAO_SNAPSHOT_OVERRIDE: replayOverride,
       },
       prepare: async (runCwd) => {
         cwd = runCwd

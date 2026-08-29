@@ -5,11 +5,11 @@
  * outcomes into null (admitted) or a user-visible failure line; teardown
  * empties the seat (HMR safety).
  */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@daoai/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
+import { SlotRegistry } from '@daoai/dao-client-ui-renderer/client'
+import type { SessionId } from '@daoai/dao-session/types'
+import { LocaleRuntime } from '@daoai/dao-client-locale/client'
 import { PlanChip } from '../src/client/PlanModeControl.tsx'
 import type { PlanChipInjected } from '../src/client/index.ts'
 import { apply, inject } from '../src/client/index.ts'

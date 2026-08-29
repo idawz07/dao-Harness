@@ -1,16 +1,16 @@
-import { Context } from '@deepseek-ai/cordis'
-import InvariantRegistry from '@deepseek-ai/dsh-invariants'
+import { Context } from '@daoai/cordis'
+import InvariantRegistry from '@daoai/dao-invariants'
 import type {
   AgentContext,
   ISessions,
   SessionBinding,
   SessionListState,
   SessionSnapshot,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import { MutableSessionEventSource } from '@deepseek-ai/dsh-api-session-controller/client'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { HostObservable } from '@deepseek-ai/dsh-client-ui-slots'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+} from '@daoai/dao-api-session-controller/client'
+import { MutableSessionEventSource } from '@daoai/dao-api-session-controller/client'
+import { createSnapshotStore } from '@daoai/dao-client-store'
+import type { HostObservable } from '@daoai/dao-client-ui-slots'
+import type { SessionId } from '@daoai/dao-session/types'
 import { Fragment } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {

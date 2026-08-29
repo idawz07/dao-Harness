@@ -4,15 +4,15 @@
  * creation, flatten post-publication failures, and dispose to whole-tree
  * quiescence.
  *
- * @module @deepseek-ai/dsh-subagent-codex/run
+ * @module @daoai/dao-subagent-codex/run
  */
 
 import { randomUUID } from 'node:crypto'
 import { readFileSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import { SessionId } from '@deepseek-ai/dsh-session'
+import type { ContentBlock } from '@daoai/dao-llm'
+import { SessionId } from '@daoai/dao-session'
 import {
   settleRunResult,
   subprocessRunHandle,
@@ -20,12 +20,12 @@ import {
   type SubagentRun,
   type SubagentStartRequest,
   type SubagentStopReason,
-} from '@deepseek-ai/dsh-subagent'
+} from '@daoai/dao-subagent'
 import type {
   SubprocessHandle,
   SubprocessOutcome,
   SubprocessSpawnSpec,
-} from '@deepseek-ai/dsh-subprocess'
+} from '@daoai/dao-subprocess'
 import {
   CodexAppServerWire,
   type CodexWireFailureFacts,

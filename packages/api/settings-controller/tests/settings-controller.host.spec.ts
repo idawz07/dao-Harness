@@ -1,14 +1,14 @@
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
+import { Context } from '@daoai/cordis'
+import z from '@daoai/schemastery'
 import {
   InvalidPresetIdError,
   PresetExistsError,
   UnknownPresetError,
-} from '@deepseek-ai/dsh-agent-presets'
-import { settingsNamespace } from '@deepseek-ai/dsh-settings'
-import type { SettingsDescriptor, SettingsNamespace } from '@deepseek-ai/dsh-settings'
-import { TypertRemoteFailure, remoteMethods } from '@deepseek-ai/dsh-typert-protocol'
+} from '@daoai/dao-agent-presets'
+import { settingsNamespace } from '@daoai/dao-settings'
+import type { SettingsDescriptor, SettingsNamespace } from '@daoai/dao-settings'
+import { TypertRemoteFailure, remoteMethods } from '@daoai/dao-typert-protocol'
 import SettingsController from '../src/index.ts'
 import { MemorySettings } from '../../../settings/settings/tests/memory.ts'
 
@@ -106,7 +106,7 @@ describe('the settings Remote namespace a configuration page calls', () => {
       expect(failure).toBeInstanceOf(TypertRemoteFailure)
       expect((failure as TypertRemoteFailure).failure).toEqual({
         code: 'internal',
-        message: 'settings service is absent: this deployment does not mount a settings provider (e.g. @deepseek-ai/dsh-settings-file) in its composition',
+        message: 'settings service is absent: this deployment does not mount a settings provider (e.g. @daoai/dao-settings-file) in its composition',
         details: {},
       })
     }

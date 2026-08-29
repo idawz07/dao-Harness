@@ -14,17 +14,17 @@
  * tears its scope down immediately unless it is the staged one, whose scope
  * survives frozen (read-only view) until the stage moves on.
  */
-import type { Context, Fiber } from '@deepseek-ai/cordis'
-import type { SubagentAddress } from '@deepseek-ai/dsh-subagent/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { workspaceTitleOf } from '@deepseek-ai/dsh-util-workspace-path'
-import type { WorkspaceId } from '@deepseek-ai/dsh-workspace/types'
+import type { Context, Fiber } from '@daoai/cordis'
+import type { SubagentAddress } from '@daoai/dao-subagent/client'
+import type { SessionId } from '@daoai/dao-session/types'
+import { workspaceTitleOf } from '@daoai/dao-util-workspace-path'
+import type { WorkspaceId } from '@daoai/dao-workspace/types'
 import { SESSION_SEARCH_RESULT_LIMIT } from '../../types.ts'
 import type { SessionJob as JobView } from '../../types.ts'
-import type { SessionProjectionMap } from '@deepseek-ai/dsh-session-projection/types'
+import type { SessionProjectionMap } from '@daoai/dao-session-projection/types'
 import {
   createSnapshotStore, type SnapshotStore,
-} from '@deepseek-ai/dsh-client-store'
+} from '@daoai/dao-client-store'
 import type { ClientFailure, ClientResult } from '../contract/result.ts'
 import type { SessionEventSource } from '../contract/events.ts'
 import type { SessionFace } from '../contract/session.ts'
@@ -135,7 +135,7 @@ export interface SessionBinding {
 }
 
 // Scope primitives live in ../scope.ts (the client mirror of host
-// dsh-scope, keyed by Agent identity); re-exported here so existing
+// dao-scope, keyed by Agent identity); re-exported here so existing
 // consumers keep their import site.
 export { scopeOf } from '../scope.ts'
 
@@ -224,7 +224,7 @@ export class ClientSessions implements ISessions {
   ) {
     this.selection = createSnapshotStore<SessionSelection>(
       {},
-      { persist: { name: 'dsh.sessions.current' } })
+      { persist: { name: 'dao.sessions.current' } })
     const restored = this.selection.getSnapshot()
     this.manager = new SessionManager(
       remote,

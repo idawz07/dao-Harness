@@ -6,16 +6,16 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import { ToolCallId } from '@deepseek-ai/dsh-llm'
-import { Session, SessionId } from '@deepseek-ai/dsh-session'
-import AgentRegistry, { Inbox } from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import * as ToolTodo from '@deepseek-ai/dsh-tool-todo'
+import { Context } from '@daoai/cordis'
+import Loader from '@daoai/cordis-plugin-loader'
+import Include from '@daoai/cordis-plugin-include'
+import { ToolCallId } from '@daoai/dao-llm'
+import { Session, SessionId } from '@daoai/dao-session'
+import AgentRegistry, { Inbox } from '@daoai/dao-agent'
+import type { Agent } from '@daoai/dao-agent'
+import SystemPrompt from '@daoai/dao-system-prompt'
+import ToolRuntime from '@daoai/dao-tools'
+import * as ToolTodo from '@daoai/dao-tool-todo'
 
 let root: string | undefined
 let context: Context | undefined
@@ -52,13 +52,13 @@ function resultText(result: { content: { type: string; text?: string }[] }): str
  * @returns the booted context.
  */
 async function boot(configLines: readonly string[]): Promise<Context> {
-  root = await mkdtemp(join(tmpdir(), 'dsh-todo-loader-'))
+  root = await mkdtemp(join(tmpdir(), 'dao-todo-loader-'))
   const configPath = join(root, 'cordis.yml')
   await writeFile(configPath, [
-    "- name: '@deepseek-ai/dsh-agent'",
-    "- name: '@deepseek-ai/dsh-system-prompt'",
-    "- name: '@deepseek-ai/dsh-tools'",
-    "- name: '@deepseek-ai/dsh-tool-todo'",
+    "- name: '@daoai/dao-agent'",
+    "- name: '@daoai/dao-system-prompt'",
+    "- name: '@daoai/dao-tools'",
+    "- name: '@daoai/dao-tool-todo'",
     ...configLines.length > 0 ? ['  config:', ...configLines] : [],
     '',
   ].join('\n'))
@@ -69,10 +69,10 @@ async function boot(configLines: readonly string[]): Promise<Context> {
   await ctx.plugin(Loader)
   ctx.loader.builtins.include = Include
   const modules = new Map<string, unknown>([
-    ['@deepseek-ai/dsh-agent', AgentRegistry],
-    ['@deepseek-ai/dsh-system-prompt', SystemPrompt],
-    ['@deepseek-ai/dsh-tools', ToolRuntime],
-    ['@deepseek-ai/dsh-tool-todo', ToolTodo],
+    ['@daoai/dao-agent', AgentRegistry],
+    ['@daoai/dao-system-prompt', SystemPrompt],
+    ['@daoai/dao-tools', ToolRuntime],
+    ['@daoai/dao-tool-todo', ToolTodo],
   ])
   ctx.loader.internal = {
     version: 'v2',

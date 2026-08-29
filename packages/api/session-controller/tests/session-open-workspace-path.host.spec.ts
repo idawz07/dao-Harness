@@ -1,6 +1,6 @@
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import SessionStore from '@deepseek-ai/dsh-session'
+import { Context } from '@daoai/cordis'
+import AgentRegistry from '@daoai/dao-agent'
+import SessionStore from '@daoai/dao-session'
 import { describe, expect, it, vi } from 'vitest'
 import {
   createSessionTestController,

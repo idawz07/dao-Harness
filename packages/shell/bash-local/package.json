@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-bash-local",
-  "description": "Local-subprocess implementation of the DeepSeek Harness bash executor seam",
+  "name": "@daoai/dao-bash-local",
+  "description": "Local-subprocess implementation of the Dao bash executor seam",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,23 +32,23 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-shell": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-subprocess": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^"
+    "@daoai/dao-shell": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-subprocess": "workspace:^",
+    "@daoai/dao-timeout": "workspace:^",
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-settings": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@daoai/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-shell": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-subprocess": "workspace:^",
-    "@deepseek-ai/dsh-subprocess-local": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^"
+    "@daoai/dao-shell": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-subprocess": "workspace:^",
+    "@daoai/dao-subprocess-local": "workspace:^",
+    "@daoai/dao-timeout": "workspace:^",
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-settings": "workspace:^"
   }
 }

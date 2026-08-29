@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-win32-process",
-  "description": "Low-level Win32 process, stdio, and Job Object primitives for the DeepSeek Harness Windows sandbox",
+  "name": "@daoai/dao-win32-process",
+  "description": "Low-level Win32 process, stdio, and Job Object primitives for the Dao Windows sandbox",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -32,14 +32,14 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   },
   "dependencies": {
     "koffi": "^3.1.0"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/cordis": "workspace:^"
   }
 }

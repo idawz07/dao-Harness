@@ -7,7 +7,7 @@ export const SESSION_CONTROLLER_REMOTE_EVENTS = [
   'api-session/status',
 ] as const
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@daoai/dao-typert-protocol' {
   interface TypertRemoteEventSelection extends
     Record<typeof SESSION_CONTROLLER_REMOTE_EVENTS[number], true> {}
 }

@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import SessionStore, { Session, SessionId, type CreateSessionOptions, type SessionEvent } from '@deepseek-ai/dsh-session'
-import DeepSeekLlmApiExtensionRegistry from '@deepseek-ai/dsh-deepseek-llm-api-extensions'
+import { Context } from '@daoai/cordis'
+import SessionStore, { Session, SessionId, type CreateSessionOptions, type SessionEvent } from '@daoai/dao-session'
+import DeepSeekLlmApiExtensionRegistry from '@daoai/dao-deepseek-llm-api-extensions'
 import * as SessionLogDeepSeek from '../src/index.ts'
 
 const contexts: Context[] = []

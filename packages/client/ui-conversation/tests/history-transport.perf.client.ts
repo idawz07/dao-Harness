@@ -6,24 +6,24 @@ import { performance } from 'node:perf_hooks'
 import { brotliCompressSync, gzipSync } from 'node:zlib'
 import { expect, it } from 'vitest'
 import { z } from 'zod'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import { isChunkRow, packChunkRuns } from '@deepseek-ai/dsh-session/chunk-rows'
-import type { ChunkRow } from '@deepseek-ai/dsh-session/chunk-rows'
-import type { SessionEvent, SessionEventMap } from '@deepseek-ai/dsh-session/types'
+import { createUserMessage } from '@daoai/dao-llm'
+import { isChunkRow, packChunkRuns } from '@daoai/dao-session/chunk-rows'
+import type { ChunkRow } from '@daoai/dao-session/chunk-rows'
+import type { SessionEvent, SessionEventMap } from '@daoai/dao-session/types'
 import type {
   ChunkRowEvent,
   SessionEventEntry,
   SessionHistoryRecord,
   SessionWireEvent,
-} from '@deepseek-ai/dsh-api-session-controller/types'
-import { historyEntries } from '@deepseek-ai/dsh-api-session-controller/src/client/sessions/history-records.ts'
-import type { SessionEventLikeEntry } from '@deepseek-ai/dsh-api-session-controller/client'
-import { ConversationNodeAssembler } from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@daoai/dao-api-session-controller/types'
+import { historyEntries } from '@daoai/dao-api-session-controller/src/client/sessions/history-records.ts'
+import type { SessionEventLikeEntry } from '@daoai/dao-api-session-controller/client'
+import { ConversationNodeAssembler } from '@daoai/dao-client-ui-conversation/client'
 import type {
   ConversationNodeDefinition,
   ConversationViewDefinition,
   ConversationViewNode,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@daoai/dao-client-ui-conversation/client'
 
 const LOGICAL_EVENTS = 416_756
 const DELTA_EVENTS = 416_176
