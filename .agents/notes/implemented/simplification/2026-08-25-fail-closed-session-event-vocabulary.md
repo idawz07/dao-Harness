@@ -2,8 +2,6 @@
 
 Status: implemented
 
-English | [中文](2026-08-25-fail-closed-session-event-vocabulary.zh.md)
-
 ## Problem
 
 A session reader must not silently omit a durable event it does not understand. An unknown event can change later request reconstruction, policy state, recovery, or another plugin-owned projection, so successful JSON parsing is not enough to establish a faithful read. The reader before [issue #1901](https://github.com/deepseek-ai/deepseek-harness/issues/1901) passed unknown event types through while core folds ignored them, allowing a resumed session to lose semantics without a diagnostic.

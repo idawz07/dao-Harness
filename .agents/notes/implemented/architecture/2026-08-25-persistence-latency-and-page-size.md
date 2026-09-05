@@ -2,8 +2,6 @@
 
 Status: implemented
 
-English | [中文](2026-08-25-persistence-latency-and-page-size.zh.md)
-
 ## Problem
 
 The physical persistence optimizations need to reduce retained storage without moving disproportionate work into full writes, reads, or session forks. The original 105-session corpus showed that JSONL level-19 compression made full writes and forks more than twice as slow. The earlier SQLite page-size experiment predated shared-dictionary row compression and showed negligible savings, so it did not establish the best page size for the current row distribution.

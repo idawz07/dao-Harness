@@ -1,9 +1,9 @@
 ---
 name: dao-code-review
-description: Use when reviewing a pull request in the deepseek-harness repo — orients the reviewer to this codebase's standards (AGENTS.md conventions, defensive patterns, ADRs, quality gates) and the review-specific checks that code alone can't show
+description: Use when reviewing a pull request in the Dao repo — orients the reviewer to this codebase's standards (AGENTS.md conventions, defensive patterns, ADRs, quality gates) and the review-specific checks that code alone can't show
 ---
 
-# Reviewing a DeepSeek-Harness PR
+# Reviewing a Dao PR
 
 **This skill is guidance, not a complete checklist.** Verify and fetch the PR's live base and exact head, then run `pnpm --silent run change-scope --base <verified-base-ref> --head <verified-head-ref>` before reading the diff and enough surrounding code to understand the design. The report identifies paths and dirty layers but does not replace semantic review. Re-establish the base and rerun it after a retarget or merge. Prioritize correctness, lifecycle, security, and broken required behavior over style; a short review with one substantiated blocker is better than a list of nits.
 
@@ -15,7 +15,6 @@ description: Use when reviewing a pull request in the deepseek-harness repo — 
 - [dao-prose-standard](../dao-prose-standard/SKILL.md): required coverage and editorial judgment for comments, docs, prompts, and visible strings.
 - [docs/testing.md](../../../docs/testing.md) and the [quality-gates Agent Note](../../notes/implemented/process/2026-06-11-quality-gates.md): required test tiers and gates.
 - [Agent Notes](../../notes/README.md): design rationale. Treat disagreement with an Agent Note as a design discussion, not an automatic veto.
-- For bilingual changes, read [translation-rules.md](../../../docs/i18n/translation-rules.md) and [terminology.md](../../../docs/i18n/terminology.md); the extended translation skill is outside automatic review and runs only on explicit user invocation.
 
 ## Blocking requirements
 
@@ -25,7 +24,7 @@ description: Use when reviewing a pull request in the deepseek-harness repo — 
 4. **Registrations clean up.** Verify each new registry contribution passes the disposal tests required by [packages/AGENTS.md](../../../packages/AGENTS.md).
 5. **Invariant companions are semantic.** For every touched `./invariant`, require an owner event-stream or mutable-data relationship at the point where that package can observe it; service or method presence, plugin metadata or effects, and fixed pure examples belong in type, load, or unit tests. Accept an empty installer when its package-specific reason establishes that no plausible runtime relationship exists; do not demand an invented check merely to eliminate emptiness ([repository rule](../../../AGENTS.md#conventions); [package invariant rules](../../../packages/AGENTS.md)).
 6. **Required evidence exists.** Verify the author ran the [relevant local checks](../../../AGENTS.md#run-relevant-checks-locally) for the diff and that CI covers the exhaustive matrix; review the semantic gaps neither can detect.
-7. **Client UI copy is locale-owned.** Reject product text embedded in JSX, templates, helper returns, accessibility attributes, or primitive defaults. Require typed dictionary keys, the standard `t` seat or explicit localized props, `verify-client-ui-i18n`, and behavior evidence in each affected locale; preserve user/model/wire data and code tokens verbatim.
+7. **Client UI copy is dictionary-owned.** Reject product text embedded in JSX, templates, helper returns, accessibility attributes, or primitive defaults. Require typed dictionary keys and the standard `t` seat, `verify-client-ui-i18n`, and behavior evidence for the affected screens; preserve user/model/wire data and code tokens verbatim.
 
 ## Manual checks
 
@@ -43,7 +42,6 @@ description: Use when reviewing a pull request in the deepseek-harness repo — 
 - **Invariant lifecycle and negative controls:** verify candidate observations are rejected before publication where possible, session-backed checks reconstruct durable history after late loading or HMR, and a deliberately invalid case fails through the real runner for the intended rule.
 - **Implemented Agent Notes match shipped reality:** when a PR implements a proposed Agent Note, move and rewrite it as present-tense shipped state in the same diff, then verify paths, names, and mechanisms against the implementation.
 - **Transcript changes:** editor-visible or model-visible changes update snapshots or explain why no snapshot applies. Review expected-output diffs as behavior changes, not formatting noise.
-- **Bilingual changes:** compare meaning and terminology on both sides; a green pairing hash does not prove translation quality.
 
 ## Reporting findings
 

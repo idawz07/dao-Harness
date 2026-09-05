@@ -2,8 +2,6 @@
 
 Status: implemented
 
-English | [中文](2026-08-22-single-dao-application-launcher.zh.md)
-
 ## Problem
 
 Dao application processes need one owner for composition, plugin resolution, environment discovery, shutdown, and user customization. A dedicated app bin with a complete `cordis.yml` creates a second lifecycle beside profile launch: plugins installed into a profile do not reach it, behavior drifts from `dao-base`, and SDK callers learn arbitrary process argv instead of the product's composition model.

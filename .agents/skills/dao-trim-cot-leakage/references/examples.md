@@ -176,13 +176,13 @@ Replace the hedge with the actual bound and the failure behavior when it is exce
 
 Working-language fragments and session separators are transcription residue. The Figma frame name stays: external provenance that resolves outside the repo by design.
 
-### Authoring-language slip inside a paired fence
+### Authoring-language slip inside a pinned fence
 
-**Leaked in both files:** `// 更新这里 before returning` inside a verbatim code block.
+**Leaked:** `// 更新这里 before returning` in a comment pinned by a type-equivalence fence.
 
-**Fixed in both files:** `// Update this before returning.`
+**Fixed:** `// Update this before returning.` in the owning source, then re-paste the fence.
 
-Correct the block once and copy that byte-exact fence into both language files. Translating the code comment differently in the Chinese counterpart breaks the pairing contract even when both comments are individually fluent.
+Correct the source once and re-paste the byte-exact fence into the derivative page. Rewording the comment in only one copy breaks the byte-exact gate even when both copies are fluent.
 
 ## Behavior-visible candidates
 

@@ -2,8 +2,6 @@
 
 Status: implemented
 
-English | [中文](2026-07-31-even-out-shipped-tool-rosters.zh.md)
-
 ## Problem
 
 The two shipped `dao` surfaces offered different tools for no recorded reason. Session checkpoints, tool-result pruning, the goal tools, and Ralph were in `tui.cordis.yml`; `tool-todo` and, later, web search were in `web.cordis.yml`. Neither surface offered session search, a string-replacement editor, or a repeat-tool guard, though all three exist as packages and none is surface-specific.
@@ -30,7 +28,7 @@ Two capabilities stay out on the evidence their own packages record, and are lis
 
 `@daoai/dao-mcp-client` becomes a runtime dependency of the CLI without a row in any shipped config. The plugin mounts exactly one server per instance and `command` is required, so a default would have to name a third-party server and spawn it as a child process on every launch — outside `ctx.shell`, and therefore outside the sandbox policy the Web surface composes.
 
-The layer that would make MCP a default is the one this repository does not have yet: a bridge that reads a user's server list and mounts one client per entry, the same shape [`dao-hooks-claude-code`](../../../../packages/hooks/hooks-claude-code/README.md) already has for a Claude Code `hooks.json`. Shipping the dependency means an installed `dao` can mount servers from `$DAO_HOME/config.yaml`; the CLI README carries the YAML.
+The layer that would make MCP a default is the one this repository does not have yet: a bridge that reads a user's server list and mounts one client per entry, the same shape [`dao-hooks-codex`](../../../../packages/hooks/hooks-codex/README.md) already has for a Codex `hooks.json`. Shipping the dependency means an installed `dao` can mount servers from `$DAO_HOME/config.yaml`; the CLI README carries the YAML.
 
 ## Testing
 

@@ -2,8 +2,6 @@
 
 Status: implemented
 
-English | [中文](2026-08-27-inspector-development-mount.zh.md)
-
 ## Problem
 
 `@daoai/dao-experimental-inspector` is a private package no published dao installation carries, yet development launches need to mount it into the shipped Web composition on demand. A row in a shipped bundle patch cannot express this: `verify-cordis-config` requires every named row of a bundle patch to resolve from that bundle's own `dependencies` — disabled rows included — and a published manifest must not depend on an unpublished package.

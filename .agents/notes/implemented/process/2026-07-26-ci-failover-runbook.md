@@ -2,8 +2,6 @@
 
 Status: implemented
 
-English | [中文](2026-07-26-ci-failover-runbook.zh.md)
-
 ## Problem
 
 The three required Linux worker jobs in [CI](../../../../.github/workflows/ci.yml) (`node 24 / static`, `node 24 / coverage`, `node 24 / snapshots and artifacts`) run on the hosted enterprise 32-core pools; the required verdict job that aggregates them (`all checks passed`) runs on standard `ubuntu-latest`; the independent native Windows job (`windows node 24 / native complete`) runs on the hosted `dao-windows-2025-16core` larger runner. When the enterprise pools degrade — jobs queue indefinitely or the enterprise labels vanish — every open pull request becomes unmergeable, and the ordinary recovery of merging a fix is itself deadlocked behind the very required checks that cannot run. **Scope: two independent switches, one per platform.** `DAO_CI_FAILOVER_LINUX` recovers an enterprise Linux-pool outage (the three required Linux workers plus the `all checks passed` verdict); `DAO_CI_FAILOVER_WINDOWS` recovers a hosted Windows-pool outage (the native Windows job). A Linux-pool outage need not retarget the native Windows job and vice versa. The verdict's other required dependencies (`node-compat`, `python-sdk`, `windows`) stay on standard hosted runners by design (the portable boundary); in a broader GitHub-hosted capacity failure that also takes out the standard pools, those dependencies still block `all checks passed`. An outage therefore needs a switch any responder with repository write access can throw without merging anything.
@@ -41,7 +39,6 @@ The two switches are independent: flip only the one whose platform is degraded.
 ## Capacity during failover
 
 Six always-on instances absorb normal PR traffic (the pool's steady-state load is one serial standby job per master push, so failover capacity is effectively the full pool). If queues still build, register additional instances with an org registration token (org Settings → Actions → Runners → New runner). Clone an existing runner directory **excluding its identity files** — `rsync -a --exclude '.runner*' --exclude '.credentials*' --exclude '_diag' --exclude '_work' <src>/ <dst>/` (the globs also catch `.runner_migrated`/`.credentials_migrated`, which GitHub writes on migrated runners and which equally trigger the already-configured refusal) — then run `config.sh` (copying `.runner`/`.credentials` verbatim makes it refuse with "already configured"), and **start the listener**: `sudo ./svc.sh install ubuntu && sudo ./svc.sh start`. Registration alone leaves the runner offline; only a started service adds capacity. About a minute per instance.
-
 
 ### Switch back
 

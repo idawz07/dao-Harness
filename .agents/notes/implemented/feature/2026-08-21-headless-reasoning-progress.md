@@ -2,8 +2,6 @@
 
 Status: implemented
 
-English | [中文](2026-08-21-headless-reasoning-progress.zh.md)
-
 ## Problem
 
 The one-shot headless runner waits for complete Agent quiescence before printing the final assistant text. Reasoning-capable providers already expose their reasoning as durable `assistant/chunk` events, but a long reasoned response leaves the terminal silent until the run completes. The final answer must remain the only stdout payload so command substitution and other consumers keep a stable result channel.

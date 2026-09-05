@@ -2,8 +2,6 @@
 
 Status: implemented
 
-English | [中文](2026-08-29-local-llama-router-farm-default-route.zh.md)
-
 ## Problem
 
 The rebrand removes the official DeepSeek API layer from the product, and the key for that route cannot be shared into this repository. The repository's own live LLM traffic — real-model e2e, `demo:ptc`, the owner's interactive runs — needs a route that works without it, and the product's shipped default must point at something the owner actually runs. The resident alternative is the owner's self-hosted Qwen3.8 farm on tailscale: a llama.cpp router card plus four vLLM cards that load one GPU model at a time.
