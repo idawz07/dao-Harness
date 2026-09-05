@@ -41,7 +41,7 @@ describe('dao run with Agent Teams enabled', () => {
         },
       }, undefined, 2) + '\n')
       await writeFile(join(profileDir, 'cordis.patch.yml'), [
-        '- id: llm-deepseek',
+        '- id: llm-pi-ai',
         '  disabled: true',
         '- id: session-persistence-jsonl',
         '  config:',
@@ -60,7 +60,7 @@ describe('dao run with Agent Teams enabled', () => {
           DAO_HOME: home,
           DAO_AGENTS_HOME: join(cwd, '.agents'),
           DAO_TELEMETRY_DISABLED: '1',
-          DEEPSEEK_API_KEY: '',
+          LLAMA_ROUTER_API_KEY: '',
           NODE_OPTIONS: [
             process.env.NODE_OPTIONS,
             '--disable-warning=ExperimentalWarning',

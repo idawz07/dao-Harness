@@ -800,7 +800,7 @@ function stripYamlScalar(value: string): string {
 
 const APP_EXAMPLES = [
   {
-    id: 'dsh_base',
+    id: 'dao_base',
     rel: 'apps/cli/composition.md',
     title: 'DAO Base Composition',
     label: 'packages/bundle/base/cordis.patch.yml',

@@ -1,6 +1,6 @@
 {
   "name": "@daoai/dao-llm-pi-ai",
-  "description": "pi-ai-backed DeepSeek adapter for the Dao LLM seam (design-verification twin of dao-llm-deepseek)",
+  "description": "pi-ai-backed multi-provider adapter for users and maintainers routing the harness LLM service through pi-ai catalogs and hand-declared gateways",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -55,7 +55,6 @@
     "@daoai/dao-launch-environment": "workspace:^",
     "@daoai/dao-invariants": "workspace:^",
     "@daoai/dao-llm": "workspace:^",
-    "@daoai/dao-llm-deepseek": "workspace:^",
     "@daoai/dao-settings": "workspace:^",
     "@daoai/dao-timeout": "workspace:^",
     "@daoai/cordis": "workspace:^"

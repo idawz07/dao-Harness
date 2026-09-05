@@ -6,7 +6,7 @@
  * external network. The port is fixed because the fetched URL is recorded.
  */
 import { createServer } from 'node:http'
-import { HttpFetchProvider } from '@deepseek-ai/dsh-web-fetch-http'
+import { HttpFetchProvider } from '@daoai/dao-web-fetch-http'
 
 /** Fixed loopback port the scenario prompt points `web_fetch` at. */
 const PORT = 43117

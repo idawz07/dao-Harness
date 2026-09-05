@@ -35,10 +35,10 @@ import {
   type NormalizeContext,
   type SnapshotManifest,
   type WorkspaceSnapshotEntry,
-} from '@deepseek-ai/dsh-session-snapshot'
-import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@deepseek-ai/dsh-loader-smoke'
-import { resolvePwshPath } from '@deepseek-ai/dsh-pwsh-local'
-import { parseSessionLog } from '@deepseek-ai/dsh-llm-replay'
+} from '@daoai/dao-session-snapshot'
+import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@daoai/dao-loader-smoke'
+import { resolvePwshPath } from '@daoai/dao-pwsh-local'
+import { parseSessionLog } from '@daoai/dao-llm-replay'
 
 const repoRoot = fileURLToPath(new URL('../../', import.meta.url))
 const snapshotsRoot = fileURLToPath(new URL('./', import.meta.url))

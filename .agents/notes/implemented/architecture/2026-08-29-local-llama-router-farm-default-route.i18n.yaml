@@ -1,0 +1,6 @@
+# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
+# side as of the last confirmed-consistent state. Both languages carry equal authority;
+# after editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write .agents/notes/implemented/architecture/2026-08-29-local-llama-router-farm-default-route.md
+2026-08-29-local-llama-router-farm-default-route.md: 8d062a4e76e7104d9df9379fd49a6310722a52df
+2026-08-29-local-llama-router-farm-default-route.zh.md: 823f349e1c8a1f6a5ca03dc5069bdca86dcdfce9

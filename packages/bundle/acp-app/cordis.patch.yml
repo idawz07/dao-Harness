@@ -16,5 +16,6 @@
       name: '@daoai/dao-acp'
       inject: [acpAppStartup]
       config:
-        provider: deepseek-official
-        model: deepseek-v4-flash
+        # Shipped default: the resident llama-router card's main preset.
+        provider: llama-router
+        model: Qwen3.8-27B-Q6_K_XL-128K

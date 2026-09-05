@@ -7,9 +7,9 @@ import { runLoaderSmoke } from '@daoai/dao-loader-smoke'
 const binScript = fileURLToPath(new URL('../../../../../../packages/test-support/loader-smoke/tests/fixtures/headless-driver.ts', import.meta.url))
 const configPath = fileURLToPath(new URL('../cordis.yml', import.meta.url))
 const tsconfigPath = fileURLToPath(new URL('../../../../../../tsconfig.json', import.meta.url))
-const hasKey = Boolean(process.env.DEEPSEEK_API_KEY)
+const farmReachable = Boolean(process.env.DAO_FARM_REACHABLE)
 
-describe.skipIf(!hasKey)('headless-agent with real model', () => {
+describe.skipIf(!farmReachable)('headless-agent with real model', () => {
   it('modifies a temporary workspace and verifies the file outside the agent', async () => {
     let verified = ''
     const { stdout } = await runLoaderSmoke({

@@ -88,7 +88,6 @@ async function runHeadlessPtySmoke(): Promise<string> {
       env: {
         DAO_HOME: home,
         DAO_AGENTS_HOME: join(cwd, '.agents'),
-        DEEPSEEK_API_KEY: 'keyless-shutdown-no-call',
         DAO_TELEMETRY_DISABLED: '1',
         DAO_TEST_SHUTDOWN_ARM_FILE: join(cwd, 'shutdown-armed'),
       },

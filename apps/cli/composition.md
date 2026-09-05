@@ -8,178 +8,186 @@ The dao-base bundle patch shared by the web, headless, sdk, and acp profiles; th
 ```mermaid
 flowchart LR
   cfg["packages/bundle/base/cordis.patch.yml<br/>cordis.yml"]
-  plugin_dsh_base_timer["timer<br/>@daoai/cordis-plugin-timer"]
-  cfg --> plugin_dsh_base_timer
-  plugin_dsh_base_hmr["hmr<br/>@daoai/cordis-plugin-hmr"]
-  cfg --> plugin_dsh_base_hmr
-  plugin_dsh_base_llm["llm<br/>@daoai/dao-llm"]
-  cfg --> plugin_dsh_base_llm
-  plugin_dsh_base_deepseek_llm_api_extensions["deepseek-llm-api-extensions<br/>@daoai/dao-deepseek-llm-api-extensions"]
-  cfg --> plugin_dsh_base_deepseek_llm_api_extensions
-  plugin_dsh_base_session["session<br/>@daoai/dao-session"]
-  cfg --> plugin_dsh_base_session
-  plugin_dsh_base_session_log_deepseek["session-log-deepseek<br/>@daoai/dao-session-log-deepseek"]
-  cfg --> plugin_dsh_base_session_log_deepseek
-  plugin_dsh_base_typert["typert<br/>@daoai/dao-typert-registry"]
-  cfg --> plugin_dsh_base_typert
-  plugin_dsh_base_typert_loader["typert-loader<br/>@daoai/dao-typert-loader"]
-  cfg --> plugin_dsh_base_typert_loader
-  plugin_dsh_base_typert_gateway["typert-gateway<br/>@daoai/dao-api-gateway"]
-  cfg --> plugin_dsh_base_typert_gateway
-  plugin_dsh_base_session_title["session-title<br/>@daoai/dao-session-title"]
-  cfg --> plugin_dsh_base_session_title
-  plugin_dsh_base_session_title_llm["session-title-llm<br/>@daoai/dao-session-title-first-prompt-llm"]
-  cfg --> plugin_dsh_base_session_title_llm
-  plugin_dsh_base_user_questions["user-questions<br/>@daoai/dao-user-questions"]
-  cfg --> plugin_dsh_base_user_questions
-  plugin_dsh_base_agent["agent<br/>@daoai/dao-agent"]
-  cfg --> plugin_dsh_base_agent
-  plugin_dsh_base_plugin_package_inventory_deepseek["plugin-package-inventory-deepseek<br/>@daoai/dao-plugin-package-inventory-deepseek"]
-  cfg --> plugin_dsh_base_plugin_package_inventory_deepseek
-  plugin_dsh_base_agent_default_model["agent-default-model<br/>@daoai/dao-agent-default-model"]
-  cfg --> plugin_dsh_base_agent_default_model
-  plugin_dsh_base_jobs["jobs<br/>@daoai/dao-jobs-local"]
-  cfg --> plugin_dsh_base_jobs
-  plugin_dsh_base_llm_retry["llm-retry<br/>@daoai/dao-llm-retry"]
-  cfg --> plugin_dsh_base_llm_retry
-  plugin_dsh_base_settings["settings<br/>@daoai/dao-settings-file"]
-  cfg --> plugin_dsh_base_settings
-  plugin_dsh_base_credentials["credentials<br/>@daoai/dao-credentials-local"]
-  cfg --> plugin_dsh_base_credentials
-  plugin_dsh_base_llm_pi_ai["llm-pi-ai<br/>@daoai/dao-llm-pi-ai"]
-  cfg --> plugin_dsh_base_llm_pi_ai
-  plugin_dsh_base_session_persistence_jsonl["session-persistence-jsonl<br/>@daoai/dao-session-persistence-jsonl"]
-  cfg --> plugin_dsh_base_session_persistence_jsonl
-  plugin_dsh_base_attachment_local["attachment-local<br/>@daoai/dao-attachment-local"]
-  cfg --> plugin_dsh_base_attachment_local
-  plugin_dsh_base_session_query_sqlite["session-query-sqlite<br/>@daoai/dao-session-query-sqlite"]
-  cfg --> plugin_dsh_base_session_query_sqlite
-  plugin_dsh_base_session_projection["session-projection<br/>@daoai/dao-session-projection"]
-  cfg --> plugin_dsh_base_session_projection
-  plugin_dsh_base_storage["storage<br/>@daoai/dao-storage"]
-  cfg --> plugin_dsh_base_storage
-  plugin_dsh_base_storage_json["storage-json<br/>@daoai/dao-storage-json"]
-  cfg --> plugin_dsh_base_storage_json
-  plugin_dsh_base_storage_domain["storage-domain<br/>@daoai/dao-storage-domain"]
-  cfg --> plugin_dsh_base_storage_domain
-  plugin_dsh_base_session_projection_cache["session-projection-cache<br/>@daoai/dao-session-projection-cache"]
-  cfg --> plugin_dsh_base_session_projection_cache
-  plugin_dsh_base_session_telemetry_otel["session-telemetry-otel<br/>@daoai/dao-session-telemetry-otel"]
-  cfg --> plugin_dsh_base_session_telemetry_otel
-  plugin_dsh_base_subprocess["subprocess<br/>@daoai/dao-subprocess-local"]
-  cfg --> plugin_dsh_base_subprocess
-  plugin_dsh_base_sandbox["sandbox<br/>@daoai/dao-sandbox-local"]
-  cfg --> plugin_dsh_base_sandbox
-  plugin_dsh_base_sandbox_policy["sandbox-policy<br/>@daoai/dao-sandbox-policy"]
-  cfg --> plugin_dsh_base_sandbox_policy
-  plugin_dsh_base_bash_sandbox["bash-sandbox<br/>@daoai/dao-bash-sandbox"]
-  cfg --> plugin_dsh_base_bash_sandbox
-  plugin_dsh_base_pwsh_sandbox["pwsh-sandbox<br/>@daoai/dao-pwsh-sandbox"]
-  cfg --> plugin_dsh_base_pwsh_sandbox
-  plugin_dsh_base_approval["approval<br/>@daoai/dao-user-approval"]
-  cfg --> plugin_dsh_base_approval
-  plugin_dsh_base_permission["permission<br/>@daoai/dao-permission-presets"]
-  cfg --> plugin_dsh_base_permission
-  plugin_dsh_base_shell_env["shell-env<br/>@daoai/dao-shell-env"]
-  cfg --> plugin_dsh_base_shell_env
-  plugin_dsh_base_tool_bash["tool-bash<br/>@daoai/dao-tool-bash"]
-  cfg --> plugin_dsh_base_tool_bash
-  plugin_dsh_base_tool_pwsh["tool-pwsh<br/>@daoai/dao-tool-pwsh"]
-  cfg --> plugin_dsh_base_tool_pwsh
-  plugin_dsh_base_tool_jobs["tool-jobs<br/>@daoai/dao-tool-jobs"]
-  cfg --> plugin_dsh_base_tool_jobs
-  plugin_dsh_base_fs_observation_policy["fs-observation-policy<br/>@daoai/dao-fs-observation-policy"]
-  cfg --> plugin_dsh_base_fs_observation_policy
-  plugin_dsh_base_tool_fs["tool-fs<br/>@daoai/dao-tool-fs"]
-  cfg --> plugin_dsh_base_tool_fs
-  plugin_dsh_base_tool_fs_search["tool-fs-search<br/>@daoai/dao-tool-fs-search"]
-  cfg --> plugin_dsh_base_tool_fs_search
-  plugin_dsh_base_agent_instructions["agent-instructions<br/>@daoai/dao-agent-instructions"]
-  cfg --> plugin_dsh_base_agent_instructions
-  plugin_dsh_base_skill["skill<br/>@daoai/dao-skill"]
-  cfg --> plugin_dsh_base_skill
-  plugin_dsh_base_skill_filesystem["skill-filesystem<br/>@daoai/dao-skill-filesystem"]
-  cfg --> plugin_dsh_base_skill_filesystem
-  plugin_dsh_base_skill_badge["skill-badge<br/>@daoai/dao-skill-badge"]
-  cfg --> plugin_dsh_base_skill_badge
-  plugin_dsh_base_tool_skill["tool-skill<br/>@daoai/dao-tool-skill"]
-  cfg --> plugin_dsh_base_tool_skill
-  plugin_dsh_base_commands["commands<br/>@daoai/dao-commands"]
-  cfg --> plugin_dsh_base_commands
-  plugin_dsh_base_command_feedback["command-feedback<br/>@daoai/dao-command-feedback"]
-  cfg --> plugin_dsh_base_command_feedback
-  plugin_dsh_base_goal["goal<br/>@daoai/dao-goal"]
-  cfg --> plugin_dsh_base_goal
-  plugin_dsh_base_goal_round_driver["goal-round-driver<br/>@daoai/dao-goal-round-driver"]
-  cfg --> plugin_dsh_base_goal_round_driver
-  plugin_dsh_base_command_goal["command-goal<br/>@daoai/dao-command-goal"]
-  cfg --> plugin_dsh_base_command_goal
-  plugin_dsh_base_plan_mode["plan-mode<br/>@daoai/dao-plan-mode"]
-  cfg --> plugin_dsh_base_plan_mode
-  plugin_dsh_base_token_meter["token-meter<br/>@daoai/dao-token-meter"]
-  cfg --> plugin_dsh_base_token_meter
-  plugin_dsh_base_compaction_basic["compaction-basic<br/>@daoai/dao-compaction-basic"]
-  cfg --> plugin_dsh_base_compaction_basic
-  plugin_dsh_base_command_compact["command-compact<br/>@daoai/dao-command-compact"]
-  cfg --> plugin_dsh_base_command_compact
-  plugin_dsh_base_subagent["subagent<br/>@daoai/dao-subagent"]
-  cfg --> plugin_dsh_base_subagent
-  plugin_dsh_base_subagent_spawn_in_process["subagent-spawn-in-process<br/>@daoai/dao-subagent-spawn-in-process"]
-  cfg --> plugin_dsh_base_subagent_spawn_in_process
-  plugin_dsh_base_subagent_fork_in_process["subagent-fork-in-process<br/>@daoai/dao-subagent-fork-in-process"]
-  cfg --> plugin_dsh_base_subagent_fork_in_process
-  plugin_dsh_base_tool_subagent_control["tool-subagent-control<br/>@daoai/dao-tool-subagent-control"]
-  cfg --> plugin_dsh_base_tool_subagent_control
-  plugin_dsh_base_tool_subagent_list_agents["tool-subagent-list-agents<br/>@daoai/dao-tool-subagent-control/list-agents"]
-  cfg --> plugin_dsh_base_tool_subagent_list_agents
-  plugin_dsh_base_tool_subagent["tool-subagent<br/>@daoai/dao-tool-subagent"]
-  cfg --> plugin_dsh_base_tool_subagent
-  plugin_dsh_base_tool_subagent_fork["tool-subagent-fork<br/>@daoai/dao-tool-subagent"]
-  cfg --> plugin_dsh_base_tool_subagent_fork
-  plugin_dsh_base_tool_subagent_report["tool-subagent-report<br/>@daoai/dao-tool-subagent-report"]
-  cfg --> plugin_dsh_base_tool_subagent_report
-  plugin_dsh_base_workflow_worker_thread["workflow-worker-thread<br/>@daoai/dao-workflow-worker-thread"]
-  cfg --> plugin_dsh_base_workflow_worker_thread
-  plugin_dsh_base_tool_workflow["tool-workflow<br/>@daoai/dao-tool-workflow"]
-  cfg --> plugin_dsh_base_tool_workflow
-  plugin_dsh_base_timeout_policy["timeout-policy<br/>@daoai/dao-tool-call-timeout-policy"]
-  cfg --> plugin_dsh_base_timeout_policy
-  plugin_dsh_base_spill_local["spill-local<br/>@daoai/dao-spill-local"]
-  cfg --> plugin_dsh_base_spill_local
-  plugin_dsh_base_spill_policy["spill-policy<br/>@daoai/dao-spill-policy"]
-  cfg --> plugin_dsh_base_spill_policy
-  plugin_dsh_base_session_checkpoint_policy["session-checkpoint-policy<br/>@daoai/dao-session-checkpoint-policy"]
-  cfg --> plugin_dsh_base_session_checkpoint_policy
-  plugin_dsh_base_tool_result_pruner["tool-result-pruner<br/>@daoai/dao-compaction-tool-result-pruner"]
-  cfg --> plugin_dsh_base_tool_result_pruner
-  plugin_dsh_base_tool_todo["tool-todo<br/>@daoai/dao-tool-todo"]
-  cfg --> plugin_dsh_base_tool_todo
-  plugin_dsh_base_tool_goal["tool-goal<br/>@daoai/dao-tool-goal"]
-  cfg --> plugin_dsh_base_tool_goal
-  plugin_dsh_base_tool_ralph["tool-ralph<br/>@daoai/dao-tool-ralph"]
-  cfg --> plugin_dsh_base_tool_ralph
-  plugin_dsh_base_tool_str_replace_editor["tool-str-replace-editor<br/>@daoai/dao-tool-str-replace-editor"]
-  cfg --> plugin_dsh_base_tool_str_replace_editor
-  plugin_dsh_base_repeat_tool_reminder["repeat-tool-reminder<br/>@daoai/dao-repeat-tool-reminder"]
-  cfg --> plugin_dsh_base_repeat_tool_reminder
-  plugin_dsh_base_web["web<br/>@daoai/dao-web"]
-  cfg --> plugin_dsh_base_web
-  plugin_dsh_base_web_search_deepseek["web-search-deepseek<br/>@daoai/dao-web-search-deepseek"]
-  cfg --> plugin_dsh_base_web_search_deepseek
-  plugin_dsh_base_web_fetch_http["web-fetch-http<br/>@daoai/dao-web-fetch-http"]
-  cfg --> plugin_dsh_base_web_fetch_http
-  plugin_dsh_base_tool_web["tool-web<br/>@daoai/dao-tool-web"]
-  cfg --> plugin_dsh_base_tool_web
-  plugin_dsh_base_tools["tools<br/>@daoai/dao-tools"]
-  cfg --> plugin_dsh_base_tools
-  plugin_dsh_base_system_prompt["system-prompt<br/>@daoai/dao-system-prompt"]
-  cfg --> plugin_dsh_base_system_prompt
-  plugin_dsh_base_agent_loop["agent-loop<br/>@daoai/dao-agent-loop"]
-  cfg --> plugin_dsh_base_agent_loop
-  plugin_dsh_base_fs_sandbox["fs-sandbox<br/>@daoai/dao-fs-sandbox"]
-  cfg --> plugin_dsh_base_fs_sandbox
-  plugin_dsh_base_llm_deepseek["llm-deepseek<br/>@daoai/dao-llm-deepseek"]
-  cfg --> plugin_dsh_base_llm_deepseek
+  plugin_dao_base_timer["timer<br/>@daoai/cordis-plugin-timer"]
+  cfg --> plugin_dao_base_timer
+  plugin_dao_base_hmr["hmr<br/>@daoai/cordis-plugin-hmr"]
+  cfg --> plugin_dao_base_hmr
+  plugin_dao_base_llm["llm<br/>@daoai/dao-llm"]
+  cfg --> plugin_dao_base_llm
+  plugin_dao_base_deepseek_llm_api_extensions["deepseek-llm-api-extensions<br/>@daoai/dao-deepseek-llm-api-extensions"]
+  cfg --> plugin_dao_base_deepseek_llm_api_extensions
+  plugin_dao_base_session["session<br/>@daoai/dao-session"]
+  cfg --> plugin_dao_base_session
+  plugin_dao_base_session_log_deepseek["session-log-deepseek<br/>@daoai/dao-session-log-deepseek"]
+  cfg --> plugin_dao_base_session_log_deepseek
+  plugin_dao_base_typert["typert<br/>@daoai/dao-typert-registry"]
+  cfg --> plugin_dao_base_typert
+  plugin_dao_base_typert_loader["typert-loader<br/>@daoai/dao-typert-loader"]
+  cfg --> plugin_dao_base_typert_loader
+  plugin_dao_base_typert_gateway["typert-gateway<br/>@daoai/dao-api-gateway"]
+  cfg --> plugin_dao_base_typert_gateway
+  plugin_dao_base_session_title["session-title<br/>@daoai/dao-session-title"]
+  cfg --> plugin_dao_base_session_title
+  plugin_dao_base_session_title_llm["session-title-llm<br/>@daoai/dao-session-title-first-prompt-llm"]
+  cfg --> plugin_dao_base_session_title_llm
+  plugin_dao_base_user_questions["user-questions<br/>@daoai/dao-user-questions"]
+  cfg --> plugin_dao_base_user_questions
+  plugin_dao_base_agent["agent<br/>@daoai/dao-agent"]
+  cfg --> plugin_dao_base_agent
+  plugin_dao_base_plugin_package_inventory_deepseek["plugin-package-inventory-deepseek<br/>@daoai/dao-plugin-package-inventory-deepseek"]
+  cfg --> plugin_dao_base_plugin_package_inventory_deepseek
+  plugin_dao_base_agent_default_model["agent-default-model<br/>@daoai/dao-agent-default-model"]
+  cfg --> plugin_dao_base_agent_default_model
+  plugin_dao_base_jobs["jobs<br/>@daoai/dao-jobs-local"]
+  cfg --> plugin_dao_base_jobs
+  plugin_dao_base_llm_retry["llm-retry<br/>@daoai/dao-llm-retry"]
+  cfg --> plugin_dao_base_llm_retry
+  plugin_dao_base_settings["settings<br/>@daoai/dao-settings-file"]
+  cfg --> plugin_dao_base_settings
+  plugin_dao_base_credentials["credentials<br/>@daoai/dao-credentials-local"]
+  cfg --> plugin_dao_base_credentials
+  plugin_dao_base_llm_pi_ai["llm-pi-ai<br/>@daoai/dao-llm-pi-ai"]
+  cfg --> plugin_dao_base_llm_pi_ai
+  plugin_dao_base_qwen38_quasar_nvfp4["qwen38-quasar-nvfp4<br/>Qwen3.8-27B QUASAR-QAT NVFP4 262K"]
+  cfg --> plugin_dao_base_qwen38_quasar_nvfp4
+  plugin_dao_base_qwen38_cyanwiki_awq_g32["qwen38-cyanwiki-awq-g32<br/>Qwen3.8-27B Cyanwiki AWQ 192K (G32 W4A16, MTP-2)"]
+  cfg --> plugin_dao_base_qwen38_cyanwiki_awq_g32
+  plugin_dao_base_qwen38_unsloth_nvfp4["qwen38-unsloth-nvfp4<br/>Qwen3.8-27B Unsloth NVFP4 Dynamic V3 131K"]
+  cfg --> plugin_dao_base_qwen38_unsloth_nvfp4
+  plugin_dao_base_qwen38_ninfer_nvfp4full["qwen38-ninfer-nvfp4full<br/>Qwen3.8-27B NInfer NVFP4 Full 262K"]
+  cfg --> plugin_dao_base_qwen38_ninfer_nvfp4full
+  plugin_dao_base_session_persistence_jsonl["session-persistence-jsonl<br/>@daoai/dao-session-persistence-jsonl"]
+  cfg --> plugin_dao_base_session_persistence_jsonl
+  plugin_dao_base_attachment_local["attachment-local<br/>@daoai/dao-attachment-local"]
+  cfg --> plugin_dao_base_attachment_local
+  plugin_dao_base_session_query_sqlite["session-query-sqlite<br/>@daoai/dao-session-query-sqlite"]
+  cfg --> plugin_dao_base_session_query_sqlite
+  plugin_dao_base_session_projection["session-projection<br/>@daoai/dao-session-projection"]
+  cfg --> plugin_dao_base_session_projection
+  plugin_dao_base_storage["storage<br/>@daoai/dao-storage"]
+  cfg --> plugin_dao_base_storage
+  plugin_dao_base_storage_json["storage-json<br/>@daoai/dao-storage-json"]
+  cfg --> plugin_dao_base_storage_json
+  plugin_dao_base_storage_domain["storage-domain<br/>@daoai/dao-storage-domain"]
+  cfg --> plugin_dao_base_storage_domain
+  plugin_dao_base_session_projection_cache["session-projection-cache<br/>@daoai/dao-session-projection-cache"]
+  cfg --> plugin_dao_base_session_projection_cache
+  plugin_dao_base_session_telemetry_otel["session-telemetry-otel<br/>@daoai/dao-session-telemetry-otel"]
+  cfg --> plugin_dao_base_session_telemetry_otel
+  plugin_dao_base_subprocess["subprocess<br/>@daoai/dao-subprocess-local"]
+  cfg --> plugin_dao_base_subprocess
+  plugin_dao_base_sandbox["sandbox<br/>@daoai/dao-sandbox-local"]
+  cfg --> plugin_dao_base_sandbox
+  plugin_dao_base_sandbox_policy["sandbox-policy<br/>@daoai/dao-sandbox-policy"]
+  cfg --> plugin_dao_base_sandbox_policy
+  plugin_dao_base_bash_sandbox["bash-sandbox<br/>@daoai/dao-bash-sandbox"]
+  cfg --> plugin_dao_base_bash_sandbox
+  plugin_dao_base_pwsh_sandbox["pwsh-sandbox<br/>@daoai/dao-pwsh-sandbox"]
+  cfg --> plugin_dao_base_pwsh_sandbox
+  plugin_dao_base_approval["approval<br/>@daoai/dao-user-approval"]
+  cfg --> plugin_dao_base_approval
+  plugin_dao_base_permission["permission<br/>@daoai/dao-permission-presets"]
+  cfg --> plugin_dao_base_permission
+  plugin_dao_base_shell_env["shell-env<br/>@daoai/dao-shell-env"]
+  cfg --> plugin_dao_base_shell_env
+  plugin_dao_base_tool_bash["tool-bash<br/>@daoai/dao-tool-bash"]
+  cfg --> plugin_dao_base_tool_bash
+  plugin_dao_base_tool_pwsh["tool-pwsh<br/>@daoai/dao-tool-pwsh"]
+  cfg --> plugin_dao_base_tool_pwsh
+  plugin_dao_base_tool_jobs["tool-jobs<br/>@daoai/dao-tool-jobs"]
+  cfg --> plugin_dao_base_tool_jobs
+  plugin_dao_base_fs_observation_policy["fs-observation-policy<br/>@daoai/dao-fs-observation-policy"]
+  cfg --> plugin_dao_base_fs_observation_policy
+  plugin_dao_base_tool_fs["tool-fs<br/>@daoai/dao-tool-fs"]
+  cfg --> plugin_dao_base_tool_fs
+  plugin_dao_base_tool_fs_search["tool-fs-search<br/>@daoai/dao-tool-fs-search"]
+  cfg --> plugin_dao_base_tool_fs_search
+  plugin_dao_base_agent_instructions["agent-instructions<br/>@daoai/dao-agent-instructions"]
+  cfg --> plugin_dao_base_agent_instructions
+  plugin_dao_base_skill["skill<br/>@daoai/dao-skill"]
+  cfg --> plugin_dao_base_skill
+  plugin_dao_base_skill_filesystem["skill-filesystem<br/>@daoai/dao-skill-filesystem"]
+  cfg --> plugin_dao_base_skill_filesystem
+  plugin_dao_base_skill_badge["skill-badge<br/>@daoai/dao-skill-badge"]
+  cfg --> plugin_dao_base_skill_badge
+  plugin_dao_base_tool_skill["tool-skill<br/>@daoai/dao-tool-skill"]
+  cfg --> plugin_dao_base_tool_skill
+  plugin_dao_base_commands["commands<br/>@daoai/dao-commands"]
+  cfg --> plugin_dao_base_commands
+  plugin_dao_base_command_feedback["command-feedback<br/>@daoai/dao-command-feedback"]
+  cfg --> plugin_dao_base_command_feedback
+  plugin_dao_base_goal["goal<br/>@daoai/dao-goal"]
+  cfg --> plugin_dao_base_goal
+  plugin_dao_base_goal_round_driver["goal-round-driver<br/>@daoai/dao-goal-round-driver"]
+  cfg --> plugin_dao_base_goal_round_driver
+  plugin_dao_base_command_goal["command-goal<br/>@daoai/dao-command-goal"]
+  cfg --> plugin_dao_base_command_goal
+  plugin_dao_base_plan_mode["plan-mode<br/>@daoai/dao-plan-mode"]
+  cfg --> plugin_dao_base_plan_mode
+  plugin_dao_base_token_meter["token-meter<br/>@daoai/dao-token-meter"]
+  cfg --> plugin_dao_base_token_meter
+  plugin_dao_base_compaction_basic["compaction-basic<br/>@daoai/dao-compaction-basic"]
+  cfg --> plugin_dao_base_compaction_basic
+  plugin_dao_base_command_compact["command-compact<br/>@daoai/dao-command-compact"]
+  cfg --> plugin_dao_base_command_compact
+  plugin_dao_base_subagent["subagent<br/>@daoai/dao-subagent"]
+  cfg --> plugin_dao_base_subagent
+  plugin_dao_base_subagent_spawn_in_process["subagent-spawn-in-process<br/>@daoai/dao-subagent-spawn-in-process"]
+  cfg --> plugin_dao_base_subagent_spawn_in_process
+  plugin_dao_base_subagent_fork_in_process["subagent-fork-in-process<br/>@daoai/dao-subagent-fork-in-process"]
+  cfg --> plugin_dao_base_subagent_fork_in_process
+  plugin_dao_base_tool_subagent_control["tool-subagent-control<br/>@daoai/dao-tool-subagent-control"]
+  cfg --> plugin_dao_base_tool_subagent_control
+  plugin_dao_base_tool_subagent_list_agents["tool-subagent-list-agents<br/>@daoai/dao-tool-subagent-control/list-agents"]
+  cfg --> plugin_dao_base_tool_subagent_list_agents
+  plugin_dao_base_tool_subagent["tool-subagent<br/>@daoai/dao-tool-subagent"]
+  cfg --> plugin_dao_base_tool_subagent
+  plugin_dao_base_tool_subagent_fork["tool-subagent-fork<br/>@daoai/dao-tool-subagent"]
+  cfg --> plugin_dao_base_tool_subagent_fork
+  plugin_dao_base_tool_subagent_report["tool-subagent-report<br/>@daoai/dao-tool-subagent-report"]
+  cfg --> plugin_dao_base_tool_subagent_report
+  plugin_dao_base_workflow_worker_thread["workflow-worker-thread<br/>@daoai/dao-workflow-worker-thread"]
+  cfg --> plugin_dao_base_workflow_worker_thread
+  plugin_dao_base_tool_workflow["tool-workflow<br/>@daoai/dao-tool-workflow"]
+  cfg --> plugin_dao_base_tool_workflow
+  plugin_dao_base_timeout_policy["timeout-policy<br/>@daoai/dao-tool-call-timeout-policy"]
+  cfg --> plugin_dao_base_timeout_policy
+  plugin_dao_base_spill_local["spill-local<br/>@daoai/dao-spill-local"]
+  cfg --> plugin_dao_base_spill_local
+  plugin_dao_base_spill_policy["spill-policy<br/>@daoai/dao-spill-policy"]
+  cfg --> plugin_dao_base_spill_policy
+  plugin_dao_base_session_checkpoint_policy["session-checkpoint-policy<br/>@daoai/dao-session-checkpoint-policy"]
+  cfg --> plugin_dao_base_session_checkpoint_policy
+  plugin_dao_base_tool_result_pruner["tool-result-pruner<br/>@daoai/dao-compaction-tool-result-pruner"]
+  cfg --> plugin_dao_base_tool_result_pruner
+  plugin_dao_base_tool_todo["tool-todo<br/>@daoai/dao-tool-todo"]
+  cfg --> plugin_dao_base_tool_todo
+  plugin_dao_base_tool_goal["tool-goal<br/>@daoai/dao-tool-goal"]
+  cfg --> plugin_dao_base_tool_goal
+  plugin_dao_base_tool_ralph["tool-ralph<br/>@daoai/dao-tool-ralph"]
+  cfg --> plugin_dao_base_tool_ralph
+  plugin_dao_base_tool_str_replace_editor["tool-str-replace-editor<br/>@daoai/dao-tool-str-replace-editor"]
+  cfg --> plugin_dao_base_tool_str_replace_editor
+  plugin_dao_base_repeat_tool_reminder["repeat-tool-reminder<br/>@daoai/dao-repeat-tool-reminder"]
+  cfg --> plugin_dao_base_repeat_tool_reminder
+  plugin_dao_base_web["web<br/>@daoai/dao-web"]
+  cfg --> plugin_dao_base_web
+  plugin_dao_base_web_search_deepseek["web-search-deepseek<br/>@daoai/dao-web-search-deepseek"]
+  cfg --> plugin_dao_base_web_search_deepseek
+  plugin_dao_base_web_fetch_http["web-fetch-http<br/>@daoai/dao-web-fetch-http"]
+  cfg --> plugin_dao_base_web_fetch_http
+  plugin_dao_base_tool_web["tool-web<br/>@daoai/dao-tool-web"]
+  cfg --> plugin_dao_base_tool_web
+  plugin_dao_base_tools["tools<br/>@daoai/dao-tools"]
+  cfg --> plugin_dao_base_tools
+  plugin_dao_base_system_prompt["system-prompt<br/>@daoai/dao-system-prompt"]
+  cfg --> plugin_dao_base_system_prompt
+  plugin_dao_base_agent_loop["agent-loop<br/>@daoai/dao-agent-loop"]
+  cfg --> plugin_dao_base_agent_loop
+  plugin_dao_base_fs_sandbox["fs-sandbox<br/>@daoai/dao-fs-sandbox"]
+  cfg --> plugin_dao_base_fs_sandbox
+  plugin_dao_base_llm_deepseek["llm-deepseek<br/>@daoai/dao-llm-deepseek"]
+  cfg --> plugin_dao_base_llm_deepseek
 ```
 
 | Plugin id | Package / module |
@@ -204,6 +212,10 @@ flowchart LR
 | `settings` | `@daoai/dao-settings-file` |
 | `credentials` | `@daoai/dao-credentials-local` |
 | `llm-pi-ai` | `@daoai/dao-llm-pi-ai` |
+| `qwen38-quasar-nvfp4` | `Qwen3.8-27B QUASAR-QAT NVFP4 262K` |
+| `qwen38-cyanwiki-awq-g32` | `Qwen3.8-27B Cyanwiki AWQ 192K (G32 W4A16, MTP-2)` |
+| `qwen38-unsloth-nvfp4` | `Qwen3.8-27B Unsloth NVFP4 Dynamic V3 131K` |
+| `qwen38-ninfer-nvfp4full` | `Qwen3.8-27B NInfer NVFP4 Full 262K` |
 | `session-persistence-jsonl` | `@daoai/dao-session-persistence-jsonl` |
 | `attachment-local` | `@daoai/dao-attachment-local` |
 | `session-query-sqlite` | `@daoai/dao-session-query-sqlite` |

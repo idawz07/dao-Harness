@@ -5,14 +5,14 @@ import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import type { Context } from '@daoai/cordis'
 import { SessionId } from '@daoai/dao-session'
-import { codingHarness, finalText, SYSTEM_PROMPT, waitForIdle } from './harness.ts'
+import { codingHarness, finalText, SYSTEM_PROMPT, ROUTE, MODEL, waitForIdle } from './harness.ts'
 
 /**
  * Proves durable conversation continuity end-to-end: run 1 tells the REAL model
  * a fact and persists the turn to JSONL; run 2 is a fresh harness (new Context,
  * same `.sessions` root) that RESUMES the persisted session id and asks the
  * model to recall the fact. The recall can only come from the rehydrated event
- * log — a fresh session would have no idea. Key-gated like the other e2es.
+ * log — a fresh session would have no idea. Farm-gated like the other e2es.
  */
 
 const SECRET = 'plum-galaxy-1791'
@@ -30,7 +30,7 @@ afterEach(async () => {
   root = undefined
 })
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('resume: continue a persisted session across processes', () => {
+describe.skipIf(!process.env.DAO_FARM_REACHABLE)('resume: continue a persisted session across processes', () => {
   it('recalls a fact stored in a prior, separately-disposed session', async () => {
     root = await mkdtemp(join(tmpdir(), 'dao-resume-e2e-'))
 
@@ -40,7 +40,7 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY)('resume: continue a persisted ses
     ctx = await codingHarness(process.cwd(), { persona: SYSTEM_PROMPT, persistenceRoot: root })
     const first = (await ctx.agents.create({
       sessionId: SESSION_ID,
-      agentOptions: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      agentOptions: { provider: ROUTE, model: MODEL },
     })).agent
     first.followup(createUserMessage({ content: [{ type: 'text', text: `Remember this code for later: ${SECRET}. Just acknowledge it.` }], source: { kind: 'user' } }))
     await waitForIdle(ctx, first)
@@ -53,7 +53,7 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY)('resume: continue a persisted ses
     ctx = await codingHarness(process.cwd(), { persona: SYSTEM_PROMPT, persistenceRoot: root })
     const resumed = (await ctx.agents.resume({
       resumeSessionId: SESSION_ID,
-      agentOptions: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      agentOptions: { provider: ROUTE, model: MODEL },
     })).agent
     expect(resumed.session.id).toBe(SESSION_ID)
     // The prior user turn is in the rehydrated log before the model is asked.

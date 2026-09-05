@@ -5,13 +5,13 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import type { Context } from '@daoai/cordis'
-import { codingHarness, finalText, SYSTEM_PROMPT, waitForIdle } from './harness.ts'
+import { codingHarness, finalText, SYSTEM_PROMPT, ROUTE, MODEL, waitForIdle } from './harness.ts'
 import { SessionId } from '@daoai/dao-session'
 
 /**
  * The swebench-style smoke test: a real model fixes a real bug in a temp
  * directory using only the bash tool, and the fix is verified OUTSIDE the
- * agent by re-running the test script. Key-gated.
+ * agent by re-running the test script. Farm-gated.
  */
 
 const TEST_FILE = [
@@ -44,7 +44,7 @@ afterEach(async () => {
   workdir = undefined
 })
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('coding task: fix a failing test via bash', () => {
+describe.skipIf(!process.env.DAO_FARM_REACHABLE)('coding task: fix a failing test via bash', () => {
   it('repairs add.js so node add.test.js passes', async () => {
     workdir = await mkdtemp(join(tmpdir(), 'dao-coding-task-'))
     await writeFile(join(workdir, 'add.js'), BUGGY_ADD)
@@ -55,7 +55,7 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY)('coding task: fix a failing test 
     expect(before.status).not.toBe(0)
 
     ctx = await codingHarness(workdir, { persona: SYSTEM_PROMPT })
-    const agent = ctx.agentLoop.create(SessionId('e2e-task'), { provider: 'deepseek-official', model: 'deepseek-v4-flash' })
+    const agent = ctx.agentLoop.create(SessionId('e2e-task'), { provider: ROUTE, model: MODEL })
 
     agent.followup(createUserMessage({
       content: [{

@@ -6348,9 +6348,6 @@ importers:
       '@daoai/dao-llm':
         specifier: workspace:^
         version: link:../llm
-      '@daoai/dao-llm-deepseek':
-        specifier: workspace:^
-        version: link:../llm-deepseek
       '@daoai/dao-settings':
         specifier: workspace:^
         version: link:../../settings/settings

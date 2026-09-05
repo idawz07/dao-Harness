@@ -8,7 +8,9 @@ import * as BashEnvPlugin from '@daoai/dao-shell-env'
 import LocalSubprocessRuntime from '@daoai/dao-subprocess-local'
 import * as ToolBash from '@daoai/dao-tool-bash'
 import * as ToolTodo from '@daoai/dao-tool-todo'
-import * as LlmDeepSeek from '@daoai/dao-llm-deepseek'
+import CredentialsLocal from '@daoai/dao-credentials-local'
+import * as LlmPiAi from '@daoai/dao-llm-pi-ai'
+import type { PiAiModelProfile, PiAiProviderProfile } from '@daoai/dao-llm-pi-ai'
 import TokenMeter from '@daoai/dao-token-meter'
 import ToolResultPruner from '@daoai/dao-compaction-tool-result-pruner'
 import JsonlSessionPersistence from '@daoai/dao-session-persistence-jsonl'
@@ -18,10 +20,30 @@ import type { BasicCompactionConfig } from '@daoai/dao-compaction-basic'
 
 /**
  * Shared harness for the headless-agent e2e suites: the full plugin stack
- * with the real DeepSeek adapter and the real bash + todo_write tools. Lives
- * outside the *.e2e.ts pattern so importing it never re-registers another
- * file's tests.
+ * with the real pi-ai adapter on the local llama-router farm route and the
+ * real bash + todo_write tools. Lives outside the *.e2e.ts pattern so
+ * importing it never re-registers another file's tests.
  */
+
+export const ROUTE = 'llama-router'
+export const MODEL = 'Qwen3.8-27B-Q6_K_XL-128K'
+
+const farmModel: PiAiModelProfile = {
+  id: MODEL,
+  contextWindow: 131072,
+  maxTokens: 65536,
+  reasoningEfforts: { off: null, minimal: 'minimal', low: 'low', medium: 'medium', high: 'high' },
+}
+
+const farmProfile: PiAiProviderProfile = {
+  displayName: 'Local Llama Router',
+  apiKeyEnv: 'LLAMA_ROUTER_API_KEY',
+  api: 'openai-completions',
+  baseURL: 'http://100.110.212.93:8081/v1',
+  reasoning: 'high',
+  compat: { thinkingFormat: 'qwen-chat-template' },
+  models: [farmModel],
+}
 
 export const SYSTEM_PROMPT = 'You are a coding agent. Use bash for file operations '
   + 'with cat/grep/heredocs; check [exit code: N] markers, '
@@ -49,7 +71,7 @@ export interface CodingHarnessOptions {
    * compaction plugin (the default suites run without it).
    */
   compact?: BasicCompactionConfig
-  /** Test-only context capacity advertised for `deepseek-v4-flash`. */
+  /** Test-only context capacity advertised for the router's default model. */
   modelContextWindow?: number
 }
 
@@ -59,9 +81,11 @@ export async function codingHarness(workdir: string, options: CodingHarnessOptio
     systemPrompt: { persona: options.persona ?? '' },
   })
   await ctx.plugin(AgentLoop, { agents: [] })
-  await ctx.plugin(LlmDeepSeek, options.modelContextWindow === undefined ? {} : {
-    models: [{ id: 'deepseek-v4-flash', contextWindow: options.modelContextWindow }],
-  })
+  await ctx.plugin(CredentialsLocal)
+  const profile = options.modelContextWindow === undefined
+    ? farmProfile
+    : { ...farmProfile, models: [{ ...farmModel, contextWindow: options.modelContextWindow }] }
+  await ctx.plugin(LlmPiAi, { providers: { [ROUTE]: profile } })
   await ctx.plugin(LocalSubprocessRuntime)
   await ctx.plugin(BashEnvPlugin)
   await ctx.plugin(LocalBashExecutor, { cwd: workdir, timeoutMs: 30_000 })

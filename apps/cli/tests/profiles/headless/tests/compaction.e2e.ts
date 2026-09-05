@@ -4,11 +4,11 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import type { Context } from '@daoai/cordis'
-import { codingHarness, finalText, SYSTEM_PROMPT, waitForIdle } from './harness.ts'
+import { codingHarness, finalText, SYSTEM_PROMPT, ROUTE, MODEL, waitForIdle } from './harness.ts'
 import { SessionId } from '@daoai/dao-session'
 
 /**
- * Key-gated smoke for mid-session compaction. It verifies the compact event
+ * Farm-gated smoke for mid-session compaction. It verifies the compact event
  * pair, replacement of older surface nodes, and a final answer after compaction.
  */
 // The keyless headless snapshot pins deterministic overflow recovery; this test
@@ -24,28 +24,35 @@ afterEach(async () => {
   workdir = undefined
 })
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('compaction: a long session compacts mid-flight and keeps running', () => {
+describe.skipIf(!process.env.DAO_FARM_REACHABLE)('compaction: a long session compacts mid-flight and keeps running', () => {
   it('summarizes older history into a checkpoint without breaking the task', async () => {
     workdir = await mkdtemp(join(tmpdir(), 'dao-compaction-'))
+    // ~1800 tokens per read: the third read pushes the latest-request envelope
+    // past the 0.5 threshold (6000 of the 12000 test window), while the window
+    // stays large enough that pi-ai's max_tokens clamp (contextWindow − input
+    // − 4096 safety) never crushes the output cap below a usable reply.
     for (let i = 1; i <= 4; i++) {
-      await writeFile(join(workdir, `file${i}.txt`), `This is file number ${i}. `.repeat(50))
+      await writeFile(join(workdir, `file${i}.txt`), `This is file number ${i}. `.repeat(300))
     }
 
-    // Reasoning tokens require a larger generation cap than the retained checkpoint.
+    // Reasoning tokens require a larger generation cap than the retained
+    // checkpoint.
     ctx = await codingHarness(workdir, {
       persona: SYSTEM_PROMPT,
-      modelContextWindow: 2000,
+      modelContextWindow: 12000,
       compact: {
         thresholdRatio: 0.5,
         retainTokens: 400,
         summarizationProvider: '',
         summarizationModel: '',
         maxTokens: 1024,
-        compactionRetries: 1,
+        // The live router queues under parallel e2e load; one retry keeps the
+        // summarization call from dying on a transient queueing failure.
+        compactionRetries: 2,
       },
       persistenceRoot: join(workdir, '.sessions'),
     })
-    const agent = ctx.agentLoop.create(SessionId('e2e-compaction'), { provider: 'deepseek-official', model: 'deepseek-v4-flash' })
+    const agent = ctx.agentLoop.create(SessionId('e2e-compaction'), { provider: ROUTE, model: MODEL })
 
     agent.followup(createUserMessage({
       content: [{

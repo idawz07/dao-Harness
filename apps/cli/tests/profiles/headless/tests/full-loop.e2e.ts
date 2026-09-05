@@ -4,12 +4,12 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import type { Context } from '@daoai/cordis'
-import { codingHarness, finalText, SYSTEM_PROMPT, waitForIdle } from './harness.ts'
+import { codingHarness, finalText, SYSTEM_PROMPT, ROUTE, MODEL, waitForIdle } from './harness.ts'
 import { SessionId } from '@daoai/dao-session'
 
 /**
  * The first place a REAL model meets the REAL bash tool: the cheap canary
- * before the coding-task e2e. Key-gated (see vitest.e2e.config.ts).
+ * before the coding-task e2e. Farm-gated (see vitest.e2e.config.ts).
  */
 
 let ctx: Context | undefined
@@ -25,11 +25,11 @@ afterEach(async () => {
   workdir = undefined
 })
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('full loop: real model + real bash tool', () => {
+describe.skipIf(!process.env.DAO_FARM_REACHABLE)('full loop: real model + real bash tool', () => {
   it('runs a bash command on request and reports its output', async () => {
     workdir = await mkdtemp(join(tmpdir(), 'dao-full-loop-e2e-'))
     ctx = await codingHarness(workdir, { persona: SYSTEM_PROMPT })
-    const agent = ctx.agentLoop.create(SessionId('e2e-loop'), { provider: 'deepseek-official', model: 'deepseek-v4-flash' })
+    const agent = ctx.agentLoop.create(SessionId('e2e-loop'), { provider: ROUTE, model: MODEL })
 
     agent.followup(createUserMessage({ content: [{ type: 'text', text: 'Run `echo e2e-ok` with the bash tool and tell me its exact output.' }], source: { kind: 'user' } }))
     await waitForIdle(ctx, agent)

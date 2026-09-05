@@ -1,17 +1,40 @@
+import { spawnSync } from 'node:child_process'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import { defineConfig } from 'vitest/config'
 import { standardDecoratorPlugin, vitestExecArgv } from './vitest.shared.ts'
 
-// Real-API suite, separate because it spends tokens. Each test self-skips without
-// its provider credential for keyless CI; credentialed workflows preflight the
-// secrets they require. Values may come from the environment or gitignored root
-// `.env`, with provider-specific endpoint overrides where supported.
+// Real-API suite, separate because it spends tokens. Each test self-skips
+// without its provider credential for keyless CI; credentialed workflows
+// preflight the secrets they require. Values may come from the environment or
+// gitignored root `.env`, with provider-specific endpoint overrides where
+// supported.
 try {
   // Node >= 21.7 native; throws when the file does not exist.
   process.loadEnvFile(new URL('.env', import.meta.url).pathname)
 } catch {
   // No .env — fine, the environment may already carry the variables.
 }
+
+/**
+ * The real-model e2e self-skip gate: one synchronous TCP probe of the
+ * resident llama-router card, the always-on default route. Its reachability
+ * is exactly the condition the real-model suites need, so CI without
+ * tailscale skips fast the way the old keyless skip did. Freezes
+ * `DAO_FARM_REACHABLE` for the whole suite run.
+ * @returns whether the router's port accepts connections
+ */
+function farmReachable(): boolean {
+  const script = "const s = require('node:net').connect(8081, '100.110.212.93');"
+    + 's.setTimeout(3000);'
+    + "s.on('connect', () => { s.end(); process.exit(0) });"
+    + "s.on('timeout', () => { s.destroy(); process.exit(1) });"
+    + "s.on('error', () => process.exit(1));"
+  const probe = spawnSync(process.execPath, ['-e', script], { timeout: 5_000, stdio: 'ignore' })
+  return probe.status === 0
+}
+
+if (farmReachable()) process.env.DAO_FARM_REACHABLE = '1'
+else delete process.env.DAO_FARM_REACHABLE
 
 const DEFAULT_E2E_MAX_WORKERS = 4
 

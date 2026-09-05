@@ -16,7 +16,9 @@ import { LocalBashExecutor } from '@daoai/dao-bash-local'
 import * as BashEnvPlugin from '@daoai/dao-shell-env'
 import LocalSubprocessRuntime from '@daoai/dao-subprocess-local'
 import * as ToolBash from '@daoai/dao-tool-bash'
-import * as LlmDeepSeek from '@daoai/dao-llm-deepseek'
+import CredentialsLocal from '@daoai/dao-credentials-local'
+import * as LlmPiAi from '@daoai/dao-llm-pi-ai'
+import type { PiAiProviderProfile } from '@daoai/dao-llm-pi-ai'
 import { WorkerThreadCodeRuntime } from '@daoai/dao-code-runtime-worker-thread'
 import LocalFileSystem from '@daoai/dao-fs-local'
 import * as ToolFs from '@daoai/dao-tool-fs'
@@ -35,6 +37,24 @@ import * as ToolCordis from '@daoai/dao-tool-cordis'
 const PERSONA = 'You are a coding agent. You work by writing TypeScript programs for run_code: '
   + 'batch related tool work into one program and print or return ONLY the findings that matter.'
 const WORKSPACE_PROBE = 'dragonfruit-8675309'
+
+const ROUTE = 'llama-router'
+const MODEL = 'Qwen3.8-27B-Q6_K_XL-128K'
+
+const farmProfile: PiAiProviderProfile = {
+  displayName: 'Local Llama Router',
+  apiKeyEnv: 'LLAMA_ROUTER_API_KEY',
+  api: 'openai-completions',
+  baseURL: 'http://100.110.212.93:8081/v1',
+  reasoning: 'high',
+  compat: { thinkingFormat: 'qwen-chat-template' },
+  models: [{
+    id: MODEL,
+    contextWindow: 131072,
+    maxTokens: 65536,
+    reasoningEfforts: { off: null, minimal: 'minimal', low: 'low', medium: 'medium', high: 'high' },
+  }],
+}
 
 let ctx: Context | undefined
 let workdir: string | undefined
@@ -57,7 +77,8 @@ async function ptcModeHarness(cwd: string): Promise<Context> {
   await harness.plugin(ToolRuntime, { mode: 'ptc' })
   await harness.plugin(AgentRegistry)
   await harness.plugin(AgentLoop, { agents: [] })
-  await harness.plugin(LlmDeepSeek)
+  await harness.plugin(CredentialsLocal)
+  await harness.plugin(LlmPiAi, { providers: { [ROUTE]: farmProfile } })
   await harness.plugin(LocalSubprocessRuntime)
   await harness.plugin(BashEnvPlugin)
   await harness.plugin(LocalBashExecutor, { cwd, timeoutMs: 30_000 })
@@ -77,7 +98,8 @@ async function workspacePtcModeHarness(): Promise<Context> {
   await harness.plugin(ToolFs)
   await harness.plugin(WorkspaceContext, { maxBytes: 65536 })
   await harness.plugin(AgentLoop, { agents: [] })
-  await harness.plugin(LlmDeepSeek, { models: [{ id: 'deepseek-v4-flash' }] })
+  await harness.plugin(CredentialsLocal)
+  await harness.plugin(LlmPiAi, { providers: { [ROUTE]: farmProfile } })
   await harness.plugin(WorkerThreadCodeRuntime, {})
   return harness
 }
@@ -349,11 +371,11 @@ function waitForIdle(harness: Context, agent: Agent): Promise<void> {
   })
 }
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('PTC mode: real model writes a program over real tools', () => {
+describe.skipIf(!process.env.DAO_FARM_REACHABLE)('PTC mode: real model writes a program over real tools', () => {
   it('collapses the wire tool list to [run_code], bridges sub-calls, and returns curated output', async () => {
     workdir = await mkdtemp(join(tmpdir(), 'dao-ptc-e2e-'))
     ctx = await ptcModeHarness(workdir)
-    const agent = ctx.agentLoop.create(SessionId('e2e-ptc'), { provider: 'deepseek-official', model: 'deepseek-v4-flash' })
+    const agent = ctx.agentLoop.create(SessionId('e2e-ptc'), { provider: ROUTE, model: MODEL })
 
     agent.followup(createUserMessage({
       content: [{
@@ -405,7 +427,7 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY)('PTC mode: real model writes a pr
     const handle = await ctx.agents.create({
       sessionId: SessionId('e2e-ptc-workspace-session'),
       meta: { cwd: workdir },
-      agentOptions: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      agentOptions: { provider: ROUTE, model: MODEL },
     })
 
     handle.agent.followup(createUserMessage({

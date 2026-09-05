@@ -487,7 +487,27 @@ describe.skipIf(!existsSync(daoBin))('dao BUILT bin (node lib/bin.js, no tsx)', 
       successText: 'ACP BUILT PROFILE OK',
     })
     const home = mkdtempSync(join(tmpdir(), 'dao-built-acp-'))
-    const child = execa(process.execPath, [daoBin, '--profile', 'acp'], {
+    // The published default route is the llama-router card; a patch overlay
+    // retargets it at the mock so the turn stays keyless and local.
+    const patch = join(home, 'mock-router.cordis.yml')
+    writeFileSync(patch, [
+      '- id: llm-pi-ai',
+      '  config:',
+      '    providers:',
+      '      llama-router:',
+      '        displayName: Mock',
+      '        apiKeyEnv: LLAMA_ROUTER_API_KEY',
+      '        api: openai-completions',
+      `        baseURL: ${server.baseURL}`,
+      '        reasoning: high',
+      '        models:',
+      '          - id: Qwen3.8-27B-Q6_K_XL-128K',
+      '            contextWindow: 131072',
+      '            maxTokens: 65536',
+      '            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }',
+      '',
+    ].join('\n'))
+    const child = execa(process.execPath, [daoBin, '--profile', 'acp', '--patch', patch], {
       cwd: home,
       reject: false,
       timeout: SPAWN_TIMEOUT_MS,
@@ -496,8 +516,7 @@ describe.skipIf(!existsSync(daoBin))('dao BUILT bin (node lib/bin.js, no tsx)', 
         ...process.env,
         DAO_HOME: home,
         DAO_TELEMETRY_DISABLED: '1',
-        DEEPSEEK_API_KEY: apiKey,
-        DEEPSEEK_BASE_URL: server.baseURL,
+        LLAMA_ROUTER_API_KEY: apiKey,
         DAO_PERMISSION_MODE: 'danger-full-access',
       },
       extendEnv: false,
@@ -572,12 +591,31 @@ describe.skipIf(!existsSync(daoBin))('dao BUILT bin (node lib/bin.js, no tsx)', 
       successText: 'published headless profile reached the mock',
     })
     const home = mkdtempSync(join(tmpdir(), 'dao-built-headless-'))
+    // The published default route is the llama-router card; a patch overlay
+    // retargets it at the mock so the turn stays keyless and local.
+    const patch = join(home, 'mock-router.cordis.yml')
+    writeFileSync(patch, [
+      '- id: llm-pi-ai',
+      '  config:',
+      '    providers:',
+      '      llama-router:',
+      '        displayName: Mock',
+      '        apiKeyEnv: LLAMA_ROUTER_API_KEY',
+      '        api: openai-completions',
+      `        baseURL: ${server.baseURL}`,
+      '        reasoning: high',
+      '        models:',
+      '          - id: Qwen3.8-27B-Q6_K_XL-128K',
+      '            contextWindow: 131072',
+      '            maxTokens: 65536',
+      '            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }',
+      '',
+    ].join('\n'))
     try {
-      const result = await runBuiltBin(['--profile', 'headless', 'answer', 'from', 'the', 'published', 'entry'], {
+      const result = await runBuiltBin(['--profile', 'headless', '--patch', patch, 'answer', 'from', 'the', 'published', 'entry'], {
         DAO_HOME: home,
         DAO_TELEMETRY_DISABLED: '1',
-        DEEPSEEK_API_KEY: apiKey,
-        DEEPSEEK_BASE_URL: server.baseURL,
+        LLAMA_ROUTER_API_KEY: apiKey,
       })
       expect(result.code, result.stderr).toBe(0)
       expect(result.stdout).toBe('published headless profile reached the mock')

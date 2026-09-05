@@ -366,7 +366,7 @@ async function sendGitHubDelivery(origin: string): Promise<Response> {
   })
 }
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('GitHub webhook through the real dao CLI and model', () => {
+describe.skipIf(!process.env.DAO_FARM_REACHABLE)('GitHub webhook through the real dao CLI and model', () => {
   it('creates, attaches, prompts, and completes a Workspace Session', async () => {
     expect(existsSync(BUILT_BIN), `missing built CLI ${BUILT_BIN}; run pnpm run build:official`).toBe(true)
     const root = await mkdtemp(join(tmpdir(), 'dao-github-webhook-real-'))

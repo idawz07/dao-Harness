@@ -1,1 +1,206 @@
-../../../../../snapshots/acp/escalation-approved/cordis.yml
+# The acp test profile patch over the shipped `acp` profile. The dao
+# launcher owns environment loading, plugin resolution, and process shutdown;
+# stdout remains reserved for ACP JSON-RPC. The snapshot record at
+# snapshots/acp/escalation-approved keeps its own recorded composition.
+
+# The base bundle's llm-pi-ai row restated in full: a patch replaces the
+# targeted row's whole config. The llama router (port 8081) is the resident
+# card and the default; the four vLLM cards (ports 18080–18083) are on-demand.
+# Each route resolves its apiKeyEnv reference per request, so no key is
+# inlined; context windows are the cards' per-slot sizes.
+- id: llm-pi-ai
+  name: '@daoai/dao-llm-pi-ai'
+  config:
+    providers:
+      llama-router:
+        displayName: Local Llama Router
+        apiKeyEnv: LLAMA_ROUTER_API_KEY
+        api: openai-completions
+        baseURL: http://100.110.212.93:8081/v1
+        reasoning: high
+        compat:
+          thinkingFormat: qwen-chat-template
+        models:
+          - id: Qwen3.8-27B-Q6_K_XL-128K
+            contextWindow: 131072
+            maxTokens: 65536
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }
+          - id: Qwen3.8-27B-Q6_K_XL-128K-NoThink
+            contextWindow: 131072
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts: false
+          - id: Qwen3.8-27B-Q4_K_XL-128K-Vision
+            contextWindow: 131072
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }
+          - id: Qwen3.8-27B-AD-Q5_K_M-256K-P1-Vision
+            contextWindow: 196608
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }
+          - id: Qwen3.8-27B-AD-Q5_K_M-256K-P2-Vision
+            contextWindow: 131072
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }
+          - id: Ornith-1.0-35B
+            contextWindow: 131072
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts: false
+          - id: Gemma4-12B-Unified
+            contextWindow: 32768
+            maxTokens: 32768
+            input: [text, image]
+            reasoningEfforts: false
+          - id: Gemma4-E2B-Uncensored-HauhauCS-Aggressive
+            contextWindow: 32768
+            maxTokens: 32768
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }
+      qwen38-quasar-262k:
+        displayName: Qwen3.8 QUASAR 262K (vLLM card)
+        apiKeyEnv: QWEN38_QUASAR_API_KEY
+        api: openai-completions
+        baseURL: http://100.110.212.93:18081/v1
+        reasoning: high
+        compat:
+          thinkingFormat: qwen-chat-template
+          supportsDeveloperRole: false
+          supportsThinkingTokenBudget: true
+        models:
+          - id: qwen38-quasar-nvfp4
+            name: Qwen3.8-27B QUASAR-QAT NVFP4 262K
+            contextWindow: 262144
+            maxTokens: 49152
+            input: [text, image]
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high, xhigh: xhigh }
+      qwen38-cyanwiki-192k:
+        displayName: Qwen3.8 Cyanwiki 192K (vLLM card)
+        apiKeyEnv: QWEN38_CYANWIKI_API_KEY
+        api: openai-completions
+        baseURL: http://100.110.212.93:18080/v1
+        reasoning: high
+        compat:
+          thinkingFormat: qwen
+          supportsReasoningEffort: true
+          supportsDeveloperRole: false
+        models:
+          - id: qwen38-cyanwiki-awq-g32
+            name: Qwen3.8-27B Cyanwiki AWQ 192K (G32 W4A16, MTP-2)
+            contextWindow: 196608
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high, xhigh: xhigh, max: xhigh }
+      qwen38-unsloth-nvfp4-131k:
+        displayName: Qwen3.8 Unsloth 131K (vLLM card)
+        apiKeyEnv: QWEN38_UNSLOTH_API_KEY
+        api: openai-completions
+        baseURL: http://100.110.212.93:18082/v1
+        reasoning: high
+        compat:
+          thinkingFormat: qwen-chat-template
+          supportsReasoningEffort: false
+          supportsDeveloperRole: false
+          supportsFinishReason: false
+        models:
+          - id: qwen38-unsloth-nvfp4
+            name: Qwen3.8-27B Unsloth NVFP4 Dynamic V3 131K
+            contextWindow: 131072
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high, xhigh: xhigh }
+      qwen38-ninfer-nvfp4full-262k:
+        displayName: Qwen3.8 NInfer 262K (vLLM card)
+        apiKeyEnv: QWEN38_NINFER_API_KEY
+        api: openai-completions
+        baseURL: http://100.110.212.93:18083/v1
+        reasoning: high
+        compat:
+          thinkingFormat: qwen
+          supportsReasoningEffort: true
+          supportsDeveloperRole: false
+        models:
+          - id: qwen38-ninfer-nvfp4full
+            name: Qwen3.8-27B NInfer NVFP4 Full 262K
+            contextWindow: 262144
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high, xhigh: xhigh, max: xhigh }
+
+- id: sandbox-policy
+  name: '@daoai/dao-sandbox-policy'
+  config:
+    mode: !!js "process.env.DAO_PERMISSION_MODE ?? (process.env.DAO_SNAPSHOT === undefined ? 'workspace-write' : 'danger-full-access')"
+    workspaceRoot: !!js process.cwd()
+
+- id: approval
+  name: '@daoai/dao-user-approval'
+  config:
+    policy: !!js "(process.env.DAO_PERMISSION_MODE ?? (process.env.DAO_SNAPSHOT === undefined ? 'workspace-write' : 'danger-full-access')) === 'danger-full-access' ? 'never' : 'ask'"
+
+- id: session-persistence-jsonl
+  name: '@daoai/dao-session-persistence-jsonl'
+  config:
+    root: !!js process.env.DAO_SNAPSHOT_SESSIONS_ROOT ?? daoHomePath('sessions')
+    compression: !!js "process.env.DAO_SNAPSHOT === undefined ? 'zstd' : 'none'"
+
+- id: acp
+  name: '@daoai/dao-acp'
+  config:
+    provider: llama-router
+    model: Qwen3.8-27B-Q6_K_XL-128K
+
+- id: system-prompt
+  name: '@daoai/dao-system-prompt'
+  config:
+    persona: |
+      You are a coding assistant powered by the {{model}} model. Your working directory is {{cwd}}. Your bash tool runs under a file sandbox — a `[sandbox: file access denied …]` result is policy, not a command bug.
+
+      Verify your work by running the code or tests. Keep answers brief and factual.
+
+- id: agent-instructions
+  name: '@daoai/dao-agent-instructions'
+  config:
+    maxBytes: 65536
+
+- id: tool-subagent
+  name: '@daoai/dao-tool-subagent'
+  config:
+    provider: spawn
+    toolName: subagent
+    backgroundMode: continuable
+    maxDepth: 1
+
+# Fork omits model selection so provider/model stay equal to the parent and the
+# inherited history remains eligible for KV Cache reuse. It stays one-shot because
+# a continuable child's `report` tool and prompt section precede that history and
+# invalidate the same prefix. `run_in_background` is off as an explicit foreground-only
+# choice even though the shipped ACP profile mounts the generic Job runtime.
+# See .agents/notes/implemented/feature/2026-08-18-model-selected-subagent-routes.md
+# and .agents/notes/implemented/architecture/2026-08-10-fork-children-stay-one-shot.md.
+- id: tool-subagent-fork
+  name: '@daoai/dao-tool-subagent'
+  config:
+    provider: fork
+    toolName: subagent_fork
+    backgroundMode: one-shot
+    enableRunInBackground: false
+    maxDepth: 1
+
+- id: fs-sandbox
+  name: '@daoai/dao-fs-sandbox'
+  config:
+    cwd: !!js process.cwd()
+
+- insert:
+    - id: hooks-claude-code
+      name: '@daoai/dao-hooks-claude-code'
+      config:
+        configPath: ./hooks.json
+
+    - id: hooks-codex
+      name: '@daoai/dao-hooks-codex'
+      config:
+        configPath: ./codex-hooks.json

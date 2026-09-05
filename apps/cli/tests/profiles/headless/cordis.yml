@@ -3,15 +3,16 @@
 # the composition base, while user-plane values resolve per request through
 # the two providers below.
 
-# User-settings document (`$DAO_HOME/settings.yaml`, hot-reloaded): a
-# `llm-deepseek:` section there overrides the adapter entry below without a
+# User-settings document (`$DAO_HOME/settings.yaml`, hot-reloaded): an
+# `llm-pi-ai:` section there overrides the adapter entry below without a
 # restart.
 - id: settings
   name: '@daoai/dao-settings-file'
 
 # Credential store: the live process environment over `$DAO_HOME/.credentials.yaml`
-# (owner-only file, hot-reloaded). The adapter resolves `DEEPSEEK_API_KEY`
-# through it at each request, so no key is inlined in this file.
+# (owner-only file, hot-reloaded). The adapter resolves each route's
+# `DAO_*_API_KEY` reference through it at each request, so no key is inlined
+# in this file.
 - id: credentials
   name: '@daoai/dao-credentials-local'
 
@@ -24,21 +25,133 @@
 - id: plugin-package-inventory-deepseek
   name: '@daoai/dao-plugin-package-inventory-deepseek'
 
-# The DeepSeek adapter. Swap to '@daoai/dao-llm-pi-ai' for the pi-ai-backed
-# twin (a `providers` dict keyed by route; `reasoning: high` replaces
-# thinking/reasoningEffort). Shipped default: full thinking at max effort on
-# every request. Exact-model resolution materializes request defaults before
-# the request header is logged.
-- id: llm-deepseek
-  name: '@daoai/dao-llm-deepseek'
+# The pi-ai adapter, carrying the local Qwen3.8 farm on tailscale. The llama
+# router (port 8081) is the resident systemd card and the default; the four
+# vLLM cards (ports 18080–18083) are on-demand, declared so a card started
+# through the service manager (port 8767) serves immediately and is refused
+# only while down. Each route resolves its apiKeyEnv reference per request
+# through the credential store, so no key is inlined. Context windows are the
+# cards' per-slot sizes, not trained model windows.
+- id: llm-pi-ai
+  name: '@daoai/dao-llm-pi-ai'
   config:
-    thinking: enabled
-    reasoningEffort: max
-    models:
-      - id: deepseek-v4-pro
-        contextWindow: 128000
-      - id: deepseek-v4-flash
-        contextWindow: 128000
+    providers:
+      llama-router:
+        displayName: Local Llama Router
+        apiKeyEnv: LLAMA_ROUTER_API_KEY
+        api: openai-completions
+        baseURL: http://100.110.212.93:8081/v1
+        reasoning: high
+        compat:
+          thinkingFormat: qwen-chat-template
+        models:
+          - id: Qwen3.8-27B-Q6_K_XL-128K
+            contextWindow: 131072
+            maxTokens: 65536
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }
+          - id: Qwen3.8-27B-Q6_K_XL-128K-NoThink
+            contextWindow: 131072
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts: false
+          - id: Qwen3.8-27B-Q4_K_XL-128K-Vision
+            contextWindow: 131072
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }
+          - id: Qwen3.8-27B-AD-Q5_K_M-256K-P1-Vision
+            contextWindow: 196608
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }
+          - id: Qwen3.8-27B-AD-Q5_K_M-256K-P2-Vision
+            contextWindow: 131072
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }
+          - id: Ornith-1.0-35B
+            contextWindow: 131072
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts: false
+          - id: Gemma4-12B-Unified
+            contextWindow: 32768
+            maxTokens: 32768
+            input: [text, image]
+            reasoningEfforts: false
+          - id: Gemma4-E2B-Uncensored-HauhauCS-Aggressive
+            contextWindow: 32768
+            maxTokens: 32768
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }
+      qwen38-quasar-262k:
+        displayName: Qwen3.8 QUASAR 262K (vLLM card)
+        apiKeyEnv: QWEN38_QUASAR_API_KEY
+        api: openai-completions
+        baseURL: http://100.110.212.93:18081/v1
+        reasoning: high
+        compat:
+          thinkingFormat: qwen-chat-template
+          supportsDeveloperRole: false
+          supportsThinkingTokenBudget: true
+        models:
+          - id: qwen38-quasar-nvfp4
+            name: Qwen3.8-27B QUASAR-QAT NVFP4 262K
+            contextWindow: 262144
+            maxTokens: 49152
+            input: [text, image]
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high, xhigh: xhigh }
+      qwen38-cyanwiki-192k:
+        displayName: Qwen3.8 Cyanwiki 192K (vLLM card)
+        apiKeyEnv: QWEN38_CYANWIKI_API_KEY
+        api: openai-completions
+        baseURL: http://100.110.212.93:18080/v1
+        reasoning: high
+        compat:
+          thinkingFormat: qwen
+          supportsReasoningEffort: true
+          supportsDeveloperRole: false
+        models:
+          - id: qwen38-cyanwiki-awq-g32
+            name: Qwen3.8-27B Cyanwiki AWQ 192K (G32 W4A16, MTP-2)
+            contextWindow: 196608
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high, xhigh: xhigh, max: xhigh }
+      qwen38-unsloth-nvfp4-131k:
+        displayName: Qwen3.8 Unsloth 131K (vLLM card)
+        apiKeyEnv: QWEN38_UNSLOTH_API_KEY
+        api: openai-completions
+        baseURL: http://100.110.212.93:18082/v1
+        reasoning: high
+        compat:
+          thinkingFormat: qwen-chat-template
+          supportsReasoningEffort: false
+          supportsDeveloperRole: false
+          supportsFinishReason: false
+        models:
+          - id: qwen38-unsloth-nvfp4
+            name: Qwen3.8-27B Unsloth NVFP4 Dynamic V3 131K
+            contextWindow: 131072
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high, xhigh: xhigh }
+      qwen38-ninfer-nvfp4full-262k:
+        displayName: Qwen3.8 NInfer 262K (vLLM card)
+        apiKeyEnv: QWEN38_NINFER_API_KEY
+        api: openai-completions
+        baseURL: http://100.110.212.93:18083/v1
+        reasoning: high
+        compat:
+          thinkingFormat: qwen
+          supportsReasoningEffort: true
+          supportsDeveloperRole: false
+        models:
+          - id: qwen38-ninfer-nvfp4full
+            name: Qwen3.8-27B NInfer NVFP4 Full 262K
+            contextWindow: 262144
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high, xhigh: xhigh, max: xhigh }
 
 # Managed child-process groups for the bash executor (spawn/kill/output plumbing).
 - id: subprocess
@@ -55,11 +168,10 @@
   config:
     agents:
       - id: main
-        provider: deepseek-official
-        # Stays on flash: the goal/ralph replay corpora were recorded on it, and
-        # their nested-include overlays cannot re-pin the app config (a config
-        # patch cannot target an entry behind a nested include).
-        model: deepseek-v4-flash
+        # Shipped default: the resident router card's main preset at the route's
+        # `reasoning: high` default.
+        provider: llama-router
+        model: Qwen3.8-27B-Q6_K_XL-128K
         cwd: !!js process.cwd()
     workspaceContext:
       maxBytes: 65536

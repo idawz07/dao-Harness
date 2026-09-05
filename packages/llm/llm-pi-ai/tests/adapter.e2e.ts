@@ -1,100 +1,113 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { Context } from '@daoai/cordis'
-import LlmRuntime, { createUserMessage, ToolCallId, ReasoningEffortId  } from '@daoai/dao-llm'
+import LlmRuntime, { createUserMessage, ToolCallId, ReasoningEffortId } from '@daoai/dao-llm'
 import type { Message, ToolSchema } from '@daoai/dao-llm'
+import CredentialsLocal from '@daoai/dao-credentials-local'
 import * as LlmPiAi from '@daoai/dao-llm-pi-ai'
 import type { PiAiProviderProfile } from '@daoai/dao-llm-pi-ai'
-import * as LlmDeepSeek from '@daoai/dao-llm-deepseek'
 import { assemble, type AssembledResult } from './assemble.ts'
 
 /**
- * Real-API e2e for the pi-ai-backed adapter: V4 Flash + V4 Pro with provider
- * defaults and representative off/high/max reasoning. Mirrors the native
- * adapter's StreamChunk contract and exercises a replayed tool follow-up.
- * Key-gated.
+ * Real-farm e2e for the pi-ai-backed adapter: the resident llama-router
+ * card's default preset at the route's `high` default, at explicit `off`
+ * and `high`, plus a replayed tool follow-up. The key resolves through the
+ * credential store's live process environment (the e2e config loads the
+ * gitignored root `.env`). Self-skips when the farm is unreachable — the
+ * `DAO_FARM_REACHABLE` marker the e2e config sets after probing the router.
  */
 
-const FLASH = 'deepseek-v4-flash'
-const PRO = 'deepseek-v4-pro'
+const ROUTE = 'llama-router'
+const MODEL = 'Qwen3.8-27B-Q6_K_XL-128K'
 const contexts: Context[] = []
 
-async function harness(_model: string, config: Partial<PiAiProviderProfile> = {}) {
-  const ctx = new Context()
-  contexts.push(ctx)
-  await ctx.plugin(LlmRuntime)
-  await ctx.plugin(LlmPiAi, {
-    providers: {
-      deepseek: {
-        ...process.env.DEEPSEEK_API_KEY === undefined ? {} : { apiKey: process.env.DEEPSEEK_API_KEY },
-        ...process.env.DEEPSEEK_BASE_URL === undefined ? {} : { baseURL: process.env.DEEPSEEK_BASE_URL },
-        ...config,
-      },
-    },
-  })
-  return ctx
+const farmProfile: PiAiProviderProfile = {
+  displayName: 'Local Llama Router',
+  apiKeyEnv: 'LLAMA_ROUTER_API_KEY',
+  api: 'openai-completions',
+  baseURL: 'http://100.110.212.93:8081/v1',
+  reasoning: 'high',
+  compat: { thinkingFormat: 'qwen-chat-template' },
+  models: [{
+    id: MODEL,
+    contextWindow: 131072,
+    maxTokens: 65536,
+    reasoningEfforts: { off: null, minimal: 'minimal', low: 'low', medium: 'medium', high: 'high' },
+  }],
 }
 
-afterEach(async () => {
-  await Promise.all(contexts.splice(0).map(ctx => ctx.fiber.dispose()))
-})
-
-function ask(text: string): Message[] {
+function ask(prompt: string): Message[] {
   return [createUserMessage({
-    content: [{ type: 'text', text }],
-    source: { kind: 'plugin', plugin: 'test' },
+    content: [{ type: 'text', text: prompt }],
+    source: { kind: 'user' },
   })]
 }
 
 function textOf(result: AssembledResult): string {
   return result.message.content
     .filter(block => block.type === 'text')
-    .map(block => block.text)
+    .map(block => (block.type === 'text' ? block.text : ''))
     .join('')
-}
-
-function blockKinds(result: AssembledResult): string[] {
-  return result.message.content.map(block => block.type)
 }
 
 const weatherTool: ToolSchema = {
   name: 'get_weather',
-  description: 'Get the current weather for a city.',
+  description: 'Get the current weather for a city',
   parameters: {
     type: 'object',
     properties: { city: { type: 'string', description: 'City name' } },
     required: ['city'],
+    additionalProperties: false,
   },
 }
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('llm-pi-ai e2e (real API)', () => {
-  it.each([FLASH, PRO])('%s + provider-default reasoning: plain text generation', async (model) => {
-    const ctx = await harness(model)
-    const result = await assemble(ctx,{
-      model,
+async function harness(config: Partial<PiAiProviderProfile> = {}) {
+  const ctx = new Context()
+  contexts.push(ctx)
+  await ctx.plugin(LlmRuntime)
+  await ctx.plugin(CredentialsLocal)
+  await ctx.plugin(LlmPiAi, {
+    providers: { [ROUTE]: { ...farmProfile, ...config } },
+  })
+  return ctx
+}
+
+describe.skipIf(!process.env.DAO_FARM_REACHABLE)('llm-pi-ai e2e (local farm)', () => {
+  afterEach(async () => {
+    await Promise.all(contexts.splice(0).map(ctx => ctx.fiber.dispose()))
+  })
+
+  it('route-default reasoning high: reasoning block plus plain text', async () => {
+    const ctx = await harness()
+    const result = await assemble(ctx, {
+      provider: ROUTE,
+      model: MODEL,
       messages: ask('Reply with exactly the word: pong'),
-      maxTokens: 50,
+      maxTokens: 2000,
     })
     expect(result.finish.kind).toBe('stop')
+    expect(result.message.content.some(block => block.type === 'reasoning')).toBe(true)
     expect(textOf(result).toLowerCase()).toContain('pong')
   })
 
-  it('flash + reasoning off: plain text without reasoning blocks', async () => {
-    const ctx = await harness(FLASH)
-    const result = await assemble(ctx,{
-      model: FLASH,
+  it('reasoning off: plain text without reasoning blocks', async () => {
+    const ctx = await harness()
+    const result = await assemble(ctx, {
+      provider: ROUTE,
+      model: MODEL,
       reasoningEffort: ReasoningEffortId('off'),
       messages: ask('Reply with exactly the word: pong'),
-      maxTokens: 50,
+      maxTokens: 2000,
     })
     expect(result.finish.kind).toBe('stop')
     expect(result.message.content.some(block => block.type === 'reasoning')).toBe(false)
     expect(textOf(result).toLowerCase()).toContain('pong')
   })
 
-  it.each([FLASH, PRO])('%s + reasoning high: reasoning blocks present', async (model) => {
-    const ctx = await harness(model)
-    const result = await assemble(ctx,{
-      model,
+  it('reasoning high: reasoning blocks present', async () => {
+    const ctx = await harness()
+    const result = await assemble(ctx, {
+      provider: ROUTE,
+      model: MODEL,
       reasoningEffort: ReasoningEffortId('high'),
       messages: ask('Which is larger, 9.11 or 9.8? Answer with just the number.'),
       maxTokens: 2000,
@@ -104,12 +117,13 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY)('llm-pi-ai e2e (real API)', () =>
     expect(textOf(result)).toContain('9.8')
   })
 
-  it('pro + reasoning max: tool-call round trip', async () => {
-    const ctx = await harness(PRO)
+  it('reasoning high: tool-call round trip', async () => {
+    const ctx = await harness()
 
-    const first = await assemble(ctx,{
-      model: PRO,
-      reasoningEffort: ReasoningEffortId('max'),
+    const first = await assemble(ctx, {
+      provider: ROUTE,
+      model: MODEL,
+      reasoningEffort: ReasoningEffortId('high'),
       messages: ask('What is the weather in Paris right now? Use the get_weather tool.'),
       tools: [weatherTool],
       maxTokens: 2000,
@@ -120,9 +134,10 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY)('llm-pi-ai e2e (real API)', () =>
     expect(call!.name).toBe('get_weather')
     expect(JSON.parse(call!.arguments)).toMatchObject({ city: expect.stringMatching(/paris/i) as string })
 
-    const second = await assemble(ctx,{
-      model: PRO,
-      reasoningEffort: ReasoningEffortId('max'),
+    const second = await assemble(ctx, {
+      provider: ROUTE,
+      model: MODEL,
+      reasoningEffort: ReasoningEffortId('high'),
       messages: [
         ...ask('What is the weather in Paris right now? Use the get_weather tool.'),
         first.message,
@@ -140,25 +155,5 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY)('llm-pi-ai e2e (real API)', () =>
     })
     expect(second.finish.kind).toBe('stop')
     expect(textOf(second).toLowerCase()).toMatch(/sunny|22/)
-  })
-
-  it('produces the same block structure as llm-deepseek for the same prompt', async () => {
-    // Loose structural equivalence between the two independent adapters:
-    // same block KINDS in the same order for a deterministic prompt — the
-    // cross-implementation check that the StreamChunk design holds.
-    const deepseekCtx = new Context()
-    contexts.push(deepseekCtx)
-    await deepseekCtx.plugin(LlmRuntime)
-    await deepseekCtx.plugin(LlmDeepSeek, { thinking: 'disabled' })
-
-    const piCtx = await harness(FLASH)
-
-    const prompt = ask('Reply with exactly the word: pong')
-    const [fromDeepSeek, fromPiAi] = await Promise.all([
-      assemble(deepseekCtx, { provider: 'deepseek-official', model: FLASH, messages: prompt, maxTokens: 50 }),
-      assemble(piCtx, { model: FLASH, messages: prompt, maxTokens: 50 }),
-    ])
-    expect(blockKinds(fromPiAi)).toEqual(blockKinds(fromDeepSeek))
-    expect(fromPiAi.finish.kind).toBe(fromDeepSeek.finish.kind)
   })
 })

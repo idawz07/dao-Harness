@@ -30,7 +30,7 @@ describe('dao-acp-app bundle', () => {
     expect(rows.find(row => row.id === 'acp-app-startup')?.name).toBe('@daoai/dao-acp-app')
     expect(rows.find(row => row.id === 'acp')).toMatchObject({
       inject: ['acpAppStartup'],
-      config: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      config: { provider: 'llama-router', model: 'Qwen3.8-27B-Q6_K_XL-128K' },
     })
   })
 })
