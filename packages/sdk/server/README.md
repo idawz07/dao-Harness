@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-sdk-jsonrpc-server
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-sdk-jsonrpc-server` serves the SDK wire protocol over stdio so out-of-process clients can drive harness agents: it opens one session per `sessionId`, queues user prompts, and streams every session event and agent status transition back to the client. Mount it as the `jsonrpc` plugin in a Loader composition; the surrounding tree supplies everything else — agents, model adapters, persistence, and tools. Stdout carries only JSON-RPC frames, so a deployment must not compose a stdout logger. It answers `shutdown` by disposing the root runtime and exiting 0; the app bin owns EOF and signal exits.
@@ -29,7 +27,7 @@ Mount this plugin when a runtime must serve SDK clients: add it to a `cordis.yml
 
 ### Wiring
 
-The plugin creates one agent per `sessionId` on first use. A registered model adapter wins the route; an unowned `deepseek-official` route mounts the DeepSeek adapter, and any other unowned provider fails initialization. The selected adapter resolves the exact model and optional reasoning effort before initialization succeeds.
+The plugin creates one agent per `sessionId` on first use. The surrounding tree must already mount a model adapter for the requested provider; a provider with no registered adapter fails initialization. The selected adapter resolves the exact model and optional reasoning effort before initialization succeeds.
 
 ### Configuration
 
@@ -119,13 +117,12 @@ Append-only; newly visible content follows the reusable request prefix and does 
 
 <a id="known-limitations-and-deferred-work"></a>
 
-
 These limits define when the plugin needs special operational care. They are current package constraints, not a comparison with other serving approaches or a task backlog.
 
 - **The wire has no per-session close or prompt-cancel method** — SDK-created agents remain live until process shutdown.
 - **There is no per-prompt result** — `MessageId` identifies inbox admission only; clients that own an automation interval must define and observe that interval themselves.
 - **stdout purity is deployment-enforced** — a surrounding config can still load a stdout logger and corrupt the JSON-RPC channel; this plugin does not inspect or veto sibling loggers.
-- **Automatic adapter mounting is DeepSeek-specific** — `initialize` can reuse any pre-registered model adapter, but its only fallback mounts the DeepSeek adapter.
+- **There is no fallback adapter mounting** — `initialize` reuses only model adapters the surrounding tree already registered; a provider with no registered adapter fails initialization.
 
 <a id="dev-note"></a>
 ### Dev Note

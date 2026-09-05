@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-session-query-sqlite
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-session-query-sqlite` searches session history with a SQLite FTS5 index and returns ranked, cursor-paginated results grouped by session or within one session. Mount it together with `dao-session-query` and you get full-text search plus the whole query surface — exact reads, filters, and traces — at once. Live sessions are indexed from memory and persisted sessions from a dedicated derived-index database, so results always reflect the newest state without touching the session-persistence store. Search is opt-in and off by default in shipped compositions: `openAt` decides whether the index opens at startup, at the first search, or never. Setup and usage come first; the implementation internals live in a collapsible developer section below.
@@ -136,7 +134,6 @@ None; this package neither assembles nor sends a provider request.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when this package is a poor fit or needs special operational care. They are current package constraints, not a general SQLite comparison or a task backlog.
 

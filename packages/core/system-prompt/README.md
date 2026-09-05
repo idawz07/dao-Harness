@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-system-prompt
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-system-prompt` assembles the system prompt and tool schemas the model receives before each step. Plugins contribute ordered prompt sections, dynamic runtime context, tool-schema providers, and named variables; the loop calls `assemble()` once per step and renders the result into the complete model prompt. The package provides the fixed harness identity and the global deployment persona, while an agent-scoped contribution shadows the global default for one agent. Config controls the harness identity opener, dynamic runtime context, the deployment persona, and an explicit model-facing tool order. Choose it when you need to add a prompt section, a prompt variable, or a tool-schema source — it is the assembly point all model-facing prose flows through.
@@ -165,13 +163,11 @@ Prefix-stable while the visible schema set, rendering, and order are unchanged. 
 
 <a id="known-limitations-and-deferred-work"></a>
 
-
 These limits define when prompt assembly needs special care. They are current package constraints, not a task backlog.
 
 - **Deployment-authored prompt text is config/composition only** — this plugin owns the global persona default, creator plugins may register agent-scoped shadows, and other sections come from the plugin that owns the fact; there is no end-user prompt-editing API.
 - **No escape syntax for literal `{{…}}` braces** — every complete group is interpolated against registered variables; an escape is deferred until a real prompt needs one.
 - **`toolOrder` misconfiguration surfaces at prompt assembly (the first turn), not at boot** — only shape violations throw at config load.
-
 
 <a id="dev-note"></a>
 ### Dev Note

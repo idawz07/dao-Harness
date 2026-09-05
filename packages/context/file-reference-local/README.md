@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-file-reference-local
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 Agents and their host UIs get ranked path candidates for `@file` mentions, scoped to each agent's workspace and bounded so even large repositories stay responsive. `dao-file-reference-local` implements `ctx.fileReferences` for the local filesystem: it keeps one reusable search index per agent, rebuilds it in the background after tool results so completion reflects workspace changes without stalling, and never follows directory symlinks. When the addressed agent can call `read`, it also installs a stable one-sentence guidance into the system prompt. Choose it when the agent's `read` tool operates on the Harness host filesystem; remote or virtual namespaces need a provider whose discovery matches the tool.
@@ -119,7 +117,6 @@ The stable sentence joins the system-prompt prefix. Mounting or removing this pr
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the provider is a poor fit. They are current package constraints.
 

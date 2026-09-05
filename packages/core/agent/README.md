@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-agent
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 With `dao-agent` you can create or resume an agent, send a follow-up prompt, steer the current step, inject model-facing context, cancel an activity, and wait until the agent is idle — all through the `Agent` handle every plugin programs against and the live registry (`ctx.agents`) that tracks running agents. The package also carries the process-local initiator scope, which attributes asynchronous work to the agent that started it, and declares the `agent/*` event vocabulary plugins use to observe or intercept work in flight. It has zero loop dependency: concrete creation and driving live in `dao-agent-loop`, which registers its factory here, so the driver stays swappable. Choose this package when you build UI, hooks, orchestrators, or extension plugins that touch live agents; the interface itself runs no model calls.
@@ -34,7 +32,7 @@ Mount `dao-agent` wherever live agents exist: it provides `ctx.agents` and the `
 ```text
 const handle = await ctx.agents.create({
   sessionId,
-  agentOptions: { provider: 'deepseek', model: 'deepseek-chat' },
+  agentOptions: { provider: 'llama-router', model: 'qwen38-27b' },
 })
 // later:
 await handle.dispose()   // stops the loop, unregisters, removes the session, unwinds the scope
@@ -160,7 +158,6 @@ Prefix-stable while an agent's scoped registrations are unchanged. Setup or relo
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when this package needs special care. They are current package constraints, not a task backlog.
 

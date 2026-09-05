@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-pwsh-local
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-pwsh-local` is the PowerShell executor: every command runs as a fresh, non-interactive `pwsh -Command` process with no profile files, so no shell state survives between calls. It mirrors `dao-bash-local`'s semantics call-for-call and adds PowerShell-shaped concerns: executable resolution, UTF-8 output pinning, and the model-friendly terminal environment. Commands run with the harness process's own authority — this executor confines nothing; compose `dao-pwsh-sandbox` when commands need the sandbox capability. The model-facing `pwsh` tool talks to it once it is mounted.
@@ -136,7 +134,6 @@ No direct invalidation; the named consumer owns any request-prefix changes.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when this executor is a poor fit. They are current package constraints, not a roadmap.
 

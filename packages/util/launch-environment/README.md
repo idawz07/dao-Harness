@@ -5,8 +5,6 @@ kind: "package-library"
 
 # @daoai/dao-launch-environment
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-launch-environment` freezes this run's environment at launch into an immutable snapshot that records which layer supplied each value. Resolving a name searches the layers from most to least trusted — the inherited process environment, the invoking directory's `.env`, then the Harness home's `.env` — so the winning value always carries its source. A caller can also resolve from a named subset of layers, which is a refusal rather than a demotion: omitted layers are unreachable no matter how trust ordering changes later. Values still reach `process.env` for config expressions and third-party libraries, but nothing the harness resolves treats that flattened view as authoritative. It is a zero-dependency library that product packages import directly; a `cordis.yml` cannot load it.
@@ -32,7 +30,7 @@ Resolve user-facing values through the snapshot instead of `process.env` wheneve
 import { launchEnvironmentOf } from '@daoai/dao-launch-environment'
 
 declare const ctx: import('@daoai/cordis').Context
-const endpoint = launchEnvironmentOf(ctx).get('DEEPSEEK_BASE_URL')?.value
+const endpoint = launchEnvironmentOf(ctx).get('LLAMA_ROUTER_BASE_URL')?.value
 ```
 
 `get(name)` searches every layer, most trusted first. `getFrom(name, sources)` searches only the named layers without changing that trust order — a caller that must never accept a layer leaves it out of the list, so no future reordering can let it back in.
@@ -45,7 +43,7 @@ const endpoint = launchEnvironmentOf(ctx).get('DEEPSEEK_BASE_URL')?.value
 | `<invocation cwd>/.env` | The project the harness was launched in, which the product trusts to configure its own agent |
 | `$DAO_HOME/.env` | The user's own machine-level defaults |
 
-Names match the way the platform matches them: exactly on POSIX, case-insensitively on Windows. A case-sensitive lookup on Windows would rank the wrong layer — a shell's `deepseek_api_key` and a project `.env`'s `DEEPSEEK_API_KEY` are one variable to the OS.
+Names match the way the platform matches them: exactly on POSIX, case-insensitively on Windows. A case-sensitive lookup on Windows would rank the wrong layer — a shell's `llama_router_api_key` and a project `.env`'s `LLAMA_ROUTER_API_KEY` are one variable to the OS.
 
 ### When no launcher booted the tree
 
@@ -87,14 +85,13 @@ Read these pages when you need the launcher that builds the snapshot or the cons
 
 - [Boot package](../../boot/app-boot/README.md) — the launcher that fills `ctx.launchEnvironment` before any config entry mounts.
 - [Credentials store](../../credentials/credentials-local/README.md) — resolves stored credentials against the snapshot's layers.
-- [DeepSeek provider](../../llm/llm-deepseek/README.md) — reads provider configuration through the launch environment.
+- [pi-ai provider](../../llm/llm-pi-ai/README.md) — reads provider configuration through the launch environment.
 
 -----
 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the snapshot is not a security boundary. They are current package constraints, not a task backlog.
 

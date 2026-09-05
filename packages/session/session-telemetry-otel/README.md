@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-session-telemetry-otel
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-session-telemetry-otel` delivers session records through OpenTelemetry logs and is the only entry a deployment loads for the [session-telemetry seam](../session-telemetry/README.md). Its `mode` decides whether session records follow the live stream, are released only at recorded feedback, or stay local: `FULL` hands every record to the OTel SDK immediately, `FEEDBACK_ONLY` replays the canonical log when a `feedback/record` lands, and `DISABLED` (the default) constructs nothing and shares nothing. Uploading modes compose the OTel JS SDK as-is — `LoggerProvider` → `BatchLogRecordProcessor` → OTLP/HTTP log exporter — and map each record onto `logger.emit()`, so batching, retry, queueing, and loss policy follow the SDK. Records carry the complete event data as the seam's redaction waterfall returns it, so a deployment exporting beyond a trusted boundary mounts its own redaction rules. Modes, configuration, and the export surface come first; the implementation internals live in a collapsible developer section below.
@@ -127,7 +125,6 @@ None; the package neither assembles nor sends a provider request.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define where SDK behavior governs and where export guarantees end. They are current package constraints.
 

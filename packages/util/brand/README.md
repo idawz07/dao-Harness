@@ -5,8 +5,6 @@ kind: "package-library"
 
 # @daoai/dao-brand
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-brand` makes structurally identical strings non-interchangeable at the type level with its `Branded<B>` primitive: a `SessionId` cannot be passed where a `ToolCallId` is expected even though both are plain `string`s at runtime. Comparison, logging, JSON serialization, and the wire format all behave exactly as for ordinary strings because the brand is erased at compile time. It is a type-only package with no runtime code and no dependency on other harness packages, so any package can brand the ids it owns without importing an unrelated capability package. Packages that own a cross-package id — `ToolCallId` in `dao-llm`, the shared agent/session `SessionId`, `JobId` in `dao-jobs` — brand that id and construct it through a per-id factory.

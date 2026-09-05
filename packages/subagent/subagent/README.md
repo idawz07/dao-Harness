@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-subagent
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-subagent` is the service behind child-agent delegation: an agent hands a task to a named child, collects the finished result, and — for continuable children — keeps sending follow-up work across turns. Multiple providers coexist under one contract, so a single composition can offer in-process children, out-of-process ACP or SDK children, and real Codex or Claude Code children side by side. Children come in two shapes: one-shot runs that settle with a single result, and continuable children whose durable session accepts later messages and can be interrupted. The same service answers discovery questions — which children exist, their mode, activity, and lineage — without loading or resuming them. Mount it with at least one provider backend and a delegation tool; the backends and the model-facing tools live in sibling packages.
@@ -157,7 +155,6 @@ Prefix-stable within a child: the statement never changes during the child's lif
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the seam is a poor fit or needs special operational care. They are current package constraints, not a general delegation comparison or a task backlog.
 

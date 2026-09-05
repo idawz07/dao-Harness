@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-session-persistence-sqlite
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-session-persistence-sqlite` keeps every session's durable history in a single SQLite database: sessions survive restarts, and the deployment's whole history becomes one queryable file you can back up, inspect with SQL, and analyze — instead of one artifact per session. Choosing it changes nothing for the agent loop, the model, or replay, because it serves the same logical `SessionEvent` stream as the JSONL backend; packing, compression, and recovery are storage-internal details. Choose it when a single queryable database fits the deployment; no shipped composition enables it by default. It is a pre-release provider: it rejects database files it does not own instead of migrating them, and its synchronous Node SQLite driver blocks the JavaScript thread during reads and writes. Setup, sizing, and migration guidance come first; the implementation internals live in a collapsible developer section below.
@@ -169,7 +167,6 @@ Physical packing does not mutate request prefixes. Provider cache reuse depends 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the provider is a poor fit or needs special operational care. They are current package constraints, not a general SQLite comparison or a task backlog.
 

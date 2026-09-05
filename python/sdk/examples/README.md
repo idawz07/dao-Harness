@@ -1,7 +1,5 @@
 # Python SDK example
 
-English | [中文](README.zh.md)
-
 Runnable Python SDK example over the sole application launcher, `dao --profile sdk-minimal`. The Python client owns JSON-RPC stdio; the profile owns the agent composition, persistence, execution policy, and plugins.
 
 ## Run the minimal agent
@@ -9,7 +7,7 @@ Runnable Python SDK example over the sole application launcher, `dao --profile s
 Install `dao-sdk`, export a model credential, then supply an isolated Harness home and workspace:
 
 ```sh
-export DEEPSEEK_API_KEY=sk-your-key-here
+export LLAMA_ROUTER_API_KEY=sk-your-key-here
 python python/sdk/examples/minimal.py \
   --dao-home /absolute/path/to/example-dao-home \
   --workspace /absolute/path/to/disposable-workspace \
@@ -17,14 +15,14 @@ python python/sdk/examples/minimal.py \
   "Inspect the repository and fix the failing tests."
 ```
 
-Set `DEEPSEEK_BASE_URL` for a compatible proxy, `DAO_MODEL` for the script's default model, or `DAO_SYSTEM_PROMPT` for the deployment persona. `--model` is the single runtime model selection; no matching environment variable is required. `--profile` can select another SDK-serving profile. The selected home stores the generated `sdk-minimal` profile and uncompressed JSONL session logs under `sessions/`; the script never reads `~/.dao` implicitly.
+Pass `--provider` for another route and `--model` for another model (the script's default model comes from `DAO_MODEL`); `DAO_SYSTEM_PROMPT` sets the deployment persona. `--model` is the single runtime model selection; no matching environment variable is required. `--profile` can select another SDK-serving profile. The selected home stores the generated `sdk-minimal` profile and uncompressed JSONL session logs under `sessions/`; the script never reads `~/.dao` implicitly.
 
 The shipped [`@daoai/dao-sdk-minimal` bundle](../../../packages/bundle/sdk-minimal/README.md) is the complete explicit Cordis tree for this mode. It exposes exactly:
 
 - owner-scoped persistent `bash` on Linux/macOS or `pwsh` on Windows
 - `str_replace_editor` with `view`, `create`, `str_replace`, and `insert`
 
-The bundle does not include `dao-base`, so every additional row is an explicit profile change. Runtime context, local instruction discovery, compaction, settings, managed credentials, telemetry, Web tools, subagents, and the full default tool roster are absent. The tree retains SDK startup and JSON-RPC serving, one environment-configured DeepSeek adapter, local execution, and JSONL persistence.
+The bundle does not include `dao-base`, so every additional row is an explicit profile change. Runtime context, local instruction discovery, compaction, settings, managed credentials, telemetry, Web tools, subagents, and the full default tool roster are absent. The tree retains SDK startup and JSON-RPC serving, one environment-configured llama-router route, local execution, and JSONL persistence.
 
 The persistent PTY and editor can modify any path available to the runtime process, so use a disposable checkout or container.
 

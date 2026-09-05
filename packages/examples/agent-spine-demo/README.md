@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-agent-spine-demo
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-agent-spine-demo` gives you a working agent in one plugin: mount it, add an LLM adapter and an executor, and you can run a full agent conversation — in-memory sessions with automatic titles, a system prompt with your persona and workspace instructions, tools for bash, skills, and background jobs, and a loop that runs turns with retries. You configure it in user terms: persona, tool order, workspace-context budget, which agents to pre-create, optional persisted goals, and background-job limits. It ships no UI, executor, or persistence backend, and it adds no prompts or tool schemas of its own — the model sees only what your configuration produces. Use it when you are building a headless, ACP, or JSON-RPC agent and want the common agent machinery without building it yourself. Read this package for what you get out of the box and what you must supply.
@@ -35,7 +33,7 @@ Out of the box you get: in-memory sessions with automatic fallback titles; a sys
 
 These pieces are yours to supply; the bundle leaves them out so each entry point can pick its own:
 
-- **The LLM adapter** — you add the provider that calls a model; pick `llm-deepseek`, `llm-pi-ai`, or `llm-replay`.
+- **The LLM adapter** — you add the provider that calls a model; pick `llm-pi-ai` or `llm-replay`.
 - **Model-backed session-title providers** — you get deterministic fallback titles out of the box; add at most one model-based titling provider if you want smarter titles.
 - **The bash executor** — the bundle provides the bash tool; you add the executor that runs commands (`bash-local` or a sandboxed implementation).
 - **Non-local skill providers** — local skills load out of the box; add providers for embedded or remote catalogs if you need them.
@@ -50,7 +48,7 @@ The smallest working setup mounts the bundle with a workspace-context budget, pl
   config:
     workspaceContext:
       maxBytes: 4096
-- name: '@daoai/dao-llm-deepseek'   # concrete adapter for ctx.llm
+- name: '@daoai/dao-llm-pi-ai'   # concrete adapter for ctx.llm
 - name: '@daoai/dao-bash-local'     # executor for ctx.shell
 ```
 
@@ -170,7 +168,6 @@ The bundle adds no request-prefix content of its own; provider cache reuse depen
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the bundle is a poor fit or needs special operational care. They are current package constraints, not a comparison with other composition approaches or a task backlog.
 

@@ -14,12 +14,8 @@ flowchart LR
   cfg --> plugin_dao_base_hmr
   plugin_dao_base_llm["llm<br/>@daoai/dao-llm"]
   cfg --> plugin_dao_base_llm
-  plugin_dao_base_deepseek_llm_api_extensions["deepseek-llm-api-extensions<br/>@daoai/dao-deepseek-llm-api-extensions"]
-  cfg --> plugin_dao_base_deepseek_llm_api_extensions
   plugin_dao_base_session["session<br/>@daoai/dao-session"]
   cfg --> plugin_dao_base_session
-  plugin_dao_base_session_log_deepseek["session-log-deepseek<br/>@daoai/dao-session-log-deepseek"]
-  cfg --> plugin_dao_base_session_log_deepseek
   plugin_dao_base_typert["typert<br/>@daoai/dao-typert-registry"]
   cfg --> plugin_dao_base_typert
   plugin_dao_base_typert_loader["typert-loader<br/>@daoai/dao-typert-loader"]
@@ -34,8 +30,6 @@ flowchart LR
   cfg --> plugin_dao_base_user_questions
   plugin_dao_base_agent["agent<br/>@daoai/dao-agent"]
   cfg --> plugin_dao_base_agent
-  plugin_dao_base_plugin_package_inventory_deepseek["plugin-package-inventory-deepseek<br/>@daoai/dao-plugin-package-inventory-deepseek"]
-  cfg --> plugin_dao_base_plugin_package_inventory_deepseek
   plugin_dao_base_agent_default_model["agent-default-model<br/>@daoai/dao-agent-default-model"]
   cfg --> plugin_dao_base_agent_default_model
   plugin_dao_base_jobs["jobs<br/>@daoai/dao-jobs-local"]
@@ -172,8 +166,6 @@ flowchart LR
   cfg --> plugin_dao_base_repeat_tool_reminder
   plugin_dao_base_web["web<br/>@daoai/dao-web"]
   cfg --> plugin_dao_base_web
-  plugin_dao_base_web_search_deepseek["web-search-deepseek<br/>@daoai/dao-web-search-deepseek"]
-  cfg --> plugin_dao_base_web_search_deepseek
   plugin_dao_base_web_fetch_http["web-fetch-http<br/>@daoai/dao-web-fetch-http"]
   cfg --> plugin_dao_base_web_fetch_http
   plugin_dao_base_tool_web["tool-web<br/>@daoai/dao-tool-web"]
@@ -186,8 +178,6 @@ flowchart LR
   cfg --> plugin_dao_base_agent_loop
   plugin_dao_base_fs_sandbox["fs-sandbox<br/>@daoai/dao-fs-sandbox"]
   cfg --> plugin_dao_base_fs_sandbox
-  plugin_dao_base_llm_deepseek["llm-deepseek<br/>@daoai/dao-llm-deepseek"]
-  cfg --> plugin_dao_base_llm_deepseek
 ```
 
 | Plugin id | Package / module |
@@ -195,9 +185,7 @@ flowchart LR
 | `timer` | `@daoai/cordis-plugin-timer` |
 | `hmr` | `@daoai/cordis-plugin-hmr` |
 | `llm` | `@daoai/dao-llm` |
-| `deepseek-llm-api-extensions` | `@daoai/dao-deepseek-llm-api-extensions` |
 | `session` | `@daoai/dao-session` |
-| `session-log-deepseek` | `@daoai/dao-session-log-deepseek` |
 | `typert` | `@daoai/dao-typert-registry` |
 | `typert-loader` | `@daoai/dao-typert-loader` |
 | `typert-gateway` | `@daoai/dao-api-gateway` |
@@ -205,7 +193,6 @@ flowchart LR
 | `session-title-llm` | `@daoai/dao-session-title-first-prompt-llm` |
 | `user-questions` | `@daoai/dao-user-questions` |
 | `agent` | `@daoai/dao-agent` |
-| `plugin-package-inventory-deepseek` | `@daoai/dao-plugin-package-inventory-deepseek` |
 | `agent-default-model` | `@daoai/dao-agent-default-model` |
 | `jobs` | `@daoai/dao-jobs-local` |
 | `llm-retry` | `@daoai/dao-llm-retry` |
@@ -274,14 +261,12 @@ flowchart LR
 | `tool-str-replace-editor` | `@daoai/dao-tool-str-replace-editor` |
 | `repeat-tool-reminder` | `@daoai/dao-repeat-tool-reminder` |
 | `web` | `@daoai/dao-web` |
-| `web-search-deepseek` | `@daoai/dao-web-search-deepseek` |
 | `web-fetch-http` | `@daoai/dao-web-fetch-http` |
 | `tool-web` | `@daoai/dao-tool-web` |
 | `tools` | `@daoai/dao-tools` |
 | `system-prompt` | `@daoai/dao-system-prompt` |
 | `agent-loop` | `@daoai/dao-agent-loop` |
 | `fs-sandbox` | `@daoai/dao-fs-sandbox` |
-| `llm-deepseek` | `@daoai/dao-llm-deepseek` |
 
 Source config: [`packages/bundle/base/cordis.patch.yml`](../../packages/bundle/base/cordis.patch.yml).
 

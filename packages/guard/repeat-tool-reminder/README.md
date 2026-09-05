@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-repeat-tool-reminder
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 A model can get stuck calling the same tool with the same arguments — re-running a failing command, re-reading an unchanged file — burning time and tokens without making progress. `dao-repeat-tool-reminder` notices the pattern and tells the model to stop: at chosen repeat counts it delivers a reminder to analyze the last result and either try a different approach or finish. The reminder is advice, never a block: a legitimate repeated call is delayed by nothing, and the decision to continue, change approach, or stop stays with the model. It tracks each agent separately, so one agent's loop never disturbs another's work, and a new user message clears the count. It ships enabled in the `dao` base bundle with reminders at 3, 5, and 8 repeats.
@@ -162,7 +160,6 @@ Append-only; newly visible content follows the reusable request prefix and does 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the guard is a poor fit. They are current package constraints, not a task backlog.
 

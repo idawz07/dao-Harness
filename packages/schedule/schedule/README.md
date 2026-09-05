@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-schedule
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-schedule` gives your session durable reminders: ask the model to remind you later, and the reminder comes back as an ordinary follow-up message in the same conversation. You can schedule a one-time reminder after a delay or at an absolute time, or a repeating reminder on a fixed interval, and you can list what is still pending or cancel a reminder. Reminders survive restarts: an already-live idle agent can deliver due work immediately, while a closed or cold session keeps it overdue until a future live root agent resumes the session. Delivery stays inside the session, with no email, SMS, or push notification. It is an opt-in Web capability; load the Schedule overlay to enable the reminder tools.
@@ -197,7 +195,6 @@ The batch appends after existing history and preserves its reusable prefix. Its 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits describe when Schedule does not fit your use case or needs special operational care. They are current package constraints, not a general reminder-service comparison or a task backlog.
 

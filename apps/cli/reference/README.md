@@ -1,7 +1,5 @@
 # `dao` CLI behavior reference
 
-English | [中文](README.zh.md)
-
 This reference defines the profile, web-alias, plugin-management, and config-dump command modes. Argv is parsed once through [`src/args.ts`](../src/args.ts), and [`src/bin.ts`](../src/bin.ts) dynamically imports only the selected runner.
 
 ## Profile boot
@@ -45,17 +43,14 @@ dao --profile web --patch ./extra.yml --dump-config
 
 `dao plugin --profile <name> <args...>` initializes the profile when missing (shipped template, or `@daoai/dao-base` alone for other names), then forwards `<args...>` to `pnpm` with the profile directory as working directory — `add`, `remove`, `why`, `update`, and every other pnpm verb work unchanged; pnpm must be on PATH. Relative path specs (`.`, `../plugin`, and their `file:`/`link:` forms) are anchored to the invoking directory first, so `add .` from a plugin checkout installs that checkout, not the profile. After every successful run, `dao.profile.bundles` is reconciled against the installed state: each dependency resolving to a package whose manifest declares `"dao": { "bundle": { "patch": "./cordis.patch.yml" } }` joins the layer stack (so an `update` that gains the declaration activates it), a bundle-less dependency stays plain with a one-time warning, and a removed dependency leaves the stack.
 
-The Codex and Claude Code subagent providers are separate optional Bundles. Add either package, both in one command, or remove either package independently:
+The Codex subagent provider is a separate optional Bundle. Add the package or remove it independently:
 
 ```sh
 dao plugin --profile <name> add @daoai/dao-subagent-codex
-dao plugin --profile <name> add @daoai/dao-subagent-claude-code
-dao plugin --profile <name> add @daoai/dao-subagent-codex @daoai/dao-subagent-claude-code
 dao plugin --profile <name> remove @daoai/dao-subagent-codex
-dao plugin --profile <name> remove @daoai/dao-subagent-claude-code
 ```
 
-The successful pnpm operation changes the Profile manifest and Bundle list on disk; a running Profile keeps the Bundle set from its current start. Restart that Profile after adding, removing, or updating a Bundle. This startup boundary applies to Bundle membership, while ordinary edits to the Profile or home `cordis.patch.yml` take effect through hot reload. On the next start, each installed Bundle registers only its dormant Host provider; a copied Preset must separately enable the matching tool row for new Agents. The [Codex provider README](../../../packages/subagent/subagent-codex/README.md) and [Claude Code provider README](../../../packages/subagent/subagent-claude-code/README.md) own executable, authentication, payload, and failure details; the [base Bundle reference](../../../packages/bundle/base/README.md) owns the default dependency closure.
+The successful pnpm operation changes the Profile manifest and Bundle list on disk; a running Profile keeps the Bundle set from its current start. Restart that Profile after adding, removing, or updating a Bundle. This startup boundary applies to Bundle membership, while ordinary edits to the Profile or home `cordis.patch.yml` take effect through hot reload. On the next start, the installed Bundle registers only its dormant Host provider; a copied Preset must separately enable the matching tool row for new Agents. The [Codex provider README](../../../packages/subagent/subagent-codex/README.md) owns executable, authentication, payload, and failure details; the [base Bundle reference](../../../packages/bundle/base/README.md) owns the default dependency closure.
 
 ```sh
 dao plugin --profile tui add github:deepseek-harness/turtle-ui
@@ -89,7 +84,7 @@ New sessions in base-backed profiles default to the `workspace-write` permission
 
 ## Shared deployment behavior
 
-The base bundle mounts the native DeepSeek adapter, settings and credential providers, stable `web_search`, the public-only HTTP fetch provider, and feedback-gated session telemetry. Provider credentials resolve from the inherited environment, `$DAO_HOME/.credentials.yaml`, the invoking directory's `.env`, then `$DAO_HOME/.env`; the managed document is never materialized into `process.env`, while both `.env` files are ordinary launch environment layers. Search uses `DEEPSEEK_API_KEY` and accepts `DEEPSEEK_SEARCH_BASE_URL`. The Web app's `cordis`, `ptc`, and `standard` agent presets expose `web_fetch` in every sandbox and approval mode without per-call confirmation; the provider still rejects non-public destinations before connecting.
+The base bundle mounts the pi-ai model adapter (the local llama-router farm is the shipped default), settings and credential providers, the stable `web_search` tool with no search provider shipped in the base (a deployment mounts one, e.g. web-search-exa or web-search-perplexity), the public-only HTTP fetch provider, and feedback-gated session telemetry. Provider credentials resolve from the inherited environment, `$DAO_HOME/.credentials.yaml`, the invoking directory's `.env`, then `$DAO_HOME/.env`; the managed document is never materialized into `process.env`, while both `.env` files are ordinary launch environment layers. The farm route resolves `LLAMA_ROUTER_API_KEY` per request, mounted search providers resolve their own API-key environment variable the same way, and `web_search` auto-selects when exactly one mounted provider is usable. The Web app's `cordis`, `ptc`, and `standard` agent presets expose `web_fetch` in every sandbox and approval mode without per-call confirmation; the provider still rejects non-public destinations before connecting.
 
 Session telemetry defaults to feedback-gated sharing: nothing is uploaded until the user records `/feedback`, and each recorded feedback uploads the session records not yet shared, through that event; a resumed session shares only its current lifecycle. `DAO_TELEMETRY_MODE=FULL` instead streams every projected session event as OTLP/HTTP logs, `DAO_TELEMETRY_MODE=DISABLED` keeps everything local, and any non-empty `DAO_TELEMETRY_DISABLED` remains an authoritative hard opt-out. `DAO_TELEMETRY_OTLP_URL` selects another collector. The shipped base has no telemetry redaction rule, so released exports can contain message text, tool arguments and results, and workspace paths; the [feedback-gated-default Agent Note](../../../.agents/notes/implemented/feature/2026-08-25-feedback-gated-telemetry-default.md) owns that deployment decision.
 

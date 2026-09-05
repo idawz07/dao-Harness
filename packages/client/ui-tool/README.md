@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-client-ui-tool
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-client-ui-tool` is the client Tool presentation plugin of the dao web client: it renders every tool call in the conversation. `ui-conversation` dispatches each ordered `tool-call` Conversation Node through the matching key of `conversation.chat.node`; this package renders its root and Code Dispatch children, then dispatches every atomic call through the keyed `tool.call.toolview` slot. Unregistered Tool names use the generic card. Business UI packages register only their wire Tool names and atomic views — they do not pair Session events, rebuild the transcript, or own root/subcall topology, because the Runtime remains authoritative for call/result pairing, lifecycle, and recursive `subCalls` projection.
@@ -92,7 +90,6 @@ None; this package neither assembles nor sends a provider request.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define the dispatch depth and the view ownership; they are current package constraints.
 

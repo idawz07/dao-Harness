@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-storage-domain
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-storage-domain` is the typed way to use the storage family: an owning package declares a domain once — its name, format version, and zod record schemas — and host consumers open it over a routed backend and read and write records through `ctx.storageDomain`. Reads are synchronous from authoritative in-memory state; every write is durable before it resolves and emits a `domain/changed` event, so reads never diverge from the stored medium. It is the only consumer of the backend contract — product packages never touch backends directly. The layer is host-side only: it registers no tools, injects no prompts, and appends no session events, so the model and the agent loop never see it.
@@ -144,7 +142,6 @@ Independent: domain reads and writes never touch request prefixes, so nothing he
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the domain layer is a poor fit or needs special operational care. They are current package constraints, not a task backlog.
 

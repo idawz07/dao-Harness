@@ -5,8 +5,6 @@ kind: "package-bundle"
 
 # @daoai/dao-experimental-agent-team-web-profile
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-experimental-agent-team-web-profile` is the private Web layer for [Agent Teams](../agent-team/README.md). Add it after `@daoai/dao-web-app` and [`@daoai/dao-experimental-agent-team-profile`](../agent-team-profile/README.md) to show the Team roster, task board, and teammate navigation in the browser. Removing either experimental layer leaves the stable base and Web composition unchanged. Official releases exclude this package, so it is available only from a source checkout.

@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-client-ui-workspace
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-client-ui-workspace` is the shared Workspace browser and picker of the dao web client: users browse grouped or flat Session rows in the sidebar, pick a Workspace for a new session from the Session Intent hero, and manage Workspaces and Sessions with add, rename, reorder, search, fork, and archive actions; the same Workspace menu and add flow serve both surfaces. Pending user interactions surface as amber warning dots, and the shared sidebar projection hides subagent-origin sessions. Distinct canonical paths remain separate id-keyed Workspaces, and adding a folder goes through a directory-flow child hole that a composed picker package's client half fills.
@@ -93,7 +91,6 @@ None; this package neither assembles nor sends a provider request.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define the search depth, the archive surface, and the picking carrier; they are current package constraints.
 

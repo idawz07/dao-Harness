@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-fs-observation-policy
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-fs-observation-policy` adds the read-before-edit policy to the `ctx.fs` filesystem contract ([`dao-fs`](../fs/README.md)): it records which files the calling session has observed, and guards every write and edit with that record — an unseen file can only be created, an observed file can only be replaced at the version last seen, and editing requires a prior read. It participates through the `fs/*` events only, so it registers no service and has no public methods; removing it leaves the bare provider's unconditional mutation behavior instead of breaking the tools. Loading it alongside a backend (`fs-local`, `fs-sandbox`) and the tools (`tool-fs`) makes model file edits fail with a clear remedy until the file has been read. Choose it for deployments that want agents to read before they mutate files.
@@ -119,7 +117,6 @@ Append-only; newly visible content follows the reusable request prefix and does 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the policy is a poor fit or needs special operational care. They are current package constraints, not a general filesystem comparison or a task backlog.
 

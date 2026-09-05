@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-client-ui-permission-presets
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 This package provides permission preset surfaces for two lifetimes in the Web GUI: a General-settings row chooses the default for later sessions without switching the current session. A picker on the host `/permission` command switches the current session through one flat preset list with the active value marked. Kebab-case names render as title-case labels, and `danger-full-access` is presented as `Full access`. Choosing full access requires an explicit risk acknowledgement before either surface writes it. Both surfaces read one host-computed projection and write through one path, so the pushed projection frame is the single confirmation both follow.
@@ -73,7 +71,6 @@ No direct invalidation; the knob consumers own any request-prefix changes.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define the current permission surfaces. They are current package constraints, not a general policy comparison or a task backlog.
 

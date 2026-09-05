@@ -5,11 +5,9 @@ kind: "package-library"
 
 # @daoai/dao-hook-protocol
 
-English | [中文](README.zh.md)
-
 ## Summary
 
-`dao-hook-protocol` makes both bridges handle your hooks identically: it defines what a hook can do and what happens when it runs. You never install or configure it yourself — choose `dao-hooks-claude-code` or `dao-hooks-codex`, point it at your existing `hooks.json`, and these rules apply to your hooks. Through either bridge, a hook can block a prompt or tool call with a message the model sees, attach extra context to the conversation, or ask the run to stop. Only command hooks run; `http`, `mcp_tool`, `prompt`, and `agent` handlers are skipped with a warning.
+`dao-hook-protocol` makes the bridge handle your hooks: it defines what a hook can do and what happens when it runs. You never install or configure it yourself — choose `dao-hooks-codex` and point it at your existing `hooks.json`, and these rules apply to your hooks. Through the bridge, a hook can block a prompt or tool call with a message the model sees, attach extra context to the conversation, or ask the run to stop. Only command hooks run; `http`, `mcp_tool`, `prompt`, and `agent` handlers are skipped with a warning.
 
 ## Table of Contents
 
@@ -25,11 +23,11 @@ English | [中文](README.zh.md)
 <a id="use-this-package"></a>
 ## Use this package
 
-You don't install or configure this package directly — mounting `dao-hooks-claude-code` or `dao-hooks-codex` applies these rules to your existing `hooks.json` hooks. Use this page to learn what a hook can do and what happens when it runs; the two bridge pages list which events each dialect supports.
+You don't install or configure this package directly — mounting `dao-hooks-codex` applies these rules to your existing `hooks.json` hooks. Use this page to learn what a hook can do and what happens when it runs; the bridge page lists the events its dialect supports.
 
 ### When to choose it
 
-Choose `dao-hooks-claude-code` or `dao-hooks-codex` when you have existing Claude Code or Codex hooks and want them to keep working during agent runs. You never choose this package directly. Avoid the whole group for bespoke behavior with no reference-tool equivalent: a native Cordis plugin has the full harness API with no hook protocol in between.
+Choose `dao-hooks-codex` when you have existing Codex hooks and want them to keep working during agent runs. You never choose this package directly. Avoid the whole group for bespoke behavior with no reference-tool equivalent: a native Cordis plugin has the full harness API with no hook protocol in between.
 
 ### What a hook can do
 
@@ -111,7 +109,7 @@ Read these pages when the package-level contract is not enough. They move from t
 <a id="model-experience"></a>
 ## Model Experience
 
-Indirectly, through `dao-hooks-claude-code` and `dao-hooks-codex`, which are the only consumers that render decoded hook output into model context.
+Indirectly, through `dao-hooks-codex`, the only consumer that renders decoded hook output into model context.
 
 #### KV Cache effect
 
@@ -120,7 +118,6 @@ No direct invalidation; the named consumers own any request-prefix changes.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits describe what hooks cannot do through the shared engine yet. They are current package constraints, not a task backlog.
 

@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-session-persistence
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-session-persistence` stores a session's event log durably, reloads it on resume, and lists stored sessions through one backend-neutral service (`ctx.sessionPersistence`) that every persistence backend implements. The persisted unit is the existing `SessionEvent` log — there is no parallel stored message type — and non-replayable metadata (format version, working directory, lineage, seed boundary) travels separately as `SessionHeader`. Backends own their storage, the service owns the semantics: append-only logs, contiguous sequence numbers, crash recovery that preserves an interrupted turn instead of truncating it, and durable writes that resolve only after the batch is safe. Pick a backend (`session-persistence-jsonl` for per-session files, `session-persistence-sqlite` for one database), mount it, and sessions persist and resume without the loop or the model knowing which backend is underneath.
@@ -129,7 +127,6 @@ Persistence does not mutate live request prefixes. A resumed loop can reuse prov
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define where the seam's guarantees stop. They are current package constraints, not a task backlog.
 

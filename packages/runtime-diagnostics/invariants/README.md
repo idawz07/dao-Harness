@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-invariants
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-invariants` runs package-owned runtime checks — invariants — inside a Dao composition: any package can ship a `./invariant` companion that verifies its own durable relationships (authoritative event streams and mutable snapshots) while the composition runs. Checks run automatically, and a failed check reports an `InvariantError` attributed to the package that owns the violated relationship. Choose it for compositions that want self-checking diagnostics with a global switch and package-name filters; the standard agent composition already mounts it with the four core companions, and loading the service alone installs no checks.
@@ -146,7 +144,6 @@ Checks observe assembled requests and durable state without mutating request con
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the registry is a poor fit or needs operational care. They are current package constraints, not a task backlog.
 

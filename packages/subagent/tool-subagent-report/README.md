@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-tool-subagent-report
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-tool-subagent-report` gives every continuable in-process child a return channel to the agent that started it: it installs a child-scoped `report` tool plus the prompt guidance that tells the child to use it. The tool and its guidance exist only inside those children — roots, one-shot subagents, remote providers, and sibling scopes never see them. Accepted reports reach the parent as ordinary parent messages, framed as `Background subagent <child-id> reported:`. Continuable mode depends on neither this package nor the control package; this one owns only the child-to-parent direction.
@@ -153,7 +151,6 @@ Append-only; the report follows the parent's reusable request prefix. Next-step 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define what an accepted report does and does not guarantee; they are current package constraints.
 

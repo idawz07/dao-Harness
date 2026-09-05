@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-authorization
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-authorization` obtains credentials that configuration cannot supply by asking a human: a plugin registers one flow per credential, and a configuration UI or another surface runs an attempt whose notices and questions reach exactly the page that asked. A human signs in with one of the flow's methods, pastes a code, or answers a question; when the flow resolves, its credential record is committed to the `dao-credentials` store, and an attempt only reports `authorized` when that commit was observed. A refusal or a withdrawn attempt settles as `cancelled` rather than an error, so a surface can tell "the human said no" from "the flow broke". Choose it when a credential must be obtained interactively: it builds on the credential-record half of the credential seam, needs that store mounted, and ships no flows of its own — your plugin registers them.
@@ -142,7 +140,6 @@ No invalidation; no authorization state enters a request prefix.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when this package is a poor fit or needs special care. They are current package constraints, not a task backlog.
 

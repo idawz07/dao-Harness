@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-terminal
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-terminal` provides persistent, owner-scoped terminal sessions to the harness: a session keeps shell or REPL state across tool calls, and every operation is fenced to the exact agent that created it. It provides the `ctx.terminals` service, which mints opaque session ids, routes session creation through registered backends, and waits for quiescent cleanup when an owner or the service disposes. It defines no terminal mechanics itself: backends such as the shipped `dao-terminal-bash` own spawning and readiness, and the model-facing tools in `dao-tool-terminal` own presentation. Sessions are process-local: they do not survive a harness restart.
@@ -128,7 +126,6 @@ No direct invalidation; `@daoai/dao-tool-terminal` owns request-prefix changes.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the service is a poor fit. They are current package constraints, not a task backlog.
 

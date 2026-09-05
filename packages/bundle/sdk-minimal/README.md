@@ -5,8 +5,6 @@ kind: "package-bundle"
 
 # `@daoai/dao-sdk-minimal`
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 Use `dao --profile sdk-minimal` when an SDK client needs a small, explicit coding-agent runtime. The profile advertises a platform-selected persistent shell and `str_replace_editor`, persists sessions as uncompressed JSONL, and selects the model from the SDK initialization request. It supplies a complete Cordis tree and deliberately excludes `dao-base`, Web, settings, managed credentials, telemetry, compaction, workspace instructions, skills, jobs, and subagents. Its danger-full-access policy lets the shell and editor modify any path available to the process, so use it only with an isolated workspace.
@@ -25,7 +23,7 @@ Use `dao --profile sdk-minimal` when an SDK client needs a small, explicit codin
 <a id="use-this-package"></a>
 ## Use this package
 
-Launch the profile directly or select it from the Python SDK. Supply an explicit `DAO_HOME`, use a disposable workspace, and provide the model credential through `DEEPSEEK_API_KEY`.
+Launch the profile directly or select it from the Python SDK. Supply an explicit `DAO_HOME`, use a disposable workspace, and provide the model credential through `LLAMA_ROUTER_API_KEY`.
 
 ```sh
 export DAO_HOME=/absolute/path/to/example-dao-home
@@ -46,7 +44,7 @@ The profile mounts exactly one persistent shell stack: Bash on Linux and macOS, 
 <details>
 <summary>Implementation internals — click to expand</summary>
 
-The bundle's single insert is the complete application tree: SDK stdio startup and JSON-RPC serving, one environment-configured DeepSeek adapter, the executor-less agent spine, local subprocess and unrestricted filesystem providers, a platform-selected persistent shell PTY, the string-replace editor, and uncompressed JSONL persistence under `$DAO_HOME/sessions`. It does not inherit another bundle, so every extra row is an explicit profile change.
+The bundle's single insert is the complete application tree: SDK stdio startup and JSON-RPC serving, one environment-configured pi-ai adapter on the `llama-router` route, the executor-less agent spine, local subprocess and unrestricted filesystem providers, a platform-selected persistent shell PTY, the string-replace editor, and uncompressed JSONL persistence under `$DAO_HOME/sessions`. It does not inherit another bundle, so every extra row is an explicit profile change.
 
 ### Source map
 

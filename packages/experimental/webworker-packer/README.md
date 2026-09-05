@@ -5,8 +5,6 @@ kind: "package-library"
 
 # `@daoai/dao-experimental-webworker-packer`
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 The VFS image packer: turns one composed profile into the gzip-compressed base tar the browser worker mounts as its filesystem, and opaque data trees into ordered overlay tars ([experimental stance](../../../.agents/notes/implemented/architecture/2026-08-20-webworker-pack-lowering-and-preview.md)). Nothing is compiled from source — the base image carries the repository's real build products, so a preview deployment debugs exactly what the served deployment ships. Read this page when packaging a preview image or diagnosing its contents.
@@ -52,7 +50,6 @@ None; this package neither assembles nor sends a provider request.
 - **Reachability infers only exact request forms** — computed `import` and `require` arguments, stored `createRequire` results, CommonJS-obtained `createRequire`, and bases other than `import.meta.url` resolve only at runtime and fail loud if the target was otherwise pruned; a target reachable only through those forms needs an explicit image entry seed.
 - **Vendored package sources (`src/*.ts`) are excluded** — nothing resolves them at runtime; a future in-worker source-inspection feature would need a dedicated include rule.
 - **The packer assumes built `lib/` artifacts are current**: it never compiles, so a stale workspace build packs stale bytes. Run the repository build first.
-
 
 <a id="dev-note"></a>
 ### Dev Note

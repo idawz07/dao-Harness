@@ -5,11 +5,9 @@ kind: "package-reference"
 
 # @daoai/dao-client-ui-attachment
 
-English | [中文](README.zh.md)
-
 ## Summary
 
-This package renders everything the conversation UI shows about attachments: pending draft images under the composer, a full-viewport drop invitation, durable images in Chat and Trajectory, and a lightbox for the original image. It is a pure presentation layer — attachment data, image loading, and callbacks come from the conversation package through declared slots. Choose it for the DeepSeek Chat-style image experience; non-image files have no surface here.
+This package renders everything the conversation UI shows about attachments: pending draft images under the composer, a full-viewport drop invitation, durable images in Chat and Trajectory, and a lightbox for the original image. It is a pure presentation layer — attachment data, image loading, and callbacks come from the conversation package through declared slots. Choose it for this chat-style image experience; non-image files have no surface here.
 
 ## Table of Contents
 
@@ -86,10 +84,9 @@ None; this package neither assembles nor sends a provider request.
 
 <a id="known-limitations-and-deferred-work"></a>
 
-
 These limits define the current attachment surface. They are package constraints, not a general image-viewer comparison or a task backlog.
 
-- **Images only** — non-image files have no rail card or history renderer yet; DeepSeek Chat-style file cards and upload progress wait until the composer accepts non-image attachments.
+- **Images only** — non-image files have no rail card or history renderer yet; chat-style file cards and upload progress wait until the composer accepts non-image attachments.
 - **No zoom or download in the lightbox** — the preview renders the original at fit-to-viewport size only.
 - **The lightbox does not trap focus** — it sets `aria-modal` and restores focus on close, but Tab can reach the page behind it.
 

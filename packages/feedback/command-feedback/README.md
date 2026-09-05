@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-command-feedback
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-command-feedback` lets a user tell the harness what they think of a session: type `/feedback` plus a remark, and the remark is recorded and acknowledged. Recording is immediate and never starts model work, so it is safe at any point in a conversation — the model neither sees the remark nor is interrupted by it. The acknowledgement names the session and the anonymous user, and reports how the session is shared under the deployment's telemetry policy. The command ships with the Web client and needs no configuration; headless, ACP, and JSON-RPC entry points do not provide slash commands and cannot run it.
@@ -125,7 +123,6 @@ Independent of the model request path. Recording appends to the session log only
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define where `/feedback` is a poor fit or behaves differently than a user might expect. They are current package constraints, not a task backlog.
 

@@ -5,8 +5,6 @@ kind: "package-bundle"
 
 # @daoai/dao-web-app
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 Run `dao --profile web` and the interface opens in your default browser, ready for interactive chat with the agent. You get the conversation view, model and settings management, and session history, backed by the same model access, tools, and safety defaults as every other surface. The command prints a tokenized startup URL; the browser exchanges that token for a signed session cookie and redirects to the clean root URL. You can change the port, suppress the browser handoff, and allow extra hosts from the command line; binding all network interfaces is intentionally not supported. Choose it for interactive work in the browser; `dao-headless` is the one-shot command-line sibling.
@@ -137,7 +135,6 @@ The prompt section sits near the system prompt's head and is stable for the life
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits tell you what to expect in unusual setups — a source checkout, SSH sessions, or strict networks. They are current package constraints, not a general browser comparison or a task backlog.
 

@@ -5,8 +5,6 @@ kind: "package-library"
 
 # @daoai/dao-sandbox-windows-acl
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-sandbox-windows-acl` confines Windows processes by write restriction: a child runs under a restricted token whose write access is limited to the workspace and a private temp directory, so `workspace-write` allows those writes and `read-only` allows none. It ships as the win32 rung of `dao-sandbox-local`: mounting the local provider on Windows gives every confined bash or pwsh call this backend automatically. It can also be embedded directly through the `AclSandbox` API to spawn confined children with captured stdio. Every Win32 call is checked and failures throw, so a child is never spawned unrestricted. Enforcement is partial by design — the restricted token must retain Everyone for process initialization, and NTFS hard links can alias one file object across paths — so the backend reports `partial` and callers that need the absolute boundary can surface it.
@@ -160,7 +158,6 @@ None directly; the denial surface belongs to the tool layer.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the backend is a poor fit or needs special operational care. They are current package constraints, not a general Windows comparison or a task backlog.
 

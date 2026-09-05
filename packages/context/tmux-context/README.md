@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-tmux-context
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-tmux-context` tells the model where its agent process runs: on each turn whose tmux state changed, it appends a durable, source-attributed reading naming the tmux session, window, and pane plus the window's pane-tree layout. It is sampled once per turn during request preparation and only when the process genuinely lives inside the named pane — a terminal that merely inherited `$TMUX`/`$TMUX_PANE` from a tmux ancestor reads as not in tmux and adds nothing. An unchanged location adds nothing, and a failed query is a no-op, never a turn failure. The plugin is opt-in and not part of the shipped Web/headless composition.
@@ -120,7 +118,6 @@ Append-only; newly visible content follows the reusable request prefix and does 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when tmux location context is a poor fit. They are current package constraints.
 

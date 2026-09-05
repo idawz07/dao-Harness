@@ -216,15 +216,6 @@
         backgroundMode: one-shot
         maxDepth: provider-managed
 
-    - id: tool-subagent-claude-code
-      name: '@daoai/dao-tool-subagent'
-      disabled: true
-      config:
-        provider: claude-code
-        toolName: subagent_claude_code
-        backgroundMode: one-shot
-        maxDepth: provider-managed
-
     - id: workflow-worker-thread
       name: '@daoai/dao-workflow-worker-thread'
       config:

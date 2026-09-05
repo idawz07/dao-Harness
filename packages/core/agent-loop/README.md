@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-agent-loop
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-agent-loop` creates agents — fresh or resumed from persisted history — and runs the turn and step lifecycle that claims prompts, assembles requests, streams model responses, dispatches tool calls, and appends every result back to the session log. As the default driver it implements the `Agent` interface from `dao-agent` and registers its factory there, so plugins create and drive agents through `ctx.agents` without depending on this package. Declarative config entries start agents automatically at boot, and `maxParallelToolCalls` caps how many parallel-safe tool calls run at once. It is the harness's only concrete loop — everything beyond "call the model, run the tools, repeat" belongs to plugins listening on the event taxonomy. Choose it as the driver for standard compositions; swap it by implementing `Agent` and registering through `ctx.agents`.
@@ -37,8 +35,8 @@ Agents declared in the config start automatically when the plugin loads. Each en
     maxParallelToolCalls: 10
     agents:
       - id: 'main'
-        provider: deepseek
-        model: deepseek-chat
+        provider: llama-router
+        model: qwen38-27b
         reasoningEffort: high
         cwd: /workspace
 ```
@@ -63,7 +61,7 @@ Plugins and hosts create agents through `ctx.agents.create()` and resume persist
 ```text
 const handle = await ctx.agents.create({
   sessionId,
-  agentOptions: { provider: 'deepseek', model: 'deepseek-chat' },
+  agentOptions: { provider: 'llama-router', model: 'qwen38-27b' },
   setup: (agentCtx) => { /* scoped tools, prompt sections, listeners */ },
 })
 ```
@@ -179,7 +177,6 @@ Append-only; each synthetic result follows the reusable request prefix and does 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the loop needs special care. They are current package constraints, not a task backlog.
 

@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-llm
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `@daoai/dao-llm` is the provider-neutral model-call service at the center of the harness's LLM capability. Every composition that streams a request to a model provider goes through it, and it owns the shared vocabulary — messages, content blocks, and raw stream chunks — that the agent loop, session log, and every plugin speak. With it you can register provider adapters, stream one model call, list and discover models, resolve exact-model metadata and call defaults, and capture each provider's retry policy; every request is logged so it stays reconstructable from the session log. It executes no retries and owns no provider wire logic: adapters translate their provider's format, and the optional `dao-llm-retry` package re-runs failed requests at durable step boundaries. Requests are deep-frozen before dispatch, so middleware and adapters can read them but never rewrite them.
@@ -29,7 +27,7 @@ Any composition that calls a model provider — an agent loop, a session-title g
 
 ### When to choose it
 
-Choose this package whenever a plugin or composition needs to call a model: it is the only supported path into provider adapters, and it keeps one vocabulary across the loop, the session log, and every consumer. Do not reach for it when you need provider-specific wire behavior (that belongs in an adapter such as `dao-llm-deepseek` or `dao-llm-pi-ai`) or retry execution (that belongs in `dao-llm-retry`).
+Choose this package whenever a plugin or composition needs to call a model: it is the only supported path into provider adapters, and it keeps one vocabulary across the loop, the session log, and every consumer. Do not reach for it when you need provider-specific wire behavior (that belongs in an adapter such as `dao-llm-pi-ai`) or retry execution (that belongs in `dao-llm-retry`).
 
 ### Minimal composition
 
@@ -37,17 +35,21 @@ Mount the service and at least one adapter, then select the provider by name in 
 
 ```yaml
 - name: '@daoai/dao-llm'
-- name: '@daoai/dao-llm-deepseek'
+- name: '@daoai/dao-llm-pi-ai'
   config:
-    apiKeyEnv: DEEPSEEK_API_KEY
+    providers:
+      llama-router:
+        apiKeyEnv: LLAMA_ROUTER_API_KEY
+        api: openai-completions
+        baseURL: http://100.110.212.93:8081/v1
 ```
 
 A stream returns token-level chunks and always ends with one terminal `finish` chunk; `BlockAssembler` turns the chunks into content blocks and messages, and the loop logs each chunk for replay:
 
 ```text
 for await (const chunk of ctx.llm.stream({
-  provider: 'deepseek-official',
-  model: 'deepseek-v4-flash',
+  provider: 'llama-router',
+  model: 'Qwen3.8-27B-Q6_K_XL-128K',
   messages: [createUserMessage({ content: [{ type: 'text', text: 'Hello' }] })],
 })) {
   // chunks: block-start, text-delta, ..., usage, finish
@@ -120,11 +122,10 @@ A request is validated against its exact model's capability — context window, 
 Read these pages when the package-level contract is not enough. They move from the shared types to the concrete adapters, the retry executor, and the measurement service.
 
 - [LLM streaming subsystem](../../../docs/subsystems/llm-streaming.md) — the message and block types, the assembled model request, the `StreamChunk` protocol, and the adapter contract.
-- [llm-deepseek adapter](../llm-deepseek/README.md) — the direct DeepSeek chat-completions implementation.
 - [llm-pi-ai adapter](../llm-pi-ai/README.md) — the pi-ai-backed multi-provider implementation.
 - [llm-retry](../llm-retry/README.md) — the retry executor that re-runs failed model requests.
 - [Token meter](../token-meter/README.md) — replay-aware request and context pressure measurement.
-- [Twin LLM adapters](../../../.agents/notes/implemented/architecture/2026-06-13-twin-llm-adapters.md) — why the DeepSeek route ships two structurally different adapters.
+- [Local llama-router farm default route](../../../.agents/notes/implemented/architecture/2026-08-29-local-llama-router-farm-default-route.md) — the resident local LLM route the shipped profiles default to.
 - [Terminal LLM stream failures](../../../.agents/notes/implemented/architecture/2026-07-29-terminal-llm-stream-failures.md) — the service boundary between model-request outcomes and plugin failures.
 
 -----
@@ -141,7 +142,6 @@ Reasoning-effort materialization preserves the assembled request prefix. Image i
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define where this service stops and other packages or future work begin. They are current package constraints, not a task backlog.
 

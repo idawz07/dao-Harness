@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-goal-round-driver
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-goal-round-driver` automatically continues an active goal in the same session: whenever the agent is idle with an active, armed goal and remaining round capacity, the driver starts the next goal round. Each round is one model turn toward the objective, driven by a retained goal-round prompt; only goal-sourced rounds count against the goal's round cap, and the goal records a blocker when the cap is exhausted. The driver has no configuration of its own — the round cap belongs to the goal definition and the model-facing blocked threshold belongs to `dao-tool-goal`, so policy stays in one place. Mount it together with `dao-goal` and `dao-tool-goal` when a task should work itself toward completion across rounds; leave it out when every step needs human steering.
@@ -120,7 +118,6 @@ Append-only within an epoch: each admitted round extends the existing conversati
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the driver is a poor fit or needs special care. They are current package constraints, not a task backlog.
 

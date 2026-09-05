@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-experimental-agent-team
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-experimental-agent-team` turns one coding session into a small working team: the session's agent becomes the Lead, creates named teammates for delegated work, exchanges durable messages with them, and tracks shared tasks on a common board. Messages and task state survive crashes, reloads, and interruptions, so a teammate that was offline receives its queued messages when it resumes. It provides no tools of its own — mount the sibling `dao-experimental-tool-agent-team` so the model can create teammates, message them, and use the task board. It is experimental: excluded from official releases, carries no stability promise, and needs durable session storage to activate.
@@ -188,7 +186,6 @@ Peer messages append after the target's reusable history prefix. Cold resume reu
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits describe what a team cannot do yet or what needs special operational care. They are current package constraints, not a comparison with other coordination mechanisms.
 

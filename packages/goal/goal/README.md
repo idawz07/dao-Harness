@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-goal
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-goal` keeps one durable completion objective per agent session: the goal's text, phase, round count, and revision history live in the session log, so they survive session resume, fork, and process restarts. You can create, edit, pause, resume, complete, block, and clear a goal, and every mutation is compare-and-set, so a stale view cannot clobber newer state. A goal carries a round cap (default 256) that bounds automatic continuation, and a blocked goal keeps a stable policy code plus a human explanation. It is state, not a scheduler: the service decides nothing about when work continues, and continuation permission is process-local and never persisted. Choose it when one long-running objective should span many turns; skip it for routine single-turn work.
@@ -147,7 +145,6 @@ There is no KV-cache effect until another component exposes goal state in model-
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the goal service is a poor fit or needs special care. They are current package constraints, not a task backlog.
 

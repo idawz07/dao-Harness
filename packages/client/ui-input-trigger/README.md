@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-client-ui-input-trigger
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 This package powers the input trigger pipeline of the Web GUI: it detects `/` and `@` typed under the caret, shows a grouped candidate menu, and routes a pick to the registered source. Sources register through `ctx.inputTriggers` — the `/` command source (ui-commands), the `@` file and session reference sources (ui-reference), and any business package — and the conversation wiring drives the pipeline per session. Typing a trigger seeds every source registered for it; a chrome launcher can also open exactly one source over the current selection. The pipeline is presentation-only: picks produce command claims or reference inserts whose consequences belong to the consuming host and input packages.
@@ -69,7 +67,6 @@ None; this package neither assembles nor sends a provider request.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define the current trigger pipeline. They are current package constraints, not a general menu comparison or a task backlog.
 

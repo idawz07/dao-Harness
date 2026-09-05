@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-api-gateway
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 Two-sided Typert RPC endpoint for Host and Client Cordis environments. The Host entry provides `ctx.typertGateway`, while `@daoai/dao-api-gateway/client` provides `ctx.remote`; both consume the same generated `InvocationDescriptor` contract and leave business selection to API Remotes. Connection carries unary request correlation, trust, and response envelopes, while Gateway owns multiplexed Remote streams.
@@ -69,7 +67,6 @@ No direct effect; invoked business Services own any model-visible result.
 - Lookup resolvers are configured per key; an individual Remote parameter or endpoint cannot currently select a live-only policy under the same `agent`/`session` key.
 - Forwarded events reach `$on` without business-payload projection or redaction. Ordinary notifications are not replayed after reconnect; Agent-scoped waterfalls project only the top-level Agent identity needed to select the Client Context and carry their own pending lifetime.
 - WebSocket heartbeats keep idle intermediaries active but do not require a timely Pong or terminate an unresponsive peer. Half-open carriers remain subject to TCP or intermediary failure detection before the Client reconnects.
-
 
 <a id="dev-note"></a>
 ### Dev Note

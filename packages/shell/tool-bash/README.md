@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-tool-bash
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-tool-bash` gives the agent a `bash` tool that runs commands through the mounted shell executor and returns stdout, stderr, and exit markers. Each call runs in a fresh shell — no cwd, variables, or functions survive — and `run_in_background` turns long-running commands into background jobs the agent collects with `job_output` and stops with `job_kill`. Every call runs with the managed `DAO_*` environment from `dao-shell-env`, and under a sandboxing executor a denied command may be retried once with a wider `sandbox_permissions` mode plus a `justification` through user approval. Non-zero exits are reported, not failed, so the agent decides how to react. Mount it together with an executor provider such as `dao-bash-local` or `dao-bash-sandbox` and the `dao-shell-env` plugin.
@@ -201,7 +199,6 @@ Append-only; newly visible content follows the reusable request prefix and does 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the tool is a poor fit or needs special care. They are current package constraints, not a task backlog.
 

@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-sandbox
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-sandbox` confines same-world subprocesses to a file-effect policy: commands run `read-only`, write only under the session workspace (`workspace-write`), or run unrestricted (`danger-full-access`), and every confined execution runs under a per-call policy. The bash and pwsh executors consume it, so a command — and everything it spawns — runs confined without the consumer knowing which platform runner is behind it. When the requested mode cannot be enforced, the call fails closed with a `SANDBOX_UNAVAILABLE` error instead of running unconfined. A denied call can request a strictly wider mode that a human approves once. Confinement is same-world only — backends share the host kernel and filesystem, while containers, microVMs, and remote executors replace whole capabilities instead.
@@ -160,7 +158,6 @@ Append-only; escalation text follows the retained prefix and does not invalidate
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the seam is a poor fit or needs special operational care. They are current package constraints, not a general sandbox comparison or a task backlog.
 

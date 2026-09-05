@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-cordis-host-runner
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-cordis-host-runner` makes dynamic packages runnable in this process: definitions the model records with `cordis_define` stay here, host halves run in a `node:vm` sandbox, a package with a browser half waits for a person to approve or decline it on a page, and the model can inspect the live runtime and its definitions here. The model-facing tools live in `@daoai/dao-tool-cordis`, and the browser half loads through `@daoai/dao-cordis-client-runner`. Definitions live only in process memory, so a DAO restart clears them and nothing is written to disk. One config field, `vmTimeoutMs`, bounds synchronous sandbox evaluation.
@@ -121,7 +119,6 @@ None of its own. A host half that registers tools changes the next request's too
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the runner needs special care. They are current package constraints, not a task backlog.
 

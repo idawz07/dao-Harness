@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-spill
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-spill` lets any plugin or tool save oversized text through `ctx.spillStore` and receive an opaque locator, the exact byte count, and retrieval guidance the model can act on. It defines what a spill backend does, not how it stores — a deployment mounts a backend such as `dao-spill-local` for real persistence, and the `dao-spill-policy` plugin decides when a tool result is too large. Choose it when a deployment must keep oversized tool output retrievable without flooding the model's context. The service owns storage only: no retention policy, no tool-result replacement, and no retrieval or search API. A real storage failure rejects loudly, so the caller decides how to degrade.
@@ -129,7 +127,6 @@ No direct invalidation; the named consumer owns any request-prefix changes.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the spill storage service is incomplete on its own. They are current package constraints.
 

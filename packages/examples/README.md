@@ -5,8 +5,6 @@ kind: "package-group"
 
 # examples/ — reusable composition bundles
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 The examples group provides the reusable agent spine for tests and custom deployments that need a concrete composition without assembling it by hand. Its `-demo` npm suffix marks it as support infrastructure rather than a product interface. ACP, SDK, and one-shot applications launch through the `acp`, `sdk` or `sdk-minimal`, and `headless` profiles. This group contains no application entrypoint.

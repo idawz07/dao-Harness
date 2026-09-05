@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-tool-session-query
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-tool-session-query` gives the model five read-only tools over session history: `session_search`, `session_event_search`, `session_trace`, `session_event_trace`, and `session_event_read`. The tools are workspace-authorized — a model can only reach sessions whose `cwd` exactly matches its own caller session — and results are cursor-free plain text, so the model can search prior work and follow a useful hit into its lineage or exact event data. The package is opt-in and not mounted by shipped host compositions: mounting it adds one concise guidance section and the five schemas to every request. Configuration and usage come first; the implementation internals live in a collapsible developer section below.
@@ -163,7 +161,6 @@ Append-only result text follows the reusable request prefix and does not invalid
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when this package is a poor fit or needs special operational care. They are current package constraints, not a task backlog.
 

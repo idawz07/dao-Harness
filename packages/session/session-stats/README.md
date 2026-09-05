@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-session-stats
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-session-stats` serves whole-log conversation figures — turn and step counts plus LLM, tool, first-token, and decode wall times — as the `sessionStats` projection unit. Clients read the figures from the registry's snapshot and change feed, and paging or compaction cannot change them because they fold from the complete durable log. Choose it in compositions that already mount the projection registry, such as the web chat bundle whose stats strip is the reference consumer; assemblies without the registry are unaffected and their consumers fall back to window-scoped counting. Setup and field semantics come first; the fold internals live in a collapsible developer section below.
@@ -112,7 +110,6 @@ None; the package never assembles or sends provider requests.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define what the figures describe and when the unit is absent. They are current package constraints.
 

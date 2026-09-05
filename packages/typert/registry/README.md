@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-typert-registry
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-typert-registry` makes generated Typert artifacts queryable at runtime: each package's reflection — services, events, and objects — its live Zod schemas, and Remote invocation descriptors live under stable keys that consumers can query or resolve on demand. Registrations are atomic and fiber-scoped: a contribution lands whole or not at all and is withdrawn automatically when the registering component unloads. The same service hosts the lookup and scoped-Context provider registries that Remote calls resolve through. It performs no TypeScript analysis and generates no schemas; the generator and the loader handle those.
@@ -112,7 +110,6 @@ No direct effect; a consumer that places reflection or schemas in a request owns
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define what the registry stores and rejects; they are current package constraints, not a task backlog.
 

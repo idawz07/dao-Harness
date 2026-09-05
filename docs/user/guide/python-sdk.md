@@ -1,7 +1,5 @@
 # Get started with the Python SDK
 
-English | [中文](python-sdk.zh.md)
-
 This tutorial installs the published Python SDK, runs the shipped standalone minimal profile, and shows how to customize the same `dao` profile from your own program.
 
 ## Prerequisites
@@ -9,7 +7,7 @@ This tutorial installs the published Python SDK, runs the shipped standalone min
 - Python 3.10 or newer
 - Git
 - Linux x64, Linux arm64, macOS 14 or newer on arm64, or Windows x64
-- A DeepSeek-compatible API endpoint and credential
+- A `LLAMA_ROUTER_API_KEY` credential for the profile's model endpoint
 - An isolated workspace and an isolated Harness home
 
 ## Install the SDK
@@ -38,20 +36,18 @@ The installation includes a matching native runtime wheel and the `dao` command.
 
 ## Run the checked-in example
 
-Export the credential and, when needed, a compatible proxy endpoint:
+Export the credential the profile's `llama-router` route resolves per request:
 
 ### Linux and macOS
 
 ```sh
-export DEEPSEEK_API_KEY=sk-your-key-here
-# export DEEPSEEK_BASE_URL=http://127.0.0.1:8000/v1
+export LLAMA_ROUTER_API_KEY=sk-your-key-here
 ```
 
 ### Windows PowerShell
 
 ```powershell
-$env:DEEPSEEK_API_KEY = "sk-your-key-here"
-# $env:DEEPSEEK_BASE_URL = "http://127.0.0.1:8000/v1"
+$env:LLAMA_ROUTER_API_KEY = "sk-your-key-here"
 ```
 
 Run one task with explicit workspace and home paths:
@@ -83,16 +79,16 @@ The script prints the final assistant response. The selected home receives the g
 ```python
 from pathlib import Path
 
-from dao import DeepSeekHarness
+from dao import DaoHarness
 
 workspace = Path("/absolute/path/to/disposable-workspace").resolve()
-dsh_home = Path("/absolute/path/to/example-dao-home").resolve()
-with DeepSeekHarness(
-    provider="deepseek-official",
-    model="deepseek-v4-flash",
-    max_tokens=49_152,
+dao_home = Path("/absolute/path/to/example-dao-home").resolve()
+with DaoHarness(
+    provider="llama-router",
+    model="Qwen3.8-27B-Q6_K_XL-128K",
+    max_tokens=65_536,
     cwd=str(workspace),
-    dsh_home=str(dsh_home),
+    dao_home=str(dao_home),
     profile="sdk-minimal",
 ) as harness:
     result = harness.run(
@@ -103,7 +99,7 @@ with DeepSeekHarness(
 print(result.final_response)
 ```
 
-The SDK starts the bundled `dao --profile sdk-minimal` process lazily and reuses it until context-manager exit. The profile, its persistent patch, the home patch, and any ordered `patches` tuple form the application configuration. There is no separate Python runtime bin or complete-config option.
+The SDK starts the bundled `dao --profile sdk-minimal` process lazily and reuses it until context-manager exit. The profile, its persistent patch, the home patch, and any ordered `patches` tuple form the application configuration. There is no separate Python runtime bin or complete-config option. To point the `llama-router` route at another OpenAI-compatible endpoint for one launch, pass `base_url`; the SDK writes a self-contained `llm-pi-ai` overlay that wins over the profile for that launch only.
 
 ## Install or define plugins
 
@@ -134,14 +130,14 @@ Another `profile` is valid when it includes `@daoai/dao-sdk-app` or another JSON
 | Property | Value |
 |---|---|
 | System prompt | `DAO_SYSTEM_PROMPT`, falling back to `You are a helpful software engineer assistant.` |
-| Model in `minimal.py` | `--model`, then `DAO_MODEL`, then `deepseek-v4-flash` |
+| Model in `minimal.py` | `--model`, then `DAO_MODEL`, then `Qwen3.8-27B-Q6_K_XL-128K` |
 | Model-facing tools | Persistent `bash` on Linux/macOS or `pwsh` on Windows, plus `str_replace_editor` |
 | Shell timeout | 300 seconds |
 | Editor output limit | 16,000 characters |
 | Runtime context and compaction | Absent |
-| Session persistence | Uncompressed JSONL under `<dsh_home>/sessions` |
+| Session persistence | Uncompressed JSONL under `<dao_home>/sessions` |
 
-The profile's sole bundle inserts the complete tree over an empty root and does not include `dao-base`; later base-profile tools therefore cannot appear implicitly. It contains the SDK protocol, one environment-configured DeepSeek adapter, local execution, and persistence, while settings, managed credentials, telemetry, Web tools, subagents, local instruction discovery, and compaction are absent. It pins `danger-full-access`, so the platform-selected persistent shell and editor can modify any path visible to the runtime; use a disposable checkout or container.
+The profile's sole bundle inserts the complete tree over an empty root and does not include `dao-base`; later base-profile tools therefore cannot appear implicitly. It contains the SDK protocol, one environment-configured pi-ai adapter on the `llama-router` route, local execution, and persistence, while settings, managed credentials, telemetry, Web tools, subagents, local instruction discovery, and compaction are absent. It pins `danger-full-access`, so the platform-selected persistent shell and editor can modify any path visible to the runtime; use a disposable checkout or container.
 
 The installed wheel still packages the full `web` profile and frontend assets. Run `dao web` against an explicit `DAO_HOME` when a Python SDK deployment also needs the browser application; `web` is a separate CLI application and cannot serve a Python SDK client.
 

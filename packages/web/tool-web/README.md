@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-tool-web
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 With `dao-tool-web`, the model can search the web and fetch pages through the `web_search` and `web_fetch` tools, backed by the harness web service (`ctx.web`). Choose it when the model should search the web or fetch pages; the two tools register independently, so a product disables either via config. Every successful result labels provider-controlled text as external and untrusted, and HTML conversion removes active or hidden content. Tools stay visible even when their selected provider is missing or unavailable: execution then fails with a structured error the model can read. Neither tool exposes a model-facing timeout; per-tool budgets are deployment config enforced by the timeout policy.
@@ -244,7 +242,6 @@ Append-only; newly visible content follows the reusable request prefix and does 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the tools are incomplete or need deployment cooperation. They are current package constraints.
 

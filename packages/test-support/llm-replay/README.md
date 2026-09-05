@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-llm-replay
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-llm-replay` makes snapshot tests run without an API key: it installs a replay LLM adapter that serves model streams reconstructed from a recorded session JSONL fixture, so a test boots the real agent against a fixed transcript. The fixture is a projection of the persisted session log — `assistant/chunk` events group into per-call chunk sequences, and an explicitly marked local compaction call replays as one canonical stream. A `replay.override.json` sidecar covers what a log cannot reconstruct: a throw before any chunk, a cancel/hang, or an injected retry. Live sessions bind to recorded scripts by first-call order, so parent-and-subagent scenarios each get their own script. It is the model source behind the ACP and headless snapshot suites and the Web browser e2e lane.
@@ -36,8 +34,8 @@ With `providers` configured, the plugin registers a replay-only adapter whose ca
   name: '@daoai/dao-llm-replay'
   config:
     providers:
-      - id: deepseek-official
-        name: DeepSeek
+      - id: llama-router
+        name: Llama Router
         retryPolicy:
           mode: normal
           backoff:
@@ -45,9 +43,9 @@ With `providers` configured, the plugin registers a replay-only adapter whose ca
             maxDelayMs: 1
             jitterRatio: 0
         models:
-          - id: deepseek-v4-flash
+          - id: Qwen3.8-27B-Q6_K_XL-128K
             contextWindow: 128000
-          - id: deepseek-v4-pro
+          - id: Qwen3.8-9B-Q6_K_XL-128K
   # file/overrideFile/childFiles default to $DAO_SNAPSHOT_FILE /
   # $DAO_SNAPSHOT_OVERRIDE / $DAO_SNAPSHOT_CHILD_FILES, set by the snapshot
   # harness per scenario.
@@ -73,9 +71,7 @@ A scenario where a parent agent delegates to in-process subagents records one lo
 
 ### Failure modes and overrides
 
-When replay serves `deepseek-official` with `ctx.deepseekLlmApiExtensions`, it prepares and accepts those fields after selecting a valid script entry and before yielding the first chunk. This mirrors the live adapter's post-2xx commit point, so durable acceptance watermarks and SDK event notifications behave the same in recording and replay. Replay supplies a synthetic `{ messages: [] }` base body: it proves acceptance side effects, not prepared field bytes.
-
-Two failure modes are not reconstructable from `assistant/chunk` alone — a pure throw before any chunk (for example an HTTP 401, where the log holds only a `turn/end {error}`) and a cancel/hang. A scenario that needs those supplies an optional sidecar (`<scenario>/replay.override.json`) that either replaces the derived script with a bare `ReplayEntry[]` or augments it with `{ patches: [{ at, entry }] }`, which keeps every derived call and swaps the named 0-based call indexes; `at` equal to the derived length appends the retry attempt after an injected transient throw. A `throw` entry accepts DeepSeek request extensions when it has prefix chunks; a zero-chunk throw defaults to pre-2xx non-acceptance and may set `accepted: true` for a post-2xx failure. A `hang` entry may name `readyFile`, which replay writes before waiting for cancellation so an external driver can cancel deterministically.
+Two failure modes are not reconstructable from `assistant/chunk` alone — a pure throw before any chunk (for example an HTTP 401, where the log holds only a `turn/end {error}`) and a cancel/hang. A scenario that needs those supplies an optional sidecar (`<scenario>/replay.override.json`) that either replaces the derived script with a bare `ReplayEntry[]` or augments it with `{ patches: [{ at, entry }] }`, which keeps every derived call and swaps the named 0-based call indexes; `at` equal to the derived length appends the retry attempt after an injected transient throw. A `throw` entry replays its prefix chunks before failing, so a prefixed throw models a post-2xx failure. A `hang` entry may name `readyFile`, which replay writes before waiting for cancellation so an external driver can cancel deterministically.
 
 ### What can go wrong
 
@@ -136,7 +132,6 @@ None; this package neither assembles nor sends a provider request.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when replay cannot stand in for a live model. They are current package constraints, not a task backlog.
 

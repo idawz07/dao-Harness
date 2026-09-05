@@ -5,8 +5,6 @@ kind: "package-group"
 
 # Packages
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 The harness is assembled from npm packages under `packages/`, grouped by capability family: sessions and the agent loop, model-facing tools, shell and filesystem execution, web access, subagents, and the rest. Use this page as the top-level map: find the owning group, then open its README for the package list. Every package is scoped `@daoai/dao-*` and lives in exactly one group; each group README is the authoritative package map for its family.
@@ -36,7 +34,6 @@ Every package lives in exactly one group; new packages join existing groups, and
 | [`feedback/`](feedback/README.md) | Human feedback capture and command |
 | [`identity/`](identity/README.md) | Shared anonymous identity |
 | [`llm/`](llm/README.md) | LLM capability family: abstract service + provider adapters |
-| [`e2b/`](e2b/README.md) | E2B remote-runtime providers |
 | [`subprocess/`](subprocess/README.md) | Subprocess capability family: Service Definition + local process-tree provider |
 | [`shell/`](shell/README.md) | Bash capability family: executor seam, local impl, model-facing tools |
 | [`terminal/`](terminal/README.md) | Persistent PTY capability family: owner-scoped sessions, local implementation, model-facing tools |
@@ -84,7 +81,7 @@ Every package lives in exactly one group; new packages join existing groups, and
 <a id="release-expectations"></a>
 ## Release expectations
 
-Most groups are product — stable API. The exceptions: `e2b/` is a POC, `experimental/` is unreleased, and `examples/`, `test-support/`, `runtime-diagnostics/`, and `util/` are support with lower compatibility expectations.
+Most groups are product — stable API. The exceptions: `experimental/` is unreleased, and `examples/`, `test-support/`, `runtime-diagnostics/`, and `util/` are support with lower compatibility expectations.
 
 -----
 

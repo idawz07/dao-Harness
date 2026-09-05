@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-workspace
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-workspace` gives a host a persistent set of workspaces: named user directories, each with the sessions that ran in it, kept in a stable order across restarts. With it, a UI can show a sidebar of projects, attach sessions to the right project, hide a session from the grouping without losing it, and remove a project — removal never deletes the folder or the session histories, which become ungrouped. Use it in GUI or host compositions that need durable project grouping; headless and minimal runs can omit it entirely. The package is host-side only: the model, tools, and agent loop never see it, so it adds no tokens, prompts, or request context. It needs a session store and a persistence backend mounted alongside it; setup is a few composition rows.
@@ -153,7 +151,6 @@ Independent of live requests: the package never touches a request prefix, so it 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the project list is a poor fit or needs special operational care. They are current package constraints, not a task backlog.
 

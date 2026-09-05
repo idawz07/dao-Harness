@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-session-query
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-session-query` gives code callers one service for retrieving session history: read a complete raw log, list and filter sessions, fold titles, read events with bounded context, trace session lineage and event relationships, and run full-text search. Live sessions take precedence over persisted ones, and every returned record is a detached clone, so results always describe one consistent moment. Exact reads, filters, and traces are built in; full-text search comes from a mounted backend such as `dao-session-query-sqlite`. Use it directly from code when you need programmatic access to what the model saw. Setup and usage come first; the implementation internals live in a collapsible developer section below.
@@ -134,7 +132,6 @@ None; this package neither assembles nor sends a provider request.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when this package is a poor fit or needs special operational care. They are current package constraints, not a task backlog.
 

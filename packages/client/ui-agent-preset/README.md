@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-client-ui-agent-preset
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 This package provides the agent-preset surfaces of the Web GUI: a General-settings row choosing which preset new sessions are composed from, a chip on the new-session screen choosing the next session's preset, a read-only label in the session header, and a settings section that manages the roster — copy, delete, default, and the way into a preset's own files. A session's preset is fixed at creation, so the choice applies to sessions started afterwards while running sessions keep the composition they began with. When a deployment composes no presets, all four surfaces render nothing and every session shares the host composition.
@@ -73,7 +71,6 @@ No direct invalidation. Changing the default never touches a running session's p
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define the current preset surfaces. They are current package constraints, not a general composition comparison or a task backlog.
 

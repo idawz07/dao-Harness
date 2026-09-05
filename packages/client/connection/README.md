@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-client-connection
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 The package carries browser-to-Host Remote calls, exact Fetch responses, and connection generations. The Client plugin mounts `ctx.connection` with current-page loopback state, a generic RPC carrier, the active generation and its Host facts, and the registration point for one generation source. A generation becomes visible when its source reports ready; source completion, failure, withdrawal, or an explicit stop clears it before `ConnectionController` reconnects with backoff.
@@ -61,7 +59,6 @@ None; this package neither assembles nor sends a provider request.
 - **The `/api` bridge buffers each request body in memory** — `maxRequestBodyBytes` (default 300 MiB, sized for the default 200 MiB aggregate image limit after base64 expansion plus envelope headroom) is therefore also the per-request resident bound; a streaming body path would be needed to lower it without shrinking the image limits.
 - **The browser cookie is not marked `Secure`** — loopback HTTP is the shipped transport, so exposing the same authority over plaintext networking can expose the bearer cookie in transit.
 - **There is no logout operation** — clearing the browser cookie ends one browser session; deleting the owner credential record and restarting `dao` revokes every session.
-
 
 <a id="dev-note"></a>
 ### Dev Note

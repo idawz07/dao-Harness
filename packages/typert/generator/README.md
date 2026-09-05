@@ -5,8 +5,6 @@ kind: "package-library"
 
 # @daoai/dao-typert-generator
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-typert-generator` turns source TypeScript into compiler-independent data and runnable artifacts at build time: it analyzes a workspace's package type trees, produces a `FaceModel` and type graph, and emits executable JavaScript with supported Zod schemas and a `TYPERT` reflection contribution, plus matching declarations. It is a build-time library, not a plugin — it never runs inside a live agent session. The repository's Host tsdown runs it automatically; a business package opts in by exporting `./typert` and `./client/typert` entries, and the generator validates those exports and published file lists. Static consumers can also call the analyzer directly for type inspection or catalog generation without publishing anything.
@@ -118,7 +116,6 @@ No direct effect; generated artifacts reach a request only when a consumer place
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define what the generator cannot model or emit; they are current package constraints, not a task backlog.
 

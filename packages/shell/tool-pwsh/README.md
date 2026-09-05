@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-tool-pwsh
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-tool-pwsh` gives the agent a `pwsh` tool that runs PowerShell commands through the mounted shell executor — the Windows counterpart of `dao-tool-bash`, mirroring it call-for-call. Each call runs in a fresh pwsh process, so no state survives; `run_in_background` turns long-running commands into background jobs. Commands are PowerShell-dialect: native `C:\...` paths and `$env:NAME` variables, with no dialect translation. Every call runs with the managed `DAO_*` environment, and under a sandboxing executor the tool teaches and enforces the Windows-specific language-mode and named-pipe contracts. Mount it with a PowerShell executor such as `dao-pwsh-local` and the `dao-shell-env` plugin.
@@ -193,7 +191,6 @@ Append-only; newly visible content follows the reusable request prefix and does 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the tool is a poor fit or needs special care. They are current package constraints, not a task backlog.
 

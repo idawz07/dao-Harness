@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-subagent-dao-sdk
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-subagent-dao-sdk` runs each delegated child as a complete Dao runtime in a fresh subprocess, driven over stdio JSON-RPC through the TypeScript SDK client. It is the second out-of-process backend beside the ACP provider, differing in the wire and the child contract: the child is a full peer harness with its own `cordis.yml`-decided composition, session persistence, model route, and tools. Each run spawns the child runtime (the resolved `@daoai/dao` CLI under Node, or the configured `daoBin`), completes an `initialize` handshake with the configured provider and model route, submits the task, and reads the answer from the child's session events. The parent receives only the child's final assistant text or a safe error — no intermediate messages or tool traffic crosses the boundary. Choose it when the child should be a genuine Harness runtime, fully isolated from the parent harness.
@@ -43,8 +41,8 @@ The provider advertises `agentOptions: true`, with `outputSchema`/`depthLimit`/`
 | `patches` | `[]` | Ordered per-launch profile patch files, resolved and checked at plugin load |
 | `daoHome` | required | Absolute isolated Harness home for every nested child process |
 | `cwd` | parent session cwd | Working-directory override for the child process and its SDK session |
-| `provider` | `deepseek-official` | Provider route sent in the child's `initialize` |
-| `model` | `deepseek-v4-flash` | Model sent in the child's `initialize` |
+| `provider` | `llama-router` | Provider route sent in the child's `initialize` |
+| `model` | `Qwen3.8-27B-Q6_K_XL-128K` | Model sent in the child's `initialize` |
 | `maxTokens` | adapter/provider route default | Per-request output-token cap sent in the child's `initialize` |
 | `env` | `{}` | Explicit child environment layered over the credential-scrubbed parent environment |
 | `shutdownTimeoutMs` | `1000` | Bound on the protocol `shutdown` exchange during dispose |
@@ -65,7 +63,7 @@ Request `agentOptions` override `provider`, `model`, and `maxTokens` independent
     daoHome: !!js daoHomePath('children')
     maxTokens: 49152
     env:
-      DEEPSEEK_API_KEY: !!js process.env.DEEPSEEK_API_KEY
+      LLAMA_ROUTER_API_KEY: !!js process.env.LLAMA_ROUTER_API_KEY
 - id: tool-subagent
   name: '@daoai/dao-tool-subagent'
   config: { provider: dao-sdk, toolName: subagent, maxDepth: 'provider-managed' }
@@ -165,7 +163,6 @@ Append-only; newly visible content follows the reusable request prefix and does 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when this backend is a poor fit or needs special operational care. They are current package constraints, not a general SDK comparison or a task backlog.
 

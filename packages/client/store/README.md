@@ -4,8 +4,6 @@ kind: "package-library"
 ---
 # @daoai/dao-client-store
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 React-free observable and snapshot-store primitives shared by Client controllers and renderer adapters. The package owns synchronous and animation-frame publication, Immer-backed updates, shallow equality, and optional browser persistence; React hook construction remains in `@daoai/dao-client-ui-renderer`. Use it when Client state must publish stable snapshots without depending on React.
@@ -32,7 +30,6 @@ None; the stores neither assemble nor send model requests.
 <a id="known-limitations-and-deferred-work"></a>
 
 - **Persistence is browser-local** — persisted stores use JSON in `localStorage`; non-browser runtimes disable persistence, and the package provides no cross-device synchronization.
-
 
 <a id="dev-note"></a>
 ### Dev Note

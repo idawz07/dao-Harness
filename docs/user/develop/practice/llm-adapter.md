@@ -1,7 +1,5 @@
 # LLM adapters
 
-English | [中文](llm-adapter.zh.md)
-
 This guide connects a new LLM provider to Harness.
 
 ## Overview
@@ -143,12 +141,7 @@ The first argument lists provider routes handled by the adapter. `GenerateOption
 
 ## Reference implementations
 
-The repository contains complete implementations:
-
-- `packages/llm/llm-deepseek/` — DeepSeek API adapter using the OpenAI-compatible format
-- `packages/llm/llm-pi-ai/` — Pi AI adapter using a different API format
-
-Compare the two shipped adapters to see the same harness contract implemented over different provider SDKs.
+The repository ships one complete implementation: `packages/llm/llm-pi-ai/` — the Pi AI adapter built on the pi-ai provider library. Its layout is the reference for new adapters.
 
 ## Error handling
 

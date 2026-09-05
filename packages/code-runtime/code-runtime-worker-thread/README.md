@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-code-runtime-worker-thread
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-code-runtime-worker-thread` executes TypeScript programs for the [`dao-code-runtime`](../code-runtime/README.md) seam: each program runs in one fresh Node worker thread with host-provided bindings callable as ordinary async functions, and the run returns `{ value, logs, error? }`. It is the shipped backend for PTC mode in `dao-tools`, so mounting it is what makes model-written TypeScript execution work in a composition. The runtime contains a program without isolating it: the trust posture is bash-equivalent, with an empty environment, a heap cap, measured busy-time and wall-clock budgets, and hard termination. Programs run once per request with no state carried between runs, and every failure — syntax error, budget expiry, abort, OOM exit, or output overflow — comes back as a result field.
@@ -134,7 +132,6 @@ No direct invalidation; the named consumer owns any request-prefix changes.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the backend is a poor fit or needs special operational care. They are current package constraints, not a task backlog.
 

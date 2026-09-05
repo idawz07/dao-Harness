@@ -1,14 +1,12 @@
 # Configure models
 
-English | [中文](providers.zh.md)
-
 This guide assumes you started the Web UI through the [root README](../../../README.md#run). Model changes take effect on the next request without restarting the server.
 
-## Configure DeepSeek
+## Configure the local router
 
-Open **Settings → Models**. The DeepSeek card exposes one API-key field; enter the key and save it.
+Open **Settings → Models**. The Local Llama Router card exposes one API-key field; enter the key and save it.
 
-![The Models page: the DeepSeek card, with Add provider and Add a custom provider below it](providers-models-page.png)
+![The Models page: the Local Llama Router card, with Add provider and Add a custom provider below it](providers-models-page.png)
 
 Keys are write-only. The page receives a redacted descriptor after saving, never the literal secret. The key is stored in `$DAO_HOME/.credentials.yaml`, while settings retain only its credential reference.
 
@@ -129,9 +127,9 @@ If a saved default names a provider that was deleted, the composer displays **Se
 - **The gateway refuses every request although the key and URL are right** — Its request shape differs from OpenAI's. Start with `compat.supportsDeveloperRole: false` and `compat.maxTokensField: max_tokens` on the route.
 - **Only reasoning models fail** — pi-ai sends their system prompt as the `developer` role, which the gateway rejects. Set `compat.supportsDeveloperRole: false`.
 - **A compat switch is refused as having no value** — A key written with nothing after the colon. Give it a value, or remove the key to keep the installed catalog's.
-- **An image is refused before sending** — The model declares no image modality. Give a custom provider's model `input: [text, image]`; DeepSeek's own chat-completions route is text-only and cannot be configured otherwise.
+- **An image is refused before sending** — The model declares no image modality. Give a custom provider's model `input: [text, image]`.
 - **The provider rejects a request carrying an image** — The model declares images its endpoint does not actually serve. Remove `image` from whichever list granted it — the model's `input`, or the route's `defaultInput` — then start a new session: the attached image stays in the session log, so the same request repeats until the session moves off it.
 
 ## Advanced configuration
 
-The generated [plugin configuration catalog](../../config-catalog.md) lists every supported field and default for every plugin; [`dao-llm-pi-ai`](../../config-catalog.md#daoaidao-llm-pi-ai) is the provider section this page configures. The [`dao-llm-pi-ai`](../../../packages/llm/llm-pi-ai/README.md) and [`dao-llm-deepseek`](../../../packages/llm/llm-deepseek/README.md) references own direct `settings.yaml` configuration, catalog resolution, reasoning controls, credentials, and adapter errors.
+The generated [plugin configuration catalog](../../config-catalog.md) lists every supported field and default for every plugin; [`dao-llm-pi-ai`](../../config-catalog.md#daoaidao-llm-pi-ai) is the provider section this page configures. The [`dao-llm-pi-ai`](../../../packages/llm/llm-pi-ai/README.md) reference owns direct `settings.yaml` configuration, catalog resolution, reasoning controls, credentials, and adapter errors.

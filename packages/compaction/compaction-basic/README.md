@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-compaction-basic
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-compaction-basic` keeps long agent conversations working near the model's context limit. As token pressure builds, it automatically condenses the oldest part of the conversation into a summary and keeps the recent part intact; after a context-overflow error it condenses and retries. You can also condense on demand with `/compact` from `dao-command-compact`, and mount `dao-compaction-tool-result-pruner` to trim oversized tool outputs first. Condensation costs one extra model request that reads the selected history and writes the summary; only the summary text is kept. It condenses derived history only — it cannot shrink the system prompt, tools, or session prefix, and one indivisible unit such as a single huge tool call cannot be split.
@@ -234,11 +232,10 @@ The replayed system prompt, tools, and shadowed-region messages match the conver
 
 <a id="known-limitations-and-deferred-work"></a>
 
-
 These limits define when automatic condensation is a poor fit or needs special care; they are the current package constraints.
 
 - **Meter accuracy follows the fixed heuristic** — missing reusable provider usage falls back to character count plus structural overhead rather than exact tokenization; image occurrences carry provider-exact visual tokens only on routes whose adapter declares request-image pricing.
-- **Overflow classification is adapter-maintained** — provider wording can change; both DeepSeek adapters normalize recognized context-limit failures to `CONTEXT_WINDOW_EXCEEDED`.
+- **Overflow classification is adapter-maintained** — provider wording can change; the LLM adapters normalize recognized context-limit failures to `CONTEXT_WINDOW_EXCEEDED`.
 - **Some indivisible-unit and envelope-only overflow remains outside surface compaction** — recovery cannot shrink system/tools/prefix, split an indivisible non-tool node, or repair a tool unit whose non-prunable remainder still exceeds the window. The optional pruner can shrink text-bearing tool-result bulk inside an otherwise indivisible pair.
 - **`compactRegion` requires an open turn** — a manual call on a fully-closed session throws ("no open turn") rather than compacting.
 - **Summarization failure preserves the latest durable surface** — before any replacement, the auto path logs a warning and proceeds with full over-budget history. If pruning already landed, a later summarization failure proceeds from that durable pruned surface. Summarization truncation at `maxTokens`, which hidden reasoning tokens can consume, follows the same rule.

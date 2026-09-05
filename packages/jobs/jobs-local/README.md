@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-jobs-local
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-jobs-local` runs background jobs inside the harness process: work keeps running while the agent moves on, and the owning agent can read, wait on, list, and cancel it, with completion delivered as an in-session notice when `dao-tool-jobs` is also mounted. It implements the `dao-jobs` contract with in-memory records handed out as fresh snapshots, never live state. A per-owner concurrency limit (default 10) bounds how many jobs one agent can have running or stopping at once; jobs die with the harness process and are not durable across restarts.
@@ -124,7 +122,6 @@ No direct invalidation; the named consumers own any request-prefix changes.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the registry is a poor fit. They are current package constraints, not a task backlog.
 

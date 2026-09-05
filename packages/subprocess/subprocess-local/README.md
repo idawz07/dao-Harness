@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-subprocess-local
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 Mount `dao-subprocess-local` in any composition that runs child processes on the host: it resolves local executables, spawns detached process trees with explicit stdio, and provides real terminal sessions through `node-pty`. It has no configuration, so every disposition, limit, terminal size, and grace arrives on the spawn request from the calling capability seam. Output collection keeps a bounded in-memory tail with optional spill files for full-stream recovery, children start from a scrubbed environment, and disposal terminates and joins every running tree.
@@ -118,7 +116,6 @@ No direct invalidation; the named consumers own any request-prefix changes.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the provider is a poor fit or needs special operational care. They are current package constraints, not a general platform comparison or a task backlog.
 

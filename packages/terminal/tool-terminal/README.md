@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-tool-terminal
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-tool-terminal` gives the model six tools over persistent terminal sessions: `terminal_open`, `terminal_send`, `terminal_read`, `terminal_signal`, `terminal_close`, and `terminal_list`. Every call is fenced to the exact agent that opened the session, so a model cannot operate another agent's terminal even if it learns the id. Sends run in the foreground (returning bounded output with a wait reason) or in the background through the jobs service (returning a job id collected with `job_output` and stopped with `job_kill`). Results are capped by `maxResultBytes` and stay in session history until compaction. A short guidance section tells the model to prefer one-shot tools unless a terminal's persistent state or interactive stdin is genuinely needed.
@@ -166,7 +164,6 @@ Append-only; new results follow the reusable request prefix.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define the model-facing surface that is absent. They are current package constraints, not a task backlog.
 

@@ -5,8 +5,6 @@ kind: "package-library"
 
 # @daoai/dao-agent-loop-testkit
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-agent-loop-testkit` mounts the standard prerequisite services a test needs before loading the concrete `AgentLoop` — the LLM runtime, session store, system-prompt registry, tool registry, and agent registry — in dependency order, with one call. The loop itself, adapters, optional plugins, agents, and teardown stay in the test's hands, so each scenario keeps its own load order and topology. Use it when a test's subject is loop behavior rather than service wiring; tests that probe injection failures or partial topologies mount their dependencies directly. It registers no model-facing behavior of its own.
@@ -94,7 +92,6 @@ None; this package neither assembles nor sends a provider request.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define what the helper does not share. They are current package constraints, not a task backlog.
 

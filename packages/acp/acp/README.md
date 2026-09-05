@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-acp
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-acp` lets trusted programs drive persistent Dao agents over the standard [Agent Client Protocol](https://agentclientprotocol.com): create or resume sessions, list resumable sessions, attach standard MCP servers, select a model and reasoning effort, prompt or cancel work, receive semantic execution updates, and close one session without affecting others. It is built for automation — out-of-process subagents, test runners, and scripted controllers — rather than the DAO user interface: it emits standard ACP messages, thoughts, generic tool lifecycle, configuration, and context usage, never private DAO presentation data or methods. Session persistence enables list, resume, and close across process restarts, while deletion, fork, transcript replay, additional directories, and interactive UI surfaces remain unsupported. The repository's own ACP client is `dao-subagent-acp`, and `pnpm dao --profile acp` starts a ready-to-use server. Setup and usage come first; the implementation details live in a collapsible developer section below.
@@ -38,8 +36,8 @@ Every session the server creates uses the provider and model configured here. Bo
 ```yaml
 - name: '@daoai/dao-acp'
   config:
-    provider: deepseek-official
-    model: deepseek-v4-pro
+    provider: llama-router
+    model: qwen38-27b-pro
 ```
 
 | Field | Default | Meaning |
@@ -162,7 +160,6 @@ Append-only through the owning tool result.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when this package is a poor fit or needs special operational care. They are current package constraints, not a protocol comparison or a task backlog.
 

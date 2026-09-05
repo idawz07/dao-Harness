@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-client-ui-jobs
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 This package renders the background-job surface of the Web GUI: a session-header action that opens a popover listing the jobs this session can see. It reads host-computed registry state through the runtime's `jobsBySession` mirror and issues no RPC of its own. The trigger appears only when the session has at least one job, with a badge counting running and stopping jobs; settled rows stay visible and de-emphasized until the registry drops them. The model's own view of the same jobs belongs to `dao-tool-jobs`; this package is a read-only projection for the human.
@@ -69,7 +67,6 @@ None; the package never assembles or sends provider requests.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define the current job list. They are current package constraints, not a general job-management comparison or a task backlog.
 

@@ -4,8 +4,6 @@ kind: "package-reference"
 ---
 # @daoai/dao-client-ui-chat
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 The browser Chat target for Conversation assembly. It registers Chat event definitions and snapshot construction, supplies `useChat`, renders transcript nodes and details, and owns Chat-specific stores, actions, localization, and scroll restoration; historical image URLs resolve through the Conversation-owned per-session cache (`ctx.uiConversation.imageUrl`). Its Assistant and Turn Tail definitions fold packed historical Assistant runs without expanding their members. The flow tail renders the session's local submission echoes (`SessionSnapshot.pendingSubmissions`) with the same bubble as their eventual durable user nodes, hidden per render once a user/steering node or queue occurrence carries the echo's prompt `rpcId`, so the echo-to-durable swap is atomic.
@@ -56,7 +54,6 @@ None; Chat presentation does not assemble or mutate provider requests.
 <a id="known-limitations-and-deferred-work"></a>
 
 - **The view reflects the loaded Session window** — older transcript nodes become available only after Session Controller loads the preceding event page. Turn navigation likewise represents only loaded Turns; loading an earlier page preserves existing Turn marks and redistributes the complete loaded set in a compact rail without an unloaded-history placeholder. Marks stay 10px apart until the loaded set exceeds the available height, then compress to fit.
-
 
 <a id="dev-note"></a>
 ### Dev Note

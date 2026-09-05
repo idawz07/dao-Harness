@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-client-ui-settings-plugin-inventory
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-client-ui-settings-plugin-inventory` contributes the read-only **Plugin list** tab to the Web Settings Plugins section. The tab lazily calls `ctx.remote.pluginInventory.list()` the first time it is selected and renders a searchable two-column catalog of compact disclosure cards: each collapsed card shows the short module name, an effective-enablement tag, and (for enabled entries) a colored root-fiber status dot; expanding a card reveals the Loader-tree entry id, effective configuration, and Cordis status. Loading, empty, no-match, and generic failure states stay local to the mounted component, and a failed read can be retried without exposing transport details.
@@ -81,7 +79,6 @@ None; this package neither assembles nor sends a provider request.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define the freshness and reach of the inventory view; they are current package constraints.
 

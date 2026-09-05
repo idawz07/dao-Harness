@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-tool-ralph
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-tool-ralph` gives the model the `ralph` tool: a fixed foreground workflow that hands one immutable objective to a sequence of fresh child agents, each starting with no conversation seed and carrying only the previous bounded report. It is a specialized orchestration policy built on the workflow and subagent capabilities — no Ralph mode is added to the agent loop, and the same-session goal domain stays independent. The call returns when a worker reports completion or a concrete blocker, or at the round limit; completion and blockers are worker reports, not independent certification. Use it only when the direct human explicitly asks for a Ralph loop or fresh-agent iterative execution; ordinary long-running objectives belong to goal tools, and bounded delegation belongs to subagents or workflows.
@@ -155,7 +153,6 @@ Each fresh child has an independent request cache. The parent result appends aft
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define what the tool does not yet support. They are current constraints, not a task backlog.
 

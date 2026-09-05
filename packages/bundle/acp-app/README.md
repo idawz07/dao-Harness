@@ -5,8 +5,6 @@ kind: "package-bundle"
 
 # `@daoai/dao-acp-app`
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 The automation-only ACP stdio application as a `dao` profile bundle over [`dao-base`](../base/README.md). It inherits the base's disabled module-HMR policy; its patch sets the coding-agent persona and default model route, mounts an app-owned zero-option command provider, and starts [`dao-acp`](../../acp/acp/README.md) only after that provider accepts the invocation. `dao --profile acp --help` therefore writes help and exits without claiming stdin or stdout.
@@ -61,7 +59,6 @@ Stable for a fixed profile, provider, model, and tool roster. Profile changes ta
 - **A profile can omit the ACP bridge** — a custom ACP launch profile must retain this bundle or another `dao-acp` row; otherwise no peer answers the client.
 - **User plugins can violate stdout purity** — profile and per-launch patches are trusted application composition. The shipped bundle writes no non-protocol stdout, but it cannot contain an arbitrary inserted plugin.
 - **Configuration changes require restart** — the shipped `acp` profile uses `patchReload: startup` so one stdio connection never observes a replacement bridge or Agent dependency.
-
 
 <a id="dev-note"></a>
 ### Dev Note

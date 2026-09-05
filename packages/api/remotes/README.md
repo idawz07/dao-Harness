@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-api-remotes
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 Two-sided BFF for Host Remote capabilities selected by this application. The Host entry owns the forwarded-event selection and registers its application event source with API Gateway; the Client entry imports generated `/remote` artifacts as runtime values, mounts each contribution through `ctx.remote.$mount()`, and re-exports their declaration merges. Client business packages depend on this facade rather than the Gateway implementation or individual Remote runtime entries.
@@ -69,7 +67,6 @@ No direct effect; mounted Host capabilities own any model-visible behavior they 
 - The capability set is fixed by explicit build-time value imports; the Client does not discover the Host's active Services or Remote definitions at runtime.
 - Additional capabilities require an explicit `/remote` value import and mount in this assembly.
 - Ordinary forwarded events are not replayed; state that requires reliable recovery needs an owner-provided query, cursor, or opening baseline.
-
 
 <a id="dev-note"></a>
 ### Dev Note

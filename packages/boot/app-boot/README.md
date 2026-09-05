@@ -5,8 +5,6 @@ kind: "package-library"
 
 # @daoai/dao-app-boot
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-app-boot` is the shared Loader boot library behind `dao` profiles, including the CLI packaged by the Python runtime wheel. It loads environment layers, composes profile bundles and patches, boots every plugin, and returns the running app or identifies the failed plugin and cause. Product applications use the `dao` launcher instead of publishing separate bins; direct-config helpers remain only for lower-level embedders and tests. You can preview the effective configuration before booting, select live or startup-only patch application per profile, and let a terminal-owning app restore its terminal before a fatal exit.
@@ -129,7 +127,6 @@ Boot itself invalidates nothing in the request prefix. A consumer that calls `ad
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits describe when this boot library is a poor fit or needs special care. They are current package constraints, not a task backlog.
 

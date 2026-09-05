@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-client-modules
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-client-modules` turns a plugin package's `dao.client` declaration into a loadable browser bundle: the host half scans enabled Loader entries, composes the boot graph, and serves each bundle over `/plugins`, and the browser half loads those bundles lazily on demand. Plugin bundles execute lazily — running a bundle only registers a factory, and module side effects run at materialization — so nothing runs until a plugin is first used. Everything here is browser-kernel machinery; the model never sees it.
@@ -109,7 +107,6 @@ None; this package neither assembles nor sends a provider request.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define what the module system does not do. They are current package constraints, not a task backlog.
 

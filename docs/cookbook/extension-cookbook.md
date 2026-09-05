@@ -1,7 +1,5 @@
 # Cookbook: extension plugin shapes
 
-English | [中文](extension-cookbook.zh.md)
-
 Reference patterns for harness extensions. The snippets omit imports and helper implementations and are not copy-paste-complete. For concrete authoring paths, see the [package checklist](adding-a-package.md), [first-tool tutorial](../user/develop/basic/tool.md), [tool reference](adding-a-tool.md), and [LLM adapter guide](adding-an-llm-adapter.md); the [architecture](../architecture.md) owns the system and extension-point map.
 
 ## A tool plugin
@@ -100,7 +98,7 @@ Every product feature maps to a listener on a documented extension point — the
 
 | Product feature | Plugin mechanism |
 |---|---|
-| Hook system (user + project level) | listeners on `agent/session-start`, `agent/pre-step`, `agent/request`, `tools/pre-execute`, `tools/post-execute`, and `agent/turn-stopping`; the waterfalls return typed decisions, while `agent/turn-stopping` may steer another step; the `dao-hooks-claude-code` / `dao-hooks-codex` bridges map hook config files onto these extension points |
+| Hook system (user + project level) | listeners on `agent/session-start`, `agent/pre-step`, `agent/request`, `tools/pre-execute`, `tools/post-execute`, and `agent/turn-stopping`; the waterfalls return typed decisions, while `agent/turn-stopping` may steer another step; the `dao-hooks-codex` bridge maps hook config files onto these extension points |
 | `/goal` | `ctx.goals` owns durable state, `dao-goal-round-driver` schedules same-session rounds through the public `Agent`, and separate command/tool producers expose human/model control |
 | `/loop` | on the `turn/end` session event, `followup()` the next iteration; or force-continue |
 | Dynamic workflow | `ctx.workflowEngine` + the worker-thread engine + the `workflow` tool; structured in-process children enforce output with scoped prompt/tool registrations, a monotonic tool guard, final `tools/result` commit (including enclosing `run_code`), and the structured-output execution's monotonic `concludeTurn()` marker |
@@ -117,7 +115,7 @@ Every product feature maps to a listener on a documented extension point — the
 | Subprocess sandbox (landlock / sandbox-exec) | use a `ctx.sandbox` backend through `dao-bash-sandbox`; use `tools/pre-execute` for capability-level denial |
 | Permission system / AskUserQuestion | return `ask` from `tools/pre-execute` and answer through `ctx.approval`; register a separate model-facing ask tool for ordinary user questions |
 | Plan mode | [`@daoai/dao-plan-mode`](../../packages/plan/plan-mode/README.md) — logged `plan/mode` state, the `plan:policy` guidance section, `/plan [message]` entry, `/plan off` direct exit, and the user-reviewed `exit_plan_mode` exit; enforcement stays on the independent sandbox/approval axes |
-| Sub-agent delegation | the `ctx.subagents` provider registry (`dao-subagent-spawn-in-process`/`dao-subagent-fork-in-process`/`dao-subagent-acp`/`dao-subagent-codex`/`dao-subagent-claude-code`/`dao-subagent-dao-sdk`) + `dao-tool-subagent` exposing one configured provider to the model |
+| Sub-agent delegation | the `ctx.subagents` provider registry (`dao-subagent-spawn-in-process`/`dao-subagent-fork-in-process`/`dao-subagent-acp`/`dao-subagent-codex`/`dao-subagent-dao-sdk`) + `dao-tool-subagent` exposing one configured provider to the model |
 | MCP | one plugin per server: discover tools → `ctx.tools.register()` |
 | Skills | section + tool registration; `inject()` skill content on invocation |
 | Memory | section provider + tool |
@@ -125,5 +123,5 @@ Every product feature maps to a listener on a documented extension point — the
 | UI (GUI; CLI emits JSONL) | listen `session/event` (assistant chunks, boundaries, tool activity); input → `followup()` |
 | Web Client Chat business node | register a `ConversationNodeDefinition` and `conversation.chat.node` keyed renderer |
 | SessionTelemetryBackend / replayable trace | `session/event` → JSONL; replay = `sessions.create(id, { seed })` |
-| Model adapters | `LlmAdapter` subclass via `registerAdapter` (`dao-llm-deepseek`, `dao-llm-pi-ai`) |
+| Model adapters | `LlmAdapter` subclass via `registerAdapter` (`dao-llm-pi-ai`) |
 | Plugin hot-reload | every registration is a `ctx.effect` → vendored HMR just works |

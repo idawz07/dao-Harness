@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-session
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-session` provides the append-only session log that records an agent's whole interaction history — the single source of truth every model-visible fact flows through. The LLM message history is *derived* from the log (`deriveMessages()`), never stored separately, so replay is re-derivation from the same events and compaction can shadow older surface entries without deleting history. The package also provides the in-memory store (`ctx.sessions`), the typed `SessionEvent` vocabulary that plugins extend by declaration merging, and the surface layer that orders message-producing events. Persistence is deliberately a separate concern: backends subscribe to `session/event` and flush on `session/flush`. Choose it as the foundation of any agent session; it runs no model calls itself.
@@ -165,7 +163,6 @@ Logging causes no invalidation, and exact reconstruction preserves request-prefi
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the session store needs special care. They are current package constraints, not a task backlog.
 

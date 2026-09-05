@@ -5,8 +5,6 @@ kind: "package-bundle"
 
 # @daoai/dao-headless
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-headless` runs one dao task from the command line and prints the final answer, then exits — no GUI, no server, no browser. Type `dao --profile headless "run the tests"` and the agent works through the task with the same model, tools, and safety defaults as every other surface. It is ideal for scripts, CI, and one-off jobs: the process opens no ports and leaves nothing running behind. The exit code tells you the outcome — 0 when the task completed, 1 when it aborted or errored. The main boundary: one task per invocation, with no interactive follow-up.
@@ -115,7 +113,6 @@ The runner adds nothing to the request prefix; it only drives one user message t
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits tell you when headless does not fit and what it needs from the `dao` launcher. They are current package constraints, not a general CLI comparison or a task backlog.
 

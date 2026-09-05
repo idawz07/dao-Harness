@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-web
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 Any plugin or tool can search the web or fetch a URL through `dao-web` (`ctx.web`) without binding to any vendor's API. Search and fetch providers plug in as backends, and the service picks one usable provider per operation, so callers never track which vendor runs behind a call. Choose it when building web tooling or another backend; the shipped model-facing tools (`dao-tool-web`) mount it automatically. The service itself makes no network calls and registers no model-facing tool: a provider must be mounted before search or fetch can run. Search and fetch share one selection policy, one cancellation and error vocabulary, and one configuration surface, so "how this harness reaches the web" has a single owner.
@@ -145,7 +143,6 @@ No direct invalidation; the named consumer owns any request-prefix changes.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the service is incomplete on its own. They are current package constraints.
 

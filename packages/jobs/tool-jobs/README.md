@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-tool-jobs
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-tool-jobs` gives the agent three kind-independent tools for background work — `job_output`, `job_list`, and `job_kill` — so any job the agent started, whether a background command, a PTY send, or a subagent, is read, listed, and cancelled through the same controls. When a job finishes, the owning agent is told in-session: a busy agent gets the notice in its next step, an idle agent is woken with a follow-up turn, bounded per owner. Loading the plugin also attaches the job controller that lets producers start background work. The tools are generic UI cards over `ctx.jobs`; configuration tunes wait timeouts and completion delivery.
@@ -166,7 +164,6 @@ Append-only; newly visible content follows the reusable request prefix and does 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the tools are a poor fit. They are current package constraints, not a task backlog.
 

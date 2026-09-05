@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-session-title
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-session-title` gives every session a title clients can display: a deterministic fallback from the first eligible human message, an optional asynchronous provider (such as a model-backed one), or an explicit user rename. Every accepted revision is a log-only `session/title` event, so titles survive replay, resume, and paging exactly like any other session event and never enter the model surface. The service owns scheduling and acceptance; the optional provider owns generation. Automatic work never delays the main agent response, and a newer revision supersedes older work. Configuration and title sources come first; the implementation internals live in a collapsible developer section below.
@@ -131,7 +129,6 @@ None for the main request; title events do not change its reconstructed content 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define what the title service does not provide. They are current package constraints.
 

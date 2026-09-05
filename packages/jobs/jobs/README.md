@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-jobs
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-jobs` lets tools run long work as background jobs: the work gets a stable `<kind>-N` id, keeps running while the agent moves on, and the owning agent can read its output, wait for it with a timeout, or request cancellation at any time. Jobs belong to the agent session that started them, so one agent's work is never visible to another, and completion reaches the owner as an in-session notice rather than by polling. This package ships the contract only: the process-local registry lives in `dao-jobs-local`, and the model-facing controls and completion notices live in `dao-tool-jobs`. Load an implementation to get background jobs; without one, `ctx.jobs` does not exist and `start()` cannot run.
@@ -113,7 +111,6 @@ No direct invalidation; the named consumers own any request-prefix changes.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the contract is a poor fit. They are current package constraints, not a task backlog.
 

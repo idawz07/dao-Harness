@@ -5,11 +5,9 @@ kind: "package-reference"
 
 # @daoai/dao-credentials
 
-English | [中文](README.zh.md)
-
 ## Summary
 
-`dao-credentials` keeps secret values out of configuration: you store an API key once and reference it by name (`DEEPSEEK_API_KEY`) from settings or `cordis.yml`, and the product supplies the value when a provider request needs it. Beside those references it also keeps durable credential records — per-plugin entries such as an authorization grant or provider environment values — so a plugin holds what it manages for its own ids across restarts. A rotated key takes effect on the very next request — no restart, no configuration edit. Configuration UIs can tell you whether a key or record is set, where it comes from, and whether you can change it, without ever showing a value. Storing an empty value counts as "no key", so a blank can never masquerade as a configured secret; a record's presence is the whole fact, so an entry carrying no value is a deliberate statement, not a blank.
+`dao-credentials` keeps secret values out of configuration: you store an API key once and reference it by name (`LLAMA_ROUTER_API_KEY`) from settings or `cordis.yml`, and the product supplies the value when a provider request needs it. Beside those references it also keeps durable credential records — per-plugin entries such as an authorization grant or provider environment values — so a plugin holds what it manages for its own ids across restarts. A rotated key takes effect on the very next request — no restart, no configuration edit. Configuration UIs can tell you whether a key or record is set, where it comes from, and whether you can change it, without ever showing a value. Storing an empty value counts as "no key", so a blank can never masquerade as a configured secret; a record's presence is the whole fact, so an entry carrying no value is a deliberate statement, not a blank.
 
 ## Table of Contents
 
@@ -51,7 +49,7 @@ import { credentialRef } from '@daoai/dao-credentials'
 
 declare const ctx: Context
 
-const ref = credentialRef('DEEPSEEK_API_KEY')          // POSIX shell identifier, branded
+const ref = credentialRef('LLAMA_ROUTER_API_KEY')          // POSIX shell identifier, branded
 const hit = await ctx.credentials.resolve(ref)         // { value, source } | undefined
 const info = await ctx.credentials.describe(ref)       // { configured, source?, writable } — never the value
 await ctx.credentials.set(ref, 'sk-…')                 // rejects while a read-only source shadows the ref
@@ -85,14 +83,14 @@ await ctx.credentials.deleteRecord(key)                  // no-op when absent
 A settings section or `cordis.yml` entry names a key instead of containing it — an LLM adapter, for example, takes `apiKeyEnv`:
 
 ```yaml
-apiKeyEnv: DEEPSEEK_API_KEY
+apiKeyEnv: LLAMA_ROUTER_API_KEY
 ```
 
 Requests that need the key use its current stored value, so rotating the key takes effect on the very next request — no restart and no configuration edit.
 
 ### What can go wrong
 
-- **A key the launching environment supplies cannot be overwritten** — `DEEPSEEK_API_KEY=… dao` (or a CI secret, a container `-e`) wins for this run and is reported read-only; clear the variable in the launching shell before storing a different value.
+- **A key the launching environment supplies cannot be overwritten** — `LLAMA_ROUTER_API_KEY=… dao` (or a CI secret, a container `-e`) wins for this run and is reported read-only; clear the variable in the launching shell before storing a different value.
 - **An empty value cannot be stored** — storing an empty string is refused; remove the key instead.
 - **Key values never appear in configuration UIs or diagnostics** — the UI shows whether a key is set, where it comes from, and whether you can change it; the value itself stays in the store.
 
@@ -169,7 +167,6 @@ No direct invalidation; resolved values never enter a request prefix.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when this package is a poor fit or needs special care. They are current package constraints, not a task backlog.
 

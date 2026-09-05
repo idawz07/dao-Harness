@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-experimental-tool-agent-team
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-experimental-tool-agent-team` gives the model a team toolset on top of the team domain package: create named teammates, send them messages or follow-up work, see who is available, wait for progress, interrupt a stuck teammate, and manage a shared task board — ten tools in total. A short policy section in every member's prompt teaches the model when to form a team (only when you ask for one) and how to coordinate on a shared workspace. Mounting it replaces legacy subagent controls with the same tool names, so a composition that wants both must disable the legacy definitions. It is experimental: excluded from official releases, carries no stability promise, and creates teammates only when you explicitly ask for a team.
@@ -138,7 +136,6 @@ Prefix-stable while the Team plugin generation, configuration, member role/name,
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits describe what the policy and tools cannot guarantee for a team. They are current package constraints, not a comparison with other collaboration surfaces.
 

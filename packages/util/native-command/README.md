@@ -5,8 +5,6 @@ kind: "package-library"
 
 # @daoai/dao-native-command
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-native-command` runs host executables without a shell and opens Host filesystem paths through the desktop. The command runner captures utf8 output, propagates cancellation, and hides transient Windows consoles. The path opener supports default-application and text-editor intents, browser-renderable documents, WSL translation, and desktop availability checks. It is a library, not a plugin: no `ctx`, no state, no events.
@@ -98,7 +96,6 @@ Nothing here enters a request prefix; this package neither assembles nor sends a
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when this runner is not the right tool. They are current package constraints, not a task backlog.
 

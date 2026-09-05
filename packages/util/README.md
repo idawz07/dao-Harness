@@ -5,8 +5,6 @@ kind: "package-group"
 
 # util/ — zero-dependency shared utilities
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 The `util/` group gives capability packages shared mechanical primitives instead of duplicate implementations. It covers atomic writes, branded ids, UUIDs, Harness-home paths, launch environments, native commands, output retention, and timeout handling. Every package here is a library: it registers no service or event, and the consuming capability retains the business semantics.

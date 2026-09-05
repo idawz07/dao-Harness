@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-credentials-local
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-credentials-local` is the product's default on-machine credential store: a private file under your harness home where API keys and other secrets live, written from a configuration UI and reloaded automatically when you edit the file yourself. The file is a versioned document with a `refs` section for key values and a `records` section for durable per-plugin credentials, so an authorization grant or provider environment survives restarts beside the keys. Keys come from four places in one fixed order: the environment you launch in wins, then the stored file, then your project's and your home `.env` files. A key you save takes effect immediately, even when an older key sits in a `.env`. Only your OS user can read the file, and the product never hands the agent the file's path.
@@ -58,7 +56,7 @@ import { credentialRef } from '@daoai/dao-credentials'
 
 declare const ctx: Context
 
-const ref = credentialRef('DEEPSEEK_API_KEY')
+const ref = credentialRef('LLAMA_ROUTER_API_KEY')
 await ctx.credentials.set(ref, 'sk-…')          // save
 await ctx.credentials.describe(ref)             // { configured, source?, writable } — never the value
 await ctx.credentials.unset(ref)                // remove
@@ -72,12 +70,12 @@ Keys are resolved in one fixed order — the first place that has a value wins:
 
 | Place | Writable? | Wins over |
 |---|---|---|
-| The environment you launched in (`DEEPSEEK_API_KEY=… dao`) | no | everything |
+| The environment you launched in (`LLAMA_ROUTER_API_KEY=… dao`) | no | everything |
 | The stored file | yes (`set`/`unset`) | both `.env` files |
 | Your project's `.env` (`<invocation cwd>/.env`) | not here | your home `.env` |
 | Your home `.env` (`$DAO_HOME/.env`) | not here | nothing |
 
-The launching environment wins because a per-run override — `DEEPSEEK_API_KEY=… dao`, a CI secret, a container `-e` — is this run's explicit intent; it cannot be edited from inside the product, so it is reported read-only and writes to it are refused. Everything else loses to the stored file, which is why a key you save takes effect immediately even when an older key sits in a `.env`; those two `.env` layers resolve when nothing is stored. The environment layer is the launcher's snapshot taken at launch ([environment snapshot](../../util/launch-environment/README.md)), so a variable exported after startup is not seen.
+The launching environment wins because a per-run override — `LLAMA_ROUTER_API_KEY=… dao`, a CI secret, a container `-e` — is this run's explicit intent; it cannot be edited from inside the product, so it is reported read-only and writes to it are refused. Everything else loses to the stored file, which is why a key you save takes effect immediately even when an older key sits in a `.env`; those two `.env` layers resolve when nothing is stored. The environment layer is the launcher's snapshot taken at launch ([environment snapshot](../../util/launch-environment/README.md)), so a variable exported after startup is not seen.
 
 ### The credential file
 
@@ -87,7 +85,7 @@ A versioned YAML document with one section per key space, and nothing else:
 version: 1
 
 refs:
-  DEEPSEEK_API_KEY: sk-…
+  LLAMA_ROUTER_API_KEY: sk-…
   OPENAI_API_KEY: sk-…
 
 records:
@@ -116,7 +114,7 @@ Only your OS user can read the file: the product creates it with owner-only perm
 
 ### What can go wrong
 
-- **A key the launching environment supplies is read-only** — `DEEPSEEK_API_KEY=… dao` wins for this run; saving or removing it is refused. Clear the variable in the launching shell first.
+- **A key the launching environment supplies is read-only** — `LLAMA_ROUTER_API_KEY=… dao` wins for this run; saving or removing it is refused. Clear the variable in the launching shell first.
 - **An empty value cannot be saved** — storing an empty string is refused; remove the key instead.
 - **The store refuses to load a file it cannot trust** — a file any other user can read, malformed YAML, or an unreachable path fails at startup; on a live reload the last good content keeps serving with a warning.
 - **Changes made at the same time are both kept** — if you edit the file while the product writes, your change is folded in rather than overwritten.
@@ -192,7 +190,6 @@ No direct invalidation; stored values never enter a request prefix.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the provider is a poor fit or needs special operational care. They are current package constraints, not a task backlog.
 

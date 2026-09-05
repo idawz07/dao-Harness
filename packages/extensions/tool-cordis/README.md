@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-tool-cordis
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-tool-cordis` gives the model seven tools over the live Cordis runtime of the current DAO process: inspect what is loaded and what a dynamic package may use, define a package with a host half, a browser half, or both, run it, stop it, and remove it. Packages are versioned — a plugin holds immutable package versions, and the model can append a corrected package and update to it after a failure. Definitions live only in process memory and vanish on DAO restart; nothing here writes repository files, installs packages, or changes `cordis.yml`. It also adds a system-prompt section that teaches the workflow; compose it with `@daoai/dao-cordis-host-runner`, the package that runs the sandbox and the run round trip.
@@ -175,7 +173,6 @@ Running or stopping a prompt or tool contribution changes later request prefixes
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the toolset is a poor fit or needs special care. They are current package constraints, not a task backlog.
 

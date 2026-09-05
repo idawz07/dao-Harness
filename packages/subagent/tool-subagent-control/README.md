@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-tool-subagent-control
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-tool-subagent-control` adds the global control tools for continuable children: `send_message` delivers a follow-up message that becomes the child's next turn, `interrupt_agent` stops a child's current turn while keeping its queue and descendants intact, and `list_agents` (from the separately loadable `list-agents` plugin) lists continuable children by durable id and label. The tools are global, so any number of delegation tools never duplicates them. These tools cover only the parent-to-child direction; the child-to-parent direction belongs to the independently installed `dao-tool-subagent-report`. No tool's presence decides whether a delegation tool starts continuable work.
@@ -164,7 +162,6 @@ Append-only; each result follows the reusable request prefix.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define what the control tools cannot observe or steer; they are current package constraints.
 

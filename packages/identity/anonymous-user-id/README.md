@@ -1,15 +1,13 @@
 ---
-description: "Anonymous per-harness-home identity for users and maintainers tracing how telemetry, feedback acknowledgement, and DeepSeek provider requests correlate records."
+description: "Anonymous per-harness-home identity for users and maintainers tracing how telemetry and feedback acknowledgement correlate records."
 kind: "package-library"
 ---
 
 # @daoai/dao-anonymous-user-id
 
-English | [中文](README.zh.md)
-
 ## Summary
 
-Every harness home gets one anonymous id that telemetry, feedback, and DeepSeek requests attach to their records, so receiving systems can tell that records came from the same installation without learning who the user is. The id is a random UUID stored in `$DAO_HOME/.anonymous-user-id` (`~/.dao` by default); it appears automatically the first time one of those features runs, stays stable across restarts, and is created fresh if you delete the file. Separate harness homes never share an id, and no machine or account detail goes into it. Use it whenever you want to correlate records from one installation without an account; it cannot join records across different homes.
+Every harness home gets one anonymous id that telemetry and feedback attach to their records, so receiving systems can tell that records came from the same installation without learning who the user is. The id is a random UUID stored in `$DAO_HOME/.anonymous-user-id` (`~/.dao` by default); it appears automatically the first time one of those features runs, stays stable across restarts, and is created fresh if you delete the file. Separate harness homes never share an id, and no machine or account detail goes into it. Use it whenever you want to correlate records from one installation without an account; it cannot join records across different homes.
 
 ## Table of Contents
 
@@ -25,15 +23,14 @@ Every harness home gets one anonymous id that telemetry, feedback, and DeepSeek 
 <a id="use-this-package"></a>
 ## Use this package
 
-When you want the records your installation sends out to be recognizable as coming from the same harness home — telemetry, feedback, and DeepSeek requests all carry one shared id — this package is what provides it. There is nothing to install or configure: the id appears automatically, and the shipped feedback, telemetry, and DeepSeek features already use it. Do not use it to identify a user or to join records across different homes; it is anonymous and home-scoped.
+When you want the records your installation sends out to be recognizable as coming from the same harness home — telemetry and feedback all carry one shared id — this package is what provides it. There is nothing to install or configure: the id appears automatically, and the shipped feedback and telemetry features already use it. Do not use it to identify a user or to join records across different homes; it is anonymous and home-scoped.
 
 ### What the id does for you
 
-Three things your installation sends out carry the same id, so records line up across all of them:
+Two things your installation sends out carry the same id, so records line up across both:
 
 - **Session telemetry** — your telemetry exports carry the id as the `user.id` resource attribute, so a collector can group an installation's records.
 - **Feedback** — each feedback acknowledgement names the anonymous installation that recorded it.
-- **DeepSeek requests** — every provider request carries the `x-deepseek-harness-user-id` header, so usage can be attributed per installation.
 
 ### Observing and resetting the id
 
@@ -41,7 +38,7 @@ The id lives in `$DAO_HOME/.anonymous-user-id` (`~/.dao` by default) as a plain 
 
 ### Using it in your own package
 
-When you build a feature that should share the installation's anonymous id, import the value once and reuse it — telemetry, feedback, and DeepSeek already use the same id, so your records line up with theirs:
+When you build a feature that should share the installation's anonymous id, import the value once and reuse it — telemetry and feedback already use the same id, so your records line up with theirs:
 
 ```ts
 import { getOrCreateAnonymousUserId } from '@daoai/dao-anonymous-user-id'
@@ -98,7 +95,6 @@ Read these pages when the package-level contract is not enough. They move from t
 - [dao-home-paths](../../util/home-paths/README.md) — owns `$DAO_HOME` and `~/.dao` resolution.
 - [dao-session-telemetry-otel](../../session/session-telemetry-otel/README.md) — reports the id as the OTel Resource `user.id`.
 - [dao-command-feedback](../../feedback/command-feedback/README.md) — embeds the id in the feedback acknowledgement.
-- [dao-llm-deepseek](../../llm/llm-deepseek/README.md) — sends `x-deepseek-harness-user-id` on provider requests.
 - [Session telemetry subsystem](../../../docs/subsystems/session-telemetry.md) — the telemetry seam and its backend contract.
 
 -----
@@ -106,7 +102,7 @@ Read these pages when the package-level contract is not enough. They move from t
 <a id="model-experience"></a>
 ## Model Experience
 
-None, as the shared identifier reaches DeepSeek only as model-hidden HTTP metadata and registers nothing model-facing.
+None, as the shared identifier reaches receiving systems only as model-hidden HTTP metadata and registers nothing model-facing.
 
 #### KV Cache effect
 
@@ -116,13 +112,11 @@ None; the transport header changes neither tokens nor the model-visible prefix.
 
 <a id="known-limitations-and-deferred-work"></a>
 
-
 These limits describe when the id is a poor fit or needs special attention. They are current package constraints, not a general comparison of anonymity approaches or a task backlog.
 
 - **No recovery after deletion** — losing the file mints a new anonymous identity by design; recovery would require stable derivation material that weakens anonymity.
 - **Best-effort concurrency** — a reader landing in the narrow interval between a concurrent process's exclusive create and completed write can use a different in-memory UUID for that run; later launches converge on the persisted value.
 - **No cross-home identity** — different `$DAO_HOME` values cannot be correlated.
-- **Configured DeepSeek gateways receive the id** — `dao-llm-deepseek` sends the stable header to its resolved `baseURL`, including deployment overrides, independently of telemetry sharing mode.
 - **Deleting the file does not reset the current process** — memoization keeps the run's id until the next launch.
 
 <a id="dev-note"></a>

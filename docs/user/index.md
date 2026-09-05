@@ -7,5 +7,3 @@ head:
 ---
 
 # Dao
-
-English | [中文](index.zh.md)

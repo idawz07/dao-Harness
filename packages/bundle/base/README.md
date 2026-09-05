@@ -5,8 +5,6 @@ kind: "package-bundle"
 
 # @daoai/dao-base
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 Every base-backed `dao --profile` surface runs on `dao-base`, so those surfaces share a model connection, the full tool set, durable session history, and workspace safety defaults. The shipped `sdk-minimal` profile deliberately uses a complete standalone tree instead. You rarely touch this bundle directly — shipped base-backed profiles already include it, and a custom base-backed profile names it first. When you need different defaults, change your profile patch or add a later bundle; this package is not a library you import.
@@ -47,7 +45,7 @@ Run `dao --profile my-profile "your task"` and you get a working agent with mode
 
 ### What you get
 
-Out of the box, every profile built on this core provides: a DeepSeek model connection (the provider and model are configurable, and you can enable extra providers from your settings), the full tool set — file editing, shell commands, web search, subagents, task and goal tracking — durable sessions that survive restarts, and the default permission policy that confines file writes to your workspace and asks before risky actions. Telemetry stays off unless you opt in.
+Out of the box, every profile built on this core provides: a model connection (the provider and model are configurable, and you can enable extra providers from your settings), the full tool set — file editing, shell commands, web search, subagents, task and goal tracking — durable sessions that survive restarts, and the default permission policy that confines file writes to your workspace and asks before risky actions. Telemetry stays off unless you opt in.
 
 ### Shell tools per platform
 
@@ -117,7 +115,6 @@ The bundle itself adds no request prefix; each inserted row's package owns any c
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits tell you when the core needs extra care or where an override must go. They are current package constraints, not a general comparison or a task backlog.
 

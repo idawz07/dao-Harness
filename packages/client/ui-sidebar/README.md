@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-client-ui-sidebar
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-client-ui-sidebar` is the sidebar shell of the dao web client: users see the brand row, start new sessions, collapse into the layout-owned 56px rail, and reach Settings from the bottom-pinned seat, while the scroll-aware region seat hosts the Workspace and Session browser. The Workspace and Session browser rendered into `sidebar.workspaces` belongs to ui-workspace; this package neither derives its rows nor owns its view preferences. A deployment package can replace the brand mark or name without replacing the New Session control or the rail geometry, and New Session starts the runtime's page-local frontend Session Intent against the explicit, current, or most recently active Workspace. Collapse into the layout-owned 56px rail remains presentation-local.
@@ -82,7 +80,6 @@ None; this package neither assembles nor sends a provider request.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define what the shell owns versus what its occupants own; they are current package constraints.
 

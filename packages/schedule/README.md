@@ -5,8 +5,6 @@ kind: "package-group"
 
 # schedule/ — Session-local reminders
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 The schedule group provides session-local reminders for a running conversation: ask the agent to remind you later, at an absolute time, or on a fixed interval, and each reminder arrives as an ordinary message in the same conversation when it comes due. It contains one package with three tools — create, list, and cancel — and no UI or service interface of its own. Reminders survive restarts but stay inside the session: there is no email, SMS, or push notification. This page maps the group; the package README owns the per-package contract.

@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-host-directory-picker
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 The web GUI host lets an operator choose a workspace directory through one contract: a single service whose one method reports which interaction the composed backend provides. Backends differ in interaction shape, not just mechanism — the native backend opens an OS chooser on the host display, while the browse backend serves listing and creation primitives for an in-app browser that also works for remote clients. Consumers switch on the reported capability kind; a new backend extends the capability vocabulary without editing this package. This seam is GUI-host only and never reaches the agent loop; the backends and the wire mapping live beside it.
@@ -94,7 +92,6 @@ None; this package neither assembles nor sends a provider request.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the seam contract leaves a decision to a future consumer. They are current package constraints, not a task backlog.
 

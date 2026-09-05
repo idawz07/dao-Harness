@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-subprocess
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 Any composition that runs child processes can start a fully specified child process or a real terminal session through `ctx.subprocess`, receive a live handle with streams and exit facts, and terminate the whole process tree on demand. The service provides executable lookup, the shared environment scrub, and bounded output capture, while every default — argv, deadlines, shell semantics — stays explicit on the request, so the consuming capability seams decide what a process means. A composition mounts one provider implementation (such as `dao-subprocess-local`) that registers the service; the seam package itself is an abstract contract, not a loadable plugin. Nothing here reaches a model directly: process output and lifecycle are rendered by the consuming tools.
@@ -117,7 +115,6 @@ Read these pages when the package-level contract is not enough. They move from t
 
 - [Subprocess subsystem](../../../docs/subsystems/subprocess.md) — spawn specs, output readers, outcomes, and the `DAO_*` environment in full.
 - [dao-subprocess-local](../subprocess-local/README.md) — the local host provider that implements this contract.
-- [dao-subprocess-e2b](../../e2b/subprocess-e2b/README.md) — the remote E2B provider for the same seam.
 - [dao-bash-local](../../shell/bash-local/README.md) — the largest consumer: bash commands over this service.
 - [Subprocess seam Agent Note](../../../.agents/notes/implemented/architecture/2026-07-26-subprocess-seam.md) — why the process half became its own seam and what moved with it.
 
@@ -135,7 +132,6 @@ No direct invalidation; the named consumers own any request-prefix changes.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the seam is a poor fit or leaves work to its consumers. They are current package constraints, not a comparison or a backlog.
 

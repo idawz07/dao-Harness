@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-sandbox-policy
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-sandbox-policy` resolves the file-effect mode and workspace root for every confined capability call from one shared policy home, and tells the model the current policy before each request. A deployment sets a default mode and a fallback workspace root; a session can switch its own mode, and the switch survives restart because it lives in the session log. Every enforcing capability — bash, filesystem, terminal — reads the same resolved policy, so the mode a call runs under never depends on which family resolved it. The model sees one concise `sandbox:policy` contribution naming the mode and workspace, without a separate inventory of mounted capabilities.
@@ -142,7 +140,6 @@ The stable system prompt remains byte-identical across mode changes. A changed f
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define the policy surface this package provides. They are current package constraints, not a general sandbox comparison or a task backlog.
 

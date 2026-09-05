@@ -5,8 +5,6 @@ kind: "package-library"
 
 # @daoai/dao-typert-protocol
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 With `dao-typert-protocol`, business packages can expose Host methods to Remote clients: mark a method with `@Remote` (or `@RemoteScope` for scoped receivers), bind the service to a wire namespace, and associate Host objects and scoped Contexts with wire identities through the merge-extensible protocol maps. Generated artifacts, the Host Gateway, and the Client API consume the same invocation descriptors, codecs, and provider contracts, so one declaration set stays in sync across every face. The package registers no Cordis service and runs no TypeScript analysis; it declares types and decorator markers only.
@@ -115,7 +113,6 @@ No direct effect; the declared contracts reach a request only when an assembly p
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define what the declarations can represent; they are current package constraints, not a task backlog.
 

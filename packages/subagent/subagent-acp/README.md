@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-subagent-acp
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-subagent-acp` runs each delegated child in a fresh subprocess and drives it as an Agent Client Protocol client: the child gets its own runtime, session, model configuration, and tools, and it can be any ACP-compatible agent, not just Harness. It is the out-of-process alternative to the in-process spawn and fork backends, sharing only the parent session's working directory with the child. Each run spawns a fresh process, initializes an ACP session, sends the task, and collects the streamed final answer; permission prompts are auto-answered by configuration, so no human is needed. The parent receives only the child's final answer or a safe error — no intermediate messages or tool traffic crosses the boundary. Choose it when the child must be fully isolated from the parent harness and can speak ACP.
@@ -58,7 +56,7 @@ A Dao child uses the product launcher and an explicit absolute `DAO_HOME`. The i
     permission: reject
     env:
       DAO_HOME: /absolute/path/to/isolated-child-home
-      DEEPSEEK_API_KEY: !!js process.env.DEEPSEEK_API_KEY
+      LLAMA_ROUTER_API_KEY: !!js process.env.LLAMA_ROUTER_API_KEY
 ```
 
 ### What you get
@@ -152,7 +150,6 @@ Append-only; newly visible content follows the reusable request prefix and does 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when this backend is a poor fit or needs special operational care. They are current package constraints, not a general ACP comparison or a task backlog.
 

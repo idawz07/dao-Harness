@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-tool-bash-persistent
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-tool-bash-persistent` gives the agent a `bash` tool whose shell state persists across calls for the owning agent: cwd, exported variables, functions, and background jobs survive between commands. Each agent gets its own shell backed by an owner-scoped PTY session from the terminal service, and commands for the same agent run one at a time. Configuration selects the PTY backend and the wall-clock limit for one command; a timeout or an explicit `exit` closes the shell, and the next call starts fresh. It complements the one-shot `dao-tool-bash` tool — choose it when work needs cross-call state. Mount it together with a terminal backend such as `dao-terminal-bash` and the `ctx.terminals` service.
@@ -139,7 +137,6 @@ Append-only tool results follow the reusable request prefix.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the tool is a poor fit or needs special care. They are current package constraints, not a task backlog.
 

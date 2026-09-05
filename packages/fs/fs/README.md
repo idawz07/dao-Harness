@@ -5,11 +5,9 @@ kind: "package-reference"
 
 # @daoai/dao-fs
 
-English | [中文](README.zh.md)
-
 ## Summary
 
-`dao-fs` defines the `ctx.fs` filesystem service: a compact, backend-neutral contract for one execution world that resolves paths to stable identities, maps shared host files when supported, reads text and raw bytes within bounds, lists directories, and applies atomic writes and literal edits. It deliberately leaves storage mechanics to the backends that implement it — `fs-local` for the host filesystem, `fs-sandbox` for policy-enforced confinement, and `fs-e2b` for a remote execution world. Both mutations take an optional version guard, so a backend mounted without the policy plugin still gives complete, unconstrained, atomic file operations. The package also owns the `fs/*` policy-event vocabulary that the tool package dispatches and the policy plugin decides. Choose it when you need a swappable filesystem surface; the model-facing tools themselves live in `dao-tool-fs`.
+`dao-fs` defines the `ctx.fs` filesystem service: a compact, backend-neutral contract for one execution world that resolves paths to stable identities, maps shared host files when supported, reads text and raw bytes within bounds, lists directories, and applies atomic writes and literal edits. It deliberately leaves storage mechanics to the backends that implement it — `fs-local` for the host filesystem and `fs-sandbox` for policy-enforced confinement. Both mutations take an optional version guard, so a backend mounted without the policy plugin still gives complete, unconstrained, atomic file operations. The package also owns the `fs/*` policy-event vocabulary that the tool package dispatches and the policy plugin decides. Choose it when you need a swappable filesystem surface; the model-facing tools themselves live in `dao-tool-fs`.
 
 ## Table of Contents
 
@@ -29,7 +27,7 @@ You rarely load `dao-fs` directly: you mount a backend that registers as `ctx.fs
 
 ### Choosing and mounting a backend
 
-Pick [`fs-local`](../fs-local/README.md) for ordinary host files, [`fs-sandbox`](../fs-sandbox/README.md) when a session's mutations must be confined to its workspace and temp roots, and [`fs-e2b`](../../e2b/fs-e2b/README.md) when file state must live in a remote execution world. Mounting any backend populates `ctx.fs`; swapping backends changes nothing for the policy plugin, the tools, or the tool schemas. A composition that mounts no backend has no `ctx.fs` at all, and the tools fail at registration.
+Pick [`fs-local`](../fs-local/README.md) for ordinary host files, and [`fs-sandbox`](../fs-sandbox/README.md) when a session's mutations must be confined to its workspace and temp roots. Mounting any backend populates `ctx.fs`; swapping backends changes nothing for the policy plugin, the tools, or the tool schemas. A composition that mounts no backend has no `ctx.fs` at all, and the tools fail at registration.
 
 ### What the service lets you do
 
@@ -105,7 +103,6 @@ No direct invalidation; the named consumer owns any request-prefix changes.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the contract is a poor fit or needs special operational care. They are current package constraints, not a general filesystem comparison or a task backlog.
 

@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-user-approval
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-user-approval` lets a sensitive tool action pause for a one-shot allow/reject decision: `ctx.approval.request(req)` asks the composed answerers whether one specific action may proceed and returns `allowed-once`, `rejected`, `cancelled`, or `unavailable`. Missing, non-owning, or throwing answerers fail closed to `unavailable`, and a grant applies only to the requested action. A per-session policy — `ask` (the default) or `never` — decides what happens before any answerer runs: `ask` delegates to the composed answerers, `never` rejects every request deterministically without prompting anyone. Each request is recorded in the requesting session's audit log, and the model sees only the asking consumer's tool outcome plus the current policy in the runtime-context snapshot. UI channels provide human answerers; the ACP automation bridge answers for its own agents.
@@ -147,7 +145,6 @@ Append-only; newly visible content follows the reusable request prefix and does 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the seam is a poor fit or needs special composition care. They are current package constraints, not a general permission comparison.
 

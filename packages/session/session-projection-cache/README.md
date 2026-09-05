@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-session-projection-cache
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-session-projection-cache` persists the state checkpoints of every registered projection unit (`ctx.sessionProjectionCache`) as one versioned document per session in the `session_projcache` storage domain's `per-record` layout. The shipped JSON backend stores each record at `<root>/session_projcache/sessions/<id>.json`, and the cache never reads the session-persistence layer. A stored row is a fold shortcut, never an authority: it may be stale — its `seq` says exactly how stale — but never wrong. Three mandatory checkpoints (session creation, `turn/end`, and session disposal) plus configurable count and interval throttles keep the cache fresh. Choose it when list views need synchronous cached values or cold projection folds should skip an already-checkpointed prefix.
@@ -119,7 +117,6 @@ None; the cache never assembles or sends provider requests.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define where the cache needs operational care. They are current package constraints, not a task backlog.
 

@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-client-ui-workflow-run
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-client-ui-workflow-run` is the browser plugin that reconstructs durable top-level workflow runs as independent Chat nodes in the dao web client. It consumes the four `tool-workflow/*` Session events owned by `dao-tool-workflow`, registers one `ConversationNodeDefinition`, and renders through the keyed `conversation.chat.node` slot without changing the existing workflow tool card. The run and each phase are controlled disclosures: a mount opens running, failed, cancelled, and interrupted levels and closes fully completed levels, and users can toggle either level with the full row, Enter, or Space. A member opens a child Session only while every current fact agrees, and the node shows run, phase, member identity, and status only.
@@ -81,7 +79,6 @@ None; this package neither assembles nor sends a provider request.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define which runs produce records and what the node exposes; they are current package constraints.
 

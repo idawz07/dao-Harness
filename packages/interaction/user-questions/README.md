@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-user-questions
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 User-interaction Service Definition. It owns `ctx.userQuestions`, the service a model-facing tool or permission plugin uses when it needs to pause work and ask the human for a decision. Use it when a consumer must suspend an operation until the user answers.
@@ -64,7 +62,6 @@ No direct invalidation; the named consumer owns any request-prefix changes.
 
 - **Agent-scoped Web answering** — Remote Events route the shipped Web answerer only when the request carries a live Agent scope; agentless callers need an unscoped local waterfall listener.
 - **The vocabulary is the question-form shape only** — selectable options plus optional custom text; richer interaction shapes (file pickers, diff-preview confirmations) have no seam vocabulary yet.
-
 
 <a id="dev-note"></a>
 ### Dev Note

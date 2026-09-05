@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-settings
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-settings` lets plugins expose configuration that users can change at runtime: a plugin registers a namespace with a schema, and the resolved value honors schema defaults, the deployment's own composition `base`, and the user-edited document section — with user overrides winning. Consumers read a snapshot of the resolved value and are notified of every committed change; configuration surfaces get one descriptor per namespace — schema, current value, which layer each field came from, effect timing — without touching storage directly. Writes change only the user overrides, run one at a time per namespace, and can carry an expected revision so a stale writer is refused instead of silently overwriting a newer one. A provider must be mounted to store the document; without one, nothing changes and configuration stays exactly as composed.
@@ -144,7 +142,6 @@ No direct invalidation; a consumer that folds a settings value into the request 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the service is a poor fit or needs special care. They are current package constraints, not a task backlog.
 

@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-llm-retry
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `@daoai/dao-llm-retry` is the retry executor for failed model requests: it applies each provider's resolved retry policy at the agent loop's open-step `agent/request-error` extension point, so every retry re-runs the same step inside the same open turn over the same durable history. It does not wrap the streaming call itself — every adapter call remains one provider attempt, and direct `ctx.llm.stream()` consumers stay single-attempt. Retry scheduling is durable: the plugin appends `llm/retry` events to the session log before waiting, and cancellation during backoff leaves the log consistent. Normal mode retries a bounded set of failure codes up to `maxRetries` with exponential backoff; always mode asks downstream recovery first, then retries every failure without an attempt limit.
@@ -29,20 +27,24 @@ Mount this plugin when agent runs should recover from transient model-request fa
 
 ### When to choose it
 
-Choose it when a composition runs the agent loop and wants durable request recovery. The plugin is a function plugin with no config; provider adapters such as `dao-llm-deepseek` and `dao-llm-pi-ai` own the `retryPolicy` for their routes, and multi-provider adapters place it inside each provider profile. Skip it when calls go through `ctx.llm.stream()` directly without the agent loop: those consumers remain single-attempt because a raw stream cannot separate already-emitted chunks durably.
+Choose it when a composition runs the agent loop and wants durable request recovery. The plugin is a function plugin with no config; provider adapters such as `dao-llm-pi-ai` own the `retryPolicy` for their routes, and multi-provider adapters place it inside each provider profile. Skip it when calls go through `ctx.llm.stream()` directly without the agent loop: those consumers remain single-attempt because a raw stream cannot separate already-emitted chunks durably.
 
 ### Minimal configuration
 
 ```yaml
-- name: '@daoai/dao-llm-deepseek'
+- name: '@daoai/dao-llm-pi-ai'
   config:
-    apiKeyEnv: DEEPSEEK_API_KEY
-    retryPolicy:
-      mode: always
-      backoff:
-        initialDelayMs: 1000
-        maxDelayMs: 30000
-        jitterRatio: 0.2
+    providers:
+      llama-router:
+        apiKeyEnv: LLAMA_ROUTER_API_KEY
+        api: openai-completions
+        baseURL: http://100.110.212.93:8081/v1
+        retryPolicy:
+          mode: always
+          backoff:
+            initialDelayMs: 1000
+            maxDelayMs: 30000
+            jitterRatio: 0.2
 
 - name: '@daoai/dao-llm-retry'
 ```
@@ -98,7 +100,6 @@ The plugin is one listener in the `agent/request-error` waterfall. Always mode's
 Read these pages when the package-level contract is not enough. They move from the service contract to the adapters that own retry policies.
 
 - [dao-llm service](../llm/README.md) — the provider-neutral service whose adapters own `retryPolicy`.
-- [llm-deepseek adapter](../llm-deepseek/README.md) — a provider adapter with a route-level `retryPolicy`.
 - [llm-pi-ai adapter](../llm-pi-ai/README.md) — a multi-provider adapter with per-profile `retryPolicy`.
 - [Terminal LLM stream failures](../../../.agents/notes/implemented/architecture/2026-07-29-terminal-llm-stream-failures.md) — how failures reach the service boundary as terminal chunks.
 - [LLM streaming subsystem](../../../docs/subsystems/llm-streaming.md) — the `StreamChunk` protocol and adapter contract.
@@ -125,7 +126,6 @@ The reconstructed request preserves the prior prefix and is eligible for provide
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define where the executor stops and future work begins. They are current package constraints, not a general retry comparison or a task backlog.
 

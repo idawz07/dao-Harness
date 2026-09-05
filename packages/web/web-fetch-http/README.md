@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-web-fetch-http
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 With `dao-web-fetch-http`, the harness can fetch public HTTP(S) pages through the web service (`ctx.web`) and get their status code plus bounded, decoded content without sending credentials. Choose it when a composition needs safe retrieval with URL validation, public-address resolution, connection pinning, same-origin redirects, byte and character caps, and an explicit product `User-Agent`. It returns non-2xx responses as results rather than errors, and rejects non-public destinations, binary data, and unsupported content types. The model-facing `web_fetch` tool lives in `dao-tool-web`, which renders this provider's bodies.
@@ -46,7 +44,7 @@ Load the web service and the provider; configurable limits have safe defaults an
 | `maxBodyChars` | `100,000` | Maximum decoded body length in characters |
 | `timeoutMs` | `30,000` | Fetch timeout — a resource backstop, not the model-facing tool budget |
 | `maxRedirects` | `5` | Maximum same-origin redirect hops (`0` follows none) |
-| `userAgent` | `deepseek-harness/…` | `User-Agent` header sent on every request |
+| `userAgent` | `dao/…` | `User-Agent` header sent on every request |
 
 The generated [configuration catalog](../../../docs/config-catalog.md#daoaidao-web-fetch-http) is the exhaustive source for every accepted field and its JSDoc.
 
@@ -128,7 +126,6 @@ No direct invalidation; the named consumer owns any request-prefix changes.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the provider is unsafe or a poor fit. They are current package constraints.
 

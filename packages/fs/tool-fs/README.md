@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-tool-fs
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-tool-fs` provides the model-facing filesystem tools — `read`, `read_image`, `write`, and `edit` — and their executor. With them the model reads files with line numbers, creates or replaces them atomically, and applies targeted literal edits; results are capped and failures carry stable codes with recovery instructions, all backed by a mounted `ctx.fs` backend. The read-before-edit policy lives in a separate plugin (`dao-fs-observation-policy`), so omitting it yields unconditional, still-atomic mutations. `read_image` appears while a durable attachment store is mounted and refuses execution unless the routed model declares image input. Choose this package when the model should read, create, replace, or edit UTF-8 text files; discovery (`glob`/`grep`) is a sibling package.
@@ -232,7 +230,6 @@ Append-only; newly visible content follows the reusable request prefix and does 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the tool suite is a poor fit or needs special operational care. They are current package constraints, not a general filesystem comparison or a task backlog.
 

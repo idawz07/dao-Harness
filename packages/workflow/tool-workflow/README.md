@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-tool-workflow
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-tool-workflow` gives the model the `workflow` tool: call it with a JavaScript orchestration script, an identity block, and optional arguments, and it runs the script over `ctx.workflowEngine`, fanning work out across subagents until the script's final value returns. The tool owns the model-facing schema, the usage guidance in the system prompt, and the result envelope; script parsing, execution, caps, and cancellation live behind the engine. Execution is foreground: the parent turn blocks until the whole workflow settles, and a non-clean finish is an error, never partial output. Choose it when the user explicitly asks for workflow-style or large multi-agent orchestration; prefer plain subagent calls for one or two delegations.
@@ -152,7 +150,6 @@ Append-only; newly visible content follows the reusable request prefix and does 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define what the tool does not yet support. They are current constraints, not a task backlog.
 

@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-session-log-export
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-session-log-export` lets the Web interface download a session's full history: a `Session log` button in the Session Header and an `/export` slash command both hand the session tree — the session, its sub-sessions, and attachments — to the browser as a ZIP download. The package owns the Host archive stream, its authenticated Fetch route, and the browser controls and feedback. The browser chooses the download destination. Setup and usage come first; implementation details follow.
@@ -117,7 +115,6 @@ None. The log-only command lifecycle and browser download do not change the deri
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when this package is a poor fit or needs special operational care. They are current package constraints, not a task backlog.
 

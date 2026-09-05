@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-persona
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-persona` gives one agent its own persona: a preset mounts this composable row to register the `deployment:persona` system-prompt section, shadowing the deployment-wide persona for that session. It can also make that persona the session's complete system prompt, suppressing every other section, and can turn off dynamic runtime-context snapshots for the session. Mount it inside a preset composition — mounting it globally collides with the prompt registry's own persona registration and fails loud. Without this row, a preset could change an agent's tools but never its identity.
@@ -109,7 +107,6 @@ Prefix-stable for the life of an agent — the row mounts once, before the agent
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the row is a poor fit. They are current package constraints, not a task backlog.
 

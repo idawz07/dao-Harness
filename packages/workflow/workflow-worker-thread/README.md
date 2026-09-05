@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-workflow-worker-thread
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-workflow-worker-thread` implements the workflow engine with one Node worker thread per run: the orchestration script executes inside a fresh worker while its `agent()` calls reach host subagents over a typed host/worker protocol. A synchronous script loop cannot block the harness event loop, and a script that ignores cancellation can be terminated with its worker. The isolation is containment, not a security boundary — a model-written script has the same trust premise as the model's existing bash access, and escaping the `node:vm` context recovers the worker's process authority. Mount this engine to give `ctx.workflowEngine` a concrete implementation; a composition that loads it with `dao-tool-workflow` gives the model the `workflow` tool.
@@ -160,7 +158,6 @@ Append-only; newly visible content follows the reusable request prefix and does 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the engine is a poor fit or needs special operational care. They are current constraints, not a task backlog.
 

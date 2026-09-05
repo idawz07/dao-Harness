@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-compaction
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-compaction` lets a long session condense its older history into a single summary message, keep the recent conversation intact, and continue as if the summary had always been there — with a backend such as `dao-compaction-basic` and the optional `/compact` command. The condensed content stays in the session log, so replaying the session reproduces the exact conversation. Reach for this package when you implement a condensation backend, build something that triggers condensation, or need to recognize condensed messages — it performs no condensation itself. Choose the shipped backend when you just want the feature working out of the box.
@@ -151,7 +149,6 @@ A successful backend replacement invalidates reuse from the first shadowed histo
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits describe what condensation cannot do, regardless of which backend is loaded; they are the current package constraints.
 

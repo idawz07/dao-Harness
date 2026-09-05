@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-client-ui-cordis
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-client-ui-cordis` gives a web client the browser surfaces for dynamic Cordis packages: a frame-wide panel that operates every definition the host holds, tool cards that render `cordis_define`, `cordis_run`, `cordis_stop`, and `cordis_undefine` calls in the conversation, and an `@pluginId` input source that completes the session's defined plugins. The panel is global on purpose — a model-driven run blocks on a person's approval, and that approval must be reachable no matter which session is in view. The package authors nothing the model sees: everything it operates comes from the browser runner and the host's inventory, and the cards render call and result content the conversation already logged.
@@ -105,7 +103,6 @@ None: no prompt input originates here, and answering a run request neither exten
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define where the surfaces need special care. They are current package constraints, not a task backlog.
 

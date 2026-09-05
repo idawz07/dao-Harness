@@ -4,8 +4,6 @@ kind: "package-reference"
 ---
 # Session Controller
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `@daoai/dao-api-session-controller` owns the Host `ctx.sessionController` service and the generated Client `session`, `skills`, and `fileReferences` Remote namespaces. It serves Session lifecycle and history, the Host-generation model catalog, workspace-path opening, user-invocable skill discovery, and the adapter for Agent-scoped file references. Use it through API Gateway when a Client needs operations addressed by a Session.
@@ -61,7 +59,6 @@ No direct effect; model requests remain owned by the Agent and LLM packages.
 - Control baselines represent process-local state and therefore cannot reconstruct jobs after a Host restart.
 - A failed follow resumption remains visible to the caller instead of retrying indefinitely.
 - File-reference completion uses the shared Agent lookup and can resume a cold Session; the `skills/list` catalog is the non-activating alternative for skill metadata.
-
 
 <a id="dev-note"></a>
 ### Dev Note

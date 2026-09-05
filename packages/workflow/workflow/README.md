@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-workflow
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-workflow` runs a plain-JavaScript orchestration script and gives the caller a live run whose result resolves with the script's final JSON value. The script can fan out subagents with `agent()`, combine independent work with `parallel()` and `pipeline()`, and narrate progress with `phase()` and `log()`; agents normally drive this through the `workflow` tool from `dao-tool-workflow`. A run is holder-owned: its result never rejects, cancellation and disposal are bounded, and every child is attributed to the invoking agent. The package ships no execution engine — `dao-workflow-worker-thread` is the current one — so a different isolation strategy can replace it without changing what callers or the model see.
@@ -120,7 +118,6 @@ No direct invalidation; the named consumer and engine own any request-prefix cha
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define what the capability does not yet support. They are current constraints, not a task backlog.
 

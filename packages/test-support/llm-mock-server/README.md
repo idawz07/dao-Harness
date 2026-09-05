@@ -5,11 +5,9 @@ kind: "package-library"
 
 # @daoai/dao-llm-mock-server
 
-English | [中文](README.zh.md)
-
 ## Summary
 
-`dao-llm-mock-server` stands in for a real model provider during tests as a scriptable OpenAI-compatible HTTP/SSE server: you script a sequence of wire behaviors — stream resets, stalls, malformed chunks, rate limits, server errors, successful completions, tool calls — and each accepted `/chat/completions` request consumes the next one. It serves the shipping DeepSeek adapter and the agent loop over real HTTP, so recovery policy such as retries, backoff, and timeouts is exercised against a genuine wire boundary without a provider key. A CLI (`pnpm run mock:llm`) runs the server standalone; the library entry `startMockLlmServer` embeds it in tests and returns captured requests. A `random` behavior with seeded weights mixes failures for open-ended stress runs.
+`dao-llm-mock-server` stands in for a real model provider during tests as a scriptable OpenAI-compatible HTTP/SSE server: you script a sequence of wire behaviors — stream resets, stalls, malformed chunks, rate limits, server errors, successful completions, tool calls — and each accepted `/chat/completions` request consumes the next one. It serves the shipping pi-ai adapter and the agent loop over real HTTP, so recovery policy such as retries, backoff, and timeouts is exercised against a genuine wire boundary without a provider key. A CLI (`pnpm run mock:llm`) runs the server standalone; the library entry `startMockLlmServer` embeds it in tests and returns captured requests. A `random` behavior with seeded weights mixes failures for open-ended stress runs.
 
 ## Table of Contents
 
@@ -39,12 +37,16 @@ pnpm run mock:llm \
   --partial-text "discard this half"
 ```
 
-Point the shipping DeepSeek adapter at the server; it appends `/chat/completions` to the configured base:
+Point the shipping pi-ai adapter at the server by overriding its route's `baseURL` in `$DAO_HOME/settings.yaml` (merged per provider over the profile); it appends `/chat/completions` to the configured base:
 
 ```sh
-DEEPSEEK_BASE_URL=http://127.0.0.1:8000/v1 \
-DEEPSEEK_API_KEY=mock-key \
-pnpm dao --profile headless "test provider recovery"
+# $DAO_HOME/settings.yaml
+# llm-pi-ai:
+#   providers:
+#     llama-router:
+#       baseURL: http://127.0.0.1:8000/v1
+
+LLAMA_ROUTER_API_KEY=mock-key pnpm dao --profile headless "test provider recovery"
 ```
 
 The repository script writes JSONL to stdout: a `ready` record carries the `/v1` base URL and random seed, followed by request/result records that name both the scripted behavior and the concrete behavior selected. The package exposes no installable binary.
@@ -151,7 +153,6 @@ None; requests terminate locally and never reach a provider cache.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the server needs special care. They are current package constraints, not a task backlog.
 

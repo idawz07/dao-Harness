@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-client-ui-settings
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-client-ui-settings` is the base every preference surface in the dao web client builds on: a feature plugin binds a namespace and stores or edits its preference rows in the Host settings document without re-implementing transport or schema handling. `ctx.settingsScope` derives a per-namespace scope from the shared document mirror with revision fencing, so a concurrent write from another surface is refused instead of silently overwritten; `ctx.settingsSchema` rehydrates and validates schemas and edits immutable paths synchronously. It declares the slot types settings surfaces fill — `settings.trigger`/`settings.header`/`settings.close` (chrome), `settings.action` (ordered header actions), `settings.section` (one page per feature), `settings.plugins.tab`, and `settings.onboarding` — and renders nothing itself. Because it depends on no `ui-*` presentation package, any feature that owns a preference can reach it; the settings shell itself lives in ui-settings-general.
@@ -72,7 +70,7 @@ These pages cover the settings surface family and the durable seam behind it.
 
 - [ui-settings-general](../ui-settings-general/README.md) — the settings shell: trigger chrome, navigation, General section, onboarding projection.
 - [ui-settings-plugins](../ui-settings-plugins/README.md) — the Plugins section and its configurable host-plane cards.
-- [ui-settings-models](../ui-settings-models/README.md) — the Models page and DeepSeek onboarding over this base.
+- [ui-settings-models](../ui-settings-models/README.md) — the Models page and farm onboarding over this base.
 - [settings](../../settings/README.md) — the durable user-settings seam and its file provider.
 - [ui-sidebar](../ui-sidebar/README.md) — the sidebar shell whose bottom seat hosts the settings trigger.
 
@@ -90,7 +88,6 @@ None; this package neither assembles nor sends a provider request.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define where the settings transport cannot reach; they are current package constraints.
 

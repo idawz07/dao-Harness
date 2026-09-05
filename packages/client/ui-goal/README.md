@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-client-ui-goal
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 This package renders the goal surface in the Web GUI: a strip in the composer-context stack that shows the current goal of the session and offers edit, pause, resume, and clear actions. It reads the live goal from the host-computed projection and routes every mutation through the goal service, surfacing rejections inline. It also projects each durable `/goal` command run as a `Command input` bubble in the chat, so a goal command entered by the user or the model appears in the transcript. Goal creation is outside this plugin. The shipped Web presets other than `minimal` mount `/goal` in their agent scope.
@@ -72,7 +70,6 @@ None unless the queued goal context is admitted. An admitted context extends the
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define the current goal surface. They are current package constraints, not a goal-domain comparison or a task backlog.
 

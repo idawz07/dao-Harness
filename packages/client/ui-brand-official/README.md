@@ -5,11 +5,9 @@ kind: "package-reference"
 
 # @daoai/dao-client-ui-brand-official
 
-English | [中文](README.zh.md)
-
 ## Summary
 
-This package fills the browser brand slots — `sidebar.brand.mark`, `sidebar.brand.name`, and `conversation.hero.brand.mark` — with the official Dao mark and name. It registers these occupants only when the client bundle builds with the `official` profile; every other build loads the plugin but registers nothing, so the shell fallbacks stay visible. Choose it when the deployed identity is DeepSeek's own; a deployment with its own brand composes a different package into the same slots instead. It retains no runtime state and contributes nothing to model requests.
+This package fills the browser brand slots — `sidebar.brand.mark`, `sidebar.brand.name`, and `conversation.hero.brand.mark` — with the official Dao mark and name. It registers these occupants only when the client bundle builds with the `official` profile; every other build loads the plugin but registers nothing, so the shell fallbacks stay visible. Choose it when the deployed identity is Dao's own; a deployment with its own brand composes a different package into the same slots instead. It retains no runtime state and contributes nothing to model requests.
 
 ## Table of Contents
 
@@ -25,7 +23,7 @@ This package fills the browser brand slots — `sidebar.brand.mark`, `sidebar.br
 <a id="use-this-package"></a>
 ## Use this package
 
-Mount this plugin in the browser roster of a deployment whose identity is DeepSeek's own, then build the client with the `official` profile so the occupants register.
+Mount this plugin in the browser roster of a deployment whose identity is Dao's own, then build the client with the `official` profile so the occupants register.
 
 ### Choosing the profile
 
@@ -72,7 +70,6 @@ None; this package neither assembles nor sends a provider request.
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define how brand presentation is supplied. They are current package constraints, not a brand-design comparison or a task backlog.
 

@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-tool-ask-user
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 `dao-tool-ask-user` gives the model one tool — `ask_user_question` — for asking the human a concise question when it needs confirmation, a choice, or missing information before continuing. The tool pauses until the first scoped answerer accepts the request, then feeds that answer back into the agent loop as an ordinary tool result, so no loop mechanics change. The tool returns the canonical `{ answers: [...] }` shape, rendered as compact JSON text. It renders no UI itself and does not know how input is collected; the Web client contributes its answerer through Remote Events. A runtime-owned child agent cannot ask the user; it must include the unresolved question in its final result.
@@ -134,7 +132,6 @@ Append-only; newly visible content follows the reusable request prefix and does 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define when the tool is a poor fit. They are current package constraints, not a UI backlog.
 

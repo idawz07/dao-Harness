@@ -5,8 +5,6 @@ kind: "package-reference"
 
 # @daoai/dao-client-ui-deliverables
 
-English | [中文](README.zh.md)
-
 ## Summary
 
 This package renders the deliverables row a finished turn ends with — the files the mutation tools created or modified — and links matching inline-code references in the closing prose, so a mentioned file opens in the Host. The vocabulary comes from the mutation tools' own `locations`, never from the closing prose — a produced file is listed whether or not the model remembered to name it. The shipped Web patch is the only composition that loads this package; removing its cordis.yml entry removes the guidance, row, and prose links together.
@@ -81,7 +79,6 @@ The section is static at first-party order 9000 for the lifetime of the package 
 ## Known Limitations and Deferred Work
 
 <a id="known-limitations-and-deferred-work"></a>
-
 
 These limits define the current deliverables vocabulary. They are current package constraints, not a general file-linking comparison or a task backlog.
 
