@@ -1,8 +1,6 @@
 # Web Access
 
-English | [中文](web.zh.md)
-
-The web access seam — a [capability seam](../../.agents/notes/implemented/architecture/2026-06-24-web-capability-seam.md) that spans **two operations** (search and fetch) on one `ctx.web` service, split across packages: Service Definition ([dao-web](../../packages/web/web), `ctx.web` + the provider registries), Service Providers ([dao-web-search-exa](../../packages/web/web-search-exa), [dao-web-search-perplexity](../../packages/web/web-search-perplexity), [dao-web-search-deepseek](../../packages/web/web-search-deepseek), [dao-web-fetch-http](../../packages/web/web-fetch-http)), and Consumer ([dao-tool-web](../../packages/web/tool-web), the `web_search`/`web_fetch` tool schemas). Web is **one optional capability**, not part of the agent-loop spine — so its vocabulary lives here, not in [core.md](core.md). A search-provider swap does not change how the model asks for a query, and a fetch-provider swap does not change how the model asks for a URL.
+The web access seam — a [capability seam](../../.agents/notes/implemented/architecture/2026-06-24-web-capability-seam.md) that spans **two operations** (search and fetch) on one `ctx.web` service, split across packages: Service Definition ([dao-web](../../packages/web/web), `ctx.web` + the provider registries), Service Providers ([dao-web-search-exa](../../packages/web/web-search-exa), [dao-web-search-perplexity](../../packages/web/web-search-perplexity), [dao-web-fetch-http](../../packages/web/web-fetch-http)), and Consumer ([dao-tool-web](../../packages/web/tool-web), the `web_search`/`web_fetch` tool schemas). Web is **one optional capability**, not part of the agent-loop spine — so its vocabulary lives here, not in [core.md](core.md). A search-provider swap does not change how the model asks for a query, and a fetch-provider swap does not change how the model asks for a URL.
 
 Source: [`packages/web/web/src/types.ts`](../../packages/web/web/src/types.ts)
 
@@ -37,8 +35,7 @@ interface WebSearchRequest {
 ```ts type-equiv
 /**
  * Normalized search outcome. `content` is optional provider-generated answer
- * text or summary (Exa and DeepSeek return none; Perplexity returns a
- * generated answer).
+ * text or summary (Exa returns none; Perplexity returns a generated answer).
  * `sources[]` is the portable citation shape. `truncated` is set by the seam
  * when it cut `sources[]` down to `maxResults`.
  */
@@ -144,7 +141,7 @@ The HTTP provider resolves each actual request, rejects non-public answers inclu
 
 ## Cordis API
 
-Generated from source by `scripts/gen-cordis-catalog.ts` (verified fresh by `pnpm run verify-cordis-catalog` in doc-sync; regenerate with `pnpm run gen-cordis-catalog`) — the language sides differ only in locale-specific paired document paths. Signature blocks use a `ts cordis-catalog` fence and keep the original source JSDoc; dispatch modes are defined in the [primer](../cordis-primer.md#dispatch-modes), and the framework-inherited `ctx` API lives in [cordis-api/inherited.md](../cordis-api/inherited.md).
+Generated from source by `scripts/gen-cordis-catalog.ts` (verified fresh by `pnpm run verify-cordis-catalog` in doc-sync; regenerate with `pnpm run gen-cordis-catalog`). Signature blocks use a `ts cordis-catalog` fence and keep the original source JSDoc; dispatch modes are defined in the [primer](../cordis-primer.md#dispatch-modes), and the framework-inherited `ctx` API lives in [cordis-api/inherited.md](../cordis-api/inherited.md).
 
 <a id="ctxweb--webruntime"></a>
 

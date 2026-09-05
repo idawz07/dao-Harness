@@ -5,22 +5,22 @@ import { resolve } from 'node:path'
 import type { DefaultTheme, PageData, SiteConfig } from 'vitepress'
 import type { ViteDevServer } from 'vite'
 import { withMermaid } from 'vitepress-plugin-mermaid'
-import { landingLink, localeCollections, orderedPages, routeLink, sectionSpec, type DocsLocale, type DocsPage, type DocsSidebar } from '../docs.ts'
+import { landingLink, orderedPages, routeLink, sectionSpec, type DocsPage, type DocsSidebar } from '../docs.ts'
 import { docsSourceFiles, emitRawMarkdownPages, llmsTxt, projectDocs, rawMarkdownRoute } from '../../scripts/project-doc-site.ts'
 
 projectDocs()
 
-function sidebar(locale: DocsLocale, collection: NonNullable<DocsPage['sidebar']>): DefaultTheme.SidebarItem[] {
+function sidebar(collection: DocsSidebar): DefaultTheme.SidebarItem[] {
   // `orderedPages` already sorts by section placement, so insertion order
   // carries the group order and each group keeps its pages in sequence.
   const groups = new Map<string, DocsPage[]>()
-  for (const page of orderedPages(locale, collection)) {
+  for (const page of orderedPages(collection)) {
     const entries = groups.get(page.section) ?? []
     entries.push(page)
     groups.set(page.section, entries)
   }
   return [...groups.entries()].map(([text, entries]) => {
-    const { collapsed } = sectionSpec(locale, text)
+    const { collapsed } = sectionSpec(text)
     return {
       text,
       // A present `collapsed` is what makes the default theme render the
@@ -39,67 +39,39 @@ interface GuideModuleLink {
   collection: DocsSidebar
 }
 
-/**
- * Per-locale guide-module facts: the guide collection and the module links
- * appended to the guide sidebar.
- */
-interface GuideModules {
-  /** Guide sidebar collection for the locale. */
-  guide: 'zh-guide' | 'en-guide'
-  /** Development module link. */
-  develop: GuideModuleLink
-  /** Reference module link. */
-  reference: GuideModuleLink
-}
-
-/**
- * Guide-module facts keyed by locale, giving every module label and collection
- * one home shared by the navigation bar and the guide sidebar.
- */
-const guideModules = {
-  root: {
-    guide: localeCollections.root[0],
-    develop: { label: '开发', collection: localeCollections.root[1] },
-    reference: { label: '参考', collection: localeCollections.root[2] },
-  },
-  en: {
-    guide: localeCollections.en[0],
-    develop: { label: 'Development', collection: localeCollections.en[1] },
-    reference: { label: 'Reference', collection: localeCollections.en[2] },
-  },
-} satisfies Record<DocsLocale, GuideModules>
+/** Module links appended to the guide sidebar and carried in the navigation bar. */
+const moduleLinks: readonly GuideModuleLink[] = [
+  { label: 'Development', collection: 'develop' },
+  { label: 'Reference', collection: 'reference' },
+]
 
 /**
  * Guide sidebar with direct links into the first development and reference pages.
  *
- * @param locale - Route tree whose guide sidebar is being built.
  * @returns Guide groups followed by top-level links to the other documentation modules.
  */
-function guideSidebar(locale: DocsLocale): DefaultTheme.SidebarItem[] {
-  const { guide, develop, reference } = guideModules[locale]
+function guideSidebar(): DefaultTheme.SidebarItem[] {
   return [
-    ...sidebar(locale, guide),
-    ...[develop, reference].map(({ label, collection }) => ({
+    ...sidebar('guide'),
+    ...moduleLinks.map(({ label, collection }) => ({
       text: label,
-      link: landingLink(locale, collection),
+      link: landingLink(collection),
     })),
   ]
 }
 
 /**
  * Navigation-bar items for the modules the guide sidebar links into, reading
- * their labels and collections from the shared per-locale record.
+ * their labels and collections from the shared module-link list.
  *
- * @param locale - Route tree the navigation items belong to.
- * @returns The module items for the locale's navigation bar.
+ * @returns The module items for the navigation bar.
  */
-function moduleNav(locale: DocsLocale): DefaultTheme.NavItem[] {
-  const { develop, reference } = guideModules[locale]
-  const routePrefix = locale === 'root' ? '' : '/en'
-  return [
-    { text: develop.label, link: landingLink(locale, develop.collection), activeMatch: `^${routePrefix}/develop/` },
-    { text: reference.label, link: landingLink(locale, reference.collection), activeMatch: `^${routePrefix}/reference/` },
-  ]
+function moduleNav(): DefaultTheme.NavItem[] {
+  return moduleLinks.map(({ label, collection }) => ({
+    text: label,
+    link: landingLink(collection),
+    activeMatch: `^/${collection}/`,
+  }))
 }
 
 function watchCanonicalDocs(server: ViteDevServer): void {
@@ -155,62 +127,17 @@ function escapeVueInterpolation(html: string): string {
   return html.replaceAll('{{', '&#123;&#123;').replaceAll('}}', '&#125;&#125;')
 }
 
-const sharedTheme: Pick<DefaultTheme.Config, 'search' | 'socialLinks' | 'editLink'> = {
-  search: {
-    provider: 'local',
-    options: {
-      locales: {
-        root: {
-          translations: {
-            button: {
-              buttonText: '搜索文档',
-              buttonAriaLabel: '搜索文档',
-            },
-            modal: {
-              displayDetails: '显示详细列表',
-              resetButtonTitle: '清除搜索',
-              backButtonTitle: '关闭搜索',
-              noResultsText: '未找到相关结果',
-              footer: {
-                selectText: '选择',
-                selectKeyAriaLabel: '回车键',
-                navigateText: '切换',
-                navigateUpKeyAriaLabel: '上方向键',
-                navigateDownKeyAriaLabel: '下方向键',
-                closeText: '关闭',
-                closeKeyAriaLabel: 'Esc 键',
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-  socialLinks: [
-    { icon: 'github', link: 'https://github.com/deepseek-ai/deepseek-harness' },
-  ],
-  editLink: {
-    pattern: ({ frontmatter }: PageData) => {
-      const data: unknown = frontmatter
-      const editSource: unknown = typeof data === 'object' && data !== null ? Reflect.get(data, 'editSource') : undefined
-      if (typeof editSource !== 'string') throw new Error('Projected documentation page has no editSource frontmatter.')
-      return `https://github.com/deepseek-ai/deepseek-harness/edit/master/${editSource}`
-    },
-    text: '在 GitHub 上编辑此页',
-  },
-}
-
 /** Site base path, carrying the leading and trailing slashes VitePress requires. */
 const base = process.env.DOCS_BASE ?? '/'
 
 /** Site identity shared by the VitePress configuration and the llms.txt index. */
 const siteIdentity = {
   title: 'Dao',
-  description: '用于构建 Agent Harness 的插件化 SDK',
+  description: 'A plugin-based SDK for building agent harnesses',
 }
 
 /**
- * The DeepSeek wordmark, inlined so its `currentColor` fills follow the active
+ * The Dao wordmark, inlined so its `currentColor` fills follow the active
  * theme. An `<img>` would freeze the mark at the colors the file declares.
  */
 const wordmark = readFileSync(resolve(import.meta.dirname, '../public/wordmark.svg'), 'utf8')
@@ -282,10 +209,10 @@ const scrollbarScript = `
 `
 
 /**
- * Navigation-bar title: the DeepSeek wordmark and the release-stage tag.
+ * Navigation-bar title: the Dao wordmark and the release-stage tag.
  * VitePress renders `siteTitle` as HTML.
  *
- * @param previewTag - Localized release-stage label.
+ * @param previewTag - Release-stage label.
  * @returns Markup placed beside the navigation-bar home link.
  */
 function siteTitle(previewTag: string): string {
@@ -296,6 +223,7 @@ export default withMermaid({
   title: siteIdentity.title,
   description: siteIdentity.description,
   base,
+  lang: 'en-US',
   /** Emit the raw-Markdown twin of every route plus llms.txt beside the rendered site. */
   buildEnd(siteConfig: SiteConfig) {
     emitRawMarkdownPages(siteConfig.outDir)
@@ -311,60 +239,63 @@ export default withMermaid({
   srcDir: '.generated',
   cacheDir: '.cache',
   outDir: '.dist',
-  locales: {
-    root: {
-      label: '简体中文',
-      lang: 'zh-CN',
-      themeConfig: {
-        siteTitle: siteTitle('技术预览'),
-        nav: [
-          { text: '入门', link: landingLink('root', guideModules.root.guide), activeMatch: '^/guide/' },
-          ...moduleNav('root'),
-        ],
-        sidebar: {
-          '/guide/': guideSidebar('root'),
-          '/develop/': sidebar('root', 'zh-develop'),
-          '/reference/': sidebar('root', 'zh-reference'),
-        },
-        outline: { label: '本页目录' },
-        docFooter: { prev: '上一篇', next: '下一篇' },
-        darkModeSwitchLabel: '外观',
-        lightModeSwitchTitle: '切换到浅色主题',
-        darkModeSwitchTitle: '切换到深色主题',
-        sidebarMenuLabel: '菜单',
-        returnToTopLabel: '返回顶部',
-        langMenuLabel: '切换语言',
-        skipToContentLabel: '跳至内容',
-      },
+  themeConfig: {
+    siteTitle: siteTitle('Preview'),
+    nav: [
+      { text: 'Guide', link: landingLink('guide'), activeMatch: '^/guide/' },
+      ...moduleNav(),
+    ],
+    sidebar: {
+      '/guide/': guideSidebar(),
+      '/develop/': sidebar('develop'),
+      '/reference/': sidebar('reference'),
     },
-    en: {
-      label: 'English',
-      lang: 'en-US',
-      link: '/en/',
-      themeConfig: {
-        siteTitle: siteTitle('Preview'),
-        nav: [
-          { text: 'Guide', link: landingLink('en', guideModules.en.guide), activeMatch: '^/en/guide/' },
-          ...moduleNav('en'),
-        ],
-        sidebar: {
-          '/en/guide/': guideSidebar('en'),
-          '/en/develop/': sidebar('en', 'en-develop'),
-          '/en/reference/': sidebar('en', 'en-reference'),
-        },
-        editLink: {
-          pattern: ({ frontmatter }: PageData) => {
-            const data: unknown = frontmatter
-            const editSource: unknown = typeof data === 'object' && data !== null ? Reflect.get(data, 'editSource') : undefined
-            if (typeof editSource !== 'string') throw new Error('Projected documentation page has no editSource frontmatter.')
-            return `https://github.com/deepseek-ai/deepseek-harness/edit/master/${editSource}`
+    search: {
+      provider: 'local',
+      options: {
+        translations: {
+          button: {
+            buttonText: 'Search',
+            buttonAriaLabel: 'Search',
           },
-          text: 'Edit this page on GitHub',
+          modal: {
+            displayDetails: 'Display list',
+            resetButtonTitle: 'Clear search',
+            backButtonTitle: 'Close search',
+            noResultsText: 'No results for',
+            footer: {
+              selectText: 'select',
+              selectKeyAriaLabel: 'Enter key',
+              navigateText: 'navigate',
+              navigateUpKeyAriaLabel: 'Up arrow',
+              navigateDownKeyAriaLabel: 'Down arrow',
+              closeText: 'close',
+              closeKeyAriaLabel: 'Escape key',
+            },
+          },
         },
-        outline: { label: 'On this page' },
-        docFooter: { prev: 'Previous', next: 'Next' },
       },
     },
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/deepseek-ai/deepseek-harness' },
+    ],
+    editLink: {
+      pattern: ({ frontmatter }: PageData) => {
+        const data: unknown = frontmatter
+        const editSource: unknown = typeof data === 'object' && data !== null ? Reflect.get(data, 'editSource') : undefined
+        if (typeof editSource !== 'string') throw new Error('Projected documentation page has no editSource frontmatter.')
+        return `https://github.com/deepseek-ai/deepseek-harness/edit/master/${editSource}`
+      },
+      text: 'Edit this page on GitHub',
+    },
+    outline: { label: 'On this page' },
+    docFooter: { prev: 'Previous', next: 'Next' },
+    darkModeSwitchLabel: 'Appearance',
+    lightModeSwitchTitle: 'Switch to light theme',
+    darkModeSwitchTitle: 'Switch to dark theme',
+    sidebarMenuLabel: 'Menu',
+    returnToTopLabel: 'Back to top',
+    skipToContentLabel: 'Skip to content',
   },
   vite: {
     // `srcDir` puts the Vite root inside the disposable generated tree, whose
@@ -372,7 +303,7 @@ export default withMermaid({
     publicDir: resolve(import.meta.dirname, '../public'),
     plugins: [
       {
-        name: 'deepseek-harness-doc-projector',
+        name: 'dao-doc-projector',
         configureServer(server) {
           watchCanonicalDocs(server)
           serveRawMarkdown(server)
@@ -410,5 +341,4 @@ export default withMermaid({
     },
   },
   mermaid: {},
-  themeConfig: sharedTheme,
 })

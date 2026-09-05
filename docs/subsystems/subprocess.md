@@ -1,7 +1,5 @@
 # Subprocess
 
-English | [中文](subprocess.zh.md)
-
 The subprocess seam is split across a Service Definition ([dao-subprocess](../../packages/subprocess/subprocess), `ctx.subprocess`) and Service Provider ([dao-subprocess-local](../../packages/subprocess/subprocess-local)); its Consumers are other capability seams and out-of-process backends: the [bash executor family](shell.md) uses collected batch output, LSP uses raw protocol pipes, the PTY backend uses the terminal primitive, and the ACP subagent backend uses piped ndjson plus inherited stderr. This seam owns the managed `DAO_*` environment namespace, the shared credential scrub (`scrubbedParentEnv`), and the `CollectedOutput` shape; [dao-shell](../../packages/shell/shell) re-exports the vocabulary so bash consumers keep one import root.
 
 Source: [`packages/subprocess/subprocess/src/types.ts`](../../packages/subprocess/subprocess/src/types.ts) and [`packages/subprocess/subprocess/src/index.ts`](../../packages/subprocess/subprocess/src/index.ts)
@@ -217,7 +215,6 @@ interface SubprocessCollectedOutputs {
 }
 ```
 
-
 ## Outcomes carry exit facts only
 
 `done` reports Node's close-event vocabulary and no cause classification — the service kills on abort but never decides why (the caller reads the deadline signal it owns, e.g. the bash executor's `timedOut`/`aborted` split). Collected output stays readable through `handle.collected` after settlement, so batch and streaming callers share one access path.
@@ -254,24 +251,7 @@ The abstract [`SubprocessRuntime`](../../packages/subprocess/subprocess/src/inde
 
 ## Cordis API
 
-Generated from source by `scripts/gen-cordis-catalog.ts` (verified fresh by `pnpm run verify-cordis-catalog` in doc-sync; regenerate with `pnpm run gen-cordis-catalog`) — the language sides differ only in locale-specific paired document paths. Signature blocks use a `ts cordis-catalog` fence and keep the original source JSDoc; dispatch modes are defined in the [primer](../cordis-primer.md#dispatch-modes), and the framework-inherited `ctx` API lives in [cordis-api/inherited.md](../cordis-api/inherited.md).
-
-<a id="ctxe2b--e2bruntime"></a>
-
-### `ctx.e2b` — `E2BRuntime`
-
-Creates one lazily consumable E2B SDK handle and deletes the sandbox at timeout or disposal. Creation begins at plugin construction; adapters await getSandbox before their first operation.
-
-```ts cordis-catalog
-/**
- * Return the shared live SDK handle.
- * @returns the created sandbox after the configured cwd exists.
- * @throws when E2B rejects creation or the service is disposing.
- */
-async getSandbox(): Promise<Sandbox>
-```
-
-Source: [`packages/e2b/e2b/src/index.ts`](../../packages/e2b/e2b/src/index.ts)
+Generated from source by `scripts/gen-cordis-catalog.ts` (verified fresh by `pnpm run verify-cordis-catalog` in doc-sync; regenerate with `pnpm run gen-cordis-catalog`). Signature blocks use a `ts cordis-catalog` fence and keep the original source JSDoc; dispatch modes are defined in the [primer](../cordis-primer.md#dispatch-modes), and the framework-inherited `ctx` API lives in [cordis-api/inherited.md](../cordis-api/inherited.md).
 
 <a id="ctxsubprocess--subprocessruntime-abstract-seam"></a>
 

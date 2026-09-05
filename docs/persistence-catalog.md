@@ -677,24 +677,6 @@ Types: [SessionTitleLlmRequestEventData](subsystems/session-title.md)
 
 Source: [`packages/session/session-title-llm/src/index.ts:43`](../packages/session/session-title-llm/src/index.ts)
 
-### `session-log-deepseek/*`
-
-<a id="session-log-deepseekdelivery-accepted--log-only"></a>
-
-#### `session-log-deepseek/delivery-accepted` — log-only
-
-```ts persistence-catalog
-/** Records that the configured endpoint accepted one delivery through `throughSeq`. */
-'session-log-deepseek/delivery-accepted': {
-  /** Session identity the accepted delivery carried; inherited fork markers retain the parent's id. */
-  sessionId: import('@daoai/dao-session/types').SessionId
-  /** Last canonical event included in the accepted request. */
-  throughSeq: number
-}
-```
-
-Source: [`packages/session/session-log-deepseek/src/types.ts:26`](../packages/session/session-log-deepseek/src/types.ts)
-
 ### `step/*`
 
 <a id="stepend--log-only"></a>
@@ -1039,16 +1021,3 @@ Source: [`packages/core/session/src/types.ts:228`](../packages/core/session/src/
 ```
 
 Source: [`packages/core/session/src/types.ts:249`](../packages/core/session/src/types.ts)
-
-### `web/*`
-
-<a id="webdeepseek-search-llm-request--log-only"></a>
-
-#### `web/deepseek-search-llm-request` — log-only
-
-```ts persistence-catalog
-/** Secret-free auxiliary DeepSeek search request recorded before dispatch. */
-'web/deepseek-search-llm-request': DeepSeekSearchLlmRequest
-```
-
-Source: [`packages/web/web-search-deepseek/src/provider.ts:83`](../packages/web/web-search-deepseek/src/provider.ts)
