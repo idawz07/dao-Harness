@@ -9,7 +9,7 @@
       name: './github-ready-review-rule.mjs'
       config:
         source: primary-github
-        repository: deepseek-harness/deepseek-harness
+        repository: daoAI/dao
         workspacePath: !!js process.env.DAO_GITHUB_REVIEW_WORKSPACE ?? process.cwd()
         agentPreset: standard
         permissionPreset: read-only

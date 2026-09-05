@@ -52,7 +52,6 @@
     "@daoai/dao-app-boot": "workspace:^",
     "@daoai/dao-invariants": "workspace:^",
     "@daoai/dao-llm": "workspace:^",
-    "@daoai/dao-llm-deepseek": "workspace:^",
     "@daoai/dao-loader-smoke": "workspace:^",
     "@daoai/dao-sdk-client": "workspace:^",
     "@daoai/dao-sdk-protocol": "workspace:^",

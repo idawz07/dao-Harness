@@ -11,7 +11,7 @@ import {
   WELCOME_NOTICE_ACK_FIELD, WELCOME_NOTICE_SETTINGS_NAMESPACE, WELCOME_NOTICE_VERSION,
 } from '../src/onboarding-copy.ts'
 import { ModelsSection } from '../src/client/ModelsSection.tsx'
-import { DeepSeekOnboardingDialog } from '../src/client/DeepSeekOnboardingDialog.tsx'
+import { FarmOnboardingDialog } from '../src/client/FarmOnboardingDialog.tsx'
 import { WelcomeNotice } from '../src/client/WelcomeNotice.tsx'
 
 // These specs assert the shipped Chinese copy. The lane has no jsdom `window`,
@@ -91,14 +91,14 @@ describe('ui-settings-models apply', () => {
       component: WelcomeNotice,
       options: { id: 'welcome-notice', order: -100 },
     })
-    const deepSeek = onboarding.find(entry => entry.options.id === 'deepseek-official')!
-    expect(deepSeek.component).toBe(DeepSeekOnboardingDialog)
-    expect(deepSeek.options).toMatchObject({ id: 'deepseek-official', order: 0 })
-    const deepSeekInjected = (
-      deepSeek.inject as unknown as () => import('../src/client/DeepSeekOnboardingDialog.tsx').DeepSeekOnboardingInjected
+    const farm = onboarding.find(entry => entry.options.id === 'llama-router')!
+    expect(farm.component).toBe(FarmOnboardingDialog)
+    expect(farm.options).toMatchObject({ id: 'llama-router', order: 0 })
+    const farmInjected = (
+      farm.inject as unknown as () => import('../src/client/FarmOnboardingDialog.tsx').FarmOnboardingInjected
     )()
-    expect(deepSeekInjected.hooks.models).toBe(injected.controller.store)
-    expect(deepSeekInjected.api).toBeDefined()
+    expect(farmInjected.hooks.models).toBe(injected.controller.store)
+    expect(farmInjected.api).toBeDefined()
 
     const after = await bench()
     await after.ctx.plugin({ inject: [...inject], apply }).await()
@@ -239,14 +239,14 @@ describe('pushed invalidations', () => {
     declare(b.slots)
     await b.ctx.plugin({ inject: [...inject], apply }).await()
     const entry = b.slots.entries('settings.onboarding')
-      .find(candidate => candidate.options.id === 'deepseek-official')!
+      .find(candidate => candidate.options.id === 'llama-router')!
     const injected = (
       entry.inject as unknown as
-      () => import('../src/client/DeepSeekOnboardingDialog.tsx').DeepSeekOnboardingInjected
+      () => import('../src/client/FarmOnboardingDialog.tsx').FarmOnboardingInjected
     )()
     injected.controller.store.update((state) => { state.status = 'ready' })
     const load = vi.spyOn(injected.controller, 'load').mockResolvedValue()
-    b.remote.emit('credentials/reference-updated', ['DEEPSEEK_API_KEY'])
+    b.remote.emit('credentials/reference-updated', ['LLAMA_ROUTER_API_KEY'])
     expect(load).toHaveBeenCalledTimes(1)
   })
 

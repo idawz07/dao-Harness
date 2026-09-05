@@ -37,7 +37,6 @@ const binScript = fileURLToPath(new URL('../../../../../../packages/test-support
 const daoBinScript = fileURLToPath(new URL('../../../../src/bin.ts', import.meta.url))
 const tsconfigPath = fileURLToPath(new URL('../../../../../../tsconfig.json', import.meta.url))
 const reasoningConfigPath = fileURLToPath(new URL('./fixtures/cli.cordis.yml', import.meta.url))
-const deepseekDefaultsConfigPath = fileURLToPath(new URL('./fixtures/dao-defaults.cordis.yml', import.meta.url))
 const piAiDefaultsConfigPath = fileURLToPath(new URL('./fixtures/pi-ai-defaults.cordis.yml', import.meta.url))
 const headlessOverlayPath = fileURLToPath(new URL('./fixtures/headless-profile.cordis.yml', import.meta.url))
 const headlessSessionExpected = join(goldensDir, 'headless-profile', 'session.expected.jsonl')
@@ -54,14 +53,14 @@ interface PersistedLog {
   readonly header: JsonObject
 }
 
-interface DeepSeekDefaultsServer {
+interface DefaultsSnapshotServer {
   readonly url: string
   readonly requests: JsonObject[]
   close(): Promise<void>
 }
 
-/** Serve one deterministic DeepSeek-compatible response while retaining its request body. */
-async function deepseekDefaultsServer(): Promise<DeepSeekDefaultsServer> {
+/** Serve one deterministic OpenAI-compatible response while retaining its request body. */
+async function defaultsSnapshotServer(): Promise<DefaultsSnapshotServer> {
   const requests: JsonObject[] = []
   const server = createServer((request: IncomingMessage, response: ServerResponse) => {
     let body = ''
@@ -89,7 +88,7 @@ async function deepseekDefaultsServer(): Promise<DeepSeekDefaultsServer> {
   })
   await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve))
   const address = server.address()
-  if (address === null || typeof address === 'string') throw new Error('DeepSeek defaults snapshot server has no port')
+  if (address === null || typeof address === 'string') throw new Error('defaults snapshot server has no port')
   return {
     url: `http://127.0.0.1:${address.port}`,
     requests,
@@ -420,64 +419,11 @@ describe('headless stream-json snapshots', () => {
     `)
   }, LOADER_SMOKE_TEST_TIMEOUT_MS)
 
-  it('keeps provider comments alive and sends DeepSeek defaults through the one-shot app', async () => {
-    const server = await deepseekDefaultsServer()
+  it('keeps provider comments alive and sends pi-ai router defaults through the one-shot app', async () => {
+    const server = await defaultsSnapshotServer()
     try {
       const result = await runLoaderSmoke({
-        label: 'DeepSeek adapter defaults headless stream-json snapshot',
-        tempDirPrefix: 'headless-snapshot-dao-defaults-',
-        binScript,
-        libBinScript: binScript,
-        configPath: deepseekDefaultsConfigPath,
-        binArgs: [
-          deepseekDefaultsConfigPath,
-          'return the deterministic response',
-        ],
-        tsconfigPath,
-        env: {
-          // Configuration carries only the reference; the key rides the
-          // launching environment, which is the whole credential plane here.
-          DEEPSEEK_API_KEY: 'snapshot-key',
-          DAO_SNAPSHOT_BASE_URL: server.url,
-          NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
-        },
-      })
-
-      expect(result.stderr).toBe('')
-      expect(server.requests).toHaveLength(1)
-      expect(server.requests[0]?.max_tokens).toBe(256_000)
-      expect(server.requests[0]?.reasoning_effort).toBe('low')
-      const header = (parseJsonl(result.stdout)
-        .map(record => record.event)
-        .find((event): event is JsonObject => (
-          event !== null
-          && typeof event === 'object'
-          && !Array.isArray(event)
-          && 'type' in event
-          && event.type === 'request/header'
-        ))?.data as JsonObject | undefined)?.header as JsonObject | undefined
-      expect(header?.config).toMatchInlineSnapshot(`
-        {
-          "maxTokens": 256000,
-          "model": "deepseek-v4-flash",
-          "provider": "deepseek-official",
-          "reasoningEffort": "low",
-        }
-      `)
-      expect(header?.adapterDefaults).toEqual({
-        maxTokens: true,
-        reasoningEffort: true,
-      })
-    } finally {
-      await server.close()
-    }
-  }, LOADER_SMOKE_TEST_TIMEOUT_MS)
-
-  it('sends pi-ai DeepSeek compatibility through the one-shot app', async () => {
-    const server = await deepseekDefaultsServer()
-    try {
-      const result = await runLoaderSmoke({
-        label: 'pi-ai DeepSeek compatibility headless stream-json snapshot',
+        label: 'pi-ai router defaults headless stream-json snapshot',
         tempDirPrefix: 'headless-snapshot-pi-ai-defaults-',
         binScript,
         libBinScript: binScript,
@@ -488,7 +434,9 @@ describe('headless stream-json snapshots', () => {
         ],
         tsconfigPath,
         env: {
-          DEEPSEEK_API_KEY: 'snapshot-key',
+          // Configuration carries only the reference; the key rides the
+          // launching environment, which is the whole credential plane here.
+          LLAMA_ROUTER_API_KEY: 'snapshot-key',
           DAO_SNAPSHOT_BASE_URL: server.url,
           NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
         },
@@ -510,8 +458,8 @@ describe('headless stream-json snapshots', () => {
       expect(header?.config).toMatchInlineSnapshot(`
         {
           "maxTokens": 1024,
-          "model": "deepseek-v4-flash",
-          "provider": "deepseek",
+          "model": "Qwen3.8-27B-Q6_K_XL-128K",
+          "provider": "llama-router",
           "reasoningEffort": "low",
         }
       `)

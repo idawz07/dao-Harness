@@ -24,12 +24,12 @@ import { zh } from '../src/client/locales.ts'
 const sid = (k: string): SessionId => k as SessionId
 
 const GROUPS = [{
-  id: 'deepseek-official',
-  name: 'DeepSeek',
+  id: 'llama-router',
+  name: 'Local Llama Router',
   models: [
     {
-      id: 'deepseek-v4-flash',
-      name: 'DeepSeek-V4-Flash',
+      id: 'qwen38-27b',
+      name: 'Qwen3.8-27B-Flash',
       reasoning: {
         efforts: [
           { id: 'off', name: 'Off' },
@@ -40,8 +40,8 @@ const GROUPS = [{
       },
     },
     {
-      id: 'deepseek-v4-pro',
-      name: 'DeepSeek-V4-Pro',
+      id: 'qwen38-27b-pro',
+      name: 'Qwen3.8-27B-Pro',
       reasoning: {
         efforts: [
           { id: 'off', name: 'Off' },
@@ -57,7 +57,7 @@ const GROUPS = [{
 /** Boot the plugin over fake faces + a stateful fake host (current moves on selectModel). */
 async function bench() {
   const ctx = new Context()
-  let defaultSelection: ModelSelection = { provider: 'deepseek-official', model: 'deepseek-v4-flash' }
+  let defaultSelection: ModelSelection = { provider: 'llama-router', model: 'qwen38-27b' }
   let selected = defaultSelection
   const calls = { models: 0, select: 0 }
   const projections = new Map<SessionId, SnapshotStore<ModelSelectionProjection | undefined>>()
@@ -71,7 +71,7 @@ async function bench() {
         ok: true as const,
         value: {
           default: defaultSelection,
-          routableProviders: routable ? ['deepseek-official'] : [],
+          routableProviders: routable ? ['llama-router'] : [],
           groups: GROUPS,
           failures: [],
         },
@@ -183,8 +183,8 @@ describe('ui-model-selection dual entry', () => {
     const b = await bench()
     b.mint('s1')
     const options = await b.contribution().ui.options(projection('s1'), new AbortController().signal)
-    expect(options.map((o: SelectOption) => o.label)).toEqual(['DeepSeek-V4-Flash', 'DeepSeek-V4-Pro'])
-    expect(options[0]).toMatchObject({ active: true, detail: 'DeepSeek' })
+    expect(options.map((o: SelectOption) => o.label)).toEqual(['Qwen3.8-27B-Flash', 'Qwen3.8-27B-Pro'])
+    expect(options[0]).toMatchObject({ active: true, detail: 'Local Llama Router' })
     expect(options[1]?.active).toBeUndefined()
   })
 
@@ -194,23 +194,23 @@ describe('ui-model-selection dual entry', () => {
     const seatFace = b.seat().inject!(sid('s1'))
     // Switch through the SEAT entry.
     expect(await seatFace.select({
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'llama-router',
+      model: 'qwen38-27b-pro',
       reasoningEffort: 'max',
     })).toBe(true)
     expect(b.hostCurrent()).toEqual({
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'llama-router',
+      model: 'qwen38-27b-pro',
       reasoningEffort: 'max',
     })
     expect(seatFace.directory.getSnapshot().current).toEqual({
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'llama-router',
+      model: 'qwen38-27b-pro',
       reasoningEffort: 'max',
     })
     // The POPUP's next options pass reflects it without a seat-side reload.
     const options = await b.contribution().ui.options(projection('s1'), new AbortController().signal)
-    expect(options.find((o: SelectOption) => o.label === 'DeepSeek-V4-Pro')).toMatchObject({ active: true })
+    expect(options.find((o: SelectOption) => o.label === 'Qwen3.8-27B-Pro')).toMatchObject({ active: true })
   })
 
   it('a popup selection lands on the seat store — the reverse direction of the same state', async () => {
@@ -218,11 +218,11 @@ describe('ui-model-selection dual entry', () => {
     b.mint('s1')
     const seatFace = b.seat().inject!(sid('s1'))
     const options = await b.contribution().ui.options(projection('s1'), new AbortController().signal)
-    const pro = options.find((o: SelectOption) => o.label === 'DeepSeek-V4-Pro')!
+    const pro = options.find((o: SelectOption) => o.label === 'Qwen3.8-27B-Pro')!
     await b.contribution().ui.onSelect(pro, projection('s1'))
     expect(seatFace.directory.getSnapshot().current).toEqual({
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'llama-router',
+      model: 'qwen38-27b-pro',
       reasoningEffort: 'high',
     })
   })
@@ -249,17 +249,17 @@ describe('ui-model-selection dual entry', () => {
     const b = await bench()
     b.mint('s1')
     const face = b.seat().inject!(sid('s1'))
-    await face.select({ provider: 'deepseek-official', model: 'deepseek-v4-pro' })
-    b.setHostCurrent({ provider: 'deepseek-official', model: 'deepseek-v4-flash' })
+    await face.select({ provider: 'llama-router', model: 'qwen38-27b-pro' })
+    b.setHostCurrent({ provider: 'llama-router', model: 'qwen38-27b' })
 
     b.ctx.emit('connection/reset')
     expect(face.directory.getSnapshot()).toMatchObject({
-      current: { provider: 'deepseek-official', model: 'deepseek-v4-pro' },
+      current: { provider: 'llama-router', model: 'qwen38-27b-pro' },
       status: 'ready',
     })
     face.load()
     expect(face.directory.getSnapshot()).toMatchObject({
-      current: { provider: 'deepseek-official', model: 'deepseek-v4-pro' },
+      current: { provider: 'llama-router', model: 'qwen38-27b-pro' },
       status: 'ready',
     })
   })
@@ -269,21 +269,21 @@ describe('ui-model-selection dual entry', () => {
     b.mint('s1')
     const face = b.seat().inject!(sid('s1'))
     face.load()
-    expect(face.directory.getSnapshot().current?.model).toBe('deepseek-v4-flash')
+    expect(face.directory.getSnapshot().current?.model).toBe('qwen38-27b')
 
-    b.remote.emit('settings/document-updated', ['llm-deepseek', 1])
+    b.remote.emit('settings/document-updated', ['llm-pi-ai', 1])
     b.setProjected(sid('s1'), {
-      lastUsed: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
-      next: { provider: 'deepseek-official', model: 'deepseek-v4-pro' },
+      lastUsed: { provider: 'llama-router', model: 'qwen38-27b' },
+      next: { provider: 'llama-router', model: 'qwen38-27b-pro' },
     })
     expect(face.directory.getSnapshot()).toMatchObject({
-      current: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      current: { provider: 'llama-router', model: 'qwen38-27b' },
       status: 'ready',
     })
 
     await vi.waitFor(() => {
       expect(face.directory.getSnapshot()).toMatchObject({
-        current: { provider: 'deepseek-official', model: 'deepseek-v4-pro' },
+        current: { provider: 'llama-router', model: 'qwen38-27b-pro' },
         status: 'ready',
       })
     })
@@ -314,7 +314,7 @@ describe('ui-model-selection dual entry', () => {
     expect(b.calls.models).toBe(1)
 
     b.setRoutable(false)
-    b.remote.emit('settings/document-updated', ['llm-deepseek', 1])
+    b.remote.emit('settings/document-updated', ['llm-pi-ai', 1])
     await Promise.resolve()
     await Promise.resolve()
     expect(b.blockOf('s1')?.reason).toBe(zh['blocked.composer'])
@@ -336,7 +336,7 @@ describe('ui-model-selection dual entry', () => {
     // A model the route serves but no longer advertises: the seat prompts for
     // a selection, the composer stays usable. Blocking here would break a
     // supported configuration (a narrowed `models` list over a live route).
-    b.setHostCurrent({ provider: 'deepseek-official', model: 'unlisted' })
+    b.setHostCurrent({ provider: 'llama-router', model: 'unlisted' })
     face.load()
     await Promise.resolve()
     await Promise.resolve()
@@ -377,12 +377,12 @@ describe('ui-model-selection dual entry', () => {
     const face = b.seat().inject!(sid('child'))
     expect(face.available).toBe(false)
     face.load()
-    await expect(face.select({ provider: 'deepseek', model: 'deepseek-v4-pro' })).resolves.toBe(false)
+    await expect(face.select({ provider: 'llama-router', model: 'qwen38-27b-pro' })).resolves.toBe(false)
     await expect(b.ctx.modelDirectories.directoryFor(sid('child')).load())
       .rejects.toThrow(/unavailable for addressed subagent/)
     await expect(b.ctx.modelDirectories.directoryFor(sid('child')).select({
-      provider: 'deepseek',
-      model: 'deepseek-v4-pro',
+      provider: 'llama-router',
+      model: 'qwen38-27b-pro',
     })).rejects.toThrow(/unavailable for addressed subagent/)
     b.ctx.emit('connection/reset')
     await Promise.resolve()

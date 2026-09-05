@@ -9,15 +9,15 @@ const missingCredential: CredentialInfo = { configured: false, writable: true }
 function row(overrides: Partial<ProviderRow> = {}): ProviderRow {
   return {
     entry: {
-      provider: 'deepseek-official',
-      displayName: 'DeepSeek',
-      settingsNs: 'llm-deepseek',
-      settingsPath: [],
+      provider: 'llama-router',
+      displayName: 'Local Llama Router',
+      settingsNs: 'llm-pi-ai',
+      settingsPath: ['providers', 'llama-router'],
       active: true,
     },
     configured: true,
     removable: false,
-    apiKeyEnv: 'DEEPSEEK_API_KEY',
+    apiKeyEnv: 'LLAMA_ROUTER_API_KEY',
     credential: missingCredential,
     ...overrides,
   }

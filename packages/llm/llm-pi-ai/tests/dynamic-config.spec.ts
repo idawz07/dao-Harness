@@ -100,12 +100,12 @@ describe('request-level dynamic profiles', () => {
       declared: false,
     })
     await ctx.settings.update(NS, {
-      providers: { deepseek: { apiKeyEnv: 'PI_DYNAMIC_KEY', baseURL: server.url } },
+      providers: { cerebras: { apiKeyEnv: 'PI_DYNAMIC_KEY', baseURL: server.url } },
     })
-    expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['deepseek'])
-    await expect(ctx.llm.listModels('deepseek')).resolves.not.toHaveLength(0)
+    expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['cerebras'])
+    await expect(ctx.llm.listModels('cerebras')).resolves.not.toHaveLength(0)
 
-    const result = await assemble(ctx, { provider: 'deepseek', model: 'deepseek-v4-flash', messages: [] })
+    const result = await assemble(ctx, { provider: 'cerebras', model: 'gemma-4-31b', messages: [] })
     expect(result.message.content).toEqual([{ type: 'text', text: 'hello' }])
     expect(server.headers[0]?.authorization).toBe('Bearer pk-from-settings')
 
@@ -128,11 +128,11 @@ describe('request-level dynamic profiles', () => {
 
     expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['openai'])
     await ctx.settings.update(NS, {
-      providers: { deepseek: { apiKeyEnv: 'PI_LIVE_KEY', baseURL: server.url } },
+      providers: { cerebras: { apiKeyEnv: 'PI_LIVE_KEY', baseURL: server.url } },
     })
-    expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['openai', 'deepseek'])
+    expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['openai', 'cerebras'])
 
-    const result = await assemble(ctx, { provider: 'deepseek', model: 'deepseek-v4-flash', messages: [] })
+    const result = await assemble(ctx, { provider: 'cerebras', model: 'gemma-4-31b', messages: [] })
     expect(result.message.content).toEqual([{ type: 'text', text: 'hello' }])
     expect(server.headers[0]?.authorization).toBe('Bearer live-key')
 
@@ -140,7 +140,7 @@ describe('request-level dynamic profiles', () => {
     // composition route stays.
     await ctx.settings.replace(NS, {})
     expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['openai'])
-    const removed = await assemble(ctx, { provider: 'deepseek', model: 'deepseek-v4-flash', messages: [] })
+    const removed = await assemble(ctx, { provider: 'cerebras', model: 'gemma-4-31b', messages: [] })
     expect(removed.finish).toMatchObject({ kind: 'error', failure: { code: 'NO_ADAPTER' } })
   })
 
@@ -150,14 +150,14 @@ describe('request-level dynamic profiles', () => {
     await writeFile(join(dir, '.credentials.yaml'), 'version: 1\nrefs:\n  PI_DYNAMIC_KEY: pk-one\n', { mode: 0o600 })
     const server = await mockServer([{ events: textEvents }, { events: textEvents }])
     const ctx = await boot(dir, {
-      providers: { deepseek: { apiKeyEnv: 'PI_DYNAMIC_KEY', baseURL: server.url } },
+      providers: { cerebras: { apiKeyEnv: 'PI_DYNAMIC_KEY', baseURL: server.url } },
     })
 
-    await assemble(ctx, { provider: 'deepseek', model: 'deepseek-v4-flash', messages: [] })
+    await assemble(ctx, { provider: 'cerebras', model: 'gemma-4-31b', messages: [] })
     expect(server.headers[0]?.authorization).toBe('Bearer pk-one')
 
     await ctx.credentials.set(credentialRef('PI_DYNAMIC_KEY'), 'pk-two')
-    await assemble(ctx, { provider: 'deepseek', model: 'deepseek-v4-flash', messages: [] })
+    await assemble(ctx, { provider: 'cerebras', model: 'gemma-4-31b', messages: [] })
     expect(server.headers[1]?.authorization).toBe('Bearer pk-two')
   })
 

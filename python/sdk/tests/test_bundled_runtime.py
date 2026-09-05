@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pytest
 
-from dao import DeepSeekHarness, HarnessClient, HarnessConfig
+from dao import DaoHarness, HarnessClient, HarnessConfig
 from dao.errors import JsonRpcError, TransportClosedError
 from dao_runtime import RUNTIME_MODE_ENV_VAR, resolve_bundled_launch_args
 
@@ -30,13 +30,13 @@ def _client(tmp_path: Path, mode: str, monkeypatch: pytest.MonkeyPatch, *patches
     _select_mode(mode, monkeypatch)
     return HarnessClient(
         HarnessConfig(
-            dsh_home=str(tmp_path / "home"),
+            dao_home=str(tmp_path / "home"),
             patches=tuple(str(patch) for patch in patches),
             cwd=str(tmp_path),
             env={
-                # The lazily mounted adapter requires a key even without a model call.
-                "DEEPSEEK_API_KEY": "sk-dummy-for-boot",
-                "DEEPSEEK_BASE_URL": "http://127.0.0.1:9",
+                # The route resolves its key reference per request; a dummy value keeps
+                # the boot path exercised without a reachable endpoint.
+                "LLAMA_ROUTER_API_KEY": "sk-dummy-for-boot",
                 "DAO_PERMISSION_MODE": "danger-full-access",
                 "DAO_TELEMETRY_DISABLED": "1",
             },
@@ -50,7 +50,7 @@ def test_bundled_runtime_boots_the_sdk_profile(
     tmp_path: Path, mode: str, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     with _client(tmp_path, mode, monkeypatch) as client:
-        init = client.initialize(provider="deepseek-official", cwd=str(tmp_path), model="deepseek-v4-pro")
+        init = client.initialize(provider="llama-router", cwd=str(tmp_path), model="Qwen3.8-27B-Q6_K_XL-128K")
 
     assert init.serverInfo is not None
     assert init.serverInfo.name == "dao-sdk-runtime"
@@ -71,10 +71,10 @@ def test_python_sdk_applies_an_ordered_profile_patch(
         "id": "system-prompt",
         "config": {"persona": "Python SDK ordered patch marker."},
     }]))
-    harness = DeepSeekHarness(
-        model="deepseek-v4-pro",
+    harness = DaoHarness(
+        model="Qwen3.8-27B-Q6_K_XL-128K",
         cwd=str(tmp_path),
-        dsh_home=str(tmp_path / "home"),
+        dao_home=str(tmp_path / "home"),
         patches=(str(patch),),
         env={"DAO_PERMISSION_MODE": "danger-full-access"},
         api_key="sk-dummy-for-boot",
@@ -99,7 +99,7 @@ def test_bundled_runtime_surfaces_unbundled_plugin_failure(
     client.start()
     try:
         with pytest.raises((JsonRpcError, TransportClosedError, TimeoutError)) as excinfo:
-            client.initialize(provider="deepseek-official", cwd=str(tmp_path), model="deepseek-v4-pro")
+            client.initialize(provider="llama-router", cwd=str(tmp_path), model="Qwen3.8-27B-Q6_K_XL-128K")
     finally:
         client.close()
 

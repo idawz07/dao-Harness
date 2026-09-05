@@ -764,7 +764,7 @@ describe('connected generation', () => {
     api.onHistory = () => Promise.resolve(ok({
       records: entries(plainTurn(0, 0, 'a', 'b')) as never[],
       hasMore: false,
-      modelSelection: { provider: 'deepseek-official', model: 'deepseek-chat' },
+      modelSelection: { provider: 'llama-router', model: 'qwen38-27b' },
     }))
     const manager = new SessionManager(fakeRemote(api))
     const openedSession = manager.get(S1)

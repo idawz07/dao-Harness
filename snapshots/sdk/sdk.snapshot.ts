@@ -4,8 +4,8 @@
  * `@daoai/dao-sdk-client`, drives one turn over stdio JSON-RPC,
  * and pins the SDK `RunResult`, the complete notification stream, and the
  * persisted session logs. Replay serves recorded model
- * responses via `llm-replay` (`cordis.snapshot.yml`); `DSH_SNAPSHOT=record`
- * re-records against the live API; `DSH_SNAPSHOT=refresh` replays committed
+ * responses via `llm-replay` (`cordis.snapshot.yml`); `DAO_SNAPSHOT=record`
+ * re-records against the live API; `DAO_SNAPSHOT=refresh` replays committed
  * fixtures and rewrites expected outputs.
  */
 
@@ -45,7 +45,7 @@ import {
   type WorkspaceSnapshotEntry,
 } from '@daoai/dao-session-snapshot'
 import {
-  DeepSeekHarness,
+  DaoHarness,
   type HarnessNotification,
   type NotificationSubscription,
   type RunResult,
@@ -64,7 +64,7 @@ const MINIMAL_BASH_DESCRIPTION = `Run commands in a bash shell
 * Please avoid commands that may produce a very large amount of output.
 * Please run long lived commands in the background, e.g. 'sleep 10 &' or start a server in the background.`
 
-const mode = process.env.DSH_SNAPSHOT ?? 'replay'
+const mode = process.env.DAO_SNAPSHOT ?? 'replay'
 const recording = mode === 'record'
 const refreshing = mode === 'refresh'
 const RUNTIME_WORKSPACE_ENTRIES = [
@@ -110,10 +110,10 @@ interface SdkAssertions {
 
 const SDK_ASSERTIONS: Readonly<Record<string, SdkAssertions>> = {
   'subagent-dsh-sdk-diagnostic': {
-    environment: { DSH_TEST_CHILD_PATCH: dshSdkDiagnosticChildPatch },
+    environment: { DAO_TEST_CHILD_PATCH: dshSdkDiagnosticChildPatch },
   },
   'persistent-tools': {
-    environment: { DSH_SYSTEM_PROMPT: MINIMAL_SYSTEM_PROMPT },
+    environment: { DAO_SYSTEM_PROMPT: MINIMAL_SYSTEM_PROMPT },
     expectedTools: { bash: ['command'], str_replace_editor: ['command', 'path'] },
     expectedSystem: MINIMAL_SYSTEM_PROMPT,
     expectedToolDescriptions: { bash: MINIMAL_BASH_DESCRIPTION },
@@ -123,7 +123,7 @@ const SDK_ASSERTIONS: Readonly<Record<string, SdkAssertions>> = {
     },
   },
   'subagent-dsh-sdk-dynamic-route': {
-    environment: { DSH_TEST_PARENT_PROVIDER: 'deepseek-official' },
+    environment: { DAO_TEST_PARENT_PROVIDER: 'deepseek-official' },
     dshSdkChild: {
       config: dshSdkChildConfig,
       agentConfig: {
@@ -504,8 +504,8 @@ async function runScenario(scenario: CorpusScenario): Promise<{
     await mkdir(childHome, { recursive: true })
     childSessionsRoot = join(childHome, 'sessions')
     childEnvironment = {
-      DSH_TEST_CHILD_PATCHES: JSON.stringify([childPatch]),
-      DSH_TEST_CHILD_HOME: childHome,
+      DAO_TEST_CHILD_PATCHES: JSON.stringify([childPatch]),
+      DAO_TEST_CHILD_HOME: childHome,
     }
   }
   const workspaceDir = join(scenario.dir, 'workspace')
@@ -520,25 +520,25 @@ async function runScenario(scenario: CorpusScenario): Promise<{
   const [parentFixture, ...childFixtures] = replayFixtures
   const env: Record<string, string> = {
     ...Object.fromEntries(Object.entries(process.env).filter(([, value]) => value !== undefined)) as Record<string, string>,
-    DSH_SNAPSHOT: mode,
-    DSH_SNAPSHOT_PROVIDER: route.provider,
-    DSH_SNAPSHOT_MODEL: route.model,
-    DSH_TELEMETRY_DISABLED: '1',
-    DSH_AGENTS_HOME: join(cwd, '.agents'),
+    DAO_SNAPSHOT: mode,
+    DAO_SNAPSHOT_PROVIDER: route.provider,
+    DAO_SNAPSHOT_MODEL: route.model,
+    DAO_TELEMETRY_DISABLED: '1',
+    DAO_AGENTS_HOME: join(cwd, '.agents'),
     NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
     ...parentFixture === undefined ? {} : {
-      DSH_SNAPSHOT_FILE: parentFixture,
-      ...childFixtures.length > 0 ? { DSH_SNAPSHOT_CHILD_FILES: childFixtures.join(delimiter) } : {},
+      DAO_SNAPSHOT_FILE: parentFixture,
+      ...childFixtures.length > 0 ? { DAO_SNAPSHOT_CHILD_FILES: childFixtures.join(delimiter) } : {},
     },
     ...!recording && scenario.manifest.replay?.override === true
-      ? { DSH_SNAPSHOT_OVERRIDE: join(scenario.dir, 'replay.override.json') }
+      ? { DAO_SNAPSHOT_OVERRIDE: join(scenario.dir, 'replay.override.json') }
       : {},
     ...scenario.manifest.environment,
     ...assertions.environment,
     ...childEnvironment,
   }
 
-  const harness = new DeepSeekHarness({
+  const harness = new DaoHarness({
     profile: 'sdk',
     patches,
     dshHome,

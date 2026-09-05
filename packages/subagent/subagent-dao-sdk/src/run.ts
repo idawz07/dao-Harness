@@ -12,8 +12,8 @@
 
 import { randomUUID } from 'node:crypto'
 import {
-  DeepSeekHarness,
-  type DeepSeekHarnessOptions,
+  DaoHarness,
+  type DaoHarnessOptions,
   type HarnessNotification,
   JsonRpcResponseError,
   SdkProtocolError,
@@ -51,7 +51,7 @@ export interface SdkRunSpec {
   maxTokens?: number
   /**
    * Extra environment variables to ADD for the child (e.g. the child
-   * runtime's own `DEEPSEEK_API_KEY`). Merged after
+   * runtime's own `LLAMA_ROUTER_API_KEY`). Merged after
    * the seam's `scrubbedParentEnv()` base, so an explicit credential or
    * current `DAO_*` fact survives while ambient namesakes never leak.
    */
@@ -114,8 +114,8 @@ class SdkRunFailure extends Error {
 }
 
 /** Runtime constructor seam replaced only by package-local fake-runtime tests. */
-export const internals: { createHarness(options: DeepSeekHarnessOptions): DeepSeekHarness } = {
-  createHarness: options => new DeepSeekHarness(options),
+export const internals: { createHarness(options: DaoHarnessOptions): DaoHarness } = {
+  createHarness: options => new DaoHarness(options),
 }
 
 /**

@@ -1,9 +1,5 @@
 # SDK-profile patch for the child runtime in the cwd-inheritance proof.
 
-- id: llm-deepseek
-  name: '@daoai/dao-llm-deepseek'
-  disabled: true
-
 - id: system-prompt
   name: '@daoai/dao-system-prompt'
   config:

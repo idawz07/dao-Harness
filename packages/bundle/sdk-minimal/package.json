@@ -1,6 +1,6 @@
 {
   "name": "@daoai/dao-sdk-minimal",
-  "description": "The standalone minimal SDK profile bundle: JSON-RPC, one DeepSeek adapter, persistent shell, editor, and JSONL sessions",
+  "description": "The standalone minimal SDK profile bundle: JSON-RPC, one pi-ai adapter, persistent shell, editor, and JSONL sessions",
   "version": "0.1.2-alpha.1",
   "publishConfig": {
     "access": "public"
@@ -40,15 +40,12 @@
   },
   "dependencies": {
     "@daoai/dao-agent-spine-demo": "workspace:^",
-    "@daoai/dao-deepseek-llm-api-extensions": "workspace:^",
     "@daoai/dao-fs-local": "workspace:^",
-    "@daoai/dao-llm-deepseek": "workspace:^",
-    "@daoai/dao-plugin-package-inventory-deepseek": "workspace:^",
+    "@daoai/dao-llm-pi-ai": "workspace:^",
     "@daoai/dao-sandbox-local": "workspace:^",
     "@daoai/dao-sandbox-policy": "workspace:^",
     "@daoai/dao-sdk-app": "workspace:^",
     "@daoai/dao-sdk-jsonrpc-server": "workspace:^",
-    "@daoai/dao-session-log-deepseek": "workspace:^",
     "@daoai/dao-session-persistence-jsonl": "workspace:^",
     "@daoai/dao-subprocess-local": "workspace:^",
     "@daoai/dao-terminal": "workspace:^",

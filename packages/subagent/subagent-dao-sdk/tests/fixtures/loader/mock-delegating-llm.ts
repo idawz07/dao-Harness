@@ -66,8 +66,8 @@ export const inject = ['llm']
  * @param ctx - the plugin context supplying `ctx.llm`.
  */
 export function apply(ctx: Context): void {
-  const providers = process.env.DAO_TEST_PARENT_PROVIDER === 'deepseek-official'
-    ? ['deepseek-official', 'mock']
+  const providers = process.env.DAO_TEST_PARENT_PROVIDER === 'llama-router'
+    ? ['llama-router', 'mock']
     : ['mock']
   ctx.llm.registerAdapter(providers, new MockDelegatingAdapter())
 }

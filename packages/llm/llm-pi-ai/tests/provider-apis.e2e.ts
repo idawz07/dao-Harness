@@ -27,8 +27,9 @@ interface ProviderCase {
 
 const openAIBaseURL = process.env.DAO_PI_AI_OPENAI_BASE_URL
 const azureOpenAIKey = process.env.AZURE_OPENAI_API_KEY
-// Strictly ANTHROPIC_*: the DeepSeek endpoint does not serve the anthropic-messages
-// protocol, so falling back to DEEPSEEK_API_KEY turns the keyless skip into a 404.
+// Strictly ANTHROPIC_*: the anthropic-messages endpoint accepts only Anthropic
+// credentials, so falling back to another provider's key turns the keyless skip
+// into a 404.
 const anthropicApiKey = process.env.ANTHROPIC_API_KEY
 const anthropicBaseURL = process.env.DAO_PI_AI_ANTHROPIC_BASE_URL
 

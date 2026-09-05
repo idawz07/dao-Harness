@@ -7,7 +7,7 @@ import argparse
 import os
 from pathlib import Path
 
-from dao import DeepSeekHarness
+from dao import DaoHarness
 
 
 def main() -> None:
@@ -23,21 +23,21 @@ def main() -> None:
     )
     parser.add_argument("--profile", default="sdk-minimal")
     parser.add_argument("--session-id")
-    parser.add_argument("--provider", default="deepseek-official")
-    parser.add_argument("--model", default=os.environ.get("DAO_MODEL", "deepseek-v4-flash"))
+    parser.add_argument("--provider", default="llama-router")
+    parser.add_argument("--model", default=os.environ.get("DAO_MODEL", "Qwen3.8-27B-Q6_K_XL-128K"))
     parser.add_argument("--max-tokens", type=int)
     args = parser.parse_args()
-    if args.dsh_home is None:
+    if args.dao_home is None:
         parser.error("--dao-home or a non-empty DAO_HOME is required")
 
     workspace = args.workspace.resolve()
-    dsh_home = args.dsh_home.resolve()
-    with DeepSeekHarness(
+    dao_home = args.dao_home.resolve()
+    with DaoHarness(
         provider=args.provider,
         model=args.model,
         max_tokens=args.max_tokens,
         cwd=str(workspace),
-        dsh_home=str(dsh_home),
+        dao_home=str(dao_home),
         profile=args.profile,
     ) as harness:
         result = harness.run(args.prompt, session_id=args.session_id)

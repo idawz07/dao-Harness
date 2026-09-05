@@ -58,11 +58,11 @@ function snapshotMode(value: string | undefined): SnapshotMode {
     case 'replay': return 'replay'
     case 'record': return 'record'
     case 'refresh': return 'refresh'
-    default: throw new Error(`unknown DSH_SNAPSHOT mode: ${value}`)
+    default: throw new Error(`unknown DAO_SNAPSHOT mode: ${value}`)
   }
 }
 
-const mode = snapshotMode(process.env.DSH_SNAPSHOT)
+const mode = snapshotMode(process.env.DAO_SNAPSHOT)
 const RUNTIME_WORKSPACE_ENTRIES = ['.agents', '.dsh', '.snapshot-patches'] as const
 
 interface JsonObject {
@@ -631,23 +631,23 @@ describe('headless recorded-session snapshots', () => {
             ? 0
             : 1,
           env: {
-            DSH_SNAPSHOT: replaying ? 'replay' : 'record',
-            DSH_SNAPSHOT_PROVIDER: model.provider,
-            DSH_SNAPSHOT_MODEL: model.model,
-            DSH_SNAPSHOT_SPILL_ROOT: spillRoot,
-            DSH_SNAPSHOT_FILE: join(scenario.dir, 'session.jsonl'),
+            DAO_SNAPSHOT: replaying ? 'replay' : 'record',
+            DAO_SNAPSHOT_PROVIDER: model.provider,
+            DAO_SNAPSHOT_MODEL: model.model,
+            DAO_SNAPSHOT_SPILL_ROOT: spillRoot,
+            DAO_SNAPSHOT_FILE: join(scenario.dir, 'session.jsonl'),
             ...(replaying && fixtureFiles.length > 1
-              ? { DSH_SNAPSHOT_CHILD_FILES: fixtureFiles.slice(1).map(file => join(scenario.dir, file)).join(delimiter) }
+              ? { DAO_SNAPSHOT_CHILD_FILES: fixtureFiles.slice(1).map(file => join(scenario.dir, file)).join(delimiter) }
               : {}),
             ...(replaying && scenario.manifest.replay?.override === true
-              ? { DSH_SNAPSHOT_OVERRIDE: join(scenario.dir, 'replay.override.json') }
+              ? { DAO_SNAPSHOT_OVERRIDE: join(scenario.dir, 'replay.override.json') }
               : {}),
             ...(scenario.manifest.permission === undefined
               ? {}
-              : { DSH_PERMISSION_MODE: scenario.manifest.permission }),
+              : { DAO_PERMISSION_MODE: scenario.manifest.permission }),
             ...scenario.manifest.environment,
             NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
-            DSH_TELEMETRY_DISABLED: '1',
+            DAO_TELEMETRY_DISABLED: '1',
           },
           prepare: async (cwd) => {
             await mkdir(join(cwd, patchRoot), { recursive: true })

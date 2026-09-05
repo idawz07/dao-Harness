@@ -347,7 +347,7 @@ describe('subagent descriptors', () => {
       mode: 'continuable' as const,
       provider: 'spawn',
       label: 'complete child',
-      agentProvider: 'deepseek',
+      agentProvider: 'llama-router',
       agentModel: 'chat',
       agentReasoningEffort: ReasoningEffortId('high'),
       persona: 'reviewer',

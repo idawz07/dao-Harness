@@ -58,7 +58,6 @@
     "@daoai/dao-fs-observation-policy": "workspace:^",
     "@daoai/dao-invariants": "workspace:^",
     "@daoai/dao-llm": "workspace:^",
-    "@daoai/dao-llm-deepseek": "workspace:^",
     "@daoai/dao-sandbox": "workspace:^",
     "@daoai/dao-sandbox-policy": "workspace:^",
     "@daoai/dao-session": "workspace:^",

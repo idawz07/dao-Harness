@@ -744,7 +744,7 @@ describe('CodexAppServerWire', () => {
     const initialize = await child.peer.nextMethod('initialize')
     expect(initialize.params).toEqual({
       clientInfo: {
-        name: 'deepseek-harness',
+        name: 'dao-harness',
         title: 'Dao',
         version: '0.0.1',
       },

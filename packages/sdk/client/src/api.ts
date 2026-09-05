@@ -1,5 +1,5 @@
 /**
- * High-level run API over {@link HarnessClient}: `DeepSeekHarness` owns one
+ * High-level run API over {@link HarnessClient}: `DaoHarness` owns one
  * runtime subprocess across many sessions; `HarnessSession.run` sends a
  * prompt and settles when the whole agent next becomes idle.
  *
@@ -11,7 +11,7 @@ import { resolve } from 'node:path'
 import type { SessionEvent, TurnEndReason } from '@daoai/dao-session'
 import { createProcessHarnessClient, HarnessClient, isRecord, SdkProtocolError } from './client.ts'
 import type { RuntimeProcessOptions } from './launch.ts'
-import type { ContentBlock, DeepSeekHarnessOptions, HarnessNotification, RunResult, SdkPromptContentBlock } from './types.ts'
+import type { ContentBlock, DaoHarnessOptions, HarnessNotification, RunResult, SdkPromptContentBlock } from './types.ts'
 
 /**
  * Reusable SDK for running Dao agent turns in a runtime
@@ -19,28 +19,28 @@ import type { ContentBlock, DeepSeekHarnessOptions, HarnessNotification, RunResu
  * this instance until {@link close}; always close (or `await using`) so the
  * child is reaped.
  */
-export class DeepSeekHarness implements AsyncDisposable {
+export class DaoHarness implements AsyncDisposable {
   private clientInstance: HarnessClient
   private readonly createClient: () => HarnessClient
   private readonly cwd: string
   private readonly provider: string
   private readonly model: string
-  private readonly reasoningEffort: DeepSeekHarnessOptions['reasoningEffort']
+  private readonly reasoningEffort: DaoHarnessOptions['reasoningEffort']
   private readonly maxTokens: number | undefined
   private initialized: Promise<void> | undefined
   private closed = false
 
   /** @param options - dao launch configuration plus the session route, effort, and output cap. */
-  constructor(options?: DeepSeekHarnessOptions)
-  constructor(options: DeepSeekHarnessOptions = {}, clientFactory?: () => HarnessClient) {
+  constructor(options?: DaoHarnessOptions)
+  constructor(options: DaoHarnessOptions = {}, clientFactory?: () => HarnessClient) {
     this.createClient = clientFactory ?? (() => new HarnessClient(options))
     this.clientInstance = this.createClient()
     // Absolute before the handshake: the child spawns relative to THIS
     // process's cwd, but the wire cwd is resolved again inside the child — a
     // relative value would double-resolve (e.g. `worker` → `worker/worker`).
     this.cwd = resolve(options.cwd ?? options.processCwd ?? process.cwd())
-    this.provider = options.provider ?? 'deepseek-official'
-    this.model = options.model ?? 'deepseek-v4-flash'
+    this.provider = options.provider ?? 'llama-router'
+    this.model = options.model ?? 'Qwen3.8-27B-Q6_K_XL-128K'
     this.reasoningEffort = options.reasoningEffort
     this.maxTokens = options.maxTokens
   }
@@ -134,14 +134,14 @@ export class DeepSeekHarness implements AsyncDisposable {
 }
 
 /** Construct the high-level API against a generic process for package-local fake-runtime tests. */
-export function createProcessDeepSeekHarness(
+export function createProcessDaoHarness(
   runtime: RuntimeProcessOptions,
-  options: DeepSeekHarnessOptions = {},
-): DeepSeekHarness {
-  const Constructor = DeepSeekHarness as unknown as new (
-    publicOptions: DeepSeekHarnessOptions,
+  options: DaoHarnessOptions = {},
+): DaoHarness {
+  const Constructor = DaoHarness as unknown as new (
+    publicOptions: DaoHarnessOptions,
     clientFactory: () => HarnessClient,
-  ) => DeepSeekHarness
+  ) => DaoHarness
   return new Constructor({
     ...runtime.cwd === undefined ? {} : { processCwd: runtime.cwd },
     ...options,
@@ -164,7 +164,7 @@ export class HarnessSession {
    * @param harness - the owning harness (supplies the client and handshake).
    * @param id - the wire session id this handle runs on.
    */
-  constructor(readonly harness: DeepSeekHarness, readonly id: string) {}
+  constructor(readonly harness: DaoHarness, readonly id: string) {}
 
   /**
    * Queue one prompt, then observe the whole session through its next idle.

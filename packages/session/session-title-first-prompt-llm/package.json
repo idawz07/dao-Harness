@@ -42,7 +42,6 @@
     "@daoai/cordis-plugin-loader": "workspace:^",
     "@daoai/dao-invariants": "workspace:^",
     "@daoai/dao-llm": "workspace:^",
-    "@daoai/dao-llm-deepseek": "workspace:^",
     "@daoai/dao-session": "workspace:^",
     "@daoai/dao-session-title": "workspace:^",
     "@daoai/dao-session-title-llm": "workspace:^",

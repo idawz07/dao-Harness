@@ -21,7 +21,7 @@ describe('TurnUsageDisclosure', () => {
       outputTokens: 5_800,
       reasoningTokens: 42,
       totalTokens: 15_800,
-      routes: [{ provider: 'deepseek', model: 'deepseek-chat' }],
+      routes: [{ provider: 'llama-router', model: 'qwen38-27b' }],
     }
     const view = render(<TurnUsageDisclosure usage={usage} t={t} />)
 
@@ -31,7 +31,7 @@ describe('TurnUsageDisclosure', () => {
     fireEvent.click(view.getByRole('button'))
     const details = view.container.querySelector('[data-turn-usage-details]') as HTMLElement
     expect(details).toBeTruthy()
-    expect(details.textContent).toContain('Provider / modeldeepseek/deepseek-chat')
+    expect(details.textContent).toContain('Provider / modelllama-router/qwen38-27b')
     expect(details.textContent).toContain('Uncached input5,060 tok')
     expect(details.textContent).toContain('Cached input4,940 tok')
     expect(details.textContent).toContain('Cache write0 tok')

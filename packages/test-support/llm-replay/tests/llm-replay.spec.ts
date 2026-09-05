@@ -1,11 +1,10 @@
 import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { Context } from '@daoai/cordis'
 import type { SessionEvent } from '@daoai/dao-session'
 import { CompactionId } from '@daoai/dao-compaction'
-import DeepSeekLlmApiExtensionRegistry from '@daoai/dao-deepseek-llm-api-extensions'
 import LlmRuntime, { ToolCallId, createUserMessage, GenerateOptions, LlmAdapter, StreamChunk } from '@daoai/dao-llm'
 import {
   type Config,
@@ -22,12 +21,6 @@ import {
   parseSessionLog,
   resolveScriptedEntry,
 } from '../src/index.ts'
-
-declare module '@daoai/dao-deepseek-llm-api-extensions/types' {
-  interface DeepSeekLlmApiExtensionMap {
-    test_replay: { readonly version: 1 }
-  }
-}
 
 /**
  * Unit tests for the replay llm/stream plugin. These drive the listener through
@@ -634,8 +627,8 @@ describe('installLlmReplay (through the real LlmRuntime)', () => {
       file,
       providers: [
         {
-          id: 'deepseek',
-          name: 'DeepSeek',
+          id: 'llama-router',
+          name: 'Llama Router',
           retryPolicy: {
             mode: 'normal',
             maxRetries: 2,
@@ -658,15 +651,15 @@ describe('installLlmReplay (through the real LlmRuntime)', () => {
     })
 
     expect(ctx.llm.listProviders()).toEqual([
-      { id: 'deepseek', name: 'DeepSeek' },
+      { id: 'llama-router', name: 'Llama Router' },
       { id: 'empty', name: 'empty' },
     ])
-    await expect(ctx.llm.listModels('deepseek')).resolves.toEqual([
-      { provider: 'deepseek', id: 'flash', name: 'flash', inputModalities: ['text', 'image'] },
-      { provider: 'deepseek', id: 'pro', name: 'Pro', description: 'Larger model' },
+    await expect(ctx.llm.listModels('llama-router')).resolves.toEqual([
+      { provider: 'llama-router', id: 'flash', name: 'flash', inputModalities: ['text', 'image'] },
+      { provider: 'llama-router', id: 'pro', name: 'Pro', description: 'Larger model' },
     ])
     await expect(ctx.llm.listModels('empty')).resolves.toEqual([])
-    await expect(ctx.llm.resolveModelInfo('deepseek', 'flash')).resolves.toMatchObject({
+    await expect(ctx.llm.resolveModelInfo('llama-router', 'flash')).resolves.toMatchObject({
       context: { contextWindow: 128_000 },
       inputModalities: ['text', 'image'],
       defaultMaxTokens: 64_000,
@@ -675,16 +668,16 @@ describe('installLlmReplay (through the real LlmRuntime)', () => {
         defaultEffort: 'max',
       },
     })
-    await expect(ctx.llm.resolveModelInfo('deepseek', 'pro')).resolves.not.toHaveProperty('inputModalities')
-    await expect(ctx.llm.resolveModelInfo('deepseek', 'pro')).resolves.not.toHaveProperty('context')
+    await expect(ctx.llm.resolveModelInfo('llama-router', 'pro')).resolves.not.toHaveProperty('inputModalities')
+    await expect(ctx.llm.resolveModelInfo('llama-router', 'pro')).resolves.not.toHaveProperty('context')
     // Efforts without a configured default preserve the provider's own default.
-    await expect(ctx.llm.resolveModelInfo('deepseek', 'pro')).resolves.toMatchObject({
+    await expect(ctx.llm.resolveModelInfo('llama-router', 'pro')).resolves.toMatchObject({
       reasoning: { efforts: [{ id: 'high', name: 'high' }] },
     })
-    await expect(ctx.llm.resolveModelInfo('deepseek', 'pro')).resolves.not.toHaveProperty('defaultMaxTokens')
-    await expect(ctx.llm.resolveModelInfo('deepseek', 'unlisted')).resolves.not.toHaveProperty('context')
+    await expect(ctx.llm.resolveModelInfo('llama-router', 'pro')).resolves.not.toHaveProperty('defaultMaxTokens')
+    await expect(ctx.llm.resolveModelInfo('llama-router', 'unlisted')).resolves.not.toHaveProperty('context')
     await expect(ctx.llm.resolveModelInfo('empty', 'unlisted')).resolves.not.toHaveProperty('context')
-    expect(ctx.llm.providerRetryPolicy('deepseek')).toMatchObject({
+    expect(ctx.llm.providerRetryPolicy('llama-router')).toMatchObject({
       mode: 'normal',
       maxRetries: 2,
       initialDelayMs: 1,
@@ -698,7 +691,7 @@ describe('installLlmReplay (through the real LlmRuntime)', () => {
       maxDelayMs: 10_000,
       jitterRatio: 0.1,
     })
-    expect(await drain(ctx.llm.stream({ provider: 'deepseek', model: 'pro', messages: [] }))).toEqual(TEXT_CHUNKS)
+    expect(await drain(ctx.llm.stream({ provider: 'llama-router', model: 'pro', messages: [] }))).toEqual(TEXT_CHUNKS)
 
     dispose()
     expect(ctx.llm.listProviders()).toEqual([])
@@ -712,9 +705,9 @@ describe('installLlmReplay (through the real LlmRuntime)', () => {
     expect(() => {
       installLlmReplay(ctx, {
         file,
-        providers: [{ id: 'deepseek', retryPolicy: { mode: 'normal', maxRetries: -1 } }],
+        providers: [{ id: 'llama-router', retryPolicy: { mode: 'normal', maxRetries: -1 } }],
       })
-    }).toThrow(/llm-replay: provider "deepseek" retryPolicy\.maxRetries/)
+    }).toThrow(/llm-replay: provider "llama-router" retryPolicy\.maxRetries/)
   })
 
   it('serves the Nth call the Nth derived entry (positional)', async () => {
@@ -729,90 +722,6 @@ describe('installLlmReplay (through the real LlmRuntime)', () => {
     installLlmReplay(ctx, { file })
     expect(await drain(ctx.llm.stream({ provider: 'm', model: 'm', messages: [] }))).toEqual(TEXT_CHUNKS)
     expect(await drain(ctx.llm.stream({ provider: 'm', model: 'm', messages: [] }))).toEqual(second)
-  })
-
-  it('settles official DeepSeek request extensions before replayed chunks', async () => {
-    writeLog(TEXT_CHUNKS, TEXT_CHUNKS, TEXT_CHUNKS)
-    const ctx = new Context()
-    await ctx.plugin(LlmRuntime)
-    await ctx.plugin(DeepSeekLlmApiExtensionRegistry)
-    const accepted = vi.fn()
-    ctx.deepseekLlmApiExtensions.register('test_replay', {
-      prepare: () => ({ value: { version: 1 }, accept: accepted }),
-    })
-    installLlmReplay(ctx, { file })
-
-    const sessionId = 'deepseek-replay' as NonNullable<GenerateOptions['sessionId']>
-    await drain(ctx.llm.stream({ provider: 'deepseek-official', model: 'm', messages: [], sessionId }))
-    expect(accepted).toHaveBeenCalledOnce()
-    await drain(ctx.llm.stream({
-      provider: 'deepseek-official',
-      model: 'm',
-      messages: [],
-      sessionId,
-      signal: new AbortController().signal,
-      purpose: 'compaction',
-    }))
-    expect(accepted).toHaveBeenCalledTimes(2)
-    await drain(ctx.llm.stream({ provider: 'another-provider', model: 'm', messages: [], sessionId }))
-    expect(accepted).toHaveBeenCalledTimes(2)
-  })
-
-  it('accepts anonymous official extensions and tolerates an absent optional registry', async () => {
-    writeLog(TEXT_CHUNKS)
-    const withRegistry = new Context()
-    await withRegistry.plugin(LlmRuntime)
-    await withRegistry.plugin(DeepSeekLlmApiExtensionRegistry)
-    const accepted = vi.fn()
-    withRegistry.deepseekLlmApiExtensions.register('test_replay', {
-      prepare: () => ({ value: { version: 1 }, accept: accepted }),
-    })
-    installLlmReplay(withRegistry, { file })
-    await drain(withRegistry.llm.stream({ provider: 'deepseek-official', model: 'm', messages: [] }))
-    expect(accepted).toHaveBeenCalledOnce()
-
-    const withoutRegistry = new Context()
-    await withoutRegistry.plugin(LlmRuntime)
-    installLlmReplay(withoutRegistry, { file })
-    await expect(drain(withoutRegistry.llm.stream({ provider: 'deepseek-official', model: 'm', messages: [] })))
-      .resolves.toEqual(TEXT_CHUNKS)
-  })
-
-  it('accepts only throw entries that reached the post-2xx point', async () => {
-    writeFileSync(file, sessionJsonl([]), 'utf8')
-    const overrideFile = join(dir, 'replay.override.json')
-    writeFileSync(overrideFile, JSON.stringify([
-      { kind: 'throw', chunks: [{ type: 'block-start', index: 0, blockType: 'text' }], message: 'partial', code: 'STREAM_CLOSED' },
-      { kind: 'throw', chunks: [], message: 'unauthorized', code: 'AUTH' },
-      { kind: 'throw', chunks: [], message: 'empty body', code: 'EMPTY_RESPONSE', accepted: true },
-    ]), 'utf8')
-    const ctx = new Context()
-    await ctx.plugin(LlmRuntime)
-    await ctx.plugin(DeepSeekLlmApiExtensionRegistry)
-    const accepted = vi.fn()
-    ctx.deepseekLlmApiExtensions.register('test_replay', {
-      prepare: () => ({ value: { version: 1 }, accept: accepted }),
-    })
-    installLlmReplay(ctx, { file, overrideFile })
-    const request = { provider: 'deepseek-official', model: 'm', messages: [] }
-
-    await expect(drain(ctx.llm.stream(request))).rejects.toThrow('partial')
-    expect(accepted).toHaveBeenCalledOnce()
-    await expect(drain(ctx.llm.stream(request))).rejects.toThrow('unauthorized')
-    expect(accepted).toHaveBeenCalledOnce()
-    await expect(drain(ctx.llm.stream(request))).rejects.toThrow('empty body')
-    expect(accepted).toHaveBeenCalledTimes(2)
-  })
-
-  it('rejects a non-boolean throw acceptance override', async () => {
-    writeFileSync(file, sessionJsonl([]), 'utf8')
-    const overrideFile = join(dir, 'replay.override.json')
-    writeFileSync(overrideFile, JSON.stringify([
-      { kind: 'throw', chunks: [], message: 'bad', code: 'X', accepted: 'yes' },
-    ]), 'utf8')
-    const ctx = new Context()
-    await ctx.plugin(LlmRuntime)
-    expect(() => { installLlmReplay(ctx, { file, overrideFile }) }).toThrow(/accepted must be a boolean/)
   })
 
   it('replays a sidecar throw-entry as an LlmError with its stable code, after its prefix chunks', async () => {
@@ -1358,14 +1267,14 @@ describe('apply (the plugin entry)', () => {
     installLlmReplay(ctx, {
       file,
       providers: [{
-        id: 'deepseek',
+        id: 'llama-router',
         models: [
           { id: 'vision', inputModalities: ['text', 'image'], imageRequestTokens: 384 },
           { id: 'plain' },
         ],
       }],
     })
-    const pricing = ctx.llm.imageRequestPricing('deepseek', 'vision')
+    const pricing = ctx.llm.imageRequestPricing('llama-router', 'vision')
     expect(pricing).toBeDefined()
     const ref = {
       attachmentId: 'sha256:aaaaaaaa',
@@ -1377,7 +1286,7 @@ describe('apply (the plugin entry)', () => {
     const priced = pricing?.priceImages([ref, ref])
     expect(priced?.map(price => price.visualTokens)).toEqual([384, 384])
     expect(priced?.every(price => price.text.includes('640x480px'))).toBe(true)
-    expect(ctx.llm.imageRequestPricing('deepseek', 'plain')).toBeUndefined()
+    expect(ctx.llm.imageRequestPricing('llama-router', 'plain')).toBeUndefined()
   })
 
   it('rejects imageRequestTokens on a model without the image modality during load', () => {

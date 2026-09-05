@@ -1,5 +1,5 @@
 import { createServer } from 'node:http'
-import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises'
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -11,6 +11,28 @@ import { describe, expect, it } from 'vitest'
 const binScript = fileURLToPath(new URL('../../../src/bin.ts', import.meta.url))
 const repoRoot = fileURLToPath(new URL('../../../../../', import.meta.url))
 const decompress = promisify(zstdDecompress)
+
+/** Point the shipped llama-router route at one local mock for a fresh DAO_HOME. */
+async function writeMockRoutePatch(daoHome: string, port: number): Promise<void> {
+  await mkdir(daoHome, { recursive: true })
+  await writeFile(join(daoHome, 'cordis.patch.yml'), [
+    '- id: llm-pi-ai',
+    "  name: '@daoai/dao-llm-pi-ai'",
+    '  config:',
+    '    providers:',
+    '      llama-router:',
+    '        displayName: Local Llama Router',
+    '        apiKeyEnv: LLAMA_ROUTER_API_KEY',
+    '        api: openai-completions',
+    `        baseURL: http://127.0.0.1:${port}/v1`,
+    '        models:',
+    '          - id: Qwen3.8-27B-Q6_K_XL-128K',
+    '            contextWindow: 131072',
+    '            maxTokens: 65536',
+    '            reasoningEfforts: { max: max }',
+    '',
+  ].join('\n'))
+}
 
 function waitForLine(
   lines: string[],
@@ -68,6 +90,9 @@ describe('Python SDK dao profile keyless smoke', () => {
     await new Promise<void>(resolve => modelServer.listen(0, '127.0.0.1', resolve))
     const address = modelServer.address()
     if (address === null || typeof address === 'string') throw new Error('model server did not bind a TCP port')
+    // The shipped llama-router route points at the resident farm; the home
+    // patch layer redirects it at this mock for the run.
+    await writeMockRoutePatch(join(root, '.dao'), address.port)
     // The line-predicate protocol driving below is the genuinely custom part;
     // execa owns spawn, the deadline, and exit settlement around it.
     const child = execa(process.execPath, [
@@ -82,8 +107,7 @@ describe('Python SDK dao profile keyless smoke', () => {
         DAO_HOME: join(root, '.dao'),
         DAO_PERMISSION_MODE: 'danger-full-access',
         DAO_TELEMETRY_DISABLED: '1',
-        DEEPSEEK_API_KEY: 'keyless-smoke-no-call',
-        DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}`,
+        LLAMA_ROUTER_API_KEY: 'keyless-smoke-no-call',
         ...(envValue === undefined ? {} : { DAO_MAX_TOKENS_AS_SUCCESS: envValue }),
       },
       timeout: 35_000,
@@ -108,8 +132,8 @@ describe('Python SDK dao profile keyless smoke', () => {
         method: 'initialize',
         params: {
           cwd: root,
-          provider: 'deepseek-official',
-          model: 'deepseek-v4-pro',
+          provider: 'llama-router',
+          model: 'Qwen3.8-27B-Q6_K_XL-128K',
           reasoningEffort: 'max',
           maxTokens: 1234,
         },
@@ -152,7 +176,7 @@ describe('Python SDK dao profile keyless smoke', () => {
       })
       const tools = modelRequests[0]?.tools as { function?: { name?: string } }[]
       expect(modelRequests[0]?.reasoning_effort).toBe('max')
-      expect(modelRequests[0]?.max_tokens).toBe(1234)
+      expect(modelRequests[0]?.max_completion_tokens).toBe(1234)
       expect(tools.map(tool => tool.function?.name)).not.toContain('list_subagent_models')
 
       child.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', id: 3, method: 'shutdown' })}\n`)
@@ -191,6 +215,7 @@ describe('Python SDK dao profile keyless smoke', () => {
     await new Promise<void>(resolve => modelServer.listen(0, '127.0.0.1', resolve))
     const address = modelServer.address()
     if (address === null || typeof address === 'string') throw new Error('model server did not bind a TCP port')
+    await writeMockRoutePatch(join(root, '.dao'), address.port)
     const child = execa(process.execPath, [
       '--import',
       'tsx/esm',
@@ -202,8 +227,7 @@ describe('Python SDK dao profile keyless smoke', () => {
       env: {
         DAO_HOME: join(root, '.dao'),
         DAO_SYSTEM_PROMPT: 'Minimal allowlist prompt.',
-        DEEPSEEK_API_KEY: 'keyless-smoke-no-call',
-        DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}`,
+        LLAMA_ROUTER_API_KEY: 'keyless-smoke-no-call',
       },
       timeout: 35_000,
       killSignal: 'SIGKILL',
@@ -225,7 +249,7 @@ describe('Python SDK dao profile keyless smoke', () => {
         jsonrpc: '2.0',
         id: 1,
         method: 'initialize',
-        params: { cwd: root, provider: 'deepseek-official', model: 'deepseek-v4-pro' },
+        params: { cwd: root, provider: 'llama-router', model: 'Qwen3.8-27B-Q6_K_XL-128K' },
       })}\n`)
       await waitForLine(lines, value => value.id === 1, () => stderr)
       child.stdin.write(`${JSON.stringify({
@@ -273,7 +297,7 @@ describe('Python SDK dao profile keyless smoke', () => {
         cwd: repoRoot,
         env: {
           DAO_HOME: join(root, '.dao'),
-          DEEPSEEK_API_KEY: 'keyless-smoke-no-call',
+          LLAMA_ROUTER_API_KEY: 'keyless-smoke-no-call',
           DAO_MAX_TOKENS_AS_SUCCESS: 'sometimes',
         },
         stdin: 'ignore',

@@ -1,7 +1,5 @@
 # Dao Brand Statement
 
-English | [中文](BRAND_GUIDELINES.zh.md)
-
 Dao is a privately used, locally powered agent system. Its brand is the squad, not a logo: a generalist orchestrator that spawns specialist subagents (Scout, Forge, Lens, Quill, Relay, Scribe), backed by a reference store for documents. Squad, XP, levels, and badges are the product vocabulary; each specialist carries a name, a title, a portrait, and an accent color that doubles as its UI token.
 
 ## Naming

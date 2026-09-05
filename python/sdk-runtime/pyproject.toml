@@ -9,13 +9,13 @@ description = "Bundled dao CLI runtime for the Dao Python SDK"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
-authors = [{ name = "DeepSeek" }]
+authors = [{ name = "Dao" }]
 
 [project.urls]
-Homepage = "https://github.com/deepseek-ai/deepseek-harness"
-Documentation = "https://github.com/deepseek-ai/deepseek-harness/blob/master/python/sdk-runtime/README.md"
-Issues = "https://github.com/deepseek-ai/deepseek-harness/issues"
-Source = "https://github.com/deepseek-ai/deepseek-harness"
+Homepage = "https://github.com/daoAI/dao"
+Documentation = "https://github.com/daoAI/dao/blob/master/python/sdk-runtime/README.md"
+Issues = "https://github.com/daoAI/dao/issues"
+Source = "https://github.com/daoAI/dao"
 
 [project.scripts]
 dao = "dao_runtime:main"

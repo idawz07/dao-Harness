@@ -1,9 +1,5 @@
 # Keyless generic ACP v1 control-surface patch over `dao --profile acp`.
 
-- id: llm-deepseek
-  name: '@daoai/dao-llm-deepseek'
-  disabled: true
-
 - id: acp
   name: '@daoai/dao-acp'
   config:

@@ -1,7 +1,5 @@
 # Python contributor workflows
 
-English | [中文](development.zh.md)
-
 Follow the workflow for the contributor outcome you need: build runtime artifacts, validate the SDK, run against source, or build distributions. Package behavior belongs in the [SDK reference](sdk/README.md) and [runtime carrier reference](sdk-runtime/README.md).
 
 ## Build runtime artifacts
@@ -36,14 +34,14 @@ uv run --project python/sdk python scripts/smoke-python-runtime.py \
 
 Three scenarios compare committed expected output under `scripts/snapshots/python-sdk-single-exe/`. `minimal/model-visible.json` pins the Linux/macOS `sdk-minimal` profile's assembled system prompts, advertised tool schemas, and model-visible messages; `minimal/win-x64/model-visible.json` pins its PowerShell counterpart. A plugin that contributes an unintended system section or user message therefore fails the job, and every message the profile emits is compared. `advanced/` pins one complex process's SDK result and parent/child session logs across every target. `restart/` launches two complete SDK runtime processes against one persistence root and snapshots their isolated model histories, high-level results, and separate durable logs across every target. Rerun the owning scenario with `--update-snapshots` and review that diff before committing it.
 
-Trusted pull requests also run `--scenario sdk-live --installed-wheel` on every native target. That scenario performs two tool-using turns against `https://api.deepseek.com`, verifies the created file externally, and fails when the repository secret is absent instead of self-skipping. Fork and Dependabot pull requests run the complete keyless installed-wheel path but receive no key.
+Every scenario is keyless: the model endpoint is a local mock, so no repository secret is required and fork and Dependabot pull requests run the identical path.
 
-An interactive smoke test needs `DEEPSEEK_API_KEY` in the environment or repository-root `.env`:
+An interactive run needs `LLAMA_ROUTER_API_KEY` in the environment or repository-root `.env` for the shipped llama-router route (or point `base_url` at another endpoint):
 
 ```python
-from dao import DeepSeekHarness
+from dao import DaoHarness
 
-with DeepSeekHarness(dsh_home="/absolute/path/to/test-dao-home") as harness:
+with DaoHarness(dao_home="/absolute/path/to/test-dao-home") as harness:
     print(harness.run("say hi").final_response)
 ```
 
@@ -54,7 +52,7 @@ Alternatively export a non-empty `DAO_HOME`. The SDK rejects a launch that would
 Repository contributors can select either development route; both execute the normal `dao --profile sdk` launcher:
 
 - Set `DAO_RUNTIME_MODE=node` to use the built Node carrier on system Node `>=22.19`. The build script refreshes this carrier, but distributions never include or auto-select it.
-- Set `dsh_bin` to the absolute built `apps/cli/lib/bin.js` path to exercise the checkout's CLI directly. Supply an explicit `dsh_home`, plus `profile` and ordered `patches` as needed.
+- Set `dao_bin` to the absolute built `apps/cli/lib/bin.js` path to exercise the checkout's CLI directly. Supply an explicit `dao_home`, plus `profile` and ordered `patches` as needed.
 
 `python/sdk/tests/manual_sdk_agent_smoke.py` uses the internal `_launch_args` test adapter to exercise the unbuilt TypeScript CLI under tsx. Arbitrary argv replacement is intentionally absent from the public SDK.
 

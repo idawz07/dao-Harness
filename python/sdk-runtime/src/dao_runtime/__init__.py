@@ -36,7 +36,7 @@ _ARCH_TAGS = {"x86_64": "x64", "amd64": "x64", "arm64": "arm64", "aarch64": "arm
 
 _EXE_ACQUISITION_HINT = (
     "Two ways to get the executable: run `scripts/build-exe-for-python-sdk.ts` (via tsx) in a "
-    "deepseek-harness checkout, or install the matching `dao-runtime-bin` platform "
+    "Dao checkout, or install the matching `dao-runtime-bin` platform "
     "wheel retained by the `build-exe-for-python-sdk` CI workflow. For local development "
     "against a repo source build, explicitly select the dev-only node carrier with "
     f"{RUNTIME_MODE_ENV_VAR}=node (or resolve_bundled_launch_args('node'))."
@@ -143,7 +143,7 @@ def _node_launch_args() -> tuple[str, str]:
     if not bin_js.is_file():
         raise FileNotFoundError(
             f"the dev-only node runtime closure is missing at {node_root} "
-            f"(no {bin_js}); run `scripts/build-exe-for-python-sdk.ts` in a deepseek-harness "
+            f"(no {bin_js}); run `scripts/build-exe-for-python-sdk.ts` in a Dao "
             "checkout, which builds and copies the deploy closure here. The node carrier "
             "is for repo-local development only — production uses the single-file exe."
         )

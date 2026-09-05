@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from dao import DeepSeekHarness, HarnessClient, HarnessConfig, Notification, RunResult, SdkProtocolError
+from dao import DaoHarness, HarnessClient, HarnessConfig, Notification, RunResult, SdkProtocolError
 from dao.errors import JsonRpcError
 
 
@@ -25,8 +25,7 @@ import sys
 
 env_dump = os.environ["ENV_DUMP"]
 json.dump({
-    "DEEPSEEK_API_KEY": os.environ.get("DEEPSEEK_API_KEY"),
-    "DEEPSEEK_BASE_URL": os.environ.get("DEEPSEEK_BASE_URL"),
+    "LLAMA_ROUTER_API_KEY": os.environ.get("LLAMA_ROUTER_API_KEY"),
     "DAO_CWD": os.environ.get("DAO_CWD"),
     "DAO_SESSION_ROOT": os.environ.get("DAO_SESSION_ROOT"),
     "DAO_CORDIS_CONFIG": os.environ.get("DAO_CORDIS_CONFIG"),
@@ -92,34 +91,40 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(
-        model="deepseek-v4-flash",
+    home = tmp_path / "home"
+    with DaoHarness(
+        model="Qwen3.8-27B-Q6_K_XL-128K",
         reasoning_effort="max",
         max_tokens=4096,
         cwd=str(tmp_path),
+        dao_home=str(home),
+        base_url="http://127.0.0.1:4321",
+        api_key="env-key",
         _launch_args=(sys.executable, str(script)),
         env={
             "ENV_DUMP": str(env_dump),
             "INIT_DUMP": str(init_dump),
-            "DEEPSEEK_API_KEY": "env-key",
-            "DEEPSEEK_BASE_URL": "http://127.0.0.1:4321",
         },
     ) as harness:
         result = harness.run("say hello", session_id="main")
+        base_patch = harness._client.config.patches[-1]
+        base_patch_text = Path(base_patch).read_text()
 
     assert result.final_response == "hello from runtime"
     assert result.finish_reason == "max-tokens"
     assert result.events[-1]["type"] == "turn/end"
     dumped_env = json.loads(env_dump.read_text())
-    assert dumped_env["DEEPSEEK_API_KEY"] == "env-key"
-    assert dumped_env["DEEPSEEK_BASE_URL"] == "http://127.0.0.1:4321"
+    assert dumped_env["LLAMA_ROUTER_API_KEY"] == "env-key"
     assert dumped_env["DAO_CWD"] is None
     assert dumped_env["DAO_SESSION_ROOT"] is None
     assert dumped_env["DAO_CORDIS_CONFIG"] is None
+    assert "baseURL: http://127.0.0.1:4321" in base_patch_text
+    assert "id: Qwen3.8-27B-Q6_K_XL-128K" in base_patch_text
+    assert not Path(base_patch).exists()
     assert json.loads(init_dump.read_text()) == {
         "cwd": str(tmp_path),
-        "provider": "deepseek-official",
-        "model": "deepseek-v4-flash",
+        "provider": "llama-router",
+        "model": "Qwen3.8-27B-Q6_K_XL-128K",
         "reasoningEffort": "max",
         "maxTokens": 4096,
     }
@@ -150,7 +155,7 @@ for line in sys.stdin:
     )
 
     seen: list[str] = []
-    with DeepSeekHarness(
+    with DaoHarness(
         _launch_args=(sys.executable, str(script)),
         cwd=str(tmp_path),
     ) as harness:
@@ -188,7 +193,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(
+    with DaoHarness(
         _launch_args=(sys.executable, str(script)),
         cwd=str(tmp_path),
     ) as harness:
@@ -222,7 +227,7 @@ for line in sys.stdin:
     )
     monkeypatch.chdir(tmp_path)
 
-    with DeepSeekHarness(
+    with DaoHarness(
         cwd=".",
         runtime_cwd=".",
         _launch_args=(sys.executable, str(script)),
@@ -263,7 +268,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(
+    with DaoHarness(
         _launch_args=(sys.executable, str(script)),
         cwd=str(tmp_path),
     ) as harness:
@@ -312,7 +317,7 @@ for line in sys.stdin:
     )
 
     seen: list[str] = []
-    with DeepSeekHarness(
+    with DaoHarness(
         _launch_args=(sys.executable, str(script)),
         cwd=str(tmp_path),
     ) as harness:
@@ -367,7 +372,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(
+    with DaoHarness(
         _launch_args=(sys.executable, str(script)),
         cwd=str(tmp_path),
     ) as harness:
@@ -402,7 +407,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(_launch_args=(sys.executable, str(script)), cwd=str(tmp_path)) as harness:
+    with DaoHarness(_launch_args=(sys.executable, str(script)), cwd=str(tmp_path)) as harness:
         result = harness.run("one turn", session_id="main")
         assert harness.client._notifications.qsize() == 0
 
@@ -442,7 +447,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(_launch_args=(sys.executable, str(script)), cwd=str(tmp_path)) as harness:
+    with DaoHarness(_launch_args=(sys.executable, str(script)), cwd=str(tmp_path)) as harness:
         first = harness.run("first turn", session_id="main")
         second = harness.run("second turn", session_id="main")
 
@@ -474,7 +479,7 @@ for line in sys.stdin:
     )
 
     with HarnessClient(_launch_args=(sys.executable, str(script))) as client:
-        init = client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+        init = client.initialize(provider="llama-router", cwd="/workspace", model="dsagent")
         assert init.serverInfo.name == "fake-dao"
 
         client.session_prompt("main", [{"type": "text", "text": "fix it"}])
@@ -612,7 +617,7 @@ for line in sys.stdin:
         raise RuntimeError("bad notification filter")
 
     with HarnessClient(_launch_args=(sys.executable, str(script))) as client:
-        client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+        client.initialize(provider="llama-router", cwd="/workspace", model="dsagent")
         with (
             client.subscribe_notifications(broken_filter) as broken,
             client.subscribe_notifications(lambda notification: notification.method == "tick") as healthy,
@@ -649,7 +654,7 @@ for line in sys.stdin:
     )
 
     with HarnessClient(_launch_args=(sys.executable, str(script))) as client:
-        client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+        client.initialize(provider="llama-router", cwd="/workspace", model="dsagent")
         with pytest.raises(ValueError):
             client.session_prompt("main", [{"type": "text", "text": "fix it"}])
 
@@ -676,7 +681,7 @@ for line in sys.stdin:
     )
 
     with HarnessClient(_launch_args=(sys.executable, str(script))) as client:
-        client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+        client.initialize(provider="llama-router", cwd="/workspace", model="dsagent")
 
         request = client.next_request()
         assert request.id == "bridge-req-1"
@@ -708,7 +713,7 @@ for line in sys.stdin:
     )
 
     with HarnessClient(_launch_args=(sys.executable, str(script))) as client:
-        init = client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+        init = client.initialize(provider="llama-router", cwd="/workspace", model="dsagent")
         assert init.serverInfo.name == "fake-dao"
 
 
@@ -733,7 +738,7 @@ time.sleep(60)
     ) as client:
         start = time.monotonic()
         try:
-            client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+            client.initialize(provider="llama-router", cwd="/workspace", model="dsagent")
         except TimeoutError as exc:
             assert time.monotonic() - start < 2
             assert "bridge is still starting" in str(exc)
@@ -771,7 +776,7 @@ for line in sys.stdin:
     client.start()
     proc = client._proc
     assert proc is not None
-    client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+    client.initialize(provider="llama-router", cwd="/workspace", model="dsagent")
     start = time.monotonic()
     client.close()
     assert time.monotonic() - start < 2
@@ -810,7 +815,7 @@ Path(os.environ["QUIESCED_MARKER"]).write_text("quiesced")
         _launch_args=(sys.executable, str(script)),
     )
     client.start()
-    client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+    client.initialize(provider="llama-router", cwd="/workspace", model="dsagent")
     client.close()
 
     assert marker.read_text() == "quiesced"
@@ -840,7 +845,7 @@ for line in sys.stdin:
     assert proc is not None
 
     with pytest.raises(JsonRpcError, match="bad initialize") as excinfo:
-        client.initialize(provider="deepseek-official", cwd=".", model="dsagent")
+        client.initialize(provider="llama-router", cwd=".", model="dsagent")
 
     assert excinfo.value.code == -32000
     assert "initialize diagnostic" in str(excinfo.value)
@@ -849,32 +854,32 @@ for line in sys.stdin:
 
 
 def test_public_signatures_omit_unsupported_wire_parameters() -> None:
-    from dao import DeepSeekHarnessConfig, Session
+    from dao import DaoHarnessConfig, Session
 
     assert "session_root" not in inspect.signature(HarnessClient.initialize).parameters
     assert "system_prompt" not in inspect.signature(HarnessClient.initialize).parameters
     assert "profile" not in inspect.signature(HarnessClient.session_prompt).parameters
-    assert "profile" not in inspect.signature(DeepSeekHarness.run).parameters
+    assert "profile" not in inspect.signature(DaoHarness.run).parameters
     assert "profile" not in inspect.signature(Session.run).parameters
-    assert "system_prompt" not in DeepSeekHarnessConfig.__dataclass_fields__
-    assert "max_tokens" in DeepSeekHarnessConfig.__dataclass_fields__
-    assert "reasoning_effort" in DeepSeekHarnessConfig.__dataclass_fields__
+    assert "system_prompt" not in DaoHarnessConfig.__dataclass_fields__
+    assert "max_tokens" in DaoHarnessConfig.__dataclass_fields__
+    assert "reasoning_effort" in DaoHarnessConfig.__dataclass_fields__
     assert "max_tokens" in inspect.signature(HarnessClient.initialize).parameters
     assert "reasoning_effort" in inspect.signature(HarnessClient.initialize).parameters
     assert "client_name" not in HarnessConfig.__dataclass_fields__
     assert "client_version" not in HarnessConfig.__dataclass_fields__
-    assert {"dsh_bin", "profile", "patches", "dsh_home"} <= set(
-        DeepSeekHarnessConfig.__dataclass_fields__
+    assert {"dao_bin", "profile", "patches", "dao_home"} <= set(
+        DaoHarnessConfig.__dataclass_fields__
     )
-    assert {"dsh_bin", "profile", "patches", "dsh_home"} <= set(
+    assert {"dao_bin", "profile", "patches", "dao_home"} <= set(
         HarnessConfig.__dataclass_fields__
     )
-    assert "initialize_timeout_seconds" in DeepSeekHarnessConfig.__dataclass_fields__
+    assert "initialize_timeout_seconds" in DaoHarnessConfig.__dataclass_fields__
     assert "initialize_timeout_seconds" in HarnessConfig.__dataclass_fields__
-    assert DeepSeekHarnessConfig().initialize_timeout_seconds == 30.0
+    assert DaoHarnessConfig().initialize_timeout_seconds == 30.0
     assert HarnessConfig().initialize_timeout_seconds == 30.0
     for removed in ("cordis", "session_root", "runtime_bin", "bridge_bin", "launch_args_override"):
-        assert removed not in DeepSeekHarnessConfig.__dataclass_fields__
+        assert removed not in DaoHarnessConfig.__dataclass_fields__
         assert removed not in HarnessConfig.__dataclass_fields__
     assert "_launch_args" not in HarnessConfig.__dataclass_fields__
     assert "session_root" not in RunResult.__dataclass_fields__
@@ -901,7 +906,7 @@ for line in sys.stdin:
 
     client = HarnessClient(_launch_args=(sys.executable, str(script)))
     client.start()
-    client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+    client.initialize(provider="llama-router", cwd="/workspace", model="dsagent")
     client.close()
     client.close()
 
@@ -924,7 +929,7 @@ sys.exit(42)
         _launch_args=(sys.executable, str(script)),
     ) as client:
         with pytest.raises(Exception, match="fatal bridge exploded"):
-            client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+            client.initialize(provider="llama-router", cwd="/workspace", model="dsagent")
 
 
 def test_client_serializes_concurrent_writes(tmp_path: Path) -> None:
@@ -955,7 +960,7 @@ with open(os.environ["SEEN"], "w") as seen:
         ),
         _launch_args=(sys.executable, str(script)),
     ) as client:
-        client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
+        client.initialize(provider="llama-router", cwd="/workspace", model="dsagent")
         threads = [
             threading.Thread(target=client.notify, args=(f"notice-{index}", {"index": index}))
             for index in range(50)
@@ -969,7 +974,7 @@ with open(os.environ["SEEN"], "w") as seen:
         json.loads(line)
 
 
-def _install_fake_bundled_dsh(
+def _install_fake_bundled_dao(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Install a fake runtime package that records dao argv and serves lifecycle calls."""
@@ -1008,14 +1013,14 @@ def resolve_bundled_launch_args(mode=None):
     monkeypatch.delitem(sys.modules, "dao_runtime", raising=False)
 
 
-def test_client_default_launch_uses_bundled_dsh_sdk_profile_and_explicit_home(
+def test_client_default_launch_uses_bundled_dao_sdk_profile_and_explicit_home(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     env_dump = tmp_path / "env.json"
     home = tmp_path / "home"
     patch = tmp_path / "sdk.patch.yml"
     patch.write_text("[]\n")
-    _install_fake_bundled_dsh(tmp_path, monkeypatch)
+    _install_fake_bundled_dao(tmp_path, monkeypatch)
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("DAO_HOME", str(tmp_path / "ambient-home"))
     monkeypatch.delenv("DAO_CORDIS_CONFIG", raising=False)
@@ -1023,10 +1028,10 @@ def test_client_default_launch_uses_bundled_dsh_sdk_profile_and_explicit_home(
     with HarnessClient(HarnessConfig(
         profile="sdk",
         patches=("sdk.patch.yml",),
-        dsh_home=str(home),
+        dao_home=str(home),
         env={"ENV_DUMP": str(env_dump), "DAO_HOME": str(tmp_path / "env-home")},
     )) as client:
-        init = client.initialize(provider="deepseek-official", cwd="/workspace", model="deepseek-v4-pro")
+        init = client.initialize(provider="llama-router", cwd="/workspace", model="Qwen3.8-27B-Q6_K_XL-128K")
 
     assert init.serverInfo.name == "bundled-runtime"
     assert json.loads(env_dump.read_text()) == {
@@ -1036,17 +1041,17 @@ def test_client_default_launch_uses_bundled_dsh_sdk_profile_and_explicit_home(
     }
 
 
-def test_client_accepts_explicit_environment_dsh_home(
+def test_client_accepts_explicit_environment_dao_home(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     env_dump = tmp_path / "env.json"
     home = tmp_path / "environment-home"
-    _install_fake_bundled_dsh(tmp_path, monkeypatch)
+    _install_fake_bundled_dao(tmp_path, monkeypatch)
 
     with HarnessClient(
         HarnessConfig(profile="custom", env={"ENV_DUMP": str(env_dump), "DAO_HOME": str(home)})
     ) as client:
-        client.initialize(provider="deepseek-official", cwd="/workspace", model="deepseek-v4-pro")
+        client.initialize(provider="llama-router", cwd="/workspace", model="Qwen3.8-27B-Q6_K_XL-128K")
 
     assert json.loads(env_dump.read_text()) == {
         "argv": ["--profile", "custom"],
@@ -1055,13 +1060,13 @@ def test_client_accepts_explicit_environment_dsh_home(
     }
 
 
-def test_client_rejects_an_implicit_default_dsh_home(
+def test_client_rejects_an_implicit_default_dao_home(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    _install_fake_bundled_dsh(tmp_path, monkeypatch)
+    _install_fake_bundled_dao(tmp_path, monkeypatch)
     monkeypatch.delenv("DAO_HOME", raising=False)
 
-    with pytest.raises(ValueError, match="explicit dsh_home or non-empty DAO_HOME"):
+    with pytest.raises(ValueError, match="explicit dao_home or non-empty DAO_HOME"):
         HarnessClient(HarnessConfig(env={})).start()
 
 
@@ -1070,4 +1075,4 @@ def test_client_reports_missing_bundled_runtime_dependency(monkeypatch: pytest.M
     monkeypatch.setattr(sys, "path", [])
 
     with pytest.raises(FileNotFoundError, match="Install dao-runtime-bin"):
-        HarnessClient(HarnessConfig(dsh_home="/explicit/home")).start()
+        HarnessClient(HarnessConfig(dao_home="/explicit/home")).start()

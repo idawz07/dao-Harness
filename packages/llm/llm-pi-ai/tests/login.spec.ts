@@ -94,7 +94,7 @@ describe('pi-ai login flows', () => {
       .toEqual(['oauth', 'api-key'])
     // A key-only provider still gets a flow, because pi-ai collects the key
     // through its own prompt rather than leaving it to the settings form.
-    expect(offered.find(entry => entry.key === recordKeyFor('deepseek'))?.methods.map(one => one.id))
+    expect(offered.find(entry => entry.key === recordKeyFor('cerebras'))?.methods.map(one => one.id))
       .toEqual(['api-key'])
   })
 

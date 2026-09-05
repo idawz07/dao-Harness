@@ -125,7 +125,7 @@ describe('webCardModel', () => {
 
   it('accepts open-root extensions while validating declared web arguments', () => {
     expect(webCardModel(settledSearch({
-      call: { name: 'web_search', argsRaw: '{"queries":["deepseek"],"extension":1}' },
+      call: { name: 'web_search', argsRaw: '{"queries":["dao"],"extension":1}' },
     }))).not.toBeNull()
     expect(webCardModel(settledSearch({
       call: { name: 'web_search', argsRaw: '{"queries":[7]}' },

@@ -11,6 +11,7 @@ import * as agentCore from '@daoai/dao-agent-spine-demo'
 import { LlmAdapter } from '@daoai/dao-llm'
 import type { GenerateOptions, StreamChunk } from '@daoai/dao-llm'
 import JsonlSessionPersistence from '@daoai/dao-session-persistence-jsonl'
+import * as LlmPiAi from '@daoai/dao-llm-pi-ai'
 import * as jsonrpc from '../src/index.ts'
 
 /**
@@ -41,7 +42,7 @@ interface ApplyHarness {
   dispose(): Promise<void>
 }
 
-/** Adapter whose route registration is the delayed Loader entry's readiness fact. */
+/** Adapter that is never streamed in these tests; a route's registration is its whole role. */
 class DelayedAdapter extends LlmAdapter {
   async * stream(_options: GenerateOptions): AsyncIterable<StreamChunk> {
     throw new Error('not exercised')
@@ -70,6 +71,7 @@ async function mountPlugin(
   options: {
     writeDelayMs?: number
     failFlush?: boolean
+    mountDefaultAdapter?: boolean
     beforeServer?: (ctx: Context) => Promise<void> | void
   } = {},
 ): Promise<ApplyHarness> {
@@ -77,6 +79,7 @@ async function mountPlugin(
   await ctx.plugin(agentCore, { workspaceContext: false })
   await ctx.plugin(JsonlSessionPersistence, { root: storageDir })
   await new Promise(resolve => setTimeout(resolve, 50))
+  if (options.mountDefaultAdapter !== false) ctx.llm.registerAdapter(['llama-router'], new DelayedAdapter())
   await options.beforeServer?.(ctx)
 
   const input = new PassThrough()
@@ -171,10 +174,9 @@ async function mockCompletionServer(): Promise<{ url: string; requests: unknown[
 describe('dao-sdk-jsonrpc-server plugin apply', () => {
   it('serves initialize over the injected stdio pair', async () => {
     const storageDir = await mkdtemp(join(tmpdir(), 'dao-jsonrpc-apply-init-'))
-    vi.stubEnv('DEEPSEEK_API_KEY', 'test-key')
     const harness = await mountPlugin(storageDir)
     try {
-      harness.send({ jsonrpc: '2.0', id: 'init-1', method: 'initialize', params: { cwd: storageDir, provider: 'deepseek-official', model: 'apply-model' } })
+      harness.send({ jsonrpc: '2.0', id: 'init-1', method: 'initialize', params: { cwd: storageDir, provider: 'llama-router', model: 'apply-model' } })
 
       const response = await harness.waitForFrame(frame => frame.id === 'init-1', 'initialize response')
       expect(response).toEqual({
@@ -191,7 +193,6 @@ describe('dao-sdk-jsonrpc-server plugin apply', () => {
 
   it('waits for Loader-owned adapter registration before initialize', async () => {
     const storageDir = await mkdtemp(join(tmpdir(), 'dao-jsonrpc-apply-readiness-'))
-    vi.stubEnv('DEEPSEEK_API_KEY', 'test-key')
     let markStarted!: () => void
     let release!: () => void
     const started = new Promise<void>((resolve) => { markStarted = resolve })
@@ -247,11 +248,25 @@ describe('dao-sdk-jsonrpc-server plugin apply', () => {
   it('drives a session/prompt turn end-to-end and forwards session notifications as output frames', async () => {
     const storageDir = await mkdtemp(join(tmpdir(), 'dao-jsonrpc-apply-prompt-'))
     const llmServer = await mockCompletionServer()
-    vi.stubEnv('DEEPSEEK_API_KEY', 'test-key')
-    vi.stubEnv('DEEPSEEK_BASE_URL', llmServer.url)
-    const harness = await mountPlugin(storageDir)
+    vi.stubEnv('LLAMA_ROUTER_API_KEY', 'test-key')
+    const harness = await mountPlugin(storageDir, {
+      mountDefaultAdapter: false,
+      beforeServer: async (ctx) => {
+        await ctx.plugin(LlmPiAi, {
+          providers: {
+            'llama-router': {
+              displayName: 'Mock Router',
+              apiKeyEnv: 'LLAMA_ROUTER_API_KEY',
+              api: 'openai-completions',
+              baseURL: llmServer.url,
+              models: [{ id: 'dsagent-model', contextWindow: 32768, maxTokens: 4096 }],
+            },
+          },
+        })
+      },
+    })
     try {
-      harness.send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { cwd: storageDir, provider: 'deepseek-official', model: 'dsagent-model' } })
+      harness.send({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { cwd: storageDir, provider: 'llama-router', model: 'dsagent-model' } })
       await harness.waitForFrame(frame => frame.id === 1, 'initialize response')
 
       harness.send({
@@ -320,7 +335,7 @@ describe('dao-sdk-jsonrpc-server plugin apply', () => {
       expect(harness.events.filter(event => event.kind === 'root-disposed')).toHaveLength(1)
 
       const before = harness.frames().length
-      harness.send({ jsonrpc: '2.0', id: 'after-exit', method: 'initialize', params: { cwd: storageDir, provider: 'deepseek-official', model: 'x' } })
+      harness.send({ jsonrpc: '2.0', id: 'after-exit', method: 'initialize', params: { cwd: storageDir, provider: 'llama-router', model: 'x' } })
       await settle()
       expect(harness.frames().length).toBe(before)
     } finally {
@@ -342,7 +357,7 @@ describe('dao-sdk-jsonrpc-server plugin apply', () => {
       expect(harness.outputErrors.map(error => error.message)).toEqual(['flush callback failed'])
 
       const before = harness.frames().length
-      harness.send({ jsonrpc: '2.0', id: 'after-flush-failure', method: 'initialize', params: { cwd: storageDir, provider: 'deepseek-official', model: 'x' } })
+      harness.send({ jsonrpc: '2.0', id: 'after-flush-failure', method: 'initialize', params: { cwd: storageDir, provider: 'llama-router', model: 'x' } })
       await settle()
       expect(harness.frames().length).toBe(before)
     } finally {
@@ -367,7 +382,7 @@ describe('dao-sdk-jsonrpc-server plugin apply', () => {
       expect(harness.events.some(event => event.kind === 'root-disposed')).toBe(false)
 
       const before = harness.frames().length
-      harness.send({ jsonrpc: '2.0', id: 'probe-2', method: 'initialize', params: { cwd: storageDir, provider: 'deepseek-official', model: 'x' } })
+      harness.send({ jsonrpc: '2.0', id: 'probe-2', method: 'initialize', params: { cwd: storageDir, provider: 'llama-router', model: 'x' } })
       await settle()
       expect(harness.frames().length).toBe(before)
       expect(harness.exits()).toEqual([])

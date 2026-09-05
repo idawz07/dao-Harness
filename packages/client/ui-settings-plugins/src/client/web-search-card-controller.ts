@@ -1,5 +1,5 @@
 /**
- * The web-search card's staged form over the `web-search-deepseek` settings
+ * The web-search card's staged form over the `web-search-exa` settings
  * namespace.
  *
  * The key is the one control that does not live in the section: its literal
@@ -18,13 +18,13 @@ import {
 } from './card-form.ts'
 
 /**
- * Namespace of the DeepSeek search provider. Spelled here rather than
+ * Namespace of the Exa search provider. Spelled here rather than
  * imported: a client package must not depend on a Host package.
  */
-export const WEB_SEARCH_NS = 'web-search-deepseek'
+export const WEB_SEARCH_NS = 'web-search-exa'
 
 /** Credential reference the provider resolves when the section names none. */
-const DEFAULT_API_KEY_REF = 'DEEPSEEK_API_KEY'
+const DEFAULT_API_KEY_REF = 'EXA_API_KEY'
 
 /** Form field the credential control stages under. */
 const API_KEY_FIELD = 'apiKey'
@@ -74,14 +74,14 @@ export interface WebSearchCardFace extends CardActions {
   }
 }
 
-/** Bridges the `web-search-deepseek` scope and the credentials domain onto the card. */
+/** Bridges the `web-search-exa` scope and the credentials domain onto the card. */
 export class WebSearchCardController {
   private readonly form: CardForm<WebSearchSettings>
   private readonly store: SnapshotStore<WebSearchCardState>
   private credential: CredentialState = { ref: '', configured: false, writable: true }
 
   /**
-   * @param scope - the bound settings scope for the `web-search-deepseek` namespace.
+   * @param scope - the bound settings scope for the `web-search-exa` namespace.
    * @param credentials - Remote face used for the credential the section references.
    */
   constructor(

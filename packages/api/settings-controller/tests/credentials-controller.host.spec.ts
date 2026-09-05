@@ -55,9 +55,9 @@ describe('the credentials Remote namespace a configuration surface calls', () =>
     const ctx = new Context()
     await ctx.plugin(CredentialsController)
     for (const call of [
-      () => ctx.credentialsController.describe(['DEEPSEEK_API_KEY']),
-      () => ctx.credentialsController.set('DEEPSEEK_API_KEY', 'sk-live'),
-      () => ctx.credentialsController.unset('DEEPSEEK_API_KEY'),
+      () => ctx.credentialsController.describe(['LLAMA_ROUTER_API_KEY']),
+      () => ctx.credentialsController.set('LLAMA_ROUTER_API_KEY', 'sk-live'),
+      () => ctx.credentialsController.unset('LLAMA_ROUTER_API_KEY'),
     ]) {
       const failure = await call().catch((error: unknown) => error)
       expect(failure).toBeInstanceOf(TypertRemoteFailure)
@@ -70,10 +70,10 @@ describe('the credentials Remote namespace a configuration surface calls', () =>
   })
 
   it('describes a batch of references as one map, values excluded', async () => {
-    const controller = await boot({ DEEPSEEK_API_KEY: 'sk-seeded' })
-    const described = await controller.describe(['DEEPSEEK_API_KEY', 'OPENAI_API_KEY'])
+    const controller = await boot({ LLAMA_ROUTER_API_KEY: 'sk-seeded' })
+    const described = await controller.describe(['LLAMA_ROUTER_API_KEY', 'OPENAI_API_KEY'])
     expect(described).toEqual({
-      DEEPSEEK_API_KEY: { configured: true, source: 'memory', writable: true },
+      LLAMA_ROUTER_API_KEY: { configured: true, source: 'memory', writable: true },
       OPENAI_API_KEY: { configured: false, writable: true },
     })
     expect(JSON.stringify(described)).not.toContain('sk-seeded')
@@ -82,7 +82,7 @@ describe('the credentials Remote namespace a configuration surface calls', () =>
   it('reports an invalid reference as bad-request', async () => {
     const controller = await boot()
     for (const call of [
-      () => controller.describe(['DEEPSEEK_API_KEY', 'not a var']),
+      () => controller.describe(['LLAMA_ROUTER_API_KEY', 'not a var']),
       () => controller.set('not a var', 'sk-live'),
       () => controller.unset('not a var'),
     ]) {
@@ -102,40 +102,40 @@ describe('the credentials Remote namespace a configuration surface calls', () =>
 
   it('answers only the fields the view declares, whatever a provider returns', async () => {
     const controller = await boot({}, LeakyCredentials)
-    const described = await controller.describe(['DEEPSEEK_API_KEY'])
-    expect(described.DEEPSEEK_API_KEY).toEqual({ configured: true, source: 'memory', writable: true })
+    const described = await controller.describe(['LLAMA_ROUTER_API_KEY'])
+    expect(described.LLAMA_ROUTER_API_KEY).toEqual({ configured: true, source: 'memory', writable: true })
     expect(JSON.stringify(described)).not.toContain('sk-leaked')
   })
 
   it('stores and removes through the same references the batch describes', async () => {
     const controller = await boot()
-    await controller.set('DEEPSEEK_API_KEY', 'sk-live')
-    expect(await controller.describe(['DEEPSEEK_API_KEY']))
-      .toEqual({ DEEPSEEK_API_KEY: { configured: true, source: 'memory', writable: true } })
-    await controller.unset('DEEPSEEK_API_KEY')
-    expect(await controller.describe(['DEEPSEEK_API_KEY']))
-      .toEqual({ DEEPSEEK_API_KEY: { configured: false, writable: true } })
+    await controller.set('LLAMA_ROUTER_API_KEY', 'sk-live')
+    expect(await controller.describe(['LLAMA_ROUTER_API_KEY']))
+      .toEqual({ LLAMA_ROUTER_API_KEY: { configured: true, source: 'memory', writable: true } })
+    await controller.unset('LLAMA_ROUTER_API_KEY')
+    expect(await controller.describe(['LLAMA_ROUTER_API_KEY']))
+      .toEqual({ LLAMA_ROUTER_API_KEY: { configured: false, writable: true } })
   })
 
   it('reports a refused write as credential-rejected naming only the reference', async () => {
     const controller = await boot({}, RejectingCredentials)
-    const failure = await controller.set('DEEPSEEK_API_KEY', 'sk-live').catch((error: unknown) => error)
+    const failure = await controller.set('LLAMA_ROUTER_API_KEY', 'sk-live').catch((error: unknown) => error)
     expect(failure).toBeInstanceOf(TypertRemoteFailure)
     const { code, message, details } = (failure as TypertRemoteFailure).failure
     expect(code).toBe('credential-rejected')
     expect(message).toContain('read-only source')
-    expect(details).toEqual({ ref: 'DEEPSEEK_API_KEY' })
+    expect(details).toEqual({ ref: 'LLAMA_ROUTER_API_KEY' })
   })
 
   it('reports an empty value as bad-request', async () => {
     const controller = await boot()
-    const failure = await controller.set('DEEPSEEK_API_KEY', '').catch((error: unknown) => error)
+    const failure = await controller.set('LLAMA_ROUTER_API_KEY', '').catch((error: unknown) => error)
     expect((failure as TypertRemoteFailure).failure).toMatchObject({ code: 'bad-request' })
   })
 
   it('stringifies a refusal that is not an Error', async () => {
     const controller = await boot({}, LiteralRejectingCredentials)
-    const failure = await controller.set('DEEPSEEK_API_KEY', 'sk-live').catch((error: unknown) => error)
+    const failure = await controller.set('LLAMA_ROUTER_API_KEY', 'sk-live').catch((error: unknown) => error)
     expect((failure as TypertRemoteFailure).failure.message).toBe('the store refused')
   })
 })

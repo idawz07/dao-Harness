@@ -41,7 +41,7 @@ export interface AcpRunSpec {
   permission: PermissionPolicy
   /**
    * Extra environment variables to ADD for the child (e.g. the child harness's
-   * `DEEPSEEK_API_KEY`). Merged on top of the subprocess seam's scrubbed
+   * `LLAMA_ROUTER_API_KEY`). Merged on top of the subprocess seam's scrubbed
    * parent env. A value here is forwarded even if its name matches the
    * credential-scrub pattern (an explicit opt-in for the child's own creds).
    * Explicit `DAO_*` entries are deployment-owned facts for the child harness

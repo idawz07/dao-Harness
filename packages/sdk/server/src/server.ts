@@ -14,7 +14,6 @@ import { carrierKeyOf, type Scoped } from '@daoai/dao-scope'
 import { SessionId } from '@daoai/dao-session'
 import type SubagentRuntime from '@daoai/dao-subagent'
 import type { SubagentRunEndInfo } from '@daoai/dao-subagent'
-import * as LlmDeepSeek from '@daoai/dao-llm-deepseek'
 import type {
   InitializeParams,
   InitializeResult,
@@ -73,11 +72,10 @@ function successStatus(reason: string, options: HarnessSdkJsonRpcServerOptions):
  */
 export class HarnessSdkJsonRpcServer {
   private cwd = process.cwd()
-  private provider = 'deepseek-official'
-  private model = 'deepseek-official'
+  private provider = 'llama-router'
+  private model = 'Qwen3.8-27B-Q6_K_XL-128K'
   private reasoningEffort: ReturnType<typeof ReasoningEffortId> | undefined
   private maxTokens: number | undefined
-  private llmFiber: { dispose(): Promise<void> } | undefined
   private readonly sessions = new Map<string, SessionRecord>()
   private readonly sessionCreations = new Map<string, Promise<SessionRecord>>()
   private readonly disposers: (() => void)[] = []
@@ -127,7 +125,8 @@ export class HarnessSdkJsonRpcServer {
   }
 
   /**
-   * Validate and configure the SDK route, mounting the DeepSeek fallback only when unowned.
+   * Validate and configure the SDK route; the surrounding context must already
+   * mount an adapter for the requested provider.
    * @param params - SDK handshake parameters.
    * @returns server identity for the handshake.
    */
@@ -146,11 +145,7 @@ export class HarnessSdkJsonRpcServer {
     const reasoningEffort = params.reasoningEffort === undefined
       ? undefined
       : ReasoningEffortId(params.reasoningEffort)
-    if (!this.hasAdapterFor(provider)) {
-      if (provider !== 'deepseek-official') throw new Error(`no adapter registered for provider "${provider}"`)
-      this.llmFiber = await this.ctx.plugin(LlmDeepSeek, {})
-    }
-    // Adapter presence was read from this service above; a successful fallback mount also requires it.
+    if (!this.hasAdapterFor(provider)) throw new Error(`no adapter registered for provider "${provider}"`)
     const llm = this.ctx.get('llm') as LlmRuntime
     await llm.resolveCallConfig({
       provider,
@@ -198,8 +193,8 @@ export class HarnessSdkJsonRpcServer {
   }
 
   /**
-   * Dispose server-owned agents, adapter, and subscriptions to quiescence.
-   * The surrounding context remains running.
+   * Dispose server-owned agents and subscriptions to quiescence. The
+   * surrounding context, including its adapters, remains running.
    * @returns empty JSON-RPC result.
    */
   shutdown(): Promise<Record<string, never>> {
@@ -222,11 +217,9 @@ export class HarnessSdkJsonRpcServer {
         failures.push(error)
       }
     }
-    const teardownResults = await Promise.allSettled([
-      ...records.map(rec => Promise.resolve().then(() => rec.handle.dispose())),
-      ...(this.llmFiber === undefined ? [] : [Promise.resolve().then(() => this.llmFiber?.dispose())]),
-    ])
-    this.llmFiber = undefined
+    const teardownResults = await Promise.allSettled(
+      records.map(rec => Promise.resolve().then(() => rec.handle.dispose())),
+    )
     failures.push(...teardownResults
       .filter((result): result is PromiseRejectedResult => result.status === 'rejected')
       .map(result => result.reason as unknown))

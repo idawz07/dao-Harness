@@ -1,8 +1,8 @@
 /**
  * Lossless row packing for `assistant/chunk` delta runs. Providers stream
  * token-sized deltas, so a log stores hundreds of near-identical event lines
- * whose JSON envelopes dwarf their payloads (~56× measured on a real DeepSeek
- * session). This module packs each run of consecutive same-block delta chunks
+ * whose JSON envelopes dwarf their payloads (~56× measured on a real session).
+ * This module packs each run of consecutive same-block delta chunks
  * into ONE storage row — `text-chunks`, `reasoning-chunks`, or
  * `tool-call-chunks` — and expands rows back to the exact original events.
  *

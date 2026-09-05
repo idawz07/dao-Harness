@@ -36,7 +36,7 @@ export type {
 
 /**
  * Credential-shaped environment names are NOT forwarded to children (the
- * harness's own `DEEPSEEK_API_KEY`/secrets must not leak into a spawned
+ * harness's own `LLAMA_ROUTER_API_KEY`/secrets must not leak into a spawned
  * process implicitly). One heuristic for every in-repo spawner; a
  * deliberately supplied entry survives because explicit env layers merge
  * after the scrub.
@@ -50,9 +50,9 @@ export const SENSITIVE_ENV_PATTERN = /KEY|PASSWORD|SECRET|TOKEN/i
  * harness identity never leaks implicitly (a deliberately forwarded
  * credential or current `DAO_*` fact goes through the spec's explicit `env`,
  * which merges after this scrub). Both scrubs match case-insensitively:
- * Windows environment names are case-insensitive, so a parent `dsh_*` entry
+ * Windows environment names are case-insensitive, so a parent `dao_*` entry
  * would otherwise survive and read back as `$env:DAO_*` in the child;
- * deliberate lowercase `dsh_*` names on POSIX are implausible. Exported as a plain function so spawners
+ * deliberate lowercase `dao_*` names on POSIX are implausible. Exported as a plain function so spawners
  * that cannot route through the service (node-pty backends, SDK-managed
  * transports) share the one scrub definition.
  * @returns a fresh environment object safe to hand to a child spawn.

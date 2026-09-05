@@ -15,14 +15,14 @@ import { fileURLToPath } from 'node:url'
 import SubagentRuntime from '@daoai/dao-subagent'
 import type { Agent, AgentOptions } from '@daoai/dao-agent'
 import {
-  DeepSeekHarness,
+  DaoHarness,
   HarnessClient,
   HarnessSession,
   SdkProtocolError,
 } from '@daoai/dao-sdk-client'
-import { createProcessDeepSeekHarness } from '../../../sdk/client/src/api.ts'
+import { createProcessDaoHarness } from '../../../sdk/client/src/api.ts'
 import type { RuntimeProcessOptions } from '../../../sdk/client/src/launch.ts'
-import type { DeepSeekHarnessOptions } from '@daoai/dao-sdk-client'
+import type { DaoHarnessOptions } from '@daoai/dao-sdk-client'
 import { ReasoningEffortId } from '@daoai/dao-llm'
 import * as sdk from '../src/index.ts'
 import {
@@ -41,7 +41,7 @@ const existingPatch = fileURLToPath(new URL(
   import.meta.url,
 ))
 const defaultCreateHarness = runInternals.createHarness.bind(runInternals)
-let createdHarnessOptions: DeepSeekHarnessOptions[] = []
+let createdHarnessOptions: DaoHarnessOptions[] = []
 
 beforeEach(() => {
   createdHarnessOptions = []
@@ -59,7 +59,7 @@ beforeEach(() => {
       ...options.disposeEofGraceMs === undefined ? {} : { disposeEofGraceMs: options.disposeEofGraceMs },
       ...options.disposeGraceMs === undefined ? {} : { disposeGraceMs: options.disposeGraceMs },
     }
-    return createProcessDeepSeekHarness(runtime, options)
+    return createProcessDaoHarness(runtime, options)
   }
 })
 
@@ -153,7 +153,7 @@ describe('sdkChildOutcome', () => {
 describe('dao-subagent-dao-sdk provider', () => {
   it('constructs the production dao-backed harness lazily', async () => {
     const harness = defaultCreateHarness({})
-    expect(harness).toBeInstanceOf((await import('@daoai/dao-sdk-client')).DeepSeekHarness)
+    expect(harness).toBeInstanceOf((await import('@daoai/dao-sdk-client')).DaoHarness)
     await harness.close()
   })
 
@@ -289,15 +289,15 @@ describe('dao-subagent-dao-sdk provider', () => {
     process.env.DAO_TEST_AMBIENT_SECRET_KEY = 'leak-me-not'
     try {
       const ctx = await setup({
-        FAKE_ECHO_ENV: 'DAO_TEST_AMBIENT_SECRET_KEY,DEEPSEEK_API_KEY',
-        DEEPSEEK_API_KEY: 'explicit-child-key',
+        FAKE_ECHO_ENV: 'DAO_TEST_AMBIENT_SECRET_KEY,LLAMA_ROUTER_API_KEY',
+        LLAMA_ROUTER_API_KEY: 'explicit-child-key',
         FAKE_TEXT: 'done',
       })
       const run = await ctx.subagents.start('dao-sdk', request())
       const result = await run.result
       const answer = text(result.output)
       expect(answer).toContain('DAO_TEST_AMBIENT_SECRET_KEY=\n')
-      expect(answer).toContain('DEEPSEEK_API_KEY=explicit-child-key')
+      expect(answer).toContain('LLAMA_ROUTER_API_KEY=explicit-child-key')
       await run.dispose()
       await ctx.fiber.dispose()
     } finally {
@@ -412,7 +412,7 @@ describe('dao-subagent-dao-sdk provider', () => {
 
   it('reports only safe shutdown facts when cancelled startup rollback fails', async () => {
     const rawCleanup = 'cancelled shutdown leaked SECRET_TOKEN'
-    const spy = vi.spyOn(DeepSeekHarness.prototype, 'close').mockImplementation(async function (this: DeepSeekHarness) {
+    const spy = vi.spyOn(DaoHarness.prototype, 'close').mockImplementation(async function (this: DaoHarness) {
       spy.mockRestore()
       await this.close()
       throw new Error(rawCleanup)
@@ -446,8 +446,8 @@ describe('dao-subagent-dao-sdk provider', () => {
 
   it('keeps an initialize failure authoritative when a later abort flag is already set', async () => {
     const rawFailure = new SdkProtocolError('scripted initialize rejection')
-    const start = vi.spyOn(DeepSeekHarness.prototype, 'start').mockRejectedValue(rawFailure)
-    const close = vi.spyOn(DeepSeekHarness.prototype, 'close').mockResolvedValue()
+    const start = vi.spyOn(DaoHarness.prototype, 'start').mockRejectedValue(rawFailure)
+    const close = vi.spyOn(DaoHarness.prototype, 'close').mockResolvedValue()
     try {
       const controller = new AbortController()
       const pending = startSdkRun(request('p', controller.signal), {
@@ -776,7 +776,7 @@ describe('dao-subagent-dao-sdk provider', () => {
     const ctx = await setup()
     const run = await ctx.subagents.start('dao-sdk', request())
     await run.result
-    const spy = vi.spyOn(DeepSeekHarness.prototype, 'close').mockImplementation(async function (this: DeepSeekHarness) {
+    const spy = vi.spyOn(DaoHarness.prototype, 'close').mockImplementation(async function (this: DaoHarness) {
       spy.mockRestore()
       await this.close()
       throw new Error(rawCleanup)

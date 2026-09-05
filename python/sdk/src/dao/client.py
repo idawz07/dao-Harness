@@ -25,10 +25,10 @@ NotificationFilter: TypeAlias = Callable[[Notification], bool]
 class HarnessConfig:
     """Configuration for launching the local Dao SDK runtime."""
 
-    dsh_bin: str | None = None
+    dao_bin: str | None = None
     profile: str = "sdk"
     patches: tuple[str, ...] = ()
-    dsh_home: str | None = None
+    dao_home: str | None = None
     cwd: str | None = None
     env: dict[str, str] | None = None
     initialize_timeout_seconds: float = 30.0
@@ -456,7 +456,7 @@ class HarnessClient:
         return "\n".join(parts)
 
     def _default_launch_args(self, env: dict[str, str]) -> tuple[str, ...]:
-        if self.config.dsh_bin is None:
+        if self.config.dao_bin is None:
             try:
                 from dao_runtime import resolve_bundled_launch_args
             except ImportError as exc:
@@ -466,15 +466,15 @@ class HarnessClient:
                 ) from exc
             base = resolve_bundled_launch_args()
         else:
-            base = (str(Path(self.config.dsh_bin).expanduser().resolve()),)
+            base = (str(Path(self.config.dao_bin).expanduser().resolve()),)
 
-        if self.config.dsh_home is not None:
-            if not self.config.dsh_home.strip():
-                raise ValueError("HarnessConfig requires a non-empty dsh_home")
-            env["DAO_HOME"] = str(Path(self.config.dsh_home).expanduser().resolve())
+        if self.config.dao_home is not None:
+            if not self.config.dao_home.strip():
+                raise ValueError("HarnessConfig requires a non-empty dao_home")
+            env["DAO_HOME"] = str(Path(self.config.dao_home).expanduser().resolve())
         elif not env.get("DAO_HOME", "").strip():
             raise ValueError(
-                "HarnessConfig requires an explicit dsh_home or non-empty DAO_HOME; "
+                "HarnessConfig requires an explicit dao_home or non-empty DAO_HOME; "
                 "the Python SDK never uses ~/.dao implicitly"
             )
 

@@ -195,11 +195,6 @@
     cwd: !!js process.cwd()
 
 - insert:
-    - id: hooks-claude-code
-      name: '@daoai/dao-hooks-claude-code'
-      config:
-        configPath: ./hooks.json
-
     - id: hooks-codex
       name: '@daoai/dao-hooks-codex'
       config:

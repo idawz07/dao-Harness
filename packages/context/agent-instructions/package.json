@@ -52,7 +52,6 @@
     "@daoai/dao-fs-local": "workspace:^",
     "@daoai/dao-invariants": "workspace:^",
     "@daoai/dao-llm": "workspace:^",
-    "@daoai/dao-llm-deepseek": "workspace:^",
     "@daoai/dao-home-paths": "workspace:^",
     "@daoai/dao-session": "workspace:^",
     "@daoai/dao-system-prompt": "workspace:^",

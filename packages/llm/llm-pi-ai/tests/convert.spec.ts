@@ -24,8 +24,8 @@ function assistant(overrides: Partial<AssistantMessage> = {}): AssistantMessage 
     role: 'assistant',
     content: [],
     api: 'openai-completions',
-    provider: 'deepseek',
-    model: 'deepseek-v4-flash',
+    provider: 'cerebras',
+    model: 'gemma-4-31b',
     usage: usage(),
     stopReason: 'stop',
     timestamp: 0,
@@ -73,8 +73,8 @@ function imageContext(attachments: AttachmentStore) {
 describe('toPiContext', () => {
   it('maps system prompt, user text, and tools', () => {
     const context = toPiContext({
-      provider: 'deepseek',
-      model: 'deepseek-v4-flash',
+      provider: 'cerebras',
+      model: 'gemma-4-31b',
       system: 'be helpful',
       messages: [createUserMessage({
         content: [{ type: 'text', text: 'hi' }],
@@ -90,7 +90,7 @@ describe('toPiContext', () => {
   })
 
   it('omits empty tools and absent system prompt', () => {
-    const context = toPiContext({ provider: 'deepseek', model: 'm', messages: [], tools: [] })
+    const context = toPiContext({ provider: 'cerebras', model: 'm', messages: [], tools: [] })
     expect(context.systemPrompt).toBeUndefined()
     expect(context.tools).toBeUndefined()
   })
@@ -201,7 +201,7 @@ describe('toPiContext', () => {
 
   it('maps assistant text/reasoning/tool-call blocks', () => {
     const context = toPiContext({
-      provider: 'deepseek',
+      provider: 'cerebras',
       model: 'm',
       messages: [createMessage({
         role: 'assistant',
@@ -225,7 +225,7 @@ describe('toPiContext', () => {
 
   it('marks tool-call-free assistant messages with stopReason stop', () => {
     const context = toPiContext({
-      provider: 'deepseek',
+      provider: 'cerebras',
       model: 'm',
       messages: [createMessage({
         role: 'assistant', content: [{ type: 'text', text: 'done' }],
@@ -242,20 +242,20 @@ describe('toPiContext', () => {
       messages: [createMessage({
         role: 'assistant',
         content: [{ type: 'text', text: 'done' }],
-        source: { kind: 'model', provider: 'deepseek', model: 'old-model' },
+        source: { kind: 'model', provider: 'cerebras', model: 'old-model' },
       })],
     })
     expect(context.messages[0]).toMatchObject({
       role: 'assistant',
       api: 'dao-foreign',
-      provider: 'deepseek',
+      provider: 'cerebras',
       model: 'old-model',
     })
   })
 
   it('parses malformed tool-call arguments to {}', () => {
     const context = toPiContext({
-      provider: 'deepseek',
+      provider: 'cerebras',
       model: 'm',
       messages: [createMessage({
         role: 'assistant',
@@ -269,7 +269,7 @@ describe('toPiContext', () => {
 
   it('parses non-object argument JSON (arrays, scalars) to {}', () => {
     const context = toPiContext({
-      provider: 'deepseek',
+      provider: 'cerebras',
       model: 'm',
       messages: [createMessage({
         role: 'assistant',
@@ -282,7 +282,7 @@ describe('toPiContext', () => {
 
   it('recovers toolName for tool results from the preceding assistant call', () => {
     const context = toPiContext({
-      provider: 'deepseek',
+      provider: 'cerebras',
       model: 'm',
       messages: [
         createMessage({
@@ -316,7 +316,7 @@ describe('toPiContext', () => {
 
   it('labels unmatched tool results with toolName unknown and keeps isError', () => {
     const context = toPiContext({
-      provider: 'deepseek',
+      provider: 'cerebras',
       model: 'm',
       messages: [createUserMessage({
         content: [{ type: 'tool-result', toolCallId: ToolCallId('zz'), content: [], isError: true }],
@@ -333,7 +333,7 @@ describe('toPiContext', () => {
 
   it('splits mixed user text + tool results and folds history system messages', () => {
     const context = toPiContext({
-      provider: 'deepseek',
+      provider: 'cerebras',
       model: 'm',
       messages: [
         createMessage({
@@ -354,7 +354,7 @@ describe('toPiContext', () => {
 
   it('skips plugin-added (unknown) blocks in assistant content', () => {
     const context = toPiContext({
-      provider: 'deepseek',
+      provider: 'cerebras',
       model: 'm',
       messages: [createMessage({
         role: 'assistant',
@@ -424,7 +424,7 @@ describe('toPiContext', () => {
       ],
     }))
     const context = toPiContext({
-      provider: 'deepseek',
+      provider: 'cerebras',
       model: 'new-model',
       messages: [createMessage({
         role: 'assistant',
@@ -435,7 +435,7 @@ describe('toPiContext', () => {
         ],
         source: {
           kind: 'model',
-          ...{ provider: 'deepseek', model: 'deepseek-v4-flash', replayState: state },
+          ...{ provider: 'cerebras', model: 'gemma-4-31b', replayState: state },
         },
       })],
     })
@@ -455,7 +455,7 @@ describe('toPiContext', () => {
   it('degrades unsupported replay-state versions to provider-neutral history', () => {
     const onDegrade = vi.fn()
     const context = toPiContext({
-      provider: 'deepseek',
+      provider: 'cerebras',
       model: 'm',
       messages: [createMessage({
         role: 'assistant',
@@ -463,7 +463,7 @@ describe('toPiContext', () => {
         source: {
           kind: 'model',
           ...{
-            provider: 'deepseek',
+            provider: 'cerebras',
             model: 'old',
             replayState: { response: { kind: 'pi-ai', version: 3 }, blocks: [] },
           },
@@ -473,7 +473,7 @@ describe('toPiContext', () => {
     expect(context.messages[0]).toMatchObject({
       role: 'assistant',
       api: 'dao-foreign',
-      provider: 'deepseek',
+      provider: 'cerebras',
       model: 'old',
       content: [{ type: 'text', text: 'done' }],
     })
@@ -483,7 +483,7 @@ describe('toPiContext', () => {
   it('degrades the flat pre-envelope replay state a legacy session log carries', () => {
     const onDegrade = vi.fn()
     const context = toPiContext({
-      provider: 'deepseek',
+      provider: 'cerebras',
       model: 'm',
       messages: [createMessage({
         role: 'assistant',
@@ -491,14 +491,14 @@ describe('toPiContext', () => {
         source: {
           kind: 'model',
           ...{
-            provider: 'deepseek',
-            model: 'deepseek-v4-flash',
+            provider: 'cerebras',
+            model: 'gemma-4-31b',
             replayState: {
               kind: 'pi-ai',
               version: 1,
               api: 'openai-completions',
-              provider: 'deepseek',
-              model: 'deepseek-v4-flash',
+              provider: 'cerebras',
+              model: 'gemma-4-31b',
               stopReason: 'stop',
               blocks: [{ type: 'text' }],
             },
@@ -514,14 +514,14 @@ describe('toPiContext', () => {
     const onDegrade = vi.fn()
     const state = toPiReplayState(assistant({ content: [{ type: 'text', text: 'done' }] }))
     const context = toPiContext({
-      provider: 'deepseek',
+      provider: 'cerebras',
       model: 'm',
       messages: [createMessage({
         role: 'assistant',
         content: [{ type: 'reasoning', text: 'done' }],
         source: {
           kind: 'model',
-          ...{ provider: 'deepseek', model: 'deepseek-v4-flash', replayState: state },
+          ...{ provider: 'cerebras', model: 'gemma-4-31b', replayState: state },
         },
       })],
     }, undefined, onDegrade)
@@ -537,22 +537,22 @@ describe('toPiContext', () => {
     const onDegrade = vi.fn()
     const state = toPiReplayState(assistant())
     const context = toPiContext({
-      provider: 'deepseek',
+      provider: 'cerebras',
       model: 'm',
       messages: [createMessage({
         role: 'assistant',
         content: [{ type: 'text', text: 'done' }],
         source: {
           kind: 'model',
-          ...{ provider: 'deepseek', model: 'deepseek-v4-flash', replayState: state },
+          ...{ provider: 'cerebras', model: 'gemma-4-31b', replayState: state },
         },
       })],
     }, undefined, onDegrade)
     expect(context.messages[0]).toMatchObject({
       role: 'assistant',
       api: 'dao-foreign',
-      provider: 'deepseek',
-      model: 'deepseek-v4-flash',
+      provider: 'cerebras',
+      model: 'gemma-4-31b',
       content: [{ type: 'text', text: 'done' }],
       stopReason: 'stop',
     })
@@ -563,8 +563,8 @@ describe('toPiContext', () => {
     kind: 'pi-ai',
     version: 2,
     api: 'openai-completions',
-    provider: 'deepseek',
-    model: 'deepseek-v4-flash',
+    provider: 'cerebras',
+    model: 'gemma-4-31b',
     stopReason: 'stop',
   }
   const validReplay = { response: validResponse, blocks: [{ type: 'text' }] }
@@ -573,14 +573,14 @@ describe('toPiContext', () => {
   function expectDegraded(replayState: unknown, message: string): void {
     const onDegrade = vi.fn()
     const context = toPiContext({
-      provider: 'deepseek',
+      provider: 'cerebras',
       model: 'next-model',
       messages: [createMessage({
         role: 'assistant',
         content: [{ type: 'text', text: 'done' }],
         source: {
           kind: 'model',
-          ...{ provider: 'deepseek', model: 'deepseek-v4-flash', replayState },
+          ...{ provider: 'cerebras', model: 'gemma-4-31b', replayState },
         },
       })],
     }, undefined, onDegrade)
@@ -594,7 +594,7 @@ describe('toPiContext', () => {
 
   it.each([
     ['provider', { ...validReplay, response: { ...validResponse, provider: 'openai' } }],
-    ['model', { ...validReplay, response: { ...validResponse, model: 'deepseek-v4-pro' } }],
+    ['model', { ...validReplay, response: { ...validResponse, model: 'zai-glm-4.7' } }],
   ])('degrades replay metadata whose %s differs from assistant source', (field, replayState) => {
     expectDegraded(replayState, `${field} does not match assistant source`)
   })
@@ -652,8 +652,8 @@ describe('toStreamChunks', () => {
             kind: 'pi-ai',
             version: 2,
             api: 'openai-completions',
-            provider: 'deepseek',
-            model: 'deepseek-v4-flash',
+            provider: 'cerebras',
+            model: 'gemma-4-31b',
             stopReason: 'stop',
           },
           blocks: [{ type: 'text' }],
@@ -703,8 +703,8 @@ describe('toStreamChunks', () => {
             kind: 'pi-ai',
             version: 2,
             api: 'openai-completions',
-            provider: 'deepseek',
-            model: 'deepseek-v4-flash',
+            provider: 'cerebras',
+            model: 'gemma-4-31b',
             stopReason: 'toolUse',
           },
           blocks: [{ type: 'tool-call' }],
@@ -764,11 +764,11 @@ describe('mapStopReason / mapUsage', () => {
     ['toolUse', { kind: 'tool-calls' }],
     ['pending', {
       kind: 'error',
-      failure: { message: 'pi-ai stream for model "deepseek-v4-flash" ended pending', code: 'PI_AI_ERROR' },
+      failure: { message: 'pi-ai stream for model "gemma-4-31b" ended pending', code: 'PI_AI_ERROR' },
     }],
     ['deferred', {
       kind: 'error',
-      failure: { message: 'pi-ai deferred response for model "deepseek-v4-flash" is not supported', code: 'PI_AI_ERROR' },
+      failure: { message: 'pi-ai deferred response for model "gemma-4-31b" is not supported', code: 'PI_AI_ERROR' },
     }],
     ['aborted', { kind: 'aborted', failure: { message: 'pi-ai stream aborted', code: 'ABORTED' } }],
   ] as const)('maps %s', (stopReason, expected) => {
@@ -779,7 +779,7 @@ describe('mapStopReason / mapUsage', () => {
     expect(mapStopReason(assistant({ stopReason: 'stop' }))).toEqual({
       kind: 'error',
       failure: {
-        message: 'model "deepseek-v4-flash" returned a completed response with no content',
+        message: 'model "gemma-4-31b" returned a completed response with no content',
         code: EMPTY_RESPONSE_CODE,
       },
     })
@@ -873,7 +873,7 @@ describe('mapStopReason / mapUsage', () => {
     expect(mapStopReason(silent, 100)).toEqual({
       kind: 'error',
       failure: {
-        message: 'pi-ai detected context overflow for model "deepseek-v4-flash"',
+        message: 'pi-ai detected context overflow for model "gemma-4-31b"',
         code: CONTEXT_WINDOW_EXCEEDED_CODE,
       },
     })

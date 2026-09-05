@@ -49,7 +49,6 @@
     "@daoai/dao-subprocess-local": "workspace:^",
     "@daoai/dao-invariants": "workspace:^",
     "@daoai/dao-llm": "workspace:^",
-    "@daoai/dao-llm-deepseek": "workspace:^",
     "@daoai/dao-session": "workspace:^",
     "@daoai/dao-subagent": "workspace:^",
     "@daoai/dao-subagent-in-process-driver": "workspace:^",

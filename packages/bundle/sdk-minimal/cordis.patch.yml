@@ -14,21 +14,61 @@
       config:
         maxTokensAsSuccess: false
 
-    - id: deepseek-llm-api-extensions
-      name: '@daoai/dao-deepseek-llm-api-extensions'
-
-    - id: session-log-deepseek
-      name: '@daoai/dao-session-log-deepseek'
-
-    - id: plugin-package-inventory-deepseek
-      name: '@daoai/dao-plugin-package-inventory-deepseek'
-
-    - id: llm-deepseek
-      name: '@daoai/dao-llm-deepseek'
+    # The pi-ai adapter, carrying the resident llama.cpp router card on
+    # tailscale. Its preset aliases are the model ids the SDK initialization
+    # request may select. No key is inlined: the route resolves the
+    # LLAMA_ROUTER_API_KEY environment variable per request.
+    - id: llm-pi-ai
+      name: '@daoai/dao-llm-pi-ai'
       config:
-        apiKeyEnv: DEEPSEEK_API_KEY
-        defaultContextWindow: !!js Number(process.env.DAO_CONTEXT_WINDOW ?? 1000000)
-        streamIdleTimeoutMs: 172800000
+        providers:
+          llama-router:
+            displayName: Local Llama Router
+            apiKeyEnv: LLAMA_ROUTER_API_KEY
+            api: openai-completions
+            baseURL: http://100.110.212.93:8081/v1
+            reasoning: high
+            compat:
+              thinkingFormat: qwen-chat-template
+            models:
+              - id: Qwen3.8-27B-Q6_K_XL-128K
+                contextWindow: 131072
+                maxTokens: 65536
+                reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }
+              - id: Qwen3.8-27B-Q6_K_XL-128K-NoThink
+                contextWindow: 131072
+                maxTokens: 65536
+                input: [text, image]
+                reasoningEfforts: false
+              - id: Qwen3.8-27B-Q4_K_XL-128K-Vision
+                contextWindow: 131072
+                maxTokens: 65536
+                input: [text, image]
+                reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }
+              - id: Qwen3.8-27B-AD-Q5_K_M-256K-P1-Vision
+                contextWindow: 196608
+                maxTokens: 65536
+                input: [text, image]
+                reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }
+              - id: Qwen3.8-27B-AD-Q5_K_M-256K-P2-Vision
+                contextWindow: 131072
+                maxTokens: 65536
+                input: [text, image]
+                reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }
+              - id: Ornith-1.0-35B
+                contextWindow: 131072
+                maxTokens: 65536
+                input: [text, image]
+                reasoningEfforts: false
+              - id: Gemma4-12B-Unified
+                contextWindow: 32768
+                maxTokens: 32768
+                input: [text, image]
+                reasoningEfforts: false
+              - id: Gemma4-E2B-Uncensored-HauhauCS-Aggressive
+                contextWindow: 32768
+                maxTokens: 32768
+                reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }
 
     - id: sandbox
       name: '@daoai/dao-sandbox-local'

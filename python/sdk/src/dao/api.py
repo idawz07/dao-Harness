@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+import tempfile
 import uuid
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -10,25 +12,58 @@ from .errors import SdkProtocolError
 from .models import JsonObject, Notification
 
 
+def base_url_patch_content(base_url: str, model: str) -> str:
+    """Build the ``--patch`` overlay that points llama-router at ``base_url``.
+
+    The entry replaces the profile's llm-pi-ai row wholesale and names the
+    requested model, so it applies to every profile, including ``sdk-minimal``,
+    which mounts no settings plugin. The window/token figures are catalog
+    hints; the endpoint owns the effective limits.
+    """
+    return (
+        "- id: llm-pi-ai\n"
+        "  name: '@daoai/dao-llm-pi-ai'\n"
+        "  config:\n"
+        "    providers:\n"
+        "      llama-router:\n"
+        "        displayName: Llama Router\n"
+        "        apiKeyEnv: LLAMA_ROUTER_API_KEY\n"
+        "        api: openai-completions\n"
+        f"        baseURL: {base_url}\n"
+        "        models:\n"
+        f"          - id: {model}\n"
+        "            contextWindow: 131072\n"
+        "            maxTokens: 65536\n"
+        "            reasoningEfforts:\n"
+        "              max: max\n"
+    )
+
+
 @dataclass(slots=True)
-class DeepSeekHarnessConfig:
+class DaoHarnessConfig:
     """Configuration for launching the local Dao SDK runtime.
 
-    The runtime inherits the caller's environment by default, so existing
-    DEEPSEEK_API_KEY and DEEPSEEK_BASE_URL settings keep working. Use ``env`` to
-    intentionally override or inject variables for a subprocess.
+    The runtime inherits the caller's environment by default, so an existing
+    LLAMA_ROUTER_API_KEY in the environment is used by the shipped
+    llama-router route. Use ``env`` to intentionally override or inject
+    variables for a subprocess.
+
+    ``base_url`` points the llama-router route at another endpoint: the SDK
+    writes a self-contained ``llm-pi-ai`` overlay and appends it as the final
+    ``--patch``, so it wins over the profile and any home patch for this
+    launch only and never touches the user's home.
     """
 
-    provider: str = "deepseek-official"
-    model: str = "deepseek-v4-flash"
+    provider: str = "llama-router"
+    model: str = "Qwen3.8-27B-Q6_K_XL-128K"
     reasoning_effort: str | None = None
     max_tokens: int | None = None
     cwd: str | None = None
     runtime_cwd: str | None = None
-    dsh_bin: str | None = None
+    dao_bin: str | None = None
     profile: str = "sdk"
     patches: tuple[str, ...] = ()
-    dsh_home: str | None = None
+    dao_home: str | None = None
     env: dict[str, str] = field(default_factory=dict)
     initialize_timeout_seconds: float = 30.0
     request_timeout_seconds: float | None = None
@@ -46,7 +81,7 @@ class RunResult:
     notifications: list[Notification]
 
 
-class DeepSeekHarness:
+class DaoHarness:
     """Reusable synchronous SDK for running Dao agent turns.
 
     The runtime subprocess starts lazily and remains owned by this instance
@@ -56,29 +91,36 @@ class DeepSeekHarness:
 
     def __init__(
         self,
-        config: DeepSeekHarnessConfig | None = None,
+        config: DaoHarnessConfig | None = None,
         *,
         _launch_args: tuple[str, ...] | None = None,
         **kwargs: object,
     ) -> None:
         if config is not None and kwargs:
-            raise TypeError("pass either DeepSeekHarnessConfig or keyword options, not both")
-        self.config = config or DeepSeekHarnessConfig(**kwargs)
+            raise TypeError("pass either DaoHarnessConfig or keyword options, not both")
+        self.config = config or DaoHarnessConfig(**kwargs)
         cwd = str(Path(self.config.cwd or Path.cwd()).resolve())
         runtime_cwd = str(Path(self.config.runtime_cwd).resolve()) if self.config.runtime_cwd is not None else cwd
         self._cwd = cwd
         env = dict(self.config.env)
-        if self.config.base_url is not None:
-            env["DEEPSEEK_BASE_URL"] = self.config.base_url
         if self.config.api_key is not None:
-            env["DEEPSEEK_API_KEY"] = self.config.api_key
+            env["LLAMA_ROUTER_API_KEY"] = self.config.api_key
+
+        self._base_url = self.config.base_url
+        self._base_url_model = self.config.model
+        self._base_url_patch: Path | None = None
+        patches = tuple(self.config.patches)
+        if self._base_url is not None:
+            self._base_url_patch = self._new_base_url_patch_path()
+            patches = (*patches, str(self._base_url_patch))
+            self._write_base_url_patch()
 
         self._client = HarnessClient(
             HarnessConfig(
-                dsh_bin=self.config.dsh_bin,
+                dao_bin=self.config.dao_bin,
                 profile=self.config.profile,
-                patches=self.config.patches,
-                dsh_home=self.config.dsh_home,
+                patches=patches,
+                dao_home=self.config.dao_home,
                 cwd=runtime_cwd,
                 env=env,
                 initialize_timeout_seconds=self.config.initialize_timeout_seconds,
@@ -89,7 +131,22 @@ class DeepSeekHarness:
         )
         self._initialized = False
 
-    def __enter__(self) -> "DeepSeekHarness":
+    def _new_base_url_patch_path(self) -> Path:
+        handle, raw = tempfile.mkstemp(prefix="dao-sdk-base-url-", suffix=".patch.yml")
+        os.close(handle)
+        return Path(raw)
+
+    def _write_base_url_patch(self) -> None:
+        if self._base_url_patch is not None and self._base_url is not None:
+            self._base_url_patch.write_text(
+                base_url_patch_content(self._base_url, self._base_url_model), encoding="utf-8"
+            )
+
+    def _remove_base_url_patch(self) -> None:
+        if self._base_url_patch is not None:
+            self._base_url_patch.unlink(missing_ok=True)
+
+    def __enter__(self) -> "DaoHarness":
         self.start()
         return self
 
@@ -103,6 +160,7 @@ class DeepSeekHarness:
     def start(self) -> None:
         if self._initialized:
             return
+        self._write_base_url_patch()
         self._client.start()
         self._client.initialize(
             cwd=self._cwd,
@@ -116,6 +174,7 @@ class DeepSeekHarness:
     def close(self) -> None:
         self._client.close()
         self._initialized = False
+        self._remove_base_url_patch()
 
     def start_session(self, session_id: str | None = None) -> "Session":
         self.start()
@@ -132,7 +191,7 @@ class DeepSeekHarness:
 
 
 class Session:
-    def __init__(self, harness: DeepSeekHarness, session_id: str) -> None:
+    def __init__(self, harness: DaoHarness, session_id: str) -> None:
         self.harness = harness
         self.id = session_id
 

@@ -1,6 +1,6 @@
 /**
- * Out-of-process SDK subagent backend. Each child is a complete DeepSeek
- * Harness runtime in its own process — own named profile and patch composition,
+ * Out-of-process SDK subagent backend. Each child is a complete Dao
+ * runtime in its own process — own named profile and patch composition,
  * session, model route, and tools — driven over stdio JSON-RPC through the
  * TypeScript SDK client, so it shares no Cordis context. It accepts the
  * provider/model/reasoning/maxTokens subset of `agentOptions`; other start
@@ -51,16 +51,16 @@ export interface Config {
    * fails.
    */
   cwd?: string
-  /** Provider route the child runtime initializes with (default `deepseek-official`). */
+  /** Provider route the child runtime initializes with (default `llama-router`). */
   provider: string
-  /** Model the child runtime initializes with (default `deepseek-v4-flash`). */
+  /** Model the child runtime initializes with (default `Qwen3.8-27B-Q6_K_XL-128K`). */
   model: string
   /** Optional per-request output-token cap for the child runtime. */
   maxTokens?: number
   /**
    * Extra environment variables for the child process — e.g. the child
-   * runtime's own `DEEPSEEK_API_KEY`. Forwarded on top of a credential-scrubbed copy of the parent
-   * env, so an explicit key here reaches the child while ambient secrets do
+   * runtime's own `LLAMA_ROUTER_API_KEY`. Forwarded on top of a credential-scrubbed copy of the
+   * parent env, so an explicit key here reaches the child while ambient secrets do
    * not leak implicitly.
    */
   env: Record<string, string>
@@ -83,8 +83,8 @@ export const Config: z<Config> = z.object({
   patches: z.array(z.string()).default([]),
   daoHome: z.string().required(),
   cwd: z.string(),
-  provider: z.string().default('deepseek-official'),
-  model: z.string().default('deepseek-v4-flash'),
+  provider: z.string().default('llama-router'),
+  model: z.string().default('Qwen3.8-27B-Q6_K_XL-128K'),
   maxTokens: z.number().step(1).min(1).max(Number.MAX_SAFE_INTEGER),
   env: z.dict(z.string()).default({}),
   shutdownTimeoutMs: z.number().default(DEFAULT_SHUTDOWN_TIMEOUT_MS),

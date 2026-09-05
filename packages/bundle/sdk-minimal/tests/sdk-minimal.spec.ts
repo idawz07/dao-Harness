@@ -24,10 +24,7 @@ describe('dao-sdk-minimal bundle', () => {
     expect(rows.map(row => [row.id, row.name])).toEqual([
       ['sdk-app-startup', '@daoai/dao-sdk-app'],
       ['sdk-jsonrpc-server', '@daoai/dao-sdk-jsonrpc-server'],
-      ['deepseek-llm-api-extensions', '@daoai/dao-deepseek-llm-api-extensions'],
-      ['session-log-deepseek', '@daoai/dao-session-log-deepseek'],
-      ['plugin-package-inventory-deepseek', '@daoai/dao-plugin-package-inventory-deepseek'],
-      ['llm-deepseek', '@daoai/dao-llm-deepseek'],
+      ['llm-pi-ai', '@daoai/dao-llm-pi-ai'],
       ['sandbox', '@daoai/dao-sandbox-local'],
       ['sandbox-policy', '@daoai/dao-sandbox-policy'],
       ['subprocess', '@daoai/dao-subprocess-local'],
@@ -46,10 +43,15 @@ describe('dao-sdk-minimal bundle', () => {
       inject: ['sdkAppStartup', 'loader'],
       config: { maxTokensAsSuccess: false },
     })
-    expect(rows.find(row => row.id === 'llm-deepseek')?.config).toEqual({
-      apiKeyEnv: 'DEEPSEEK_API_KEY',
-      defaultContextWindow: { __jsExpr: 'Number(process.env.DAO_CONTEXT_WINDOW ?? 1000000)' },
-      streamIdleTimeoutMs: 172800000,
+    expect(rows.find(row => row.id === 'llm-pi-ai')?.config).toMatchObject({
+      providers: {
+        'llama-router': {
+          apiKeyEnv: 'LLAMA_ROUTER_API_KEY',
+          api: 'openai-completions',
+          reasoning: 'high',
+          compat: { thinkingFormat: 'qwen-chat-template' },
+        },
+      },
     })
     expect(rows.find(row => row.id === 'agent-spine')?.config).toMatchObject({
       includeHarnessIdentity: false,

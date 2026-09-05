@@ -6,9 +6,6 @@
   config:
     path: ../../cordis.yml
     patches:
-      - id: llm-deepseek
-        name: '@daoai/dao-llm-deepseek'
-        disabled: true
       - id: agent-spine
         name: '@daoai/dao-agent-spine-demo'
         config:

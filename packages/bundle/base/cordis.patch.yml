@@ -27,14 +27,8 @@
     - id: llm
       name: '@daoai/dao-llm'
 
-    - id: deepseek-llm-api-extensions
-      name: '@daoai/dao-deepseek-llm-api-extensions'
-
     - id: session
       name: '@daoai/dao-session'
-
-    - id: session-log-deepseek
-      name: '@daoai/dao-session-log-deepseek'
 
     - id: typert
       name: '@daoai/dao-typert-registry'
@@ -67,9 +61,6 @@
     - id: agent
       name: '@daoai/dao-agent'
 
-    - id: plugin-package-inventory-deepseek
-      name: '@daoai/dao-plugin-package-inventory-deepseek'
-
     # The transport-independent default for Agents created by entry points.
     # Settings may supply a saved selection; consumers read it at creation time.
     # Shipped default: the resident llama-router card's main preset.
@@ -86,8 +77,8 @@
       name: '@daoai/dao-llm-retry'
 
     # User-settings document (`$DAO_HOME/settings.yaml`, hot-reloaded): a
-    # `llm-deepseek:` or `llm-pi-ai:` section there overrides the adapter entries
-    # below without a restart, and is what the web Models page writes.
+    # `llm-pi-ai:` section there overrides the adapter entry below without a
+    # restart, and is what the web Models page writes.
     - id: settings
       name: '@daoai/dao-settings-file'
 
@@ -293,13 +284,13 @@
     # FULL or DISABLED; uploading mirrors session-log records onto OTLP/HTTP
     # logs with no session-telemetry/record redaction rule, so exports are
     # the raw captured copy. The deployment stance, env seams, and follow-ups
-    # are pinned in the feedback-gated-default Agent Note.
-    # DAO_TELEMETRY_OTLP_URL overrides the production endpoint. A non-empty
+    # are pinned in the feedback-gated-default Agent Note. A non-empty
     # DAO_TELEMETRY_DISABLED — any value, including '0'/'false' — opts the
     # process out (the launchers patch the row disabled; config cannot disable
     # a row). Exports carry the harness home's anonymous user id ($DAO_HOME/.anonymous-user-id,
     # random UUID; delete the file to reset the identity) as the Resource's
-    # user.id. The exporter/processor values normally bound the shutdown drain
+    # user.id. The default endpoint is the local OTLP/HTTP collector port; a
+    # deployment with a real collector sets DAO_TELEMETRY_OTLP_URL. The exporter/processor values normally bound the shutdown drain
     # to ~1s against an unreachable collector: exporter.timeoutMillis is both
     # the per-attempt socket timeout and the retry deadline (1s effectively
     # disables the SDK's 5-try backoff), while maxExportBatchSize == maxQueueSize
@@ -314,7 +305,7 @@
         mode: !!js process.env.DAO_TELEMETRY_MODE || 'FEEDBACK_ONLY'
         shutdownTimeoutMillis: 3000
         exporter:
-          url: !!js process.env.DAO_TELEMETRY_OTLP_URL ?? 'https://harness-telemetry.deepseeksvc.com/v1/logs'
+          url: !!js process.env.DAO_TELEMETRY_OTLP_URL ?? 'http://127.0.0.1:4318/v1/logs'
           compression: gzip
           timeoutMillis: 1000
         processor:
@@ -560,24 +551,18 @@
 
     # Every mode enables the stable model-facing web_search tool. The Web app's
     # per-agent presets additionally enable web_fetch; other products opt in by
-    # overriding tool-web. DeepSeek search resolves the same DEEPSEEK_API_KEY
-    # credential the Models page manages for chat, at each search; its Messages
-    # endpoint is separate from the chat-completions endpoint, so it takes its own
-    # base-URL override. Anonymous fetch accepts only public HTTP(S) destinations,
-    # resolves and validates every destination, and pins every actual connection.
-    # Search is a full auxiliary model request with server-side retrieval, so this
-    # shipped DeepSeek route gets 60s while the provider-neutral tool default
-    # remains 30s.
+    # overriding tool-web. No search provider ships in the base: a deployment
+    # mounts one (e.g. web-search-exa or web-search-perplexity, keyed through the
+    # credential store) and pins its id here, or leaves the pin unset to
+    # auto-select when exactly one mounted provider is usable. Anonymous fetch
+    # accepts only public HTTP(S) destinations, resolves and validates every
+    # destination, and pins every actual connection. Search is a full auxiliary
+    # model request with server-side retrieval, so it gets 60s while the
+    # provider-neutral tool default remains 30s.
     - id: web
       name: '@daoai/dao-web'
       config:
-        searchProvider: deepseek-official
         fetchProvider: http
-
-    - id: web-search-deepseek
-      name: '@daoai/dao-web-search-deepseek'
-      config:
-        apiKeyEnv: DEEPSEEK_API_KEY
 
     - id: web-fetch-http
       name: '@daoai/dao-web-fetch-http'
@@ -613,10 +598,3 @@
     # overlay can pin another workspace.
     - id: fs-sandbox
       name: '@daoai/dao-fs-sandbox'
-
-    # The native DeepSeek adapter. No key or endpoint is inlined: both resolve per
-    # request from the `llm-deepseek:` settings section over this entry, with the
-    # key coming from the credential store below. Thinking defaults are a deployment
-    # choice.
-    - id: llm-deepseek
-      name: '@daoai/dao-llm-deepseek'

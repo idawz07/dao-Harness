@@ -3,31 +3,28 @@
   config:
     path: ../../cordis.yml
     patches:
-      - id: llm-deepseek
-        name: '@daoai/dao-llm-deepseek'
-        disabled: true
-      - insert:
-          - id: llm-pi-ai
-            name: '@daoai/dao-llm-pi-ai'
-            config:
-              providers:
-                deepseek:
-                  apiKeyEnv: DEEPSEEK_API_KEY
-                  baseURL: !!js process.env.DAO_SNAPSHOT_BASE_URL
-                  reasoning: low
-                  modelOverrides:
-                    deepseek-v4-flash:
-                      maxTokens: 1024
-                  streamIdleTimeoutMs: 1000
+      - id: llm-pi-ai
+        name: '@daoai/dao-llm-pi-ai'
+        config:
+          providers:
+            llama-router:
+              apiKeyEnv: LLAMA_ROUTER_API_KEY
+              api: openai-completions
+              baseURL: !!js process.env.DAO_SNAPSHOT_BASE_URL
+              reasoning: low
+              modelOverrides:
+                Qwen3.8-27B-Q6_K_XL-128K:
+                  maxTokens: 1024
+              streamIdleTimeoutMs: 1000
       - id: agent-spine
         config:
           agents:
             - id: main
-              provider: deepseek
-              model: deepseek-v4-flash
+              provider: llama-router
+              model: Qwen3.8-27B-Q6_K_XL-128K
               cwd: !!js process.cwd()
           workspaceContext: false
-          persona: 'Keyless pi-ai DeepSeek compatibility snapshot.'
+          persona: 'Keyless pi-ai router defaults snapshot.'
       - id: persistence
         config:
           root: './.sessions'

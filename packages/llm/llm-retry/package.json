@@ -56,7 +56,6 @@
     "@daoai/dao-agent-loop-testkit": "workspace:^",
     "@daoai/dao-invariants": "workspace:^",
     "@daoai/dao-llm": "workspace:^",
-    "@daoai/dao-llm-deepseek": "workspace:^",
     "@daoai/dao-llm-mock-server": "workspace:^",
     "@daoai/dao-session": "workspace:^",
     "@daoai/dao-session-persistence-jsonl": "workspace:^",

@@ -25,7 +25,6 @@ if TYPE_CHECKING:
 
 
 EXPECTED_TEXT = "runtime smoke ok"
-LIVE_API_SENTINEL = "PYTHON_SDK_LIVE_OK"
 CODE_PROMPT = "Use run_code to compute the packaged worker smoke value."
 CODE_WORKER_TEXT = "code worker smoke ok"
 WORKFLOW_PROMPT = "Use workflow to compute the packaged worker smoke value without agents."
@@ -231,7 +230,6 @@ def write_advanced_profile_patch(root: Path, name: str, sessions: Path) -> Path:
                 "persona": "You are a coding agent powered by the {{model}} model. Your working directory is {{cwd}}.",
             },
         },
-        {"id": "session-log-deepseek", "config": {"enabled": True}},
         *({"id": row_id, "disabled": True} for row_id in LEGACY_CUSTOM_DISABLED_ROWS),
         {"id": "tool-bash", "disabled": True},
         {"id": "tool-pwsh", "disabled": True},
@@ -712,7 +710,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--scenario",
-        choices=("all", "sdk-default", "sdk-custom", "sdk-minimal", "sdk-fs-search", "sdk-mcp", "sdk-snapshot", "sdk-restart", "sdk-profile-plugin", "sdk-live", "direct"),
+        choices=("all", "sdk-default", "sdk-custom", "sdk-minimal", "sdk-fs-search", "sdk-mcp", "sdk-snapshot", "sdk-restart", "sdk-profile-plugin", "direct"),
         default="all",
     )
     parser.add_argument("--exe", type=Path)
@@ -725,8 +723,6 @@ def main() -> None:
     args = parser.parse_args()
     if args.installed_wheel and args.exe is not None:
         parser.error("--installed-wheel resolves the wheel's own runtime and cannot be combined with --exe")
-    if args.scenario == "sdk-live" and not args.installed_wheel:
-        parser.error("--scenario sdk-live requires --installed-wheel")
     if args.scenario == "sdk-profile-plugin" and not args.installed_wheel:
         parser.error("--scenario sdk-profile-plugin requires --installed-wheel")
     if args.installed_wheel:
@@ -737,11 +733,6 @@ def main() -> None:
         parser.error("--update-snapshots requires --scenario sdk-minimal, sdk-snapshot, sdk-restart, or all")
     if args.exe is not None and not args.exe.is_file():
         parser.error(f"runtime executable does not exist: {args.exe}")
-
-    if args.scenario == "sdk-live":
-        smoke_sdk_live()
-        print("smoke-python-runtime: sdk-live passed")
-        return
 
     with MockModel() as model:
         if args.scenario in {"all", "sdk-default"}:
@@ -825,74 +816,6 @@ def assert_installed_wheel_environment() -> Path:
     return executable
 
 
-def smoke_sdk_live() -> None:
-    """Run a real-model, tool-using two-turn task through installed wheels."""
-    from dao import DeepSeekHarness
-
-    api_key = os.environ.get("DEEPSEEK_API_KEY")
-    base_url = os.environ.get("DEEPSEEK_BASE_URL")
-    if not api_key:
-        raise AssertionError("sdk-live requires DEEPSEEK_API_KEY")
-    if not base_url:
-        raise AssertionError("sdk-live requires an explicit DEEPSEEK_BASE_URL")
-
-    with tempfile.TemporaryDirectory(prefix="dao-sdk-live-") as temporary:
-        root = Path(temporary).resolve()
-        dsh_home = root / "home"
-        sessions = dsh_home / "sessions"
-        marker = root / "live-api-marker.txt"
-        session_id = "installed-wheel-live-api"
-        shell_tool = "pwsh" if IS_WINDOWS else "bash"
-        create_prompt = (
-            f"Use the {shell_tool} tool to create the file at the absolute path below with exactly one line "
-            f"containing {LIVE_API_SENTINEL}. Then reply with exactly {LIVE_API_SENTINEL}.\n{marker}"
-        )
-        verify_prompt = (
-            "Use a tool to read the file created in the previous turn. "
-            f"If its only line is {LIVE_API_SENTINEL}, reply with exactly {LIVE_API_SENTINEL}."
-        )
-        with DeepSeekHarness(
-            provider="deepseek-official",
-            model="deepseek-v4-flash",
-            cwd=str(root),
-            dsh_home=str(dsh_home),
-            env={
-                "DAO_PERMISSION_MODE": "danger-full-access",
-                "DAO_TELEMETRY_DISABLED": "1",
-            },
-            api_key=api_key,
-            base_url=base_url,
-            request_timeout_seconds=180,
-        ) as harness:
-            created = harness.run(create_prompt, session_id=session_id)
-            verified = harness.run(verify_prompt, session_id=session_id)
-
-        for label, result in (("create", created), ("verify", verified)):
-            if result.finish_reason != "completed":
-                event_types = [event.get("type") for event in result.events]
-                turn_end_data = next(
-                    (event.get("data") for event in reversed(result.events) if event.get("type") == "turn/end"),
-                    None,
-                )
-                turn_end = safe_turn_end(turn_end_data)
-                raise AssertionError(
-                    f"{label} turn ended with {result.finish_reason!r}; "
-                    f"final={result.final_response!r}; turn_end={turn_end!r}; events={event_types}"
-                )
-            if not any(event.get("type") == "tool/call" for event in result.events):
-                raise AssertionError(
-                    f"{label} turn made no model-requested tool call; "
-                    f"final={result.final_response!r}"
-                )
-            if result.final_response.strip() != LIVE_API_SENTINEL:
-                raise AssertionError(f"{label} turn returned {result.final_response!r}")
-        if not marker.is_file():
-            raise AssertionError(f"real-model tool turn did not create {marker}")
-        if marker.read_text(encoding="utf-8").splitlines() != [LIVE_API_SENTINEL]:
-            raise AssertionError(f"real-model tool turn wrote unexpected text to {marker}")
-        assert_zstd_session_log(sessions)
-
-
 def safe_turn_end(value: object) -> object:
     """Project a live-provider failure without retaining credential-bearing text."""
     if not isinstance(value, dict):
@@ -918,17 +841,17 @@ def safe_turn_end(value: object) -> object:
 
 
 def smoke_sdk_default(base_url: str) -> None:
-    from dao import DeepSeekHarness
+    from dao import DaoHarness
 
     with tempfile.TemporaryDirectory(prefix="dao-sdk-default-") as temporary:
         root = Path(temporary).resolve()
-        dsh_home = root / "home"
-        sessions = dsh_home / "sessions"
-        with DeepSeekHarness(
-            provider="deepseek-official",
-            model="smoke-model",
+        dao_home = root / "home"
+        sessions = dao_home / "sessions"
+        with DaoHarness(
+            provider="llama-router",
+            model="Qwen3.8-27B-Q6_K_XL-128K",
             cwd=str(root),
-            dsh_home=str(dsh_home),
+            dao_home=str(dao_home),
             env={
                 "DAO_PERMISSION_MODE": "danger-full-access",
                 "DAO_TELEMETRY_DISABLED": "1",
@@ -947,19 +870,19 @@ def smoke_sdk_default(base_url: str) -> None:
 
 
 def smoke_sdk_custom(base_url: str, executable: Path) -> None:
-    from dao import DeepSeekHarness
+    from dao import DaoHarness
 
     with tempfile.TemporaryDirectory(prefix="dao-sdk-custom-") as temporary:
         root = Path(temporary).resolve()
-        dsh_home = root / "home"
-        sessions = dsh_home / "sessions"
+        dao_home = root / "home"
+        sessions = dao_home / "sessions"
         patch = write_advanced_profile_patch(root, "custom.patch.yml", sessions)
-        with DeepSeekHarness(
-            provider="deepseek-official",
-            model="smoke-model",
+        with DaoHarness(
+            provider="llama-router",
+            model="Qwen3.8-27B-Q6_K_XL-128K",
             cwd=str(root),
-            dsh_bin=str(executable),
-            dsh_home=str(dsh_home),
+            dao_bin=str(executable),
+            dao_home=str(dao_home),
             patches=(str(patch),),
             env={
                 "DAO_PERMISSION_MODE": "danger-full-access",
@@ -980,7 +903,7 @@ def smoke_sdk_custom(base_url: str, executable: Path) -> None:
 
 def smoke_sdk_minimal(base_url: str, executable: Path, update_snapshots: bool) -> None:
     """Exercise the shipped standalone minimal profile through the packaged executable."""
-    from dao import DeepSeekHarness
+    from dao import DaoHarness
 
     # One mock model serves every scenario of a run, so the snapshot takes this turn's slice.
     first_request = len(MockModelHandler.requests)
@@ -988,14 +911,14 @@ def smoke_sdk_minimal(base_url: str, executable: Path, update_snapshots: bool) -
         root = Path(temporary).resolve()
         editor_path = root / "created.txt"
         prompt = f"{MINIMAL_PROMPT}\n{MINIMAL_EDITOR_PATH_PREFIX}{editor_path}"
-        dsh_home = root / "home"
-        sessions = dsh_home / "sessions"
-        with DeepSeekHarness(
-            provider="deepseek-official",
-            model="smoke-model",
+        dao_home = root / "home"
+        sessions = dao_home / "sessions"
+        with DaoHarness(
+            provider="llama-router",
+            model="Qwen3.8-27B-Q6_K_XL-128K",
             cwd=str(root),
-            dsh_bin=str(executable),
-            dsh_home=str(dsh_home),
+            dao_bin=str(executable),
+            dao_home=str(dao_home),
             profile="sdk-minimal",
             api_key="sk-keyless-smoke",
             base_url=base_url,
@@ -1018,23 +941,23 @@ def smoke_sdk_minimal(base_url: str, executable: Path, update_snapshots: bool) -
 
 def smoke_sdk_fs_search(base_url: str, executable: Path) -> None:
     """Exercise real grep and glob spawns through the packaged executable."""
-    from dao import DeepSeekHarness
+    from dao import DaoHarness
 
     with tempfile.TemporaryDirectory(prefix="dao-sdk-fs-search-") as temporary:
         root = Path(temporary).resolve()
         (root / "needle.txt").write_text(f"{FS_SEARCH_MARKER}\n")
-        dsh_home = root / "home"
-        sessions = dsh_home / "sessions"
+        dao_home = root / "home"
+        sessions = dao_home / "sessions"
         patch = write_profile_patch(root, "fs-search.patch.yml", sessions, [
             {"id": "skill-filesystem", "disabled": True},
             {"id": "tool-fs-search", "config": {"sampleOverCapGlobResults": False}},
         ])
-        with DeepSeekHarness(
-            provider="deepseek-official",
-            model="smoke-model",
+        with DaoHarness(
+            provider="llama-router",
+            model="Qwen3.8-27B-Q6_K_XL-128K",
             cwd=str(root),
-            dsh_bin=str(executable),
-            dsh_home=str(dsh_home),
+            dao_bin=str(executable),
+            dao_home=str(dao_home),
             patches=(str(patch),),
             env={
                 "DAO_PERMISSION_MODE": "danger-full-access",
@@ -1052,22 +975,22 @@ def smoke_sdk_fs_search(base_url: str, executable: Path) -> None:
 
 def smoke_sdk_mcp(base_url: str, executable: Path | None) -> None:
     """Discover and call an external stdio MCP tool through the packaged client."""
-    from dao import DeepSeekHarness
+    from dao import DaoHarness
 
     with tempfile.TemporaryDirectory(prefix="dao-sdk-mcp-") as temporary:
         root = Path(temporary).resolve()
-        dsh_home = root / "home"
-        sessions = dsh_home / "sessions"
+        dao_home = root / "home"
+        sessions = dao_home / "sessions"
         server_script = root / "mcp_server.py"
         server_script.write_text(MCP_SERVER_SCRIPT)
         patch = write_mcp_patch(root, sessions, server_script)
         discovery_log = server_script.with_suffix(".log")
-        with DeepSeekHarness(
-            provider="deepseek-official",
-            model="smoke-model",
+        with DaoHarness(
+            provider="llama-router",
+            model="Qwen3.8-27B-Q6_K_XL-128K",
             cwd=str(root),
-            dsh_bin=None if executable is None else str(executable),
-            dsh_home=str(dsh_home),
+            dao_bin=None if executable is None else str(executable),
+            dao_home=str(dao_home),
             patches=(str(patch),),
             env={
                 "DAO_PERMISSION_MODE": "danger-full-access",
@@ -1091,11 +1014,11 @@ def smoke_sdk_mcp(base_url: str, executable: Path | None) -> None:
 
 def smoke_sdk_profile_plugin(base_url: str) -> None:
     """Install an external bundle through Python's dao command and load it in the SDK."""
-    from dao import DeepSeekHarness
+    from dao import DaoHarness
 
     with tempfile.TemporaryDirectory(prefix="dao-sdk-profile-plugin-") as temporary:
         root = Path(temporary).resolve()
-        dsh_home = root / "home"
+        dao_home = root / "home"
         plugin = root / "plugin"
         plugin.mkdir()
         (plugin / "package.json").write_text(json.dumps({
@@ -1125,7 +1048,7 @@ def smoke_sdk_profile_plugin(base_url: str) -> None:
         }], indent=2))
 
         dao = Path(sysconfig.get_path("scripts")) / ("dao.exe" if IS_WINDOWS else "dao")
-        environment = {**os.environ, "DAO_HOME": str(dsh_home)}
+        environment = {**os.environ, "DAO_HOME": str(dao_home)}
         installed = subprocess.run(
             [str(dao), "plugin", "--profile", "sdk", "add", f"file:{plugin}"],
             cwd=root,
@@ -1139,17 +1062,17 @@ def smoke_sdk_profile_plugin(base_url: str) -> None:
                 f"Python-installed dao could not add the external profile plugin: "
                 f"stdout={installed.stdout!r} stderr={installed.stderr!r}"
             )
-        manifest = json.loads((dsh_home / "profiles" / "sdk" / "package.json").read_text())
+        manifest = json.loads((dao_home / "profiles" / "sdk" / "package.json").read_text())
         if "dao-python-blackbox-plugin" not in manifest.get("dependencies", {}):
             raise AssertionError(f"dao plugin did not record the external dependency: {manifest}")
         if "dao-python-blackbox-plugin" not in manifest["dao"]["profile"]["bundles"]:
             raise AssertionError(f"dao plugin did not activate the external bundle: {manifest}")
 
-        harness = DeepSeekHarness(
-            provider="deepseek-official",
-            model="smoke-model",
+        harness = DaoHarness(
+            provider="llama-router",
+            model="Qwen3.8-27B-Q6_K_XL-128K",
             cwd=str(root),
-            dsh_home=str(dsh_home),
+            dao_home=str(dao_home),
             env={
                 "DAO_PERMISSION_MODE": "danger-full-access",
                 "DAO_TELEMETRY_DISABLED": "1",
@@ -1167,24 +1090,24 @@ def smoke_sdk_profile_plugin(base_url: str) -> None:
             ) from error
 
         assert result.final_response == PROFILE_PLUGIN_TEXT, result.final_response
-        assert_zstd_session_log(dsh_home / "sessions")
+        assert_zstd_session_log(dao_home / "sessions")
 
 
 def smoke_sdk_snapshot(base_url: str, executable: Path, update_snapshots: bool) -> None:
     """Drive and compare the advanced SDK/executable behavioral snapshot."""
-    from dao import DeepSeekHarness
+    from dao import DaoHarness
 
     with tempfile.TemporaryDirectory(prefix="dao-sdk-snapshot-") as temporary:
         root = Path(temporary).resolve()
-        dsh_home = root / "home"
-        sessions = dsh_home / "sessions"
+        dao_home = root / "home"
+        sessions = dao_home / "sessions"
         patch = write_advanced_profile_patch(root, "snapshot.patch.yml", sessions)
-        with DeepSeekHarness(
-            provider="deepseek-official",
-            model="smoke-model",
+        with DaoHarness(
+            provider="llama-router",
+            model="Qwen3.8-27B-Q6_K_XL-128K",
             cwd=str(root),
-            dsh_bin=str(executable),
-            dsh_home=str(dsh_home),
+            dao_bin=str(executable),
+            dao_home=str(dao_home),
             patches=(str(patch),),
             env={
                 "DAO_PERMISSION_MODE": "danger-full-access",
@@ -1221,22 +1144,22 @@ def smoke_sdk_snapshot(base_url: str, executable: Path, update_snapshots: bool) 
 
 def smoke_sdk_restart_snapshot(base_url: str, executable: Path, update_snapshots: bool) -> None:
     """Snapshot two isolated sessions across complete SDK runtime restarts."""
-    from dao import DeepSeekHarness
+    from dao import DaoHarness
 
     with tempfile.TemporaryDirectory(prefix="dao-sdk-restart-") as temporary:
         root = Path(temporary).resolve()
-        dsh_home = root / "home"
-        sessions = dsh_home / "sessions"
+        dao_home = root / "home"
+        sessions = dao_home / "sessions"
         patch = write_advanced_profile_patch(root, "restart.patch.yml", sessions)
         first_request = len(MockModelHandler.requests)
 
         def run(prompt: str, session_id: str) -> "RunResult":
-            with DeepSeekHarness(
-                provider="deepseek-official",
-                model="smoke-model",
+            with DaoHarness(
+                provider="llama-router",
+                model="Qwen3.8-27B-Q6_K_XL-128K",
                 cwd=str(root),
-                dsh_bin=str(executable),
-                dsh_home=str(dsh_home),
+                dao_bin=str(executable),
+                dao_home=str(dao_home),
                 patches=(str(patch),),
                 env={
                     "DAO_PERMISSION_MODE": "danger-full-access",
@@ -1279,26 +1202,31 @@ def smoke_sdk_restart_snapshot(base_url: str, executable: Path, update_snapshots
 
 
 def smoke_direct(base_url: str, executable: Path) -> None:
+    from dao.api import base_url_patch_content
+
     with tempfile.TemporaryDirectory(prefix="dao-direct-") as temporary:
         root = Path(temporary).resolve()
-        dsh_home = root / "home"
-        sessions = dsh_home / "sessions"
+        dao_home = root / "home"
+        sessions = dao_home / "sessions"
+        base_patch = root / "base-url.patch.yml"
+        base_patch.write_text(
+            base_url_patch_content(base_url, "Qwen3.8-27B-Q6_K_XL-128K"), encoding="utf-8"
+        )
         patch = write_profile_patch(root, "direct.patch.yml", sessions, [])
         environment = {
             **os.environ,
-            "DAO_HOME": str(dsh_home),
+            "DAO_HOME": str(dao_home),
             "DAO_PERMISSION_MODE": "danger-full-access",
             "DAO_TELEMETRY_DISABLED": "1",
-            "DEEPSEEK_API_KEY": "sk-keyless-smoke",
-            "DEEPSEEK_BASE_URL": base_url,
+            "LLAMA_ROUTER_API_KEY": "sk-keyless-smoke",
         }
         peer = RuntimePeer(
-            [str(executable), "--profile", "sdk", "--patch", str(patch)],
+            [str(executable), "--profile", "sdk", "--patch", str(patch), "--patch", str(base_patch)],
             root,
             environment,
         )
         try:
-            peer.send({"jsonrpc": "2.0", "id": "initialize", "method": "initialize", "params": {"cwd": str(root), "provider": "deepseek-official", "model": "smoke-model"}})
+            peer.send({"jsonrpc": "2.0", "id": "initialize", "method": "initialize", "params": {"cwd": str(root), "provider": "llama-router", "model": "Qwen3.8-27B-Q6_K_XL-128K"}})
             peer.read_until(lambda message: message.get("id") == "initialize")
             peer.send({
                 "jsonrpc": "2.0",

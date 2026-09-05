@@ -33,20 +33,13 @@
   "license": "MIT",
   "peerDependencies": {
     "@daoai/dao-compaction": "workspace:^",
-    "@daoai/dao-deepseek-llm-api-extensions": "workspace:^",
     "@daoai/dao-invariants": "workspace:^",
     "@daoai/dao-llm": "workspace:^",
     "@daoai/dao-session": "workspace:^",
     "@daoai/cordis": "workspace:^"
   },
-  "peerDependenciesMeta": {
-    "@daoai/dao-deepseek-llm-api-extensions": {
-      "optional": true
-    }
-  },
   "devDependencies": {
     "@daoai/dao-compaction": "workspace:^",
-    "@daoai/dao-deepseek-llm-api-extensions": "workspace:^",
     "@daoai/dao-invariants": "workspace:^",
     "@daoai/dao-llm": "workspace:^",
     "@daoai/dao-session": "workspace:^",

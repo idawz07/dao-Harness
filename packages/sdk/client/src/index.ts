@@ -1,7 +1,7 @@
 /**
  * TypeScript client SDK for the Dao runtime: spawn the
  * same-version `dao --profile sdk` runtime as a subprocess and drive agent
- * turns over stdio JSON-RPC. `DeepSeekHarness` is the high-level run API;
+ * turns over stdio JSON-RPC. `DaoHarness` is the high-level run API;
  * `HarnessClient` is the lower-level protocol client. A pure library — it
  * registers nothing on a Cordis context; named profiles and ordered patch
  * files customize the runtime process it spawns.
@@ -9,7 +9,7 @@
  * @module @daoai/dao-sdk-client
  */
 
-export { DeepSeekHarness, HarnessSession } from './api.ts'
+export { DaoHarness, HarnessSession } from './api.ts'
 export type { RunOptions } from './api.ts'
 export {
   HarnessClient,
@@ -22,7 +22,7 @@ export { JsonRpcResponseError } from '@daoai/dao-sdk-protocol'
 export type {
   ContentBlock,
   SdkPromptContentBlock,
-  DeepSeekHarnessOptions,
+  DaoHarnessOptions,
   HarnessClientOptions,
   HarnessNotification,
   NotificationFilter,

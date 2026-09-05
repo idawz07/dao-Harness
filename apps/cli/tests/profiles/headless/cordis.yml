@@ -16,15 +16,6 @@
 - id: credentials
   name: '@daoai/dao-credentials-local'
 
-- id: deepseek-llm-api-extensions
-  name: '@daoai/dao-deepseek-llm-api-extensions'
-
-- id: session-log-deepseek
-  name: '@daoai/dao-session-log-deepseek'
-
-- id: plugin-package-inventory-deepseek
-  name: '@daoai/dao-plugin-package-inventory-deepseek'
-
 # The pi-ai adapter, carrying the local Qwen3.8 farm on tailscale. The llama
 # router (port 8081) is the resident systemd card and the default; the four
 # vLLM cards (ports 18080–18083) are on-demand, declared so a card started
