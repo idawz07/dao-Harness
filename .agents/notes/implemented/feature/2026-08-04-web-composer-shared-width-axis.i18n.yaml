@@ -1,6 +1,0 @@
-# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
-# side as of the last confirmed-consistent state. Both languages carry equal authority;
-# after editing either side, bring the other along and re-record with:
-#   pnpm run verify-translation-pairing --write .agents/notes/implemented/feature/2026-08-04-web-composer-shared-width-axis.md
-2026-08-04-web-composer-shared-width-axis.md: e5b093fc8cf2ceb8a14181c8891d4f68c095b91b
-2026-08-04-web-composer-shared-width-axis.zh.md: 63184bdc5435f88fa7749b178aa648a65f9ce0fb

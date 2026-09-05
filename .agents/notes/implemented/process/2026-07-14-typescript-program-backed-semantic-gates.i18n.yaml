@@ -1,6 +1,0 @@
-# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
-# side as of the last confirmed-consistent state. Both languages carry equal authority;
-# after editing either side, bring the other along and re-record with:
-#   pnpm run verify-translation-pairing --write .agents/notes/implemented/process/2026-07-14-typescript-program-backed-semantic-gates.md
-2026-07-14-typescript-program-backed-semantic-gates.md: 171a832d5ef682560bdbbb971a412df3ed8a9f10
-2026-07-14-typescript-program-backed-semantic-gates.zh.md: 3af4fff0fee94e1ad734b5fdd2a3fd9ad6e5de5f

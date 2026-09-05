@@ -1,6 +1,0 @@
-# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
-# side as of the last confirmed-consistent state. Both languages carry equal authority;
-# after editing either side, bring the other along and re-record with:
-#   pnpm run verify-translation-pairing --write .agents/notes/implemented/architecture/2026-08-20-web-composer-lexical-editor.md
-2026-08-20-web-composer-lexical-editor.md: 028b6d1b99d58541fdbb7e7b0f4b6b6a44439c3f
-2026-08-20-web-composer-lexical-editor.zh.md: 400f3003c030b44fd26c44eeb303e32546c4ec9b

@@ -1,6 +1,0 @@
-# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
-# side as of the last confirmed-consistent state. Both languages carry equal authority;
-# after editing either side, bring the other along and re-record with:
-#   pnpm run verify-translation-pairing --write docs/cookbook/maintaining-dao-code-review.md
-maintaining-dao-code-review.md: c4a9eee89409b9ca475c043b4440b6d9514e1aa7
-maintaining-dao-code-review.zh.md: d39dba52f940e4ff859456e0042cf37f5d7e3d15

@@ -1,6 +1,0 @@
-# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
-# side as of the last confirmed-consistent state. Both languages carry equal authority;
-# after editing either side, bring the other along and re-record with:
-#   pnpm run verify-translation-pairing --write .agents/notes/implemented/bug-fix/2026-07-22-pi-ai-transport-truncation-classification.md
-2026-07-22-pi-ai-transport-truncation-classification.md: 134b3f101a9e1f03de24f59d1c21ce03c8f0c6e7
-2026-07-22-pi-ai-transport-truncation-classification.zh.md: 5b01020f41ceee55b2de6c1251d0abe8fccffa03

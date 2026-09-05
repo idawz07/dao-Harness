@@ -1,6 +1,0 @@
-# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
-# side as of the last confirmed-consistent state. Both languages carry equal authority;
-# after editing either side, bring the other along and re-record with:
-#   pnpm run verify-translation-pairing --write .agents/notes/implemented/feature/2026-07-31-web-telemetry-default-mount.md
-2026-07-31-web-telemetry-default-mount.md: a706b0f9216d00f65fdea4d0862898971e11ade7
-2026-07-31-web-telemetry-default-mount.zh.md: b215f5f8d83921b3017e1444dcbc790b750b282d

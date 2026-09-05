@@ -1,6 +1,0 @@
-# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
-# side as of the last confirmed-consistent state. Both languages carry equal authority;
-# after editing either side, bring the other along and re-record with:
-#   pnpm run verify-translation-pairing --write .agents/notes/implemented/feature/2026-08-18-pi-ai-wire-compat-surface.md
-2026-08-18-pi-ai-wire-compat-surface.md: 7793ce061628cf92b1da812f080136ea29b74a64
-2026-08-18-pi-ai-wire-compat-surface.zh.md: a7f894f25d93ddca6ce2b03f3e78eb0b117ec415

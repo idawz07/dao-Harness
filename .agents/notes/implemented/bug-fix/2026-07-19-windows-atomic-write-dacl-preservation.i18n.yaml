@@ -1,6 +1,0 @@
-# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
-# side as of the last confirmed-consistent state. Both languages carry equal authority;
-# after editing either side, bring the other along and re-record with:
-#   pnpm run verify-translation-pairing --write .agents/notes/implemented/bug-fix/2026-07-19-windows-atomic-write-dacl-preservation.md
-2026-07-19-windows-atomic-write-dacl-preservation.md: ea8ce1032a87e92b03602b84912b6d01e18420dd
-2026-07-19-windows-atomic-write-dacl-preservation.zh.md: 658b3fac5aee3c859a0b4938175cf6a651ee58ed

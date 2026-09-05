@@ -1,6 +1,0 @@
-# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
-# side as of the last confirmed-consistent state. Both languages carry equal authority;
-# after editing either side, bring the other along and re-record with:
-#   pnpm run verify-translation-pairing --write .agents/notes/implemented/architecture/2026-08-23-python-sdk-windows-x64-runtime.md
-2026-08-23-python-sdk-windows-x64-runtime.md: 263c4e3d927d12571220a46a7ba248f1c030f4ad
-2026-08-23-python-sdk-windows-x64-runtime.zh.md: b415bf6c2d477b496b0fdebd5559e0b3565c931d

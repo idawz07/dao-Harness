@@ -1,6 +1,0 @@
-# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
-# side as of the last confirmed-consistent state. Both languages carry equal authority;
-# after editing either side, bring the other along and re-record with:
-#   pnpm run verify-translation-pairing --write .agents/notes/implemented/architecture/2026-08-19-web-index-injection-table.md
-2026-08-19-web-index-injection-table.md: 6ef88554a74519bacd96419cb2f274a6ee44ca37
-2026-08-19-web-index-injection-table.zh.md: deb9e277ba6a8e9558f06ff36d67cb3679eea724

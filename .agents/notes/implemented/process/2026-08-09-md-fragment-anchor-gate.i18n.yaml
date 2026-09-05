@@ -1,6 +1,0 @@
-# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
-# side as of the last confirmed-consistent state. Both languages carry equal authority;
-# after editing either side, bring the other along and re-record with:
-#   pnpm run verify-translation-pairing --write .agents/notes/implemented/process/2026-08-09-md-fragment-anchor-gate.md
-2026-08-09-md-fragment-anchor-gate.md: a7cfcac41d23fd47366135f9cc6553f2eda10505
-2026-08-09-md-fragment-anchor-gate.zh.md: be2486e68467d9ceb62b75064b5862b88e01dd27
