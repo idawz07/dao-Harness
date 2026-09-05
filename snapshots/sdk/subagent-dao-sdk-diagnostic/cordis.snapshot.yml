@@ -1,0 +1,11 @@
+# Keyless parent-model overlay for the Dao SDK diagnostic snapshot.
+
+- insert:
+    - id: llm-replay
+      name: '@daoai/dao-llm-replay'
+      config:
+        providers:
+          - id: llama-router
+            name: DeepSeek
+            models:
+              - id: Qwen3.8-27B-Q6_K_XL-128K

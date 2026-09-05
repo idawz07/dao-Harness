@@ -4,14 +4,14 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { cleanup, render } from '@testing-library/react'
 import { AttachmentId } from '@daoai/dao-attachment'
 import { makeTranslate } from '@daoai/dao-client-test-runtime'
-import { zh as commonZh } from '@daoai/dao-client-locale/src/locales/zh.ts'
+import { en as commonEn } from '@daoai/dao-client-locale/src/locales/en.ts'
 import type { RenderMessageImages } from '@daoai/dao-client-ui-conversation/client'
 import { AssistantMarkdown } from '../src/client/chat/AssistantMarkdown.tsx'
-import { zh } from '../src/client/locale.ts'
+import { en } from '../src/client/locale.ts'
 
 afterEach(cleanup)
 
-const t = makeTranslate(zh, commonZh)
+const t = makeTranslate(en, commonEn)
 
 const attachment = {
   attachmentId: AttachmentId(`sha256:${'a'.repeat(64)}`),

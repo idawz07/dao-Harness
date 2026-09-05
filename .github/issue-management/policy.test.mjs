@@ -164,8 +164,8 @@ test('keeps terminal Status aligned with the native close reason', () => {
 test('separates resolving and informational references', () => {
   assert.deepEqual(
     parseReferences({
-      body: 'Fixes #12\nRelated to #4\nRefs deepseekharness/dao-test#7',
-      repository: 'deepseekharness/dao-test',
+      body: 'Fixes #12\nRelated to #4\nRefs daoAI/dao-test#7',
+      repository: 'daoAI/dao-test',
     }),
     { all: [4, 7, 12], resolving: [12], related: [4, 7] },
   )

@@ -8,7 +8,9 @@ The [shipped-roster decision](2026-07-31-even-out-shipped-tool-rosters.md) made 
 
 ## Decision
 
-The shipped TUI, Web, and headless surfaces do not mount `@daoai/dao-tool-session-query`, and no shipped agent preset carries it. The consumer stays opt-in exactly as the model-facing-session-query-tools note describes: the [`session-query` snapshot composition](../../../../snapshots/session/session-query-spill/cordis.yml) remains the mounted reference, and a custom composition can mount the package with the timeout and spill policies.
+The shipped TUI, Web, and headless surfaces do not mount `@daoai/dao-tool-session-query` on the host plane, and the general-purpose presets (`standard`, `ptc`, `minimal`, `cordis`) do not carry it. The consumer stays opt-in for those surfaces exactly as the model-facing-session-query-tools note describes: the [`session-query` snapshot composition](../../../../snapshots/session/session-query-spill/cordis.yml) remains the mounted reference, and a custom composition can mount the package with the timeout and spill policies.
+
+The `lens` specialist preset is the one shipped exception: it mounts `@daoai/dao-tool-session-query` so a review session can search prior work. Orchestrator-spawned Lens children (via `subagent_lens`) still use a read-only filesystem toolFilter without the session-query tools, because those tools are absent from the parent `standard` catalog.
 
 The `ctx.sessionQuery` service itself stays mounted. `session-query-sqlite` remains a base row — the TUI's `session-reference` consumes it for `/resume` — with its full-text index off by default (`openAt: never`; the [content-search opt-in decision](../architecture/2026-08-13-session-content-search-opt-in.md)), and the Web overlay keeps its in-memory values for deployments that enable content search. Only the model-facing consumer is removed.
 

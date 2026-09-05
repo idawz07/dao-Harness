@@ -12,14 +12,34 @@ import {
   IconChevronDownOutline14, IconChevronRightOutline14, IconRefreshOutline14, StateDot,
 } from '@daoai/dao-client-ui-primitives'
 import type { PropsLocale, PropsRuntime, TranslateNS } from '@daoai/dao-client-ui-slots'
-import { NS } from './locales.ts'
+import { NS, type SubagentKey } from './locales.ts'
 import type {} from '@daoai/dao-client-ui-conversation/client'
 import type {} from '@daoai/dao-token-meter/client'
+import type {} from '@daoai/dao-squad-progress/client'
+import type { SquadBadgeId, SquadProgressProjection } from '@daoai/dao-squad-progress/client'
 import css from './SubagentHeaderLineage.module.css'
 import { indexSubagentDescendants } from './subagent-lineage.ts'
+import { squadRoleFromLabel, type SquadRoleId } from './squad-role.ts'
 
 type CatalogEntry = SubagentCatalogSnapshot['entries'][number]
 type Catalogs = SessionListState['subagentsByParent']
+
+/** CSS module class for each squad role accent. */
+const ROLE_ACCENT_CLASS = {
+  scout: css.role_scout,
+  forge: css.role_forge,
+  lens: css.role_lens,
+  quill: css.role_quill,
+  relay: css.role_relay,
+  scribe: css.role_scribe,
+} as Record<SquadRoleId, string>
+
+/** Locale keys for earned badge ids (closed vocabulary). */
+const BADGE_LOCALE_KEY: Record<SquadBadgeId, Extract<SubagentKey, `badge.${string}`>> = {
+  first_delegation: 'badge.first_delegation',
+  ten_tools: 'badge.ten_tools',
+  error_free_turn: 'badge.error_free_turn',
+}
 
 /** Business actions supplied by the slot registration. */
 export interface SubagentCatalogInjected {
@@ -82,6 +102,24 @@ function tokenTotal(
     ? undefined
     : usage.uncachedInputTokens + usage.outputTokens
       + usage.cacheReadTokens + usage.cacheWriteTokens
+}
+
+/** Locale-owned badge names joined for the level-chip tooltip. */
+function badgeNames(
+  badges: readonly SquadBadgeId[],
+  t: TranslateNS<typeof NS>,
+): string {
+  return badges.map(id => t(BADGE_LOCALE_KEY[id])).join(' · ')
+}
+
+/** Compact level chip title: level plus optional earned badge names. */
+function progressTitle(
+  progress: SquadProgressProjection,
+  t: TranslateNS<typeof NS>,
+): string {
+  const level = t('level.title', { level: progress.level })
+  if (progress.badges.length === 0) return level
+  return `${level} · ${badgeNames(progress.badges, t)}`
 }
 
 /** Exact whole-second active-turn duration for one catalog row. */
@@ -299,9 +337,11 @@ function CatalogRows({
           || (childCatalog.state === 'loading' && childCatalog.entries.length === 0)
         const summary = summaries[entry.id]
         const label = entry.label ?? entry.id
+        const role = squadRoleFromLabel(label)
+        const roleTitle = role === undefined ? undefined : t(`role.${role}`)
         const mode = entry.mode === 'one-shot' ? t('mode.oneShot') : t('mode.continuable')
         const activity = entry.activity === 'running' ? t('activity.running') : t('activity.inactive')
-        const secondary = [summary?.title, mode, activity]
+        const secondary = [roleTitle, summary?.title, mode, activity]
           .filter(value => value !== undefined)
           .join(' · ')
         const totalTokens = tokenTotal(summary?.projectionValues?.tokenUsage)
@@ -310,6 +350,9 @@ function CatalogRows({
           entry.activity,
           now,
         )
+        const squadProgress = role === undefined
+          ? undefined
+          : summary?.projectionValues?.squadProgress
         const tokenMetric = totalTokens === undefined
           ? undefined
           : t('tokens.total', { value: formatTokens(totalTokens, t) })
@@ -319,7 +362,16 @@ function CatalogRows({
             compact: formatDuration(durationMs, t),
             exact: formatExactDuration(durationMs, t),
           }
-        const metrics = [tokenMetric, durationMetric?.exact]
+        const levelMetric = squadProgress === undefined
+          ? undefined
+          : t('level.compact', { level: squadProgress.level })
+        const badgeMetric = squadProgress === undefined || squadProgress.badges.length === 0
+          ? undefined
+          : t(
+            squadProgress.badges.length === 1 ? 'badges.count.one' : 'badges.count',
+            { count: squadProgress.badges.length },
+          )
+        const metrics = [levelMetric, badgeMetric, tokenMetric, durationMetric?.exact]
           .filter(value => value !== undefined)
           .join(' · ')
 
@@ -374,9 +426,33 @@ function CatalogRows({
                   </button>
                 )}
               <div className={css.clickarea}>
-                <StateDot state={entry.activity === 'running' ? 'ongoing' : 'done'} />
+                {role === undefined
+                  ? <StateDot state={entry.activity === 'running' ? 'ongoing' : 'done'} />
+                  : (
+                    <span
+                      className={`${css.roleAccent} ${ROLE_ACCENT_CLASS[role]}`}
+                      title={t('role.accent', { role: roleTitle ?? label })}
+                      aria-hidden="true"
+                    />
+                  )}
                 <span className={css.content}>
-                  <span className={`${css.label} ${isCurrent ? css.currentLabel : ''}`}>{label}</span>
+                  <span className={css.labelRow}>
+                    <span className={`${css.label} ${isCurrent ? css.currentLabel : ''}`}>{label}</span>
+                    {squadProgress !== undefined && (
+                      <span
+                        className={css.levelChip}
+                        title={progressTitle(squadProgress, t)}
+                      >
+                        {t('level.compact', { level: squadProgress.level })}
+                        {squadProgress.badges.length > 0
+                          ? ` · ${t(
+                            squadProgress.badges.length === 1 ? 'badges.count.one' : 'badges.count',
+                            { count: squadProgress.badges.length },
+                          )}`
+                          : ''}
+                      </span>
+                    )}
+                  </span>
                   <span className={css.summary}>{secondary}</span>
                 </span>
                 {metrics !== '' && (

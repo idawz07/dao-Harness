@@ -102,7 +102,7 @@ it('hot-reloads a real client-plugin source edit without refreshing the page', a
       [process.execPath, binPath, 'web', '--no-open', '--port', '0'],
       world,
       {
-        DEEPSEEK_API_KEY: 'keyless-hmr-no-call',
+        LLAMA_ROUTER_API_KEY: 'keyless-hmr-no-call',
         DAO_HOME: join(world, '.dao'),
       },
     ))

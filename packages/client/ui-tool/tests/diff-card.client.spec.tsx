@@ -2,9 +2,7 @@
 
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render } from '@testing-library/react'
-import {
-  bindSnapshotSelector, conversationSnapshot, sessionSnapshot, workspaceSnapshot,
-} from '@daoai/dao-client-test-runtime'
+import { bindSnapshotSelector, conversationSnapshot, sessionSnapshot, workspaceSnapshot } from '@daoai/dao-client-test-runtime'
 import { createSnapshotStore } from '@daoai/dao-client-store'
 import type {
   ChatSnapshot, ConversationNode, RunningToolCall, SelectionTarget, ToolResultNode,
@@ -12,15 +10,15 @@ import type {
 import type { SessionListState } from '@daoai/dao-api-session-controller/client'
 import type { SessionId } from '@daoai/dao-session/types'
 import { makeTranslate } from '@daoai/dao-client-test-runtime'
-import { zh as commonZh } from '@daoai/dao-client-locale/src/locales/zh.ts'
+import { en as commonEn } from '@daoai/dao-client-locale/src/locales/en.ts'
 import { CHAT_DIFF_MAX_LINES, diffCardModel } from '../src/client/tool/models/diff-card-model.ts'
 import { createChatStore } from '@daoai/dao-client-ui-chat/src/client/stores.ts'
 import { GenericToolCard, type GenericToolCardProps } from '../src/client/tool/toolviews/GenericToolCard.tsx'
 import { DetailsPanel } from '@daoai/dao-client-ui-chat/src/client/details/DetailsPanel.tsx'
 import { FileMutationRow, fileMutationToolview } from '../src/client/tool/toolviews/file-mutation-row.tsx'
 import { renderToolDetails, toolChatSnapshot, useEmptyTrajectory } from './tool-details-render.client.tsx'
-import { zh } from '@daoai/dao-client-ui-conversation/src/client/locales.ts'
-import { zh as chatZh } from '@daoai/dao-client-ui-chat/src/client/locale.ts'
+import { en } from '@daoai/dao-client-ui-conversation/src/client/locales.ts'
+import { en as chatEn } from '@daoai/dao-client-ui-chat/src/client/locale.ts'
 
 afterEach(cleanup)
 
@@ -28,8 +26,8 @@ type FileMutationRowProps = Parameters<typeof FileMutationRow>[0]
 
 const SID = 's1' as SessionId
 
-const t = makeTranslate(zh, commonZh)
-const chatT = makeTranslate(chatZh, commonZh)
+const t = makeTranslate(en, commonEn)
+const chatT = makeTranslate(chatEn, commonEn)
 
 const ARGS = '{"file_path":"notes/demo.txt","old_string":"hello","new_string":"hello fixture"}'
 
@@ -233,7 +231,7 @@ describe('FileMutationRow diff card', () => {
     toggleRow(view)
     expect(view.container.querySelector('[data-diff]')).not.toBeNull()
     expect(view.getByText('hello fixture')).toBeTruthy()
-    expect(view.getByText('复制')).toBeTruthy()
+    expect(view.getByText('Copy')).toBeTruthy()
   })
 
   it('the summary is a path link that opens the tool path through the host', () => {
@@ -254,7 +252,7 @@ describe('FileMutationRow diff card', () => {
     }), 'write')} />)
     // The footer counts live inside the collapsed diff card.
     toggleRow(view)
-    expect(view.getByText('└ +1 -0 · 1 个文件')).toBeTruthy()
+    expect(view.getByText('└ +1 -0 · 1 file')).toBeTruthy()
   })
 
   it('reflects the run state on its leading slot', () => {
@@ -308,7 +306,7 @@ describe('FileMutationRow diff card', () => {
     expect(view.container.querySelector('[data-state="stopped"]')).not.toBeNull()
     // The amber StateDot is aria-hidden, so ToolRow carries the state to AT as
     // visually-hidden text; without it a stopped row is a colour-only signal.
-    expect(view.getByText('已停止')).toBeTruthy()
+    expect(view.getByText('Stopped')).toBeTruthy()
   })
 
   it('renders a plain summary span when the call carries no file path', () => {
@@ -419,10 +417,10 @@ describe('DetailsPanel diff Output section', () => {
     expect(view.getByText('hello fixture')).toBeTruthy()
   })
 
-  it('a running diff call renders its intended change, not the 运行中… placeholder', () => {
+  it('a running diff call renders its intended change, not the Running… placeholder', () => {
     const view = mount(snapshot({ runningCalls: [running()] }), target)
     expect(view.container.querySelector('[data-diff]')).not.toBeNull()
-    expect(view.queryByText('运行中…')).toBeNull()
+    expect(view.queryByText('Running…')).toBeNull()
   })
 
   it('a non-diff result keeps the flattened pre', () => {
@@ -433,6 +431,6 @@ describe('DetailsPanel diff Output section', () => {
       })],
     }), target)
     expect(view.container.querySelector('[data-diff]')).toBeNull()
-    expect(view.getByText('输出').closest('section')?.querySelector('pre')?.textContent).toBe('permission denied')
+    expect(view.getByText('Output').closest('section')?.querySelector('pre')?.textContent).toBe('permission denied')
   })
 })

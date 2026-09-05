@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/daoAI/dao.git",
     "directory": "packages/client/ui-subagent"
   },
   "type": "module",
@@ -32,12 +32,13 @@
   "dao": {
     "client": {
       "inject": [
-        "@daoai/dao-api-session-controller",
-        "@daoai/dao-client-locale",
-        "@daoai/dao-client-ui-conversation",
-        "@daoai/dao-client-ui-primitives",
-        "@daoai/dao-client-ui-input-trigger"
-      ],
+      "@daoai/dao-api-session-controller",
+      "@daoai/dao-client-locale",
+      "@daoai/dao-client-ui-conversation",
+      "@daoai/dao-client-ui-primitives",
+      "@daoai/dao-client-ui-input-trigger",
+      "@daoai/dao-squad-progress"
+    ],
       "platform": "web"
     }
   },
@@ -58,7 +59,8 @@
     "@daoai/dao-client-connection": "workspace:^",
     "@daoai/dao-session": "workspace:^",
     "@daoai/dao-client-ui-renderer": "workspace:^",
-    "@daoai/dao-client-ui-session": "workspace:^"
+    "@daoai/dao-client-ui-session": "workspace:^",
+    "@daoai/dao-squad-progress": "workspace:^"
   },
   "devDependencies": {
     "@daoai/dao-client-locale": "workspace:^",
@@ -79,7 +81,8 @@
     "@daoai/dao-client-connection": "workspace:^",
     "@daoai/dao-session": "workspace:^",
     "@daoai/dao-client-ui-renderer": "workspace:^",
-    "@daoai/dao-client-ui-session": "workspace:^"
+    "@daoai/dao-client-ui-session": "workspace:^",
+    "@daoai/dao-squad-progress": "workspace:^"
   },
   "files": [
     "lib/index.js",

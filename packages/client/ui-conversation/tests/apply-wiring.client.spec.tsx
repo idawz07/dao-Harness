@@ -1,14 +1,12 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest'
-import {
-  SlotTestRuntime, stubSettingsScope, usePinnedBrowserLanguages,
-} from '@daoai/dao-client-test-runtime'
+import { SlotTestRuntime, stubSettingsScope, usePinnedBrowserLanguages } from '@daoai/dao-client-test-runtime'
 import { LocaleRuntime } from '@daoai/dao-client-locale/client'
 import type { ObservableSnapshot } from '@daoai/dao-client-store'
 import type { SessionId } from '@daoai/dao-session/types'
 import { apply, inject, type ViewTab } from '@daoai/dao-client-ui-conversation/client'
 
-usePinnedBrowserLanguages('zh-CN')
+usePinnedBrowserLanguages('en-US')
 
 const SID = 'session-1' as SessionId
 
@@ -91,14 +89,16 @@ describe('target-neutral Conversation apply wiring', () => {
       id: 'probe',
       label: () => b.runtime.ctx.locale.getSnapshot().active,
     }, (() => null) as never)
+    b.runtime.ctx.locale.addLanguage({ id: 'zh', label: '中文', fallback: 'en' })
+    b.runtime.ctx.locale.setLocale('zh')
     await vi.waitFor(() => {
       expect(source?.getSnapshot()).toEqual([{ id: 'probe', label: 'zh' }])
     })
-    const chinese = source?.getSnapshot()
+    const prior = source?.getSnapshot()
 
     b.runtime.ctx.locale.setLocale('en')
     expect(source?.getSnapshot()).toEqual([{ id: 'probe', label: 'en' }])
-    expect(source?.getSnapshot()).not.toBe(chinese)
+    expect(source?.getSnapshot()).not.toBe(prior)
 
     disposeView()
     await vi.waitFor(() => { expect(source?.getSnapshot()).toEqual([]) })

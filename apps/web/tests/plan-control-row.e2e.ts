@@ -2,7 +2,7 @@
 // trigger keep disjoint click areas, and clicking the chip at its center
 // leaves plan mode through the real command channel. This is the browser
 // regression the external report asked for (dao-external/issues#107 →
-// deepseek-harness#1406): "increase an 800×720 browser regression test and
+// #1406): "increase an 800×720 browser regression test and
 // assert that the plan center hits the plan button".
 //
 // Plan mode is entered through the real /plan command with no argument:
@@ -92,7 +92,7 @@ describe('web e2e: plan chip click area at the narrow viewport', () => {
     // The regression depends on the real model label width: a bare fallback
     // trigger would fit beside the chip even on the pre-fix layout. The
     // directory loads asynchronously, so poll for the real label.
-    await expect.poll(() => trigger.getAttribute('aria-label'), { timeout: 10_000 }).toContain('DeepSeek-V4-Flash')
+    await expect.poll(() => trigger.getAttribute('aria-label'), { timeout: 10_000 }).toContain('Qwen3.8-27B-Q6_K_XL-128K')
     const chipBox = await chip.boundingBox()
     const triggerBox = await trigger.boundingBox()
     expect(chipBox).not.toBeNull()

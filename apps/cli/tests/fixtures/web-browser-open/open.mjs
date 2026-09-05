@@ -36,7 +36,7 @@ export default async function open(url) {
     url,
     status: response.status,
     bootManifest: html.includes('__DAO_BOOT__'),
-    apiKeyPresent: process.env.DEEPSEEK_API_KEY !== undefined,
+    apiKeyPresent: process.env.LLAMA_ROUTER_API_KEY !== undefined,
     daoHomePresent: process.env.DAO_HOME !== undefined,
   })}`)
   // The Windows launcher writes the server-exit marker only while its helper

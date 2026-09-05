@@ -915,7 +915,7 @@ function installedArtifactEnvironment(consumerRoot: string): NodeJS.ProcessEnv {
   environment.DAO_HOME = resolve(consumerRoot, '.dao')
   environment.DAO_AGENTS_HOME = resolve(consumerRoot, '.agents')
   environment.DAO_TELEMETRY_DISABLED = '1'
-  environment.DEEPSEEK_API_KEY = 'keyless-installed-web-no-call'
+  environment.LLAMA_ROUTER_API_KEY = 'keyless-installed-web-no-call'
   environment.LANG = 'en_US.UTF-8'
   environment.LC_ALL = 'en_US.UTF-8'
   environment.LC_CTYPE = 'en_US.UTF-8'

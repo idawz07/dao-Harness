@@ -4,7 +4,7 @@ Status: implemented
 
 ## Problem
 
-The Client package splits in [PR #2728](https://github.com/deepseek-ai/deepseek-harness/pull/2728) and [PR #2911](https://github.com/deepseek-ai/deepseek-harness/pull/2911) left 15 `dao.client.external` requests in feature-plugin manifests. Those requests turned ordinary value imports into synchronous module-table ordering constraints, even when the consumer needed only a type, a small pure conversion, or access to an already-injected Cordis service.
+The Client package splits in [PR #2728](https://github.com/daoAI/dao/pull/2728) and [PR #2911](https://github.com/daoAI/dao/pull/2911) left 15 `dao.client.external` requests in feature-plugin manifests. Those requests turned ordinary value imports into synchronous module-table ordering constraints, even when the consumer needed only a type, a small pure conversion, or access to an already-injected Cordis service.
 
 Removing every import mechanically would create different coupling: a general utility package could become a miscellaneous business owner, a service could carry pure presentation transforms, or duplicated target behavior could be centralized only to satisfy clone detection. Client maintenance needs one repeatable classification before choosing where a cross-package reference belongs.
 

@@ -69,7 +69,7 @@ const LIVE_PROMPT = [
   ...Array.from(
     { length: 48 },
     (_, index) =>
-      `Context ${String(index + 1).padStart(2, '0')}: 用户正在检查长会话中的增量渲染性能。`
+      `Context ${String(index + 1).padStart(2, '0')}: User正在检查长Sessions中的增量渲染性能。`
       + ` Preserve item ${String(index)} and compare ${'payload'.repeat(8)}.`,
   ),
   '```ts',
@@ -198,7 +198,7 @@ function appendTitle(session: Session, title: string, messageSeq: number): void 
 function appendRequestHeader(session: Session, turn: number, step: number): void {
   session.append('request/header', {
     header: {
-      config: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      config: { provider: 'llama-router', model: 'Qwen3.8-27B-Q6_K_XL-128K' },
       system: `Synthetic performance system prompt for turn ${String(turn)}, step ${String(step)}.`,
     },
     reason: turn === 1 && step === 1 ? 'initial' : 'change',
@@ -216,7 +216,7 @@ function appendAssistant(
     step,
     message: createAssistantMessage({
       content: text(body),
-      source: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      source: { provider: 'llama-router', model: 'Qwen3.8-27B-Q6_K_XL-128K' },
     }),
     usage: {
       inputTokens: 4_000 + turn * 10,
@@ -258,7 +258,7 @@ function appendToolStep(
           arguments: args,
         })),
       ],
-      source: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      source: { provider: 'llama-router', model: 'Qwen3.8-27B-Q6_K_XL-128K' },
     }),
     usage: {
       inputTokens: 6_000 + turn * 10,
@@ -410,7 +410,7 @@ function textStream(deltas: readonly string[], inputTokens: number): StreamChunk
 function comparisonPrompt(index: number): string {
   if (index === COMPARISON_TURNS) return LIVE_PROMPT
   return (`${LONG_CONTINUATION_USER_PREFIX}_${String(index)} `
-    + `继续分析这个长会话的第 ${String(index)} 个增量问题，并保留当前滚动和输入响应。 `
+    + `Continue分析这个长Sessions的第 ${String(index)} 个增量问题，并保留当前滚动和Input响应。 `
     + 'context '.repeat(80)).trimEnd()
 }
 
@@ -452,7 +452,7 @@ function soakTurn(index: number): ConversationTurnSpec {
     : undefined
   return {
     prompt: (`${SOAK_USER_PREFIX}_${suffix} `
-      + `持续对话第 ${String(index)} 轮，检查增量渲染与保留状态。 `
+      + `持续Sessions第 ${String(index)} 轮，检查增量渲染与保留Status。 `
       + 'context '.repeat(20)).trimEnd(),
     deltas: Array.from({ length: SOAK_DELTA_COUNT }, (_, chunkIndex) => {
       if (chunkIndex === 0) return `${SOAK_FIRST_PREFIX}_${suffix} `

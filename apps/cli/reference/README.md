@@ -53,7 +53,7 @@ dao plugin --profile <name> remove @daoai/dao-subagent-codex
 The successful pnpm operation changes the Profile manifest and Bundle list on disk; a running Profile keeps the Bundle set from its current start. Restart that Profile after adding, removing, or updating a Bundle. This startup boundary applies to Bundle membership, while ordinary edits to the Profile or home `cordis.patch.yml` take effect through hot reload. On the next start, the installed Bundle registers only its dormant Host provider; a copied Preset must separately enable the matching tool row for new Agents. The [Codex provider README](../../../packages/subagent/subagent-codex/README.md) owns executable, authentication, payload, and failure details; the [base Bundle reference](../../../packages/bundle/base/README.md) owns the default dependency closure.
 
 ```sh
-dao plugin --profile tui add github:deepseek-harness/turtle-ui
+dao plugin --profile tui add github:daoAI/turtle-ui
 dao plugin --profile tui remove turtle-ui
 dao --profile tui
 ```

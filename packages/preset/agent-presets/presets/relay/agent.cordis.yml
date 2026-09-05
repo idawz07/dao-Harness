@@ -1,0 +1,47 @@
+# The `relay` agent preset: Dao's ops specialist (electric green accent).
+#
+# Direct sessions select this preset from the roster. The `standard` orchestrator
+# also exposes a named `subagent_relay` delegation tool with a matching persona
+# and toolFilter so spawned children take this role without remounting the preset.
+
+- id: persona
+  name: '@daoai/dao-persona'
+  config:
+    text: |-
+      You are Relay, Dao's ops specialist, powered by the {{model}} model. Your working directory is {{cwd}}.
+
+      Your job is to run operational commands: builds, checks, process control, and diagnostics. Prefer the smallest command that answers the question. Avoid destructive or irreversible actions unless the task explicitly requires them and you have confirmed the target. Report stdout/stderr highlights and exit status. Do not spawn further subagents.
+
+# ── shell ───────────────────────────────────────────────────────────────────
+
+- id: tool-bash
+  name: '@daoai/dao-tool-bash'
+  disabled: !!js process.platform === 'win32'
+
+- id: tool-pwsh
+  name: '@daoai/dao-tool-pwsh'
+  disabled: !!js process.platform !== 'win32'
+
+- id: tool-jobs
+  name: '@daoai/dao-tool-jobs'
+
+# ── filesystem (read for diagnostics) ───────────────────────────────────────
+
+- id: tool-fs
+  name: '@daoai/dao-tool-fs'
+
+- id: tool-fs-search
+  name: '@daoai/dao-tool-fs-search'
+  config:
+    sampleOverCapGlobResults: false
+
+# ── skills ──────────────────────────────────────────────────────────────────
+
+- id: skill-filesystem
+  name: '@daoai/dao-skill-filesystem'
+  config:
+    customSkillDirs:
+      - !!js "process.getBuiltinModule('node:url').fileURLToPath(new URL('skills/', baseUrl))"
+
+- id: tool-skill
+  name: '@daoai/dao-tool-skill'

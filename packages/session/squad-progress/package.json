@@ -1,0 +1,66 @@
+{
+  "name": "@daoai/dao-squad-progress",
+  "description": "Squad XP, level, and badge projection plus durable storage-domain mirror for the Dao",
+  "version": "0.1.2-alpha.1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daoAI/dao.git",
+    "directory": "packages/session/squad-progress"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./types": {
+      "types": "./lib/types/types.d.ts",
+      "default": "./lib/types/types.js"
+    },
+    "./client": {
+      "types": "./lib/types/client.d.ts",
+      "default": "./lib/types/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-projection": "workspace:^",
+    "@daoai/dao-storage-domain": "workspace:^",
+    "@daoai/cordis": "workspace:^"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@daoai/cordis-plugin-include": "workspace:^",
+    "@daoai/cordis-plugin-loader": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/dao-session-projection": "workspace:^",
+    "@daoai/dao-storage": "workspace:^",
+    "@daoai/dao-storage-domain": "workspace:^",
+    "@daoai/dao-storage-json": "workspace:^",
+    "@daoai/cordis": "workspace:^"
+  }
+}

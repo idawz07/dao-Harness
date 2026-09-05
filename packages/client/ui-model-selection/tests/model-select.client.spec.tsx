@@ -6,14 +6,14 @@ import { createSnapshotStore } from '@daoai/dao-client-store'
 import type { ComponentProps } from 'react'
 import type { ModelDirectoryState } from '../src/client/directory.ts'
 import { ModelSelect } from '../src/client/ModelSelect.tsx'
-import { zh } from '../src/client/locales.ts'
-import { zh as commonZh } from '@daoai/dao-client-locale/src/locales/zh.ts'
+import { en } from '../src/client/locales.ts'
+import { en as commonEn } from '@daoai/dao-client-locale/src/locales/en.ts'
 
 // The seat's key domain is model ∪ common; the stub mirrors the real lookup
 // chain: package dictionary, then common vocabulary, then the key.
 const t: ComponentProps<typeof ModelSelect>['t'] = (key, params) => {
-  const template = (zh as Record<string, string>)[key]
-    ?? (commonZh as Record<string, string>)[key]
+  const template = (en as Record<string, string>)[key]
+    ?? (commonEn as Record<string, string>)[key]
     ?? key
   return params === undefined
     ? template
@@ -69,10 +69,10 @@ describe('ModelSelect reasoning effort', () => {
     />)
 
     const trigger = screen.getByRole('button', {
-      name: '选择模型，当前 Qwen3.8-27B-Flash，推理等级 High',
+      name: 'Select model, current Qwen3.8-27B-Flash, reasoning effort High',
     })
     fireEvent.click(trigger)
-    fireEvent.click(screen.getByRole('menuitem', { name: /推理等级/ }))
+    fireEvent.click(screen.getByRole('menuitem', { name: /Effort/ }))
     expect(screen.getAllByRole('menuitemradio').map(item => item.textContent))
       .toEqual(['Off', 'High', 'Max'])
     expect(screen.queryByText('Largest budget')).toBeNull()
@@ -84,7 +84,7 @@ describe('ModelSelect reasoning effort', () => {
         model: 'qwen38-27b',
         reasoningEffort: 'max',
       })
-      expect(trigger.getAttribute('aria-label')).toBe('选择模型，当前 Qwen3.8-27B-Flash，推理等级 Max')
+      expect(trigger.getAttribute('aria-label')).toBe('Select model, current Qwen3.8-27B-Flash, reasoning effort Max')
     })
   })
 
@@ -111,9 +111,9 @@ describe('ModelSelect reasoning effort', () => {
     />)
 
     fireEvent.click(screen.getByRole('button', {
-      name: '选择模型，当前 Model，推理等级 Default',
+      name: 'Select model, current Model, reasoning effort Default',
     }))
-    fireEvent.click(screen.getByRole('menuitem', { name: /推理等级/ }))
+    fireEvent.click(screen.getByRole('menuitem', { name: /Effort/ }))
     expect(screen.getAllByRole('menuitemradio').map(item => item.textContent))
       .toEqual(['Default', 'Standard'])
   })
@@ -132,11 +132,11 @@ describe('ModelSelect reasoning effort', () => {
       t={t}
     />)
 
-    const trigger = screen.getByRole('button', { name: '选择模型，当前 llama-router/removed-model' })
+    const trigger = screen.getByRole('button', { name: 'Select model, current llama-router/removed-model' })
     expect(trigger.textContent).toContain('llama-router/removed-model')
     fireEvent.click(trigger)
-    expect(screen.queryByRole('menuitem', { name: /推理等级/ })).toBeNull()
-    fireEvent.click(screen.getByRole('menuitem', { name: /模型/ }))
+    expect(screen.queryByRole('menuitem', { name: /Effort/ })).toBeNull()
+    fireEvent.click(screen.getByRole('menuitem', { name: /Model/ }))
     expect(screen.queryByRole('menuitemradio', { name: 'removed-model' })).toBeNull()
     expect(screen.getByRole('menuitemradio', { name: 'Qwen3.8-27B-Flash' })).toBeTruthy()
     expect(screen.queryByText('Fast catalog description')).toBeNull()
@@ -158,12 +158,12 @@ describe('ModelSelect reasoning effort', () => {
       t={t}
     />)
 
-    expect(screen.getByRole('button', { name: '正在加载模型…' }).textContent)
-      .toContain('正在加载模型…')
+    expect(screen.getByRole('button', { name: 'Loading models…' }).textContent)
+      .toContain('Loading models…')
     directory.set(state())
     await waitFor(() => {
       expect(screen.getByRole('button', {
-        name: '选择模型，当前 Qwen3.8-27B-Flash，推理等级 High',
+        name: 'Select model, current Qwen3.8-27B-Flash, reasoning effort High',
       })).toBeTruthy()
     })
   })
@@ -191,13 +191,13 @@ describe('ModelSelect reasoning effort', () => {
       t={t}
     />)
 
-    fireEvent.click(screen.getByRole('button', { name: /选择模型|当前/ }))
-    fireEvent.click(screen.getByRole('menuitem', { name: /模型/ }))
+    fireEvent.click(screen.getByRole('button', { name: /Select model|current/ }))
+    fireEvent.click(screen.getByRole('menuitem', { name: /Model/ }))
     fireEvent.click(screen.getByRole('menuitemradio', { name: /Qwen3.8-27B-Pro/ }))
     const toast = await screen.findByRole('alert')
-    expect(toast.textContent).toContain('模型操作失败：model-unavailable: session already contains images')
+    expect(toast.textContent).toContain('Model operation failed: model-unavailable: session already contains images')
     // The selection failure does not render the in-menu load strip (no Retry).
-    expect(screen.queryByRole('button', { name: '重试' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Retry' })).toBeNull()
   })
 
   it('renders no Agent-bound control for an addressed subagent session', () => {

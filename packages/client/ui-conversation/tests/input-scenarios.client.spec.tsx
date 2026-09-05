@@ -19,17 +19,15 @@ import type {
 import type {
   CommandClaim, PickOutcome, SubmitImageAttachment, SubmitOutcome,
 } from '../src/client/contract/input.ts'
-import {
-  bindSnapshotSelector, conversationSnapshot, makeTranslate, sessionSnapshot, SlotTestRuntime,
-} from '@daoai/dao-client-test-runtime'
+import { bindSnapshotSelector, conversationSnapshot, makeTranslate, sessionSnapshot, SlotTestRuntime } from '@daoai/dao-client-test-runtime'
 import type { SessionPendingInteractionSnapshot } from '@daoai/dao-client-ui-session/client'
 import type { SessionId } from '@daoai/dao-session/types'
-import { zh as commonZh } from '@daoai/dao-client-locale/src/locales/zh.ts'
+import { en as commonEn } from '@daoai/dao-client-locale/src/locales/en.ts'
 import type { DraftAttachmentId } from '../src/client/contract/input.ts'
 import { SessionInputShell } from '../src/client/input/facade.ts'
 import { InputBar } from '../src/client/skeleton/InputBar.tsx'
 import type { InputBarProps } from '../src/client/skeleton/InputBar.tsx'
-import { zh } from '../src/client/locales.ts'
+import { en } from '../src/client/locales.ts'
 
 // jsdom implements no Range geometry (Lexical's scroll-into-view measures the
 // caret with one once the surface is genuinely contenteditable).
@@ -103,9 +101,9 @@ function commandSource(
 }
 
 const COMMANDS: FakeCommand[] = [
-  { name: 'goal', description: '设定目标', input: { hint: '目标内容' } },
-  { name: 'compact', description: '压缩上下文' },
-  { name: 'vision', description: '识别图片', input: { hint: '想问什么', images: true } },
+  { name: 'goal', description: '设定Goal', input: { hint: 'Goal objective' } },
+  { name: 'compact', description: 'CompactionCONTEXT' },
+  { name: 'vision', description: '识别Image', input: { hint: '想问什么', images: true } },
 ]
 
 const PNG: SubmitImageAttachment = { mediaType: 'image/png', data: 'AA==' }
@@ -177,7 +175,7 @@ async function scopedBench(register?: (inputTriggers: InputTriggerService) => vo
     renderSlot: (() => null) as InputBarProps['renderSlot'],
     stop: vi.fn(),
     command: () => Promise.resolve(true),
-    t: makeTranslate(zh, commonZh),
+    t: makeTranslate(en, commonEn),
     variant: 'composer',
   }
   const view = render(<InputBar {...barProps} />)
@@ -190,7 +188,7 @@ async function scopedBench(register?: (inputTriggers: InputTriggerService) => vo
 
 async function bench(executeImpl?: (line: string) => Promise<SubmitOutcome>) {
   const execute = vi.fn(executeImpl ?? ((line: string) =>
-    Promise.resolve({ kind: 'success' as const, text: `已执行 ${line}` })))
+    Promise.resolve({ kind: 'success' as const, text: `已执more lines ${line}` })))
   const { source, executed, envelopes } = commandSource(COMMANDS, execute)
   const base = await scopedBench((inputTriggers) => { inputTriggers.registerSource(source) })
   return { ...base, execute, executed, envelopes }
@@ -212,8 +210,8 @@ describe('scenario A: menu-pick /goal, type args, enter submits', () => {
     expect(b.shell.snapshot.draft).toBe('/goal ')
     act(() => { b.shell.editor.update(() => {}, { discrete: true }) }) // flush the queued decoration refresh
     expect(b.view.container.querySelector('[data-lexical-text][style*="warn-label"]')?.textContent).toBe('/goal ')
-    // The zh dictionary owns a hint.goal entry, which overrides the machine's raw hint (production behavior).
-    expect(b.textarea.style.getPropertyValue('--dao-composer-hint')).toBe(JSON.stringify('输入目标，智能体将持续执行'))
+    // The en dictionary owns a hint.goal entry, which overrides the machine's raw hint (production behavior).
+    expect(b.textarea.style.getPropertyValue('--dao-composer-hint')).toBe(JSON.stringify('describe the objective for a long-running task'))
     // Continue typing args; hint drops; claim holds.
     b.type('/goal 发布 v1')
     expect(b.shell.snapshot.phase).toBe('claimed')
@@ -222,7 +220,7 @@ describe('scenario A: menu-pick /goal, type args, enter submits', () => {
     await vi.waitFor(() => { expect(b.execute).toHaveBeenCalledWith('/goal 发布 v1', []) })
     await vi.waitFor(() => { expect(b.shell.snapshot.draft).toBe('') })
     expect(b.shell.snapshot.phase).toBe('plain')
-    expect(b.view.getByText('已执行 /goal 发布 v1')).toBeTruthy()
+    expect(b.view.getByText('已执more lines /goal 发布 v1')).toBeTruthy()
     expect(b.sink).not.toHaveBeenCalled()
   })
 })
@@ -357,12 +355,12 @@ describe('scenario I: unknown /xyz + enter', () => {
         trigger: '/', name: 'command',
         candidates: () => Promise.resolve([]),
         onPick: () => undefined,
-        matchEnter: () => Promise.reject(new Error('目录预热失败')),
+        matchEnter: () => Promise.reject(new Error('directory warmup failed')),
       } as never)
     })
     act(() => { b.shell.setDraft('/plan 上线') })
     fireEvent.keyDown(b.textarea, { key: 'Enter' })
-    await vi.waitFor(() => { expect(b.view.getByText('目录预热失败')).toBeTruthy() })
+    await vi.waitFor(() => { expect(b.view.getByText('directory warmup failed')).toBeTruthy() })
     // Never a silent downgrade: draft retained, sink untouched.
     expect(b.shell.snapshot.draft).toBe('/plan 上线')
     expect(b.sink).not.toHaveBeenCalled()

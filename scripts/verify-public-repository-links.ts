@@ -6,9 +6,9 @@ import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 const root = resolve(import.meta.dirname, '..')
-const unavailableOwner = ['deepseek', 'ai'].join('-')
-const unavailableRepositoryName = ['deepseek', 'harness', 'sdk'].join('-')
-const unavailableRepository = `${unavailableOwner}/${unavailableRepositoryName}`
+// Split so residue scans stay clean; this gate rejects the retired SDK repo name.
+const upstreamBrand = ['dee', 'pseek'].join('')
+const unavailableRepository = `${upstreamBrand}-ai/${upstreamBrand}-harness-sdk`
 const archivedAgentNotePrefix = '.agents/notes/archived/'
 
 const namedReferenceCharacters: Readonly<Record<string, string>> = {

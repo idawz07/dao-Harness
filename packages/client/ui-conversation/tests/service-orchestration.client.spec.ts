@@ -10,7 +10,7 @@ import type { QueuedMessage } from '@daoai/dao-api-session-controller/client'
 import { ComposerBlockRegistry } from '../src/client/input/blocks.ts'
 import { InputHub } from '../src/client/input/hub.ts'
 import { ConversationController, UnsupportedImageMediaTypeError } from '../src/client/service.ts'
-import { zh } from '../src/client/locales.ts'
+import { en } from '../src/client/locales.ts'
 
 async function bench() {
   const runtime = await SlotTestRuntime.create()
@@ -24,7 +24,7 @@ async function bench() {
   })
   // config.input is required (the apply shares its hub with the inject
   // factories); the bench passes its own instance explicitly.
-  const hub = new InputHub(runtime.ctx, makeTranslate(zh, {}))
+  const hub = new InputHub(runtime.ctx, makeTranslate(en, {}))
   const fiber = runtime.ctx.plugin(ConversationController, {
     input: hub,
     blocks: new ComposerBlockRegistry(),
@@ -145,7 +145,7 @@ describe('ConversationController', () => {
     // No Client Sessions service at all: a bare context lacks the assembled controller.
     const bare = new Context()
     await bare.plugin(ConversationController, {
-      input: new InputHub(bare, makeTranslate(zh, {})),
+      input: new InputHub(bare, makeTranslate(en, {})),
       blocks: new ComposerBlockRegistry(),
     }).await()
     const orphan = bare.get('conversation') as ConversationController
@@ -247,7 +247,7 @@ describe('sendSession submission echo', () => {
         new File([Uint8Array.of(7)], 'kept.png', { type: 'image/png' }),
       ])
       const session = b.runtime.sessions.binding('s1')!.session
-      await expect(b.root.sendSession(session, '失败', [attachment!.id], 'queue'))
+      await expect(b.root.sendSession(session, 'Failed', [attachment!.id], 'queue'))
         .resolves.toEqual({ kind: 'error' })
       b.retire.onRetire?.({ reason: 'failed' })
       expect(b.root.draftImages([attachment!.id])).toHaveLength(1)
@@ -327,9 +327,9 @@ describe('sendSession submission echo', () => {
       },
     })
     const prompt = vi.spyOn(session, 'prompt').mockResolvedValue({ ok: true, value: { accepted: true } })
-    await expect(b.root.sendSession(session, '继续', [], 'queue')).resolves.toEqual({ kind: 'success' })
+    await expect(b.root.sendSession(session, 'Continue', [], 'queue')).resolves.toEqual({ kind: 'success' })
     expect(beginSubmission).not.toHaveBeenCalled()
-    expect(prompt).toHaveBeenCalledWith([{ type: 'text', text: '继续' }], 'queue', undefined)
+    expect(prompt).toHaveBeenCalledWith([{ type: 'text', text: 'Continue' }], 'queue', undefined)
     await b.runtime.dispose()
   })
 })
@@ -430,7 +430,7 @@ describe('InputHub queue steering (empty-draft accelerated Enter)', () => {
     b.shell.steerQueue()
     await vi.waitFor(() => {
       expect(b.shell.notices.getSnapshot()).toEqual(
-        expect.objectContaining({ level: 'error', text: '插话发送失败，请重试。' }),
+        expect.objectContaining({ level: 'error', text: 'Steering failed. Try again.' }),
       )
     })
     expect(b.updateQueue).toHaveBeenCalledTimes(1)

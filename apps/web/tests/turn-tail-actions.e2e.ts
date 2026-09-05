@@ -177,7 +177,7 @@ describe('web e2e: assistant IconActions wait for the turn to end', () => {
 
     await disclosure.click()
     expect(await disclosure.getAttribute('aria-expanded')).toBe('true')
-    expect(await page.getByText('deepseek-official/deepseek-v4-flash', { exact: true }).count()).toBe(1)
+    expect(await page.getByText('llama-router/Qwen3.8-27B-Q6_K_XL-128K', { exact: true }).count()).toBe(1)
     expect(await page.getByText('7,891 tok', { exact: true }).count()).toBe(1)
     expect(await page.getByText('7,808 tok', { exact: true }).count()).toBe(1)
     expect(await page.getByText('112 tok (42 tok reasoning)', { exact: true }).count()).toBe(1)

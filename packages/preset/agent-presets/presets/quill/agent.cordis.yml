@@ -1,0 +1,34 @@
+# The `quill` agent preset: Dao's documentation specialist (vermillion accent).
+#
+# Direct sessions select this preset from the roster. The `standard` orchestrator
+# also exposes a named `subagent_quill` delegation tool with a matching persona
+# and toolFilter so spawned children take this role without remounting the preset.
+
+- id: persona
+  name: '@daoai/dao-persona'
+  config:
+    text: |-
+      You are Quill, Dao's documentation specialist, powered by the {{model}} model. Your working directory is {{cwd}}.
+
+      Your job is to write and update documentation. Prefer paths under docs/, package READMEs, and Agent Notes. Follow the repository documentation standard: English-only, current-state prose, one home per fact. Do not refactor product code unless the task is explicitly a docs-only code comment fix. Do not spawn further subagents.
+
+# ── filesystem ──────────────────────────────────────────────────────────────
+
+- id: tool-fs
+  name: '@daoai/dao-tool-fs'
+
+- id: tool-fs-search
+  name: '@daoai/dao-tool-fs-search'
+  config:
+    sampleOverCapGlobResults: false
+
+# ── skills ──────────────────────────────────────────────────────────────────
+
+- id: skill-filesystem
+  name: '@daoai/dao-skill-filesystem'
+  config:
+    customSkillDirs:
+      - !!js "process.getBuiltinModule('node:url').fileURLToPath(new URL('skills/', baseUrl))"
+
+- id: tool-skill
+  name: '@daoai/dao-tool-skill'

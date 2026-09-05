@@ -174,7 +174,7 @@ function requestProfileShutdown(
   child.kill('SIGTERM')
 }
 
-function createEnvironmentProbeProfile(home: string, project: string): void {
+function createEnvironmentProbeProfile(home: string, project: string, baseURL: string): void {
   const pluginFile = join(project, 'environment-probe.mjs')
   writeFileSync(pluginFile, [
     "export const name = 'environment-probe'",
@@ -183,8 +183,8 @@ function createEnvironmentProbeProfile(home: string, project: string): void {
     '  void ctx.loader.await().then(async () => {',
     "    let text = ''",
     '    for await (const chunk of ctx.llm.stream({',
-    "      provider: 'deepseek-official',",
-    "      model: 'deepseek-v4-flash',",
+    "      provider: 'llama-router',",
+    "      model: 'Qwen3.8-27B-Q6_K_XL-128K',",
     '      messages: [],',
     '      maxTokens: 32,',
     '    })) {',
@@ -206,6 +206,22 @@ function createEnvironmentProbeProfile(home: string, project: string): void {
     dao: { profile: { bundles: ['@daoai/dao-base'] } },
   }, undefined, 2))
   writeFileSync(join(profileDir, 'cordis.patch.yml'), [
+    '- id: llm-pi-ai',
+    '  config:',
+    '    providers:',
+    '      llama-router:',
+    '        displayName: Local Llama Router',
+    '        apiKeyEnv: LLAMA_ROUTER_API_KEY',
+    '        api: openai-completions',
+    `        baseURL: ${baseURL}`,
+    '        reasoning: high',
+    '        compat:',
+    '          thinkingFormat: qwen-chat-template',
+    '        models:',
+    '          - id: Qwen3.8-27B-Q6_K_XL-128K',
+    '            contextWindow: 131072',
+    '            maxTokens: 65536',
+    '            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }',
     '- insert:',
     '    - id: environment-probe',
     `      name: ${pathToFileURL(pluginFile).href}`,
@@ -413,7 +429,7 @@ describe.skipIf(!existsSync(daoBin))('dao BUILT bin (node lib/bin.js, no tsx)', 
       const result = await runBuiltBin(['--profile', 'sdk', '--patch', patch], {
         DAO_HOME: home,
         DAO_TELEMETRY_DISABLED: '1',
-        DEEPSEEK_API_KEY: 'built-sdk-startup-failure-no-call',
+        LLAMA_ROUTER_API_KEY: 'built-sdk-startup-failure-no-call',
       }, home)
       expect(result.code).toBe(1)
       expect(result.stdout).toBe('')
@@ -435,7 +451,7 @@ describe.skipIf(!existsSync(daoBin))('dao BUILT bin (node lib/bin.js, no tsx)', 
         ...process.env,
         DAO_HOME: home,
         DAO_TELEMETRY_DISABLED: '1',
-        DEEPSEEK_API_KEY: 'built-sdk-profile-no-call',
+        LLAMA_ROUTER_API_KEY: 'built-sdk-profile-no-call',
       },
       extendEnv: false,
     })
@@ -460,7 +476,7 @@ describe.skipIf(!existsSync(daoBin))('dao BUILT bin (node lib/bin.js, no tsx)', 
         jsonrpc: '2.0',
         id: 1,
         method: 'initialize',
-        params: { cwd: home, provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+        params: { cwd: home, provider: 'llama-router', model: 'Qwen3.8-27B-Q6_K_XL-128K' },
       })}\n`)
       expect(await response(1)).toMatchObject({
         jsonrpc: '2.0',
@@ -661,16 +677,15 @@ describe.skipIf(!existsSync(daoBin))('dao BUILT bin (node lib/bin.js, no tsx)', 
     })
     const home = mkdtempSync(join(tmpdir(), 'dao-home-environment-'))
     const project = mkdtempSync(join(tmpdir(), 'dao-home-project-'))
-    writeFileSync(join(home, '.credentials.yaml'), `version: 1\nrefs:\n  DEEPSEEK_API_KEY: ${apiKey}\n`, { mode: 0o600 })
-    createEnvironmentProbeProfile(home, project)
+    writeFileSync(join(home, '.credentials.yaml'), `version: 1\nrefs:\n  LLAMA_ROUTER_API_KEY: ${apiKey}\n`, { mode: 0o600 })
+    createEnvironmentProbeProfile(home, project, server.baseURL)
     try {
       const result = await runBuiltBin(
         ['--profile', 'environment-probe'],
         {
           DAO_HOME: home,
           DAO_TELEMETRY_DISABLED: '1',
-          DEEPSEEK_API_KEY: undefined,
-          DEEPSEEK_BASE_URL: server.baseURL,
+          LLAMA_ROUTER_API_KEY: undefined,
         },
         project,
       )
@@ -701,7 +716,7 @@ describe.skipIf(!existsSync(daoBin))('dao BUILT bin (node lib/bin.js, no tsx)', 
     try {
       const result = await runBuiltBin(['--profile', 'web', '--patch', invalidProvider], {
         DAO_HOME: home,
-        DEEPSEEK_API_KEY: 'keyless-invalid-config',
+        LLAMA_ROUTER_API_KEY: 'keyless-invalid-config',
         DAO_TELEMETRY_DISABLED: '1',
       })
       expect(result.code).toBe(1)
@@ -983,10 +998,7 @@ describe.skipIf(!existsSync(daoBin))('dao BUILT bin (node lib/bin.js, no tsx)', 
       expect(rows.map(row => [row.id, row.name])).toEqual([
         ['sdk-app-startup', '@daoai/dao-sdk-app'],
         ['sdk-jsonrpc-server', '@daoai/dao-sdk-jsonrpc-server'],
-        ['deepseek-llm-api-extensions', '@daoai/dao-deepseek-llm-api-extensions'],
-        ['session-log-deepseek', '@daoai/dao-session-log-deepseek'],
-        ['plugin-package-inventory-deepseek', '@daoai/dao-plugin-package-inventory-deepseek'],
-        ['llm-deepseek', '@daoai/dao-llm-deepseek'],
+        ['llm-pi-ai', '@daoai/dao-llm-pi-ai'],
         ['sandbox', '@daoai/dao-sandbox-local'],
         ['sandbox-policy', '@daoai/dao-sandbox-policy'],
         ['subprocess', '@daoai/dao-subprocess-local'],

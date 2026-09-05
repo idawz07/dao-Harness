@@ -3,12 +3,12 @@
 # identical to the base example.
 - insert:
     - id: session-title-provider
-      name: '@deepseek-ai/dsh-session-title-first-prompt-llm'
+      name: '@daoai/dao-session-title-first-prompt-llm'
       config:
         targetWords: 5
         targetCjkCharacters: 10
         maxInputBytes: 4096
         maxOutputTokens: 32
         timeoutMs: 5000
-        provider: deepseek-official
-        model: deepseek-v4-flash
+        provider: llama-router
+        model: Qwen3.8-27B-Q6_K_XL-128K

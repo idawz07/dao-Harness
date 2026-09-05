@@ -1097,6 +1097,9 @@ importers:
       '@daoai/dao-pwsh-sandbox':
         specifier: workspace:^
         version: link:../../shell/pwsh-sandbox
+      '@daoai/dao-references':
+        specifier: workspace:^
+        version: link:../../references/references
       '@daoai/dao-repeat-tool-reminder':
         specifier: workspace:^
         version: link:../../guard/repeat-tool-reminder
@@ -1154,6 +1157,9 @@ importers:
       '@daoai/dao-spill-policy':
         specifier: workspace:^
         version: link:../../spill/spill-policy
+      '@daoai/dao-squad-progress':
+        specifier: workspace:^
+        version: link:../../session/squad-progress
       '@daoai/dao-storage':
         specifier: workspace:^
         version: link:../../storage/storage
@@ -1205,6 +1211,12 @@ importers:
       '@daoai/dao-tool-ralph':
         specifier: workspace:^
         version: link:../../workflow/tool-ralph
+      '@daoai/dao-tool-references':
+        specifier: workspace:^
+        version: link:../../references/tool-references
+      '@daoai/dao-tool-session-query':
+        specifier: workspace:^
+        version: link:../../session-query/tool-session-query
       '@daoai/dao-tool-skill':
         specifier: workspace:^
         version: link:../../skill/tool-skill
@@ -3321,6 +3333,9 @@ importers:
       '@daoai/dao-session':
         specifier: workspace:^
         version: link:../../core/session
+      '@daoai/dao-squad-progress':
+        specifier: workspace:^
+        version: link:../../session/squad-progress
       '@daoai/dao-subagent':
         specifier: workspace:^
         version: link:../../subagent/subagent
@@ -6461,6 +6476,73 @@ importers:
         specifier: workspace:^
         version: link:../../core/system-prompt
 
+  packages/references/references:
+    dependencies:
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@daoai/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@daoai/cordis-plugin-include':
+        specifier: workspace:^
+        version: link:../../../vendor/include
+      '@daoai/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../vendor/loader
+      '@daoai/dao-brand':
+        specifier: workspace:^
+        version: link:../../util/brand
+      '@daoai/dao-invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@daoai/dao-storage':
+        specifier: workspace:^
+        version: link:../../storage/storage
+      '@daoai/dao-storage-domain':
+        specifier: workspace:^
+        version: link:../../storage/storage-domain
+      '@daoai/dao-storage-json':
+        specifier: workspace:^
+        version: link:../../storage/storage-json
+
+  packages/references/tool-references:
+    devDependencies:
+      '@daoai/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@daoai/cordis-plugin-include':
+        specifier: workspace:^
+        version: link:../../../vendor/include
+      '@daoai/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../vendor/loader
+      '@daoai/dao-invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@daoai/dao-llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@daoai/dao-references':
+        specifier: workspace:^
+        version: link:../references
+      '@daoai/dao-storage':
+        specifier: workspace:^
+        version: link:../../storage/storage
+      '@daoai/dao-storage-domain':
+        specifier: workspace:^
+        version: link:../../storage/storage-domain
+      '@daoai/dao-storage-json':
+        specifier: workspace:^
+        version: link:../../storage/storage-json
+      '@daoai/dao-system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
+      '@daoai/dao-tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+
   packages/runtime-diagnostics/invariants:
     dependencies:
       '@daoai/schemastery':
@@ -7256,6 +7338,43 @@ importers:
       '@daoai/dao-timeout':
         specifier: workspace:^
         version: link:../../util/timeout
+
+  packages/session/squad-progress:
+    dependencies:
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@daoai/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@daoai/cordis-plugin-include':
+        specifier: workspace:^
+        version: link:../../../vendor/include
+      '@daoai/cordis-plugin-loader':
+        specifier: workspace:^
+        version: link:../../../vendor/loader
+      '@daoai/dao-invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@daoai/dao-llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@daoai/dao-session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@daoai/dao-session-projection':
+        specifier: workspace:^
+        version: link:../session-projection
+      '@daoai/dao-storage':
+        specifier: workspace:^
+        version: link:../../storage/storage
+      '@daoai/dao-storage-domain':
+        specifier: workspace:^
+        version: link:../../storage/storage-domain
+      '@daoai/dao-storage-json':
+        specifier: workspace:^
+        version: link:../../storage/storage-json
 
   packages/settings/settings:
     dependencies:
@@ -9624,6 +9743,9 @@ importers:
       '@daoai/dao-pwsh-local':
         specifier: workspace:^
         version: link:../../packages/shell/pwsh-local
+      '@daoai/dao-references':
+        specifier: workspace:^
+        version: link:../../packages/references/references
       '@daoai/dao-repeat-tool-reminder':
         specifier: workspace:^
         version: link:../../packages/guard/repeat-tool-reminder
@@ -9696,6 +9818,18 @@ importers:
       '@daoai/dao-spill':
         specifier: workspace:^
         version: link:../../packages/spill/spill
+      '@daoai/dao-squad-progress':
+        specifier: workspace:^
+        version: link:../../packages/session/squad-progress
+      '@daoai/dao-storage':
+        specifier: workspace:^
+        version: link:../../packages/storage/storage
+      '@daoai/dao-storage-domain':
+        specifier: workspace:^
+        version: link:../../packages/storage/storage-domain
+      '@daoai/dao-storage-json':
+        specifier: workspace:^
+        version: link:../../packages/storage/storage-json
       '@daoai/dao-subagent':
         specifier: workspace:^
         version: link:../../packages/subagent/subagent
@@ -9768,6 +9902,12 @@ importers:
       '@daoai/dao-tool-ralph':
         specifier: workspace:^
         version: link:../../packages/workflow/tool-ralph
+      '@daoai/dao-tool-references':
+        specifier: workspace:^
+        version: link:../../packages/references/tool-references
+      '@daoai/dao-tool-session-query':
+        specifier: workspace:^
+        version: link:../../packages/session-query/tool-session-query
       '@daoai/dao-tool-skill':
         specifier: workspace:^
         version: link:../../packages/skill/tool-skill

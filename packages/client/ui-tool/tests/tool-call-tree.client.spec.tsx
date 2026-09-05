@@ -6,14 +6,14 @@ import type { ConnectionGeneration } from '@daoai/dao-client-connection/client'
 import type { SessionSnapshot } from '@daoai/dao-api-session-controller/client'
 import type { ToolResultNode } from '@daoai/dao-client-ui-chat/client'
 import { makeTranslate } from '@daoai/dao-client-test-runtime'
-import { zh as commonZh } from '@daoai/dao-client-locale/src/locales/zh.ts'
+import { en as commonEn } from '@daoai/dao-client-locale/src/locales/en.ts'
 import type { ToolCallOwnerProps, ToolTreeProps } from '../src/client/contract/slots.ts'
 import { ToolCallTree } from '../src/client/tool/ToolCallTree.tsx'
-import { zh } from '@daoai/dao-client-ui-conversation/src/client/locales.ts'
+import { en } from '@daoai/dao-client-ui-conversation/src/client/locales.ts'
 
 afterEach(cleanup)
 
-const t: ToolTreeProps['t'] = makeTranslate(zh, commonZh)
+const t: ToolTreeProps['t'] = makeTranslate(en, commonEn)
 
 const root = (callId: string, call: ToolResultNode['call']): ToolResultNode => ({
   kind: 'tool-result', seq: 3, time: 3_000, callId, call, callTime: 2_000,

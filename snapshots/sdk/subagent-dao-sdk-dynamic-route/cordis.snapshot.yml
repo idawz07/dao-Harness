@@ -1,0 +1,22 @@
+# Keyless replay layer for the Dao SDK dynamic-route snapshot.
+
+- insert:
+    - id: llm-replay
+      name: '@daoai/dao-llm-replay'
+      config:
+        providers:
+          - id: llama-router
+            name: DeepSeek
+            models:
+              - id: mock-delegate
+          - id: mock
+            name: Mock
+            models:
+              - id: mock-routed
+                reasoningEfforts: [max]
+
+    - id: sdk-jsonrpc-server-dynamic-replay
+      name: '@daoai/dao-sdk-jsonrpc-server'
+      inject: [sdkAppStartup, loader]
+      config:
+        maxTokensAsSuccess: true

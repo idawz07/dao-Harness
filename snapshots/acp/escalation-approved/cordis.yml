@@ -2,17 +2,6 @@
 # launcher owns environment loading, plugin resolution, and process shutdown;
 # stdout remains reserved for ACP JSON-RPC.
 
-- id: llm-deepseek
-  name: '@daoai/dao-llm-deepseek'
-  config:
-    thinking: enabled
-    reasoningEffort: max
-    models:
-      - id: deepseek-v4-flash
-      - id: deepseek-v4-pro
-      - id: deepseek-v4-flash-vision-exp
-        inputModalities: [text, image]
-
 - id: sandbox-policy
   name: '@daoai/dao-sandbox-policy'
   config:
@@ -33,8 +22,8 @@
 - id: acp
   name: '@daoai/dao-acp'
   config:
-    provider: deepseek-official
-    model: deepseek-v4-pro
+    provider: llama-router
+    model: Qwen3.8-27B-Q6_K_XL-128K
 
 - id: system-prompt
   name: '@daoai/dao-system-prompt'
@@ -79,10 +68,6 @@
     cwd: !!js process.cwd()
 
 - insert:
-    - id: hooks-claude-code
-      name: '@daoai/dao-hooks-claude-code'
-      config:
-        configPath: ./hooks.json
 
     - id: hooks-codex
       name: '@daoai/dao-hooks-codex'

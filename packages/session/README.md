@@ -38,6 +38,7 @@ The group splits into four families: durable storage (persistence seam, backends
 | [`session-projection/`](session-projection/README.md) | Defines and drives projection units that fold committed events into whole current values | `ctx.sessionProjections` |
 | [`session-projection-cache/`](session-projection-cache/README.md) | Persists projection checkpoints so cold reads skip full log loads | `ctx.sessionProjectionCache` |
 | [`session-stats/`](session-stats/README.md) | Serves whole-log conversation counts and wall times through the `sessionStats` unit | registers on `ctx.sessionProjections` |
+| [`squad-progress/`](squad-progress/README.md) | Serves per-session squad XP, level, and badges through the `squadProgress` unit and mirrors them into storage | `ctx.squadProgress` |
 
 ### Titles
 

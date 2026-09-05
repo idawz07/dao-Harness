@@ -6,9 +6,7 @@ import { LocaleRuntime } from '@daoai/dao-client-locale/client'
 import type { ISession } from '@daoai/dao-api-session-controller/client'
 import type { SessionId } from '@daoai/dao-session/types'
 import type { TodoItem } from '@daoai/dao-client-ui-conversation/client'
-import {
-  apply as applyChat, inject as injectChat, type ToolResultNode,
-} from '@daoai/dao-client-ui-chat/client'
+import { apply as applyChat, inject as injectChat, type ToolResultNode } from '@daoai/dao-client-ui-chat/client'
 import type { PropsRenderSlots } from '@daoai/dao-client-ui-slots'
 import { SlotTestRuntime, TestRemote, usePinnedBrowserLanguages, stubSettingsScope } from '@daoai/dao-client-test-runtime'
 import { apply as applyConversation, inject as injectConversation } from '@daoai/dao-client-ui-conversation/client'
@@ -17,7 +15,7 @@ import { toolSessionEvents } from './tool-details-render.client.tsx'
 
 // The service reads its initial locale from the browser; these specs assert
 // the shipped Chinese copy, so they state the browser they assume.
-usePinnedBrowserLanguages('zh-CN')
+usePinnedBrowserLanguages('en-US')
 
 const SID = 's1' as SessionId
 
@@ -114,13 +112,13 @@ describe('todo_write assembly (product registrations, no outlet twins)', () => {
     // Keyed toolview registration took the row (summary derived from args).
     const row = view.container.querySelector('[data-tool="todo_write"]')
     expect(row).not.toBeNull()
-    expect(row!.textContent).toContain('1/3 已完成 · 实现 fixture 样本')
+    expect(row!.textContent).toContain('1/3 completed · 实现 fixture 样本')
 
     // The plan strip sits in the input dock, fed by the projection
     // (default-collapsed: the header summary shows; rows appear on expand).
     const panel = view.container.querySelector('[data-testid="todo-panel"]')
     expect(panel).not.toBeNull()
-    expect(panel!.textContent).toContain('1 已完成\u2002·\u20021 进行中\u2002·\u20021 待处理')
+    expect(panel!.textContent).toContain('1 completed\u2002·\u20021 in progress\u2002·\u20021 pending')
     fireEvent.click(panel!.querySelector('button')!)
     expect([...panel!.querySelectorAll('li')].map(li => li.getAttribute('data-status')))
       .toEqual(['completed', 'in_progress', 'pending'])

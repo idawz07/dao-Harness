@@ -1,6 +1,6 @@
 // Keyless browser e2e: a user who configures some OTHER provider is not asked
-// for the official DeepSeek key again, and the first-run setup card is a card
-// they can close. The shipped DeepSeek adapter stays mounted without a
+// for the farm llama-router key again, and the first-run setup card is a card
+// they can close. The shipped llm-pi-ai adapter stays mounted without a
 // credential throughout, so the only thing that ends onboarding here is the
 // pi-ai route the user configures through the real wire. Zero model calls:
 // configuration is pure settings/credentials/llm-domain traffic.
@@ -14,12 +14,12 @@ import {
   acknowledgeReloadConnectionLoss, assertFixtureInventory, captureStableAria, compareOrRefreshGolden,
   launchWebScaffold, watchConsole, webSnapshotMode, type WebScaffold,
 } from './scaffold.ts'
-import { ZH_BROWSER_LOCALE, saveFailureShot } from './support.ts'
+import { saveFailureShot } from './support.ts'
 
 const SNAPSHOT_DIR = fileURLToPath(new URL('./expected/onboarding-usable-provider', import.meta.url))
 const DISMISSED_EXPECTED = join(SNAPSHOT_DIR, 'dismissed.expected.md')
 const MODE = webSnapshotMode()
-const CREDENTIAL_STEP = '添加一个 API Key 开始使用'
+const CREDENTIAL_STEP = 'Add an API key to get started'
 
 describe.skipIf(MODE === 'record')('web e2e: another usable provider ends first-run onboarding', () => {
   let scaffold: WebScaffold
@@ -28,10 +28,9 @@ describe.skipIf(MODE === 'record')('web e2e: another usable provider ends first-
   let tripwire: ReturnType<typeof watchConsole>
 
   beforeAll(async () => {
-    scaffold = await launchWebScaffold({ deepSeekMissingCredential: true })
+    scaffold = await launchWebScaffold({ farmMissingCredential: true })
     browser = await chromium.launch()
-    // The scenario asserts the shipped Chinese copy, so the browser asks for it.
-    page = await browser.newPage({ viewport: { width: 1440, height: 960 }, locale: ZH_BROWSER_LOCALE })
+    page = await browser.newPage({ viewport: { width: 1440, height: 960 }, locale: 'en-US' })
     tripwire = watchConsole(page)
     await page.goto(scaffold.authenticatedUrl, { waitUntil: 'load' })
     await page.waitForSelector('[class*="frame"]', { timeout: 30_000 })
@@ -46,38 +45,38 @@ describe.skipIf(MODE === 'record')('web e2e: another usable provider ends first-
     onTestFailed(() => saveFailureShot(page, 'web-e2e-onboarding-setup-card-cancel'))
     const credentialStep = page.getByRole('dialog', { name: CREDENTIAL_STEP })
     await credentialStep.waitFor({ timeout: 15_000 })
-    await credentialStep.getByRole('button', { name: '稍后配置' }).click()
+    await credentialStep.getByRole('button', { name: 'Configure later' }).click()
     await credentialStep.waitFor({ state: 'detached', timeout: 15_000 })
 
-    await page.getByRole('button', { name: '设置', exact: true }).click()
-    const settings = page.getByRole('dialog', { name: '设置' })
+    await page.getByRole('button', { name: 'Settings', exact: true }).click()
+    const settings = page.getByRole('dialog', { name: 'Settings' })
     await settings.waitFor({ timeout: 10_000 })
     // Dismissing the onboarding step leaves Settings closed, so enter the
     // Models section explicitly before exercising its normal cards.
-    await settings.getByRole('button', { name: '模型' }).click()
-    const setupKey = settings.getByRole('textbox', { name: 'API 密钥', exact: true })
+    await settings.getByRole('button', { name: 'Models' }).click()
+    const setupKey = settings.getByRole('textbox', { name: 'API key', exact: true })
     await setupKey.waitFor({ timeout: 10_000 })
 
-    const add = settings.getByRole('button', { name: '添加提供方' })
+    const add = settings.getByRole('button', { name: 'Add provider' })
     await expect.poll(async () => add.isEnabled(), { timeout: 10_000 }).toBe(true)
     await add.click()
-    const pick = settings.getByLabel('提供方')
+    const pick = settings.getByLabel('Provider')
     await pick.waitFor({ timeout: 10_000 })
     await pick.selectOption('minimax-cn')
     await expect.poll(
-      async () => settings.getByRole('textbox', { name: 'API 密钥', exact: true }).count(),
+      async () => settings.getByRole('textbox', { name: 'API key', exact: true }).count(),
       { timeout: 10_000 },
     ).toBe(2)
 
     // Cancelling the setup card must not close the independent add-provider
     // draft beside it.
-    await settings.getByRole('button', { name: '取消', exact: true }).first().click()
-    expect(await settings.getByLabel('提供方').count()).toBe(1)
+    await settings.getByRole('button', { name: 'Cancel', exact: true }).first().click()
+    expect(await settings.getByLabel('Provider').count()).toBe(1)
     await expect.poll(
-      async () => settings.getByRole('textbox', { name: 'API 密钥', exact: true }).count(),
+      async () => settings.getByRole('textbox', { name: 'API key', exact: true }).count(),
       { timeout: 10_000 },
     ).toBe(1)
-    await settings.getByRole('button', { name: '编辑 DeepSeek (deepseek-official)' }).waitFor({ timeout: 10_000 })
+    await settings.getByRole('button', { name: 'Edit Local Llama Router (llama-router)' }).waitFor({ timeout: 10_000 })
     const dismissed = await captureStableAria(page, '[role="dialog"]', scaffold.workspaceCwd)
     await compareOrRefreshGolden(DISMISSED_EXPECTED, dismissed, MODE)
 
@@ -85,19 +84,19 @@ describe.skipIf(MODE === 'record')('web e2e: another usable provider ends first-
     expect(tripwire.pageErrors).toEqual([])
   }, 60_000)
 
-  it('stops prompting for DeepSeek once the other provider can serve requests', async () => {
+  it('stops prompting for the farm provider once the other provider can serve requests', async () => {
     onTestFailed(() => saveFailureShot(page, 'web-e2e-onboarding-other-provider'))
-    const settings = page.getByRole('dialog', { name: '设置' })
-    await settings.getByRole('textbox', { name: 'API 密钥', exact: true }).fill('sk-e2e-minimax')
-    await settings.getByRole('button', { name: '保存', exact: true }).click()
-    await settings.getByText('已保存 minimax-cn。', { exact: true }).waitFor({ timeout: 15_000 })
+    const settings = page.getByRole('dialog', { name: 'Settings' })
+    await settings.getByRole('textbox', { name: 'API key', exact: true }).fill('sk-e2e-minimax')
+    await settings.getByRole('button', { name: 'Apply', exact: true }).click()
+    await settings.getByText('Saved minimax-cn.', { exact: true }).waitFor({ timeout: 15_000 })
 
-    // Only minimax-cn is reachable; DeepSeek still holds no credential.
+    // Only minimax-cn is reachable; llama-router still holds no credential.
     const document = await readFile(join(scaffold.harnessHome, 'settings.yaml'), 'utf8')
     expect(document).toContain('apiKeyEnv: MINIMAX_CN_API_KEY')
     const credentials = await readFile(join(scaffold.harnessHome, '.credentials.yaml'), 'utf8')
     expect(credentials).toContain('MINIMAX_CN_API_KEY: sk-e2e-minimax')
-    expect(credentials).not.toContain('DEEPSEEK_API_KEY')
+    expect(credentials).not.toContain('LLAMA_ROUTER_API_KEY')
 
     const warningsBefore = tripwire.warnings.length
     await page.reload({ waitUntil: 'load' })
@@ -111,13 +110,13 @@ describe.skipIf(MODE === 'record')('web e2e: another usable provider ends first-
     ).toBe(0)
     expect(await page.locator('#root').evaluate(root => (root as HTMLElement).inert)).toBe(false)
 
-    // The Models page agrees: DeepSeek stays a row rather than reopening its
+    // The Models page agrees: llama-router stays a row rather than reopening its
     // setup card over a user who already has somewhere to send a request.
-    await page.getByRole('button', { name: '设置', exact: true }).click()
+    await page.getByRole('button', { name: 'Settings', exact: true }).click()
     await settings.waitFor({ timeout: 10_000 })
-    await settings.getByRole('button', { name: '模型' }).click()
-    await settings.getByRole('button', { name: '编辑 DeepSeek (deepseek-official)' }).waitFor({ timeout: 10_000 })
-    expect(await settings.getByRole('textbox', { name: 'API 密钥', exact: true }).count()).toBe(0)
+    await settings.getByRole('button', { name: 'Models' }).click()
+    await settings.getByRole('button', { name: 'Edit Local Llama Router (llama-router)' }).waitFor({ timeout: 10_000 })
+    expect(await settings.getByRole('textbox', { name: 'API key', exact: true }).count()).toBe(0)
 
     expect((await page.content()).includes('sk-e2e-minimax')).toBe(false)
     expect(tripwire.pageErrors).toEqual([])

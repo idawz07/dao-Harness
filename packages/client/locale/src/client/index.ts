@@ -1,12 +1,11 @@
 /**
  * Browser-side locale registry. Bound translation functions retain stable
- * identity for injected consumers. The plugin also registers the Language
- * preference row into the settings General section — the locale feature owns
- * its own settings surface.
+ * identity for injected consumers. The shipped product is English-only; the
+ * catalog remains extensible for language-pack plugins.
  */
 import type { Context as ClientContext } from '@daoai/cordis'
 import {
-  type BoundActions, type LocaleDictOf, type LocaleNamespaceMap, type Translate, type TranslateNS,
+  type LocaleDictOf, type LocaleNamespaceMap, type Translate, type TranslateNS,
 } from '@daoai/dao-client-ui-slots'
 // Type-only: the ctx.settingsScope Context merge and the settings slot types.
 // Cross-plugin collaboration goes through the service, never a value import
@@ -18,16 +17,8 @@ import {
   LOCALE_ID_PATTERN, LOCALE_IDS, LOCALE_PREFERENCE_FIELD, LOCALE_SETTINGS_NAMESPACE,
   type BuiltInLocaleId, type LocaleId, type LocaleSettings,
 } from '../locale-settings.ts'
-import { en, zh, type CommonKey } from '../locales/index.ts'
-import {
-  en as settingsEn, zh as settingsZh, type SettingsLocaleKey,
-} from '../locales/settings.ts'
-import type { LanguageRowInjected } from './LanguageRow.tsx'
-import { LanguageRow } from './LanguageRow.tsx'
-import { createLanguageRowStore } from './settings-store.ts'
+import { en, type CommonKey } from '../locales/index.ts'
 
-export type { LanguageRowComponentProps, LanguageRowInjected } from './LanguageRow.tsx'
-export type { LanguageOptionRow, LanguageRowState } from './settings-store.ts'
 export type { CommonKey } from '../locales/index.ts'
 export type { BuiltInLocaleId, LocaleId, LocaleSettings } from '../locale-settings.ts'
 
@@ -40,8 +31,6 @@ declare module '@daoai/dao-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Shared cross-feature vocabulary, consulted by the lookup chain after the entry's own namespace misses. */
     common: CommonKey
-    /** This feature's own settings-row copy (the Language row). */
-    'settings.locale': SettingsLocaleKey
   }
 }
 
@@ -98,23 +87,16 @@ declare module '@daoai/cordis' {
 /**
  * English is both the locale the UI opens in when the browser names no registered
  * language (and for non-browser runs), and the dictionary consulted after the
- * active locale misses a key. One constant serves both because the shipped
- * `zh`/`en` dictionaries carry identical key sets, so neither direction can
- * leave a key unresolved; the residual case points at English rather than
- * zh because a browser naming no registered language is the reader least
- * likely to read Chinese.
+ * active locale misses a key. The product ships English only; language-pack
+ * plugins may add further locales whose fallback chains terminate here.
  */
 export const FALLBACK_LOCALE: BuiltInLocaleId = 'en'
 
 /** Shared namespace for shell-level texts. */
 export const COMMON_NS = 'common'
 
-/** Namespace owning this feature's settings-row copy. */
-export const SETTINGS_NS = 'settings.locale'
-
-/** The two locales and dictionaries shipped by this package. */
+/** The locale and dictionary shipped by this package. */
 const BUILT_IN_LOCALE_METADATA = {
-  zh: { label: '中文', fallback: 'en' },
   en: { label: 'English' },
 } as const satisfies Record<BuiltInLocaleId, Omit<LocaleDefinition, 'id'>>
 const BUILT_IN_LOCALES: readonly LocaleDefinition[] = Object.freeze(
@@ -146,7 +128,7 @@ function normalizeLanguage(input: LanguageRegistration): Readonly<LanguageRegist
 function syncDocumentLanguage(snapshot: LocaleSnapshot): void {
   // Non-browser runs (node boots of the client tree) have no document.
   if (typeof document === 'undefined') return
-  document.documentElement.lang = snapshot.active === 'zh' ? 'zh-CN' : snapshot.active
+  document.documentElement.lang = snapshot.active
 }
 
 /**
@@ -359,8 +341,8 @@ export class LocaleRuntime {
    * Register a declared namespace's dictionaries, all locales in one call —
    * the typed form: each dictionary is checked against the namespace's
    * {@link LocaleNamespaceMap} key union (a missing or extra key is a
-   * compile error), and every shipped locale is required (bilingual balance
-   * enforced at registration). Duplicate (ns, locale) throws (single occupant; a
+   * compile error), and every shipped locale is required. Duplicate (ns, locale)
+   * throws (single occupant; a
    * namespace's texts have one owner). Registration bumps the revision so
    * mounted outlets pick up late-arriving dictionaries.
    * @param ns - a namespace merged into LocaleNamespaceMap.
@@ -531,52 +513,23 @@ function detectBrowserLocale(locales: readonly LocaleDefinition[]): LocaleId | u
 export const inject = ['slots', 'connection', 'remote', 'settingsScope']
 
 /**
- * Client plugin body: provide the locale service with base dictionaries and
- * register the feature-owned Language preference row into the General
- * section's item slot (a feature owns its settings surface).
+ * Client plugin body: provide the locale service with the English dictionaries
+ * and keep `<html lang>` aligned with the active locale snapshot.
  * @param ctx - client cordis context.
  */
 export function apply(ctx: ClientContext): void {
   const host = ctx.settingsScope.bind<LocaleSettings>({ namespace: LOCALE_SETTINGS_NAMESPACE })
   const locale = new LocaleRuntime(ctx, host)
-  locale.register(COMMON_NS, { zh, en })
-  locale.register(SETTINGS_NS, { zh: settingsZh, en: settingsEn })
+  locale.register(COMMON_NS, { en })
   ctx.provide('locale', locale)
   // The service IS the LocaleFace (bind + getSnapshot/subscribe): install it
   // so the render machinery can synthesize the `t` standard seat.
   ctx.slots.installLocale(locale)
 
-  const store = createLanguageRowStore()
-  let bound: BoundActions<typeof store> | undefined
-  const sync = (): void => {
-    const snapshot = locale.getSnapshot()
-    syncDocumentLanguage(snapshot)
-    bound?.sync(
-      snapshot.active,
-      snapshot.locales.map(l => ({ id: l.id, label: l.label })),
-      snapshot.revision,
-    )
-  }
-  ctx.effect(() => locale.subscribe(sync), 'locale: language row and document synchronization')
+  const sync = (): void => { syncDocumentLanguage(locale.getSnapshot()) }
+  ctx.effect(() => locale.subscribe(sync), 'locale: document language synchronization')
   // The served markup declares one language; the resolved locale may differ
   // (browser detection, or a stored preference adopted after activation), so
   // state it once at activation rather than waiting for the first change.
   sync()
-  const injected = (actions: BoundActions<typeof store>): LanguageRowInjected => {
-    bound = actions
-    // Re-sync from the getter so no event is lost between registration and
-    // first render (the store's revision guard drops stale duplicates).
-    sync()
-    return {
-      setLocale: (id) => { locale.setLocale(id) },
-    }
-  }
-  ctx.slots.inject('settings.general.item', () => ctx.slots.register({
-    name: 'settings.general.item',
-    id: 'language',
-    order: 0,
-    store,
-    locale: SETTINGS_NS,
-    inject: injected,
-  }, LanguageRow))
 }

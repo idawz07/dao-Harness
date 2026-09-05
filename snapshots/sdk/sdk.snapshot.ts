@@ -1,6 +1,6 @@
 /**
  * Keyless snapshot coverage for the TypeScript SDK path: each scenario spawns
- * the real `dsh --profile sdk` runtime through
+ * the real `dao --profile sdk` runtime through
  * `@daoai/dao-sdk-client`, drives one turn over stdio JSON-RPC,
  * and pins the SDK `RunResult`, the complete notification stream, and the
  * persisted session logs. Replay serves recorded model
@@ -69,18 +69,18 @@ const recording = mode === 'record'
 const refreshing = mode === 'refresh'
 const RUNTIME_WORKSPACE_ENTRIES = [
   '.agents',
-  '.child-dsh',
-  '.dsh',
-  '.dsh-sdk-background-release',
+  '.child-dao',
+  '.dao',
+  '.dao-sdk-background-release',
   '.replay-fixtures',
   '.snapshot-patches',
 ] as const
-const dshSdkDiagnosticChildPatch = fileURLToPath(new URL(
-  './subagent-dsh-sdk-diagnostic/child.cordis.yml',
+const daoSdkDiagnosticChildPatch = fileURLToPath(new URL(
+  './subagent-dao-sdk-diagnostic/child.cordis.yml',
   import.meta.url,
 ))
-const dshSdkChildConfig = fileURLToPath(new URL(
-  '../../packages/subagent/subagent-dsh-sdk/tests/fixtures/loader/child.cordis.yml',
+const daoSdkChildConfig = fileURLToPath(new URL(
+  '../../packages/subagent/subagent-dao-sdk/tests/fixtures/loader/child.cordis.yml',
   import.meta.url,
 ))
 
@@ -91,8 +91,8 @@ function dirOf(url: string): string {
 interface SdkAssertions {
   /** Environment overrides passed to the runtime subprocess. */
   environment?: Readonly<Record<string, string>>
-  /** A separate DSH SDK child whose persisted session joins the evidence. */
-  dshSdkChild?: {
+  /** A separate Dao SDK child whose persisted session joins the evidence. */
+  daoSdkChild?: {
     /** Profile patch materialized for the child runtime. */
     config: string
     /** Exact request configuration committed by the child runtime. */
@@ -109,8 +109,8 @@ interface SdkAssertions {
 }
 
 const SDK_ASSERTIONS: Readonly<Record<string, SdkAssertions>> = {
-  'subagent-dsh-sdk-diagnostic': {
-    environment: { DAO_TEST_CHILD_PATCH: dshSdkDiagnosticChildPatch },
+  'subagent-dao-sdk-diagnostic': {
+    environment: { DAO_TEST_CHILD_PATCH: daoSdkDiagnosticChildPatch },
   },
   'persistent-tools': {
     environment: { DAO_SYSTEM_PROMPT: MINIMAL_SYSTEM_PROMPT },
@@ -122,10 +122,10 @@ const SDK_ASSERTIONS: Readonly<Record<string, SdkAssertions>> = {
       excludes: ['workspace-write'],
     },
   },
-  'subagent-dsh-sdk-dynamic-route': {
-    environment: { DAO_TEST_PARENT_PROVIDER: 'deepseek-official' },
-    dshSdkChild: {
-      config: dshSdkChildConfig,
+  'subagent-dao-sdk-dynamic-route': {
+    environment: { DAO_TEST_PARENT_PROVIDER: 'llama-router' },
+    daoSdkChild: {
+      config: daoSdkChildConfig,
       agentConfig: {
         provider: 'mock',
         model: 'mock-routed',
@@ -278,7 +278,7 @@ function assembledRuntimeContexts(log: PersistedLog): string[] {
     }
     if (event.type !== 'user/message'
       || event.data?.source?.kind !== 'plugin'
-      || event.data.source.plugin !== '@deepseek-ai/dsh-system-prompt') return []
+      || event.data.source.plugin !== '@daoai/dao-system-prompt') return []
     return event.data.content?.flatMap(block => block.type === 'text' && typeof block.text === 'string' ? [block.text] : []) ?? []
   })
 }
@@ -371,6 +371,15 @@ function modelFromSession(log: string): { provider: string; model: string } {
     }
   }
   throw new Error('SDK snapshot session has no request model')
+}
+
+/** Map retired DeepSeek routes in committed sessions onto the farm for live record. */
+function liveRecordRoute(route: { provider: string; model: string }): { provider: string; model: string } {
+  if (route.provider !== 'deepseek-official') return route
+  const model = route.model.includes('vision')
+    ? 'Qwen3.8-27B-Q6_K_XL-128K-vision-exp'
+    : 'Qwen3.8-27B-Q6_K_XL-128K'
+  return { provider: 'llama-router', model }
 }
 
 function turnActions(log: string): TurnAction[] {
@@ -473,7 +482,7 @@ function authoredPatches(scenario: CorpusScenario, replaying: boolean): string[]
   ]
 }
 
-/** One SDK-controlled recorded scenario against a fresh `dsh --profile sdk` subprocess. */
+/** One SDK-controlled recorded scenario against a fresh `dao --profile sdk` subprocess. */
 async function runScenario(scenario: CorpusScenario): Promise<{
   results: RunResult[]
   notifications: HarnessNotification[]
@@ -484,13 +493,13 @@ async function runScenario(scenario: CorpusScenario): Promise<{
   cwd: string
 }> {
   const cwd = await mkdtemp(join(tmpdir(), `sdk-snapshot-${scenario.name}-`))
-  const dshHome = join(cwd, '.dsh')
-  const sessionsRoot = join(dshHome, 'sessions')
+  const daoHome = join(cwd, '.dao')
+  const sessionsRoot = join(daoHome, 'sessions')
   const replayFixtures = recording ? [] : await hydrateReplayFixtures(scenario, cwd)
   const fixtureContents = await Promise.all((await fixtureFiles(scenario)).map(file => readFile(file, 'utf8')))
   const primaryFixture = fixtureContents[0]
   if (primaryFixture === undefined) throw new Error(`${scenario.name}: no primary session fixture`)
-  const route = modelFromSession(primaryFixture)
+  const route = recording ? liveRecordRoute(modelFromSession(primaryFixture)) : modelFromSession(primaryFixture)
   const patchRoot = join(cwd, '.snapshot-patches')
   await mkdir(patchRoot, { recursive: true })
   const patches = authoredPatches(scenario, !recording)
@@ -498,9 +507,9 @@ async function runScenario(scenario: CorpusScenario): Promise<{
   const assertions = SDK_ASSERTIONS[scenario.name] ?? {}
   let childSessionsRoot: string | undefined
   let childEnvironment: Record<string, string> = {}
-  if (assertions.dshSdkChild !== undefined) {
-    const childHome = join(cwd, '.child-dsh')
-    const childPatch = materializeProfilePatch(assertions.dshSdkChild.config, cwd, patchRoot, patches.length)
+  if (assertions.daoSdkChild !== undefined) {
+    const childHome = join(cwd, '.child-dao')
+    const childPatch = materializeProfilePatch(assertions.daoSdkChild.config, cwd, patchRoot, patches.length)
     await mkdir(childHome, { recursive: true })
     childSessionsRoot = join(childHome, 'sessions')
     childEnvironment = {
@@ -541,7 +550,7 @@ async function runScenario(scenario: CorpusScenario): Promise<{
   const harness = new DaoHarness({
     profile: 'sdk',
     patches,
-    dshHome,
+    daoHome,
     processCwd: cwd,
     env,
     requestTimeoutMs: 110_000,
@@ -672,7 +681,7 @@ async function verifyHeaders(
   scenario: CorpusScenario,
   ordered: readonly PersistedLog[],
   ctx: NormalizeContext,
-  dshSdkChildConfig?: Readonly<Record<string, unknown>>,
+  daoSdkChildConfig?: Readonly<Record<string, unknown>>,
 ): Promise<void> {
   const pin = headerPin(scenario)
   const pinFixture = await readFile(join(pin.dir, 'session.jsonl'), 'utf8')
@@ -708,8 +717,8 @@ async function verifyHeaders(
     for (const [index, header] of headers.entries()) {
       const selectedSchemas = childSchemas.get(logIndex)?.[index]
       const base = reconstructed[index] ?? reconstructed[0]
-      const configured = logIndex === 1 && dshSdkChildConfig !== undefined
-        ? { ...base as JsonObject, config: dshSdkChildConfig }
+      const configured = logIndex === 1 && daoSdkChildConfig !== undefined
+        ? { ...base as JsonObject, config: daoSdkChildConfig }
         : base
       const expected = selectedSchemas === undefined
         ? configured
@@ -724,7 +733,7 @@ async function verifyHeaders(
 describe('TypeScript SDK snapshots over the jsonrpc runtime', () => {
   for (const scenario of sdkScenarios) {
     const scenarioTest = recording && scenario.manifest.recording === 'authored' ? it.skip : it
-    scenarioTest(`${mode}s ${scenario.name} through dsh --profile sdk`, async () => {
+    scenarioTest(`${mode}s ${scenario.name} through dao --profile sdk`, async () => {
       const scenarioDir = scenario.dir
       const notificationsExpectedPath = join(scenarioDir, 'notifications.expected.jsonl')
       const resultExpectedPath = join(scenarioDir, 'result.expected.json')
@@ -736,7 +745,7 @@ describe('TypeScript SDK snapshots over the jsonrpc runtime', () => {
       const ordered = orderLogs(
         logs,
         recording ? logs.length : files.length,
-        assertions.dshSdkChild !== undefined,
+        assertions.daoSdkChild !== undefined,
       )
       const actualContext = contextOf(ordered, cwd)
 
@@ -798,7 +807,7 @@ describe('TypeScript SDK snapshots over the jsonrpc runtime', () => {
       for (const [index, actual] of actualSnapshots.entries()) {
         expect(actual, `${scenario.name}: session ${index}`).toBe(expectedSnapshots[index])
       }
-      await verifyHeaders(scenario, ordered, actualContext, assertions.dshSdkChild?.agentConfig)
+      await verifyHeaders(scenario, ordered, actualContext, assertions.daoSdkChild?.agentConfig)
 
       // Genuine SDK protocol cases retain their secondary wire projections.
       const finalResult = results.at(-1)
@@ -851,7 +860,7 @@ describe('TypeScript SDK snapshots over the jsonrpc runtime', () => {
           for (const clause of assertions.runtimeContext.includes) expect(system).not.toContain(clause)
         }
       }
-      if (ordered.length > 1 && assertions.dshSdkChild === undefined) {
+      if (ordered.length > 1 && assertions.daoSdkChild === undefined) {
         expect(observedMethods.has('subagent.started')).toBe(true)
         expect(observedMethods.has('subagent.finished')).toBe(true)
       }

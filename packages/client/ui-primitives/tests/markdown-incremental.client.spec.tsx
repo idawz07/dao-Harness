@@ -230,22 +230,22 @@ describe('multibyte content', () => {
   const CJK_DOC = [
     '# 标题 🎉',
     '',
-    '这是一段包含 **加粗**、`行内代码` 与表情 😀🚀 的中文段落。',
+    '这是一段包含 **加粗**, `more lines内Code` 与表情 😀🚀 的中文段落。',
     '',
     '- 列表项一 ✅',
     '- 列表项二',
     '',
-    '> 引用一行,带表情 🐟',
+    '> 引用一more lines,带表情 🐟',
     '',
     '```',
-    '中文代码 🎯',
+    '中文Code 🎯',
     '```',
     '',
     '| 键 | 值 |',
     '| --- | --- |',
     '| 甲 | 乙 |',
     '',
-    '结尾段落,足够多的块让前面全部冻结。🌊',
+    '结尾段落,足够多的块让ago面全部冻结。🌊',
   ].join('\n')
 
   it('code-unit chunking (splitting surrogate pairs mid-stream) matches fresh renders', () => {

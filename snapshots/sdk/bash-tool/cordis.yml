@@ -1,24 +1,18 @@
 # SDK snapshot-record composition without provider-specific upload metadata.
 
 - id: skill-filesystem
-  name: '@deepseek-ai/dsh-skill-filesystem'
+  name: '@daoai/dao-skill-filesystem'
   config:
     includeDefaultRoots: false
 
-- id: llm-deepseek
-  name: '@deepseek-ai/dsh-llm-deepseek'
-  config:
-    thinking: enabled
-    reasoningEffort: max
-
 - id: session-persistence-jsonl
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@daoai/dao-session-persistence-jsonl'
   config:
-    root: !!js dshHomePath('sessions')
-    compression: !!js "process.env.DSH_SNAPSHOT === undefined ? 'zstd' : 'none'"
+    root: !!js daoHomePath('sessions')
+    compression: !!js "process.env.DAO_SNAPSHOT === undefined ? 'zstd' : 'none'"
 
 - id: tool-subagent
-  name: '@deepseek-ai/dsh-tool-subagent'
+  name: '@daoai/dao-tool-subagent'
   config:
     provider: spawn
     toolName: subagent

@@ -20,6 +20,7 @@ export const GROUPS_WITHOUT_SUBSYSTEM_PAGE: Readonly<Record<string, string>> = {
   bundle: 'Composition patch carriers whose mounted packages own all runtime contracts.',
   examples: 'Non-product demonstration compositions whose mounted packages own all runtime contracts.',
   hooks: 'External hook-protocol bridges over existing interception points, not a new Harness service.',
+  references: 'MVP document store; package READMEs own the service and tool contracts until a subsystem page lands with the deferred @doc UI.',
   sdk: 'Out-of-process protocol and client packages whose package READMEs own the SDK contracts.',
   util: 'Low-level primitives whose business semantics remain with their consuming subsystems.',
 }

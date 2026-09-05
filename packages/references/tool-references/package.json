@@ -1,0 +1,54 @@
+{
+  "name": "@daoai/dao-tool-references",
+  "description": "Model-facing tools over the Dao reference document store",
+  "version": "0.1.2-alpha.1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daoAI/dao.git",
+    "directory": "packages/references/tool-references"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-references": "workspace:^",
+    "@daoai/dao-system-prompt": "workspace:^",
+    "@daoai/dao-tools": "workspace:^",
+    "@daoai/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@daoai/cordis-plugin-include": "workspace:^",
+    "@daoai/cordis-plugin-loader": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-llm": "workspace:^",
+    "@daoai/dao-references": "workspace:^",
+    "@daoai/dao-storage": "workspace:^",
+    "@daoai/dao-storage-domain": "workspace:^",
+    "@daoai/dao-storage-json": "workspace:^",
+    "@daoai/dao-system-prompt": "workspace:^",
+    "@daoai/dao-tools": "workspace:^",
+    "@daoai/cordis": "workspace:^"
+  }
+}

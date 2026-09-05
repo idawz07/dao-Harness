@@ -1,77 +1,72 @@
 # Minimal live counterpart for the pwsh-tool-turn snapshot composition.
-- id: llm-deepseek
-  name: '@deepseek-ai/dsh-llm-deepseek'
-  config:
-    models:
-      - id: deepseek-v4-pro
 
 - id: subprocess
-  name: '@deepseek-ai/dsh-subprocess-local'
+  name: '@daoai/dao-subprocess-local'
 
 - id: bash-sandbox
-  name: '@deepseek-ai/dsh-bash-sandbox'
+  name: '@daoai/dao-bash-sandbox'
   disabled: true
 
 - id: pwsh-sandbox
-  name: '@deepseek-ai/dsh-pwsh-sandbox'
+  name: '@daoai/dao-pwsh-sandbox'
   disabled: false
 
 - id: shell-env
-  name: '@deepseek-ai/dsh-shell-env'
+  name: '@daoai/dao-shell-env'
 
 - id: agent-default-model
-  name: '@deepseek-ai/dsh-agent-default-model'
+  name: '@daoai/dao-agent-default-model'
   config:
-    provider: deepseek-official
-    model: deepseek-v4-pro
+    provider: llama-router
+    model: Qwen3.8-27B-Q6_K_XL-128K
 
 - id: session-persistence-jsonl
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@daoai/dao-session-persistence-jsonl'
   config:
-    root: !!js dshHomePath('sessions')
-    compression: !!js 'process.env.DSH_SNAPSHOT === undefined ? ''zstd'' : ''none'''
+    root: !!js daoHomePath('sessions')
+    compression: !!js 'process.env.DAO_SNAPSHOT === undefined ? ''zstd'' : ''none'''
 
 - id: agent-instructions
-  name: '@deepseek-ai/dsh-agent-instructions'
+  name: '@daoai/dao-agent-instructions'
   disabled: true
 
 - id: system-prompt
-  name: '@deepseek-ai/dsh-system-prompt'
+  name: '@daoai/dao-system-prompt'
   config:
     persona: You are a concise snapshot agent working in {{cwd}}.
 
 - id: goal
-  name: '@deepseek-ai/dsh-goal'
+  name: '@daoai/dao-goal'
   disabled: true
 
 - id: goal-round-driver
-  name: '@deepseek-ai/dsh-goal-round-driver'
+  name: '@daoai/dao-goal-round-driver'
   disabled: true
 
 - id: command-goal
-  name: '@deepseek-ai/dsh-command-goal'
+  name: '@daoai/dao-command-goal'
   disabled: true
 
 - id: tool-goal
-  name: '@deepseek-ai/dsh-tool-goal'
+  name: '@daoai/dao-tool-goal'
   disabled: true
 
 - id: skill
-  name: '@deepseek-ai/dsh-skill'
+  name: '@daoai/dao-skill'
   disabled: true
 
 - id: skill-filesystem
-  name: '@deepseek-ai/dsh-skill-filesystem'
+  name: '@daoai/dao-skill-filesystem'
   disabled: true
 
 - id: tool-skill
-  name: '@deepseek-ai/dsh-tool-skill'
+  name: '@daoai/dao-tool-skill'
   disabled: true
 
 - id: tool-bash
-  name: '@deepseek-ai/dsh-tool-bash'
+  name: '@daoai/dao-tool-bash'
   disabled: true
 
 - id: tool-pwsh
-  name: '@deepseek-ai/dsh-tool-pwsh'
+  name: '@daoai/dao-tool-pwsh'
   disabled: false

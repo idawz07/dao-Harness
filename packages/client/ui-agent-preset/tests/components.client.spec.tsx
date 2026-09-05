@@ -30,13 +30,13 @@ const ROW_READY: AgentPresetSettingsState = {
   currentValue: 'standard',
   // `mine` deliberately names itself nothing: the row must fall back to the
   // id for a preset whose author wrote no metadata.
-  options: [{ id: 'standard', trust: 'system', name: '标准模式' }, { id: 'mine', trust: 'user' }],
+  options: [{ id: 'standard', trust: 'system', name: 'Standard mode' }, { id: 'mine', trust: 'user' }],
 }
 
 const SEAT_READY: AgentPresetSeatState = {
   current: 'standard',
   options: [
-    { id: 'standard', trust: 'system', name: '标准模式', description: '完整的编码 agent。' },
+    { id: 'standard', trust: 'system', name: 'Standard mode', description: '完整的编码 agent。' },
     { id: 'mine', trust: 'user' },
   ],
   busy: false,
@@ -121,7 +121,7 @@ describe('the General-settings row', () => {
     renderRow({
       currentValue: 'mine',
       options: [
-        { id: 'standard', trust: 'system', name: '标准模式' },
+        { id: 'standard', trust: 'system', name: 'Standard mode' },
         { id: 'bare', trust: 'system' },
         { id: 'mine', trust: 'user' },
         { id: 'ours', trust: 'user', name: '团队模式' },

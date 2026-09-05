@@ -48,10 +48,9 @@ function runBuiltWeb(cwd: string): Promise<{ stdout: string; stderr: string; cod
   return new Promise((resolveRun, rejectRun) => {
     const env: NodeJS.ProcessEnv = {
       ...process.env,
-      DEEPSEEK_API_KEY: 'dao-cli-smoke-dummy-key',
+      LLAMA_ROUTER_API_KEY: 'dao-cli-smoke-dummy-key',
       DAO_HOME: join(cwd, '.dao'),
     }
-    delete env.DEEPSEEK_BASE_URL
     delete env.NODE_OPTIONS
     delete env.NODE_NO_WARNINGS
     const child = spawn(process.execPath, [

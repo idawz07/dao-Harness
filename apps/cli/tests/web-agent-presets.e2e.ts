@@ -216,7 +216,9 @@ describe('the shipped Web composition', () => {
   it('supplies both shipped presets, and only those, from the system root', async () => {
     const listed = await ctx.agentPresets.list()
 
-    expect(listed.map(preset => preset.id).sort()).toEqual(['cordis', 'minimal', 'ptc', 'standard'])
+    expect(listed.map(preset => preset.id).sort()).toEqual([
+      'cordis', 'forge', 'lens', 'minimal', 'ptc', 'quill', 'relay', 'scout', 'scribe', 'standard',
+    ])
     expect(listed.every(preset => preset.trust === 'system')).toBe(true)
     expect(ctx.agentPresets.defaultId).toBe('standard')
   })
@@ -235,7 +237,8 @@ describe('the shipped Web composition', () => {
       expect(toolNames(ctx, handle.agent).filter(name => name !== 'glob' && name !== 'grep')).toEqual([
         'ask_user_question', 'bash', 'create_goal', 'edit', 'exit_plan_mode',
         'get_goal', 'interrupt_agent', 'job_kill', 'job_list', 'job_output', 'list_agents', 'ralph', 'read', 'read_image', 'send_message', 'skill',
-        'subagent', 'subagent_fork', 'todo_write', 'update_goal', 'web_fetch', 'web_search',
+        'subagent', 'subagent_forge', 'subagent_fork', 'subagent_lens', 'subagent_quill', 'subagent_relay', 'subagent_scout', 'subagent_scribe',
+        'todo_write', 'update_goal', 'web_fetch', 'web_search',
         'workflow', 'write',
       ])
       expect(ctx.commands.find(handle.agent, 'goal')).toBeDefined()
@@ -255,7 +258,7 @@ describe('the shipped Web composition', () => {
     })
     await ctx.settings.update(SUBAGENT_MODEL_SELECTION_SETTINGS_NAMESPACE, {
       enabled: true,
-      allowedModels: [{ provider: 'deepseek-official', model: 'deepseek-v4-flash' }],
+      allowedModels: [{ provider: 'llama-router', model: 'Qwen3.8-27B-Q6_K_XL-128K' }],
     })
     const enabled = await ctx.agents.create({
       sessionId: SessionId('preset-model-selection-enabled'),
@@ -345,6 +348,25 @@ describe('the shipped Web composition', () => {
       const scoped = (await ctx.skills.list({ scope: handle.agent })).map(skill => skill.name)
       expect(scoped).toContain('editing-cordis-compositions')
       expect((await ctx.skills.list()).map(skill => skill.name)).not.toContain('editing-cordis-compositions')
+    } finally {
+      await handle.dispose()
+    }
+  })
+
+  it('composes the Scout specialist preset without write or shell tools', async () => {
+    const handle = await ctx.agents.create({
+      sessionId: SessionId('preset-scout'),
+      setup: agentCtx => ctx.agentPresets.mount(agentCtx, 'scout').then(() => undefined),
+    })
+    try {
+      const tools = toolNames(ctx, handle.agent)
+      expect(tools).toEqual(expect.arrayContaining(['web_search', 'web_fetch', 'read', 'skill']))
+      expect(tools).not.toContain('bash')
+      expect(tools).not.toContain('subagent')
+      // `tool-fs` still registers write/edit; the Scout persona forbids mutation.
+      // Orchestrator-spawned Scout children enforce read-only via toolFilter.
+      const scoped = (await ctx.skills.list({ scope: handle.agent })).map(skill => skill.name)
+      expect(scoped).toContain('source-citation')
     } finally {
       await handle.dispose()
     }
@@ -677,6 +699,44 @@ describe('a forked session', () => {
 })
 
 describe('a delegated child', () => {
+  it('applies Scout toolFilter when a child inherits the specialist composition controls', async () => {
+    const parent = await ctx.agents.create({
+      sessionId: SessionId('preset-scout-parent'),
+      meta: { agentPreset: 'standard' },
+      setup: agentCtx => ctx.agentPresets.mount(agentCtx, 'standard').then(() => undefined),
+    })
+    const child = await parent.agent.ctx.agents.create({
+      sessionId: SessionId('preset-scout-child'),
+      meta: childSessionMeta(parent.agent, 1, 0),
+      setup: (agentCtx) => {
+        applyChildComposition(agentCtx, parent.agent, {
+          toolFilter: {
+            allow: ['web_search', 'web_fetch', 'read', 'read_image', 'grep', 'glob', 'skill'],
+          },
+          persona: 'You are Scout, Dao\'s research specialist.',
+        })
+      },
+    })
+    try {
+      const tools = toolNames(ctx, child.agent).filter(name => name !== 'glob' && name !== 'grep')
+      // Allow-listed globals plus any Agent-scoped delegation tools the joined
+      // composition reinstalls after restrict (maxDepth: 0 still blocks starts).
+      expect(tools).toEqual(expect.arrayContaining([
+        'read', 'read_image', 'skill', 'web_fetch', 'web_search',
+      ]))
+      expect(tools).not.toContain('write')
+      expect(tools).not.toContain('bash')
+      expect(tools).not.toContain('edit')
+      const assembly = await ctx.systemPrompt.assemble({ scope: child.agent })
+      expect(assembly.sections.some(section =>
+        section.name === 'deployment:persona'
+        && section.text.includes('Scout'))).toBe(true)
+    } finally {
+      await child.dispose()
+      await parent.dispose()
+    }
+  })
+
   it('runs on the composition its parent runs on', async () => {
     const parent = await ctx.agents.create({
       sessionId: SessionId('preset-child-parent'),

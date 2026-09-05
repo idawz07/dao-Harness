@@ -2,8 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render } from '@testing-library/react'
 import { makeTranslate } from '@daoai/dao-client-test-runtime'
-import { zh as commonZh } from '@daoai/dao-client-locale/src/locales/zh.ts'
-import { zh } from '../src/client/locale.ts'
+import { en as commonEn } from '@daoai/dao-client-locale/src/locales/en.ts'
+import { en } from '../src/client/locale.ts'
 import { AssistantMarkdown, type AssistantMarkdownProps } from '../src/client/chat/AssistantMarkdown.tsx'
 
 let nextAnimationFrameId = 1
@@ -36,7 +36,7 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-const t = makeTranslate(zh, commonZh)
+const t = makeTranslate(en, commonEn)
 const renderMessageImages: AssistantMarkdownProps['renderMessageImages'] = () => null
 
 describe('ReasoningRow', () => {
@@ -49,7 +49,7 @@ describe('ReasoningRow', () => {
         renderMessageImages={renderMessageImages}
       />,
     )
-    expect(view.getByText('运行中')).toBeTruthy()
+    expect(view.getByText('Running')).toBeTruthy()
     const summary = view.getByText('Newest reasoning tokens')
     Object.defineProperties(summary, {
       scrollWidth: { configurable: true, value: 300 },
@@ -81,7 +81,7 @@ describe('ReasoningRow', () => {
     )
     flushAnimationFrames(3)
     expect(view.getByText('Inspect the session')).toBeTruthy()
-    expect(view.queryByText('运行中')).toBeNull()
+    expect(view.queryByText('Running')).toBeNull()
     expect(summary.scrollLeft).toBe(0)
     expect(summary.hasAttribute('data-follow-end')).toBe(false)
   })
@@ -101,7 +101,7 @@ describe('ReasoningRow', () => {
     expect(row.getAttribute('aria-expanded')).toBe('true')
     expect(view.getByText(/Check persistence/)).toBeTruthy()
 
-    fireEvent.click(view.getByText('思考'))
+    fireEvent.click(view.getByText('Think'))
     expect(row.getAttribute('aria-expanded')).toBe('false')
   })
 
@@ -114,7 +114,7 @@ describe('ReasoningRow', () => {
         renderMessageImages={renderMessageImages}
       />,
     )
-    fireEvent.click(view.getByText('思考'))
+    fireEvent.click(view.getByText('Think'))
     expect(view.getAllByText(/Inspect the session/)).toHaveLength(1)
     expect(view.queryByText('IN')).toBeNull()
     expect(view.container.querySelector('[class*="ioCard"]')).toBeNull()

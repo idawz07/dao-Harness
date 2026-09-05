@@ -1,0 +1,14 @@
+# SDK-profile patch for the deterministic diagnostic child runtime.
+
+- id: agent-instructions
+  name: '@daoai/dao-agent-instructions'
+  disabled: true
+
+- id: system-prompt
+  name: '@daoai/dao-system-prompt'
+  config:
+    persona: 'Return the scripted Dao SDK failure.'
+
+- insert:
+    - id: child-mock-llm
+      name: '../../../packages/subagent/subagent-dao-sdk/tests/fixtures/loader/child-mock-llm.ts'

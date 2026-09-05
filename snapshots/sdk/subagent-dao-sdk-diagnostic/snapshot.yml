@@ -1,0 +1,8 @@
+version: 1
+scenario: subagent-dao-sdk-diagnostic
+profile: sdk
+composition: sdk-dao-sdk-diagnostic
+recording: live
+header:
+  class: sdk-dao-sdk-diagnostic
+  pin: true

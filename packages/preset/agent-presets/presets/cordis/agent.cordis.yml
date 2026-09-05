@@ -20,6 +20,8 @@
     text: |-
       You are a coding agent powered by the {{model}} model, running on the Dao. Your working directory is {{cwd}}.
 
+      When the task needs a focused specialist, use the Dao squad tools (`subagent_scout`, `subagent_forge`, `subagent_lens`, `subagent_quill`, `subagent_relay`, `subagent_scribe`) the same way the `standard` orchestrator does.
+
       You can read and modify the harness you run on. Its composition is Cordis: every capability is a plugin row in a `cordis.yml`, and an agent preset is one such file mounted for a single session.
 
       Two planes decide where an edit belongs. The HOST composition holds the registries and anything shared across sessions — persistence, the sandbox and approval stack, the model route, the subagent registry and its backends. An AGENT PRESET holds what one session contributes to those registries: its tools, its persona, its prompt sections. A row that publishes a service belongs in the host composition, or inside an `isolate` realm if the preset genuinely owns that service and nothing outside one agent reads it.
@@ -189,6 +191,123 @@
         provider: fork
         toolName: subagent_fork
         backgroundMode: continuable
+
+    # Dao squad specialists: fixed persona + toolFilter per role. The model
+    # picks the tool by name; `description` becomes the UI label. Children
+    # inherit this preset's composition; the filter narrows the child's view.
+    - id: tool-subagent-scout
+      name: '@daoai/dao-tool-subagent'
+      config:
+        provider: spawn
+        toolName: subagent_scout
+        backgroundMode: continuable
+        maxDepth: 0
+        persona: |-
+          You are Scout, Dao's research specialist. Gather and cite sources with web_search, web_fetch, read, grep, and glob. Do not write files, run shell, or spawn subagents. End with a Sources list.
+        toolFilter:
+          allow:
+            - web_search
+            - web_fetch
+            - read
+            - read_image
+            - grep
+            - glob
+            - skill
+
+    - id: tool-subagent-forge
+      name: '@daoai/dao-tool-subagent'
+      config:
+        provider: spawn
+        toolName: subagent_forge
+        backgroundMode: continuable
+        maxDepth: 0
+        persona: |-
+          You are Forge, Dao's engineering specialist. Implement and fix code in this repository. Follow local conventions. Do not spawn further subagents.
+        toolFilter:
+          deny:
+            - subagent
+            - subagent_fork
+            - subagent_scout
+            - subagent_forge
+            - subagent_lens
+            - subagent_quill
+            - subagent_relay
+            - subagent_scribe
+            - workflow
+            - ralph
+            - send_message
+            - interrupt_agent
+            - list_agents
+
+    - id: tool-subagent-lens
+      name: '@daoai/dao-tool-subagent'
+      config:
+        provider: spawn
+        toolName: subagent_lens
+        backgroundMode: continuable
+        maxDepth: 0
+        persona: |-
+          You are Lens, Dao's review specialist. Review read-only with read, grep, and glob. Report severity, evidence, and remediation; do not apply fixes or spawn subagents.
+        toolFilter:
+          allow:
+            - read
+            - read_image
+            - grep
+            - glob
+            - skill
+
+    - id: tool-subagent-quill
+      name: '@daoai/dao-tool-subagent'
+      config:
+        provider: spawn
+        toolName: subagent_quill
+        backgroundMode: continuable
+        maxDepth: 0
+        persona: |-
+          You are Quill, Dao's documentation specialist. Edit docs, READMEs, and notes. Prefer docs/ paths. Do not refactor product code or spawn subagents unless the task requires it.
+        toolFilter:
+          allow:
+            - read
+            - read_image
+            - write
+            - edit
+            - grep
+            - glob
+            - skill
+
+    - id: tool-subagent-relay
+      name: '@daoai/dao-tool-subagent'
+      config:
+        provider: spawn
+        toolName: subagent_relay
+        backgroundMode: continuable
+        maxDepth: 0
+        persona: |-
+          You are Relay, Dao's ops specialist. Run the smallest diagnostic or build command that answers the task. Avoid destructive actions without explicit instruction. Do not spawn subagents.
+        toolFilter: !!js |
+          ({
+            allow: [
+              ...(process.platform === 'win32' ? ['pwsh'] : ['bash']),
+              'job_kill', 'job_list', 'job_output', 'read', 'read_image', 'grep', 'glob', 'skill',
+            ],
+          })
+
+    - id: tool-subagent-scribe
+      name: '@daoai/dao-tool-subagent'
+      config:
+        provider: spawn
+        toolName: subagent_scribe
+        backgroundMode: continuable
+        maxDepth: 0
+        persona: |-
+          You are Scribe, Dao's knowledge keeper. Organize and summarize reference material with read, grep, and glob. Dedicated reference_* store tools are available on the Scribe preset session; orchestrator-spawned children use the read-only subset until the parent mounts the store. Do not spawn subagents.
+        toolFilter:
+          allow:
+            - read
+            - read_image
+            - grep
+            - glob
+            - skill
 
     # Production dao does not install these optional providers. Install the
     # matching Bundle in this Profile and restart the Host, then copy this

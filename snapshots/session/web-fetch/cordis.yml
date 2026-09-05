@@ -6,13 +6,13 @@
       name: './web-fetch-fixture-server.mjs'
 
 - id: web
-  name: '@deepseek-ai/dsh-web'
+  name: '@daoai/dao-web'
 
 - id: web-fetch-http
-  name: '@deepseek-ai/dsh-web-fetch-http'
+  name: '@daoai/dao-web-fetch-http'
   disabled: true
 
 - id: tool-web
-  name: '@deepseek-ai/dsh-tool-web'
+  name: '@daoai/dao-tool-web'
   config:
     search: false

@@ -42,6 +42,9 @@
       "path": "../../llm/token-meter"
     },
     {
+      "path": "../../session/squad-progress"
+    },
+    {
       "path": "../../core/session"
     },
     {

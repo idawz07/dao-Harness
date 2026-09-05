@@ -15,8 +15,8 @@ This tutorial installs the published Python SDK, runs the shipped standalone min
 ### Linux and macOS
 
 ```sh
-git clone https://github.com/deepseek-ai/deepseek-harness.git
-cd deepseek-harness
+git clone https://github.com/daoAI/dao.git
+cd dao
 python -m venv .venv
 . .venv/bin/activate
 python -m pip install dao-sdk
@@ -25,8 +25,8 @@ python -m pip install dao-sdk
 ### Windows PowerShell
 
 ```powershell
-git clone https://github.com/deepseek-ai/deepseek-harness.git
-Set-Location deepseek-harness
+git clone https://github.com/daoAI/dao.git
+Set-Location dao
 py -3.10 -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install dao-sdk

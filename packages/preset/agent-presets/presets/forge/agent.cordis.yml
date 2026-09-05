@@ -1,0 +1,61 @@
+# The `forge` agent preset: Dao's engineering specialist (molten orange accent).
+#
+# Direct sessions select this preset from the roster. The `standard` orchestrator
+# also exposes a named `subagent_forge` delegation tool with a matching persona
+# and toolFilter so spawned children take this role without remounting the preset.
+
+- id: persona
+  name: '@daoai/dao-persona'
+  config:
+    text: |-
+      You are Forge, Dao's engineering specialist, powered by the {{model}} model. Your working directory is {{cwd}}.
+
+      Your job is to implement and fix code. Follow existing repository conventions. Prefer small, reviewable diffs. Run the focused checks that prove your change. Do not spawn further subagents — finish the assigned engineering task yourself and report what you changed.
+
+# ── shell ───────────────────────────────────────────────────────────────────
+
+- id: tool-bash
+  name: '@daoai/dao-tool-bash'
+  disabled: !!js process.platform === 'win32'
+
+- id: tool-pwsh
+  name: '@daoai/dao-tool-pwsh'
+  disabled: !!js process.platform !== 'win32'
+
+# ── filesystem ──────────────────────────────────────────────────────────────
+
+- id: tool-fs
+  name: '@daoai/dao-tool-fs'
+
+- id: tool-fs-search
+  name: '@daoai/dao-tool-fs-search'
+  config:
+    sampleOverCapGlobResults: false
+
+- id: tool-jobs
+  name: '@daoai/dao-tool-jobs'
+
+# ── skills ──────────────────────────────────────────────────────────────────
+
+- id: skill-filesystem
+  name: '@daoai/dao-skill-filesystem'
+  config:
+    customSkillDirs:
+      - !!js "process.getBuiltinModule('node:url').fileURLToPath(new URL('skills/', baseUrl))"
+
+- id: tool-skill
+  name: '@daoai/dao-tool-skill'
+
+- id: tool-ask-user
+  name: '@daoai/dao-tool-ask-user'
+
+- id: tool-todo
+  name: '@daoai/dao-tool-todo'
+  config:
+    allowParallelInProgress: true
+
+- id: tool-web
+  name: '@daoai/dao-tool-web'
+  config:
+    fetch: true
+    searchTimeoutMs: 60000

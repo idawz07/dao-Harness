@@ -1,6 +1,6 @@
 // Real-host smoke: spawn `dao web` with a real key, walk the full flow
 // list in a real chromium, screenshot every screen into .artifacts/ for the
-// figma comparison pass. Self-skips without DEEPSEEK_API_KEY (repo e2e
+// figma comparison pass. Self-skips without LLAMA_ROUTER_API_KEY (repo e2e
 // convention); vitest.web.config.ts loads the repo-root .env before this file
 // runs (the CLI only auto-loads .env from its cwd — a temp dir here, so
 // sessions never land in the repo's .sessions).
@@ -31,6 +31,31 @@ import { REPO_ROOT, connectFreshWorkspace, newEnglishPage, probeFreePort, requir
 
 const WEB_SURFACE_PROMPT = fileURLToPath(new URL('./expected/web-runtime-context/web-surface-prompt.expected.md', import.meta.url))
 const authenticatedCookies = new Map<string, Promise<{ origin: string; cookie: string }>>()
+
+/** Write a `--patch` overlay that retargets the shipped llama-router route at a local mock. */
+function writeMockRouterPatch(dir: string, baseURL: string): string {
+  const path = join(dir, 'mock-router.cordis.yml')
+  writeFileSync(path, [
+    '- id: llm-pi-ai',
+    '  config:',
+    '    providers:',
+    '      llama-router:',
+    '        displayName: Local Llama Router',
+    '        apiKeyEnv: LLAMA_ROUTER_API_KEY',
+    '        api: openai-completions',
+    `        baseURL: ${baseURL}`,
+    '        reasoning: high',
+    '        compat:',
+    '          thinkingFormat: qwen-chat-template',
+    '        models:',
+    '          - id: Qwen3.8-27B-Q6_K_XL-128K',
+    '            contextWindow: 131072',
+    '            maxTokens: 65536',
+    '            reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }',
+    '',
+  ].join('\n'))
+  return path
+}
 
 /** Exchange a printed process token once for Node-side HTTP/WebSocket probes. */
 function authenticatedWeb(launchUrl: string): Promise<{ origin: string; cookie: string }> {
@@ -306,7 +331,7 @@ describe('dao web keyless CLI smoke', () => {
         cwd: sessionsDir,
         env: {
           ...process.env,
-          DEEPSEEK_API_KEY: 'keyless-web-no-call',
+          LLAMA_ROUTER_API_KEY: 'keyless-web-no-call',
           DAO_HOME: join(sessionsDir, '.dao'),
           DAO_AGENTS_HOME: join(sessionsDir, '.agents'),
           TSX_TSCONFIG_PATH: join(REPO_ROOT, 'tsconfig.json'),
@@ -421,16 +446,16 @@ describe('dao web keyless CLI smoke', () => {
     await new Promise<void>(resolve => provider.listen(0, '127.0.0.1', resolve))
     const address = provider.address()
     if (address === null || typeof address === 'string') throw new Error('mock provider did not bind a TCP port')
+    const mockPatch = writeMockRouterPatch(workspace, `http://127.0.0.1:${address.port}`)
     const tsxLoader = pathToFileURL(createRequire(join(REPO_ROOT, 'package.json')).resolve('tsx')).href
     const child = spawn(
       process.execPath,
-      ['--import', tsxLoader, join(REPO_ROOT, 'apps/cli/src/bin.ts'), 'web', '--no-open', '--port', '0'],
+      ['--import', tsxLoader, join(REPO_ROOT, 'apps/cli/src/bin.ts'), 'web', '--patch', mockPatch, '--no-open', '--port', '0'],
       {
         cwd: workspace,
         env: {
           ...process.env,
-          DEEPSEEK_API_KEY: 'keyless-web-workspace',
-          DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}`,
+          LLAMA_ROUTER_API_KEY: 'keyless-web-workspace',
           DAO_HOME: join(workspace, '.dao'),
           DAO_AGENTS_HOME: join(workspace, '.agents'),
           TSX_TSCONFIG_PATH: join(REPO_ROOT, 'tsconfig.json'),
@@ -536,16 +561,16 @@ describe('dao web keyless CLI smoke', () => {
     await new Promise<void>(resolve => provider.listen(0, '127.0.0.1', resolve))
     const address = provider.address()
     if (address === null || typeof address === 'string') throw new Error('mock provider did not bind a TCP port')
+    const mockPatch = writeMockRouterPatch(workspace, `http://127.0.0.1:${address.port}`)
     const tsxLoader = pathToFileURL(createRequire(join(REPO_ROOT, 'package.json')).resolve('tsx')).href
     const child = spawn(
       process.execPath,
-      ['--import', tsxLoader, join(REPO_ROOT, 'apps/cli/src/bin.ts'), 'web', '--no-open', '--port', '0'],
+      ['--import', tsxLoader, join(REPO_ROOT, 'apps/cli/src/bin.ts'), 'web', '--patch', mockPatch, '--no-open', '--port', '0'],
       {
         cwd: workspace,
         env: {
           ...process.env,
-          DEEPSEEK_API_KEY: 'keyless-web-retry',
-          DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}`,
+          LLAMA_ROUTER_API_KEY: 'keyless-web-retry',
           DAO_HOME: join(workspace, '.dao'),
           TSX_TSCONFIG_PATH: join(REPO_ROOT, 'tsconfig.json'),
         },
@@ -621,16 +646,16 @@ describe('dao web keyless CLI smoke', () => {
     await new Promise<void>(resolve => provider.listen(0, '127.0.0.1', resolve))
     const address = provider.address()
     if (address === null || typeof address === 'string') throw new Error('mock provider did not bind a TCP port')
+    const mockPatch = writeMockRouterPatch(workspace, `http://127.0.0.1:${address.port}`)
     const tsxLoader = pathToFileURL(createRequire(join(REPO_ROOT, 'package.json')).resolve('tsx')).href
     const child = spawn(
       process.execPath,
-      ['--import', tsxLoader, join(REPO_ROOT, 'apps/cli/src/bin.ts'), 'web', '--no-open', '--port', '0'],
+      ['--import', tsxLoader, join(REPO_ROOT, 'apps/cli/src/bin.ts'), 'web', '--patch', mockPatch, '--no-open', '--port', '0'],
       {
         cwd: workspace,
         env: {
           ...process.env,
-          DEEPSEEK_API_KEY: 'keyless-web-ptc',
-          DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}`,
+          LLAMA_ROUTER_API_KEY: 'keyless-web-ptc',
           DAO_TOOLS_MODE: 'ptc',
           DAO_HOME: join(workspace, '.dao'),
           DAO_AGENTS_HOME: join(workspace, '.agents'),
@@ -670,7 +695,7 @@ describe('dao web keyless CLI smoke', () => {
   })
 })
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY || notReady.length > 0)('web smoke (real host, real key)', () => {
+describe.skipIf(!process.env.LLAMA_ROUTER_API_KEY || notReady.length > 0)('web smoke (real host, real key)', () => {
   let child: ChildProcess
   let sessionsDir: string
   let baseUrl: string
@@ -739,7 +764,7 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY || notReady.length > 0)('web smoke
   it('empty-state first send completes a real model round', async () => {
     onTestFailed(() => saveFailureShot(page, 'w5-first-round'))
     // This scenario spawns its own server against a fresh $DAO_HOME with the
-    // DeepSeek credential inherited from the environment, so no onboarding
+    // Farm credential inherited from the environment, so no onboarding
     // step mounts and the page is immediately interactive.
     // Fresh world: connect a Workspace so the composer starts live.
     await connectFreshWorkspace(page, sessionsDir)
@@ -804,7 +829,7 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY || notReady.length > 0)('web smoke
   it('bash differential rendering: tool row click leaves the default details column closed', async () => {
     onTestFailed(() => saveFailureShot(page, 'w5-tool-details'))
     const input = page.locator('[data-composer-input]').first()
-    await input.fill('请用 bash 工具运行命令 echo w5marker 然后告诉我结果')
+    await input.fill('请用 bash Tools运行命令 echo w5marker 然后告诉我Result')
     await input.press('Enter')
     // Wait for the tool ROW, not response text (the reply echoes any marker).
     // Bash renders through the third-party sample registration. Match that

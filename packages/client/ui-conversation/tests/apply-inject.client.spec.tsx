@@ -3,19 +3,14 @@ import { describe, expect, it, vi } from 'vitest'
 import type { ISession } from '@daoai/dao-api-session-controller/client'
 import { LocaleRuntime } from '@daoai/dao-client-locale/client'
 import type { ObservableSnapshot } from '@daoai/dao-client-store'
-import {
-  SlotTestRuntime, stubSettingsScope, usePinnedBrowserLanguages,
-} from '@daoai/dao-client-test-runtime'
+import { SlotTestRuntime, stubSettingsScope, usePinnedBrowserLanguages } from '@daoai/dao-client-test-runtime'
 import type { SessionBehaviorOverrides } from '@daoai/dao-client-test-runtime'
-import {
-  apply, inject, type ComposerBarInjected, type ConversationInjected,
-  type ConversationSessionInjected, type ViewTab,
-} from '@daoai/dao-client-ui-conversation/client'
+import { apply, inject, type ComposerBarInjected, type ConversationInjected, type ConversationSessionInjected, type ViewTab } from '@daoai/dao-client-ui-conversation/client'
 import type { SessionId } from '@daoai/dao-session/types'
 import type { WorkspaceId } from '@daoai/dao-workspace/types'
 import { createConversationStore } from '../src/client/stores.ts'
 
-usePinnedBrowserLanguages('zh-CN')
+usePinnedBrowserLanguages('en-US')
 
 const ROOT = 'root-1' as SessionId
 

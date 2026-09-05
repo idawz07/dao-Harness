@@ -1,8 +1,7 @@
 // Web e2e scenario for the shipped default search composition. A real browser
 // drives `web_search`; the model stream is replayed while the real search
-// provider calls a deterministic local endpoint through the real credentials
-// service. Disabled until the scenario is rewired from the removed DeepSeek
-// provider to a surviving one and the fixture re-recorded (rebrand Track 2).
+// provider calls a deterministic local endpoint. Disabled until the scenario is
+// rewired to Exa (or Perplexity) and the fixture re-recorded (rebrand Track 2).
 import { readFile } from 'node:fs/promises'
 import { createServer, type Server } from 'node:http'
 import type { AddressInfo } from 'node:net'
@@ -10,7 +9,6 @@ import { fileURLToPath } from 'node:url'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import { credentialRef } from '@daoai/dao-credentials'
 import type { SessionEvent } from '@daoai/dao-session'
 import { WEB_SEARCH_MAX_RESULTS } from '@daoai/dao-tool-web'
 import {
@@ -25,7 +23,6 @@ const UI_EXPECTED = fileURLToPath(new URL('../../../snapshots/web/web-search-rou
 const MODE = webSnapshotMode()
 const QUERIES = ['Dao snapshot search', 'Dao multi-query search'] as const
 const PROMPT = `Use web_search once with queries ${JSON.stringify(QUERIES)}. Then reply exactly SEARCH_DONE and stop.`
-const SEARCH_CREDENTIAL_REF = credentialRef('DAO_WEB_SEARCH_E2E_KEY')
 const SEARCH_CREDENTIAL = 'snapshot-search-key'
 
 /**
@@ -78,7 +75,7 @@ interface CapturedSearchRequest {
   body: unknown
 }
 
-/** Start the deterministic DeepSeek Messages double used by the real provider. */
+/** Start the deterministic Exa `/search` double used by the real provider. */
 async function startSearchServer(captured: CapturedSearchRequest[]): Promise<{ server: Server; baseURL: string }> {
   const server = createServer((request, response) => {
     let body = ''
@@ -148,13 +145,13 @@ describe.skip('web e2e: shipped default web search (rewire to a surviving search
     searchServer = search.server
     scaffold = await launchWebScaffold({
       compareReplaySession: true,
-      deepSeekSearch: {
+      searchProvider: {
+        id: 'web-search-exa',
         baseURL: search.baseURL,
-        apiKeyEnv: SEARCH_CREDENTIAL_REF,
+        apiKey: SEARCH_CREDENTIAL,
       },
       ...(MODE === 'record' ? {} : { replayFixture: FIXTURE, paceMs: 15 }),
     })
-    await scaffold.ctx.credentials.set(SEARCH_CREDENTIAL_REF, SEARCH_CREDENTIAL)
     scaffold.ctx.on('session/event', (_session, event: SessionEvent) => { sessionEvents.push(event) })
     browser = await chromium.launch()
     page = await newEnglishPage(browser)

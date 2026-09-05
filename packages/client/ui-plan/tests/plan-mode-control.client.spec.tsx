@@ -12,13 +12,13 @@ import { bindSnapshotSelector } from '@daoai/dao-client-test-runtime'
 import type { PlanProjection } from '@daoai/dao-plan-mode/client'
 import { PlanChip, type PlanChipProps } from '../src/client/PlanModeControl.tsx'
 import { makeTranslate } from '@daoai/dao-client-test-runtime'
-import { zh as commonZh } from '@daoai/dao-client-locale/src/locales/zh.ts'
-import { zh } from '../src/client/locales.ts'
+import { en as commonEn } from '@daoai/dao-client-locale/src/locales/en.ts'
+import { en } from '../src/client/locales.ts'
 
 afterEach(cleanup)
 
-// The framework-injected t seat, stubbed over the zh dictionaries (the default locale).
-const t: PlanChipProps['t'] = makeTranslate(zh, commonZh)
+// The framework-injected t seat, stubbed over the en dictionaries (the default locale).
+const t: PlanChipProps['t'] = makeTranslate(en, commonEn)
 
 function setup(
   plan: PlanProjection | undefined,
@@ -33,7 +33,7 @@ function setup(
   return { store, exitPlanMode, view }
 }
 
-const chip = () => screen.getByRole('button', { name: 'plan mode 已开启，按下关闭' })
+const chip = () => screen.getByRole('button', { name: 'Plan mode on, press to turn off' })
 
 describe('PlanChip', () => {
   it('renders nothing for an absent capability or a default-mode target', () => {
@@ -66,7 +66,7 @@ describe('PlanChip', () => {
     resolve(null)
     store.set({ value: { active: true, pending: true } })
     await waitFor(() => {
-      expect(screen.queryByRole('button', { name: 'plan mode 已开启，按下关闭' })).toBeNull()
+      expect(screen.queryByRole('button', { name: 'Plan mode on, press to turn off' })).toBeNull()
     })
   })
 
@@ -82,7 +82,7 @@ describe('PlanChip', () => {
       .mockRejectedValueOnce('socket closed')
     setup({ active: true, pending: false }, exitPlanMode)
     fireEvent.click(chip())
-    expect((await screen.findByText('退出 plan mode 失败')).getAttribute('title')).toBe('host said no')
+    expect((await screen.findByText('Failed to exit plan mode')).getAttribute('title')).toBe('host said no')
     expect(chip()).toBeTruthy()
 
     fireEvent.click(chip())

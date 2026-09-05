@@ -11,7 +11,7 @@ import {
   IconChevronDownOutline14, Menu, RiskConfirmation,
 } from '@daoai/dao-client-ui-primitives'
 import type { PermissionSettingsState } from './settings-store.ts'
-import type { PermissionSettingsKey } from './locales.ts'
+import type { PermissionAccessKey, PermissionSettingsKey } from './locales.ts'
 import { FULL_ACCESS_PRESET } from './presentation.ts'
 import css from './PermissionRow.module.css'
 
@@ -130,5 +130,7 @@ declare module '@daoai/dao-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Permission row copy. */
     'settings.permission': PermissionSettingsKey
+    /** Current-session Full access confirmation copy. */
+    'permission.access': PermissionAccessKey
   }
 }

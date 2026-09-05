@@ -1,0 +1,57 @@
+# TypeScript SDK snapshot patch for foreground and background Dao SDK failures.
+
+- id: skill-filesystem
+  name: '@daoai/dao-skill-filesystem'
+  config:
+    includeDefaultRoots: false
+
+- id: session-persistence-jsonl
+  name: '@daoai/dao-session-persistence-jsonl'
+  config:
+    root: !!js daoHomePath('sessions')
+    compression: !!js "process.env.DAO_SNAPSHOT === undefined ? 'zstd' : 'none'"
+
+- insert:
+    - id: subagent-dao-sdk-diagnostic
+      name: '@daoai/dao-subagent-dao-sdk'
+      config:
+        providerName: dao-sdk-diagnostic
+        profile: sdk
+        patches:
+          - !!js process.env.DAO_TEST_CHILD_PATCH
+        daoHome: !!js daoHomePath('children/foreground')
+        provider: mock
+        model: mock-echo
+        env:
+          DAO_TELEMETRY_DISABLED: '1'
+          DAO_TEST_CHILD_FAILURE: '1'
+    - id: tool-subagent-dao-sdk-diagnostic
+      name: '@daoai/dao-tool-subagent'
+      config:
+        provider: dao-sdk-diagnostic
+        toolName: subagent_dao_sdk
+        backgroundMode: one-shot
+        maxDepth: provider-managed
+    - id: subagent-dao-sdk-diagnostic-background
+      name: '@daoai/dao-subagent-dao-sdk'
+      config:
+        providerName: dao-sdk-diagnostic-background
+        profile: sdk
+        patches:
+          - !!js process.env.DAO_TEST_CHILD_PATCH
+        daoHome: !!js daoHomePath('children/background')
+        provider: mock
+        model: mock-echo
+        env:
+          DAO_TELEMETRY_DISABLED: '1'
+          DAO_TEST_CHILD_FAILURE: '1'
+          FAKE_INIT_GO: .dao-sdk-background-release
+    - id: tool-subagent-dao-sdk-diagnostic-background
+      name: '@daoai/dao-tool-subagent'
+      config:
+        provider: dao-sdk-diagnostic-background
+        toolName: subagent_dao_sdk_background
+        backgroundMode: one-shot
+        maxDepth: provider-managed
+    - id: release-dao-sdk-background-on-job-output
+      name: '../../../apps/cli/tests/profiles/sdk/fixtures/subagent-dsh-sdk-release-on-job-output.ts'

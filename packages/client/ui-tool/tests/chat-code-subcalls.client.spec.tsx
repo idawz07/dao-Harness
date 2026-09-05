@@ -13,7 +13,7 @@ import type { PropsRenderSlots } from '@daoai/dao-client-ui-slots'
 import {
   ConversationEventRegistry, ConversationViewRegistry, type ConvViewOwnerProps,
 } from '@daoai/dao-client-ui-conversation/client'
-import { en as conversationEn, NS as CONVERSATION_NS, zh as conversationZh } from '@daoai/dao-client-ui-conversation/src/client/locales.ts'
+import { en as conversationEn, NS as CONVERSATION_NS } from '@daoai/dao-client-ui-conversation/src/client/locales.ts'
 import { apply as applyChat, inject as injectChat } from '@daoai/dao-client-ui-chat/client'
 import { apply as applyTool, inject as injectTool } from '../src/client/apply.ts'
 import { toolChatSnapshot } from './tool-details-render.client.tsx'
@@ -126,7 +126,7 @@ async function bench(snapshot: ChatSnapshot) {
   } as never)
   const locale = new LocaleRuntime(ctx)
   ctx.provide('locale', locale)
-  locale.register(CONVERSATION_NS, { zh: conversationZh, en: conversationEn })
+  locale.register(CONVERSATION_NS, { en: conversationEn })
   runtime.slots.installLocale(locale)
 
   await runtime.root.declare(ROOT_CHILDREN, AppRoot)

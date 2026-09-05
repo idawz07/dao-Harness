@@ -267,6 +267,13 @@
       config:
         backend: json
 
+    # Squad XP / level / badges: folds session events into the squadProgress
+    # projection unit and mirrors each view into the squad_progress storage
+    # domain. Web lineage chips read the projection; Host code can call
+    # ctx.squadProgress.get(sessionId).
+    - id: squad-progress
+      name: '@daoai/dao-squad-progress'
+
     # Persisted projection cache: throttled write-behind over the
     # session_projcache domain (per-record layout — one version-stamped
     # checkpoint document per session), serving the session listing's

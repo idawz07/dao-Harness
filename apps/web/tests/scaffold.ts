@@ -5,7 +5,7 @@
 // layer stack the profile boot composes), patched the
 // snapshot way — so a real chromium exercises the real HTTP uplink/WebSocket
 // downlink, api-gateway, agent loop, tools, and persistence. Modes ride $DAO_SNAPSHOT:
-// replay (default, keyless: normally disables the llm-deepseek row and
+// replay (default, keyless: normally disables the llm-pi-ai row and
 // inserts dao-llm-replay in providers mode), record (real adapter + key,
 // harvests fixtures from live session memory), refresh (keyless replay that
 // rewrites goldens). A first-run option keeps the real adapter mounted while
@@ -18,7 +18,7 @@
 // disabled (recorded fixtures must not embed this repo's AGENTS.md);
 // session-title-llm disabled (its fire-and-forget title call would race the
 // loop for the session's replay cursor); webserver pinned to port 0 with the
-// built dist; ordinary keyless modes disable llm-deepseek and fill the open
+// built dist; ordinary keyless modes disable llm-pi-ai and fill the open
 // llm seam post-boot with installLlmReplay on the settled root ctx
 // (the plugin-row path discards the ReplayHandle; the direct install keeps
 // assertConsumed for the teardown fixture-consumption check).
@@ -91,10 +91,10 @@ export const WELCOME_NOTICE_SETTINGS_NAMESPACE = 'ui-onboarding'
 export const WELCOME_NOTICE_ACK_FIELD = 'welcomeNoticeVersion'
 export const WELCOME_NOTICE_VERSION = '2026-08-13.1'
 export const WELCOME_NOTICE_COPY = {
-  zh: {
-    title: '内测声明',
-    body: 'Dao 目前的 0.1 版本仍处在面向 Harness 开发者进行测试的阶段，还有许多地方需要持续改进和打磨，希望听取广大开发者的反馈建议。预计 Dao 的核心插件以及基础 API 都会在接下来的一段时间内快速迭代、持续演化。\n\n我们期待与全球开发者一起，在开源、开放、可复用、可组合的基础设施之上，共同探索智能上限。欢迎全球 Harness 开发者加入 DAO 插件生态。',
-    continueLabel: '继续',
+  en: {
+    title: 'Internal Testing Notice',
+    body: "Dao 0.1 remains in testing for Harness developers. Many areas need further improvement, and we welcome feedback from the developer community. Dao's core plugins and foundational APIs will continue to evolve rapidly over the coming months.\n\nWe look forward to exploring the limits of intelligence with developers around the world, building on open-source, open, reusable, and composable infrastructure. We welcome Harness developers everywhere to join the DAO plugin ecosystem.",
+    continueLabel: 'Continue',
   },
 } as const
 
@@ -142,14 +142,14 @@ const WEB_PATCH_PATH = join(REPO_ROOT, 'packages/bundle/web-app/cordis.patch.yml
 const INSTALL_ANCHOR = join(REPO_ROOT, 'apps/cli/package.json')
 
 // Replay publishes the provider catalog the gateway routes to (providers
-// mode, never catch-all: with llm-deepseek disabled no adapter exists, so a
+// mode, never catch-all: with llm-pi-ai disabled no adapter exists, so a
 // catch-all would leave resolveModelInfo unroutable and compaction-basic's
 // post-step pressure check would warn every step). The published
 // contextWindow keeps that pressure path provably inert for small fixtures.
 const REPLAY_PROVIDERS = [{
-  id: 'deepseek-official',
-  name: 'DeepSeek',
-  models: [{ id: 'deepseek-v4-flash', name: 'DeepSeek-V4-Flash', contextWindow: 128_000 }],
+  id: 'llama-router',
+  name: 'Local Llama Router',
+  models: [{ id: 'Qwen3.8-27B-Q6_K_XL-128K', name: 'Qwen3.8-27B-Q6_K_XL-128K', contextWindow: 128_000 }],
 }]
 
 /**
@@ -247,7 +247,7 @@ export interface LaunchOptions {
    * Replay fixture (session.jsonl) served by the inserted dao-llm-replay row
    * in replay/refresh modes; ignored in record mode (the real adapter
    * answers). Omit for scenarios issuing no model calls — a stray stream then
-   * fails loud with NO_ADAPTER (llm-deepseek is disabled and no replay row
+   * fails loud with NO_ADAPTER (llm-pi-ai is disabled and no replay row
    * mounts). With {@link replayProvidersOnly}, the fixture must record no
    * model calls (its header alone mounts the catalog).
    */
@@ -297,23 +297,25 @@ export interface LaunchOptions {
    */
   cordisTools?: boolean
   /**
-   * Keep the shipped DeepSeek adapter mounted while masking the process
-   * environment's DEEPSEEK_API_KEY for this scaffold lifetime. This is the
+   * Keep the shipped llm-pi-ai adapter mounted while masking the process
+   * environment's LLAMA_ROUTER_API_KEY for this scaffold lifetime. This is the
    * keyless first-run configuration lane; the default disables the adapter.
    */
-  deepSeekMissingCredential?: boolean
+  farmMissingCredential?: boolean
   /** Leave the current welcome notice pending; ordinary scenarios pre-acknowledge it before browser boot. */
   welcomeNoticePending?: boolean
   /**
-   * Patch the shipped DeepSeek search row to a deterministic endpoint and
-   * credential reference. Browser search scenarios keep the real provider and
-   * credentials seam while avoiding external search traffic and ambient keys.
+   * Insert a surviving search provider row pointed at a deterministic endpoint
+   * and API key. Browser search scenarios keep the real provider while avoiding
+   * external search traffic and ambient keys. Defaults to `web-search-exa`.
    */
-  deepSeekSearch?: {
-    /** Anthropic-compatible base URL; the provider appends `/messages`. */
+  searchProvider?: {
+    /** Plugin row id; defaults to `web-search-exa`. */
+    id?: 'web-search-exa' | 'web-search-perplexity'
+    /** Endpoint base; Exa appends `/search`, Perplexity appends `/chat/completions`. */
     baseURL: string
-    /** Credential reference resolved by the shipped search provider. */
-    apiKeyEnv: string
+    /** API key supplied through the provider's config (not ambient env). */
+    apiKey: string
   }
   /**
    * Replace the roster row the scaffold pins by default (no configured roots,
@@ -369,23 +371,23 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
   if (mode === 'record') {
     // Both owning vitest configs (web unconditionally, snapshot in record
     // mode) load the repo-root .env before this file runs.
-    if (process.env.DEEPSEEK_API_KEY === undefined || process.env.DEEPSEEK_API_KEY.length === 0) {
-      throw new Error('web e2e record mode needs DEEPSEEK_API_KEY (env or repo-root .env)')
+    if (process.env.LLAMA_ROUTER_API_KEY === undefined || process.env.LLAMA_ROUTER_API_KEY.length === 0) {
+      throw new Error('web e2e record mode needs LLAMA_ROUTER_API_KEY (env or repo-root .env)')
     }
   }
-  if (mode === 'record' && options.deepSeekMissingCredential === true) {
-    throw new Error('deepSeekMissingCredential is a keyless replay/refresh option')
+  if (mode === 'record' && options.farmMissingCredential === true) {
+    throw new Error('farmMissingCredential is a keyless replay/refresh option')
   }
-  const maskDeepSeekCredential = mode !== 'record' && options.deepSeekMissingCredential === true
-  const originalDeepSeekCredential = process.env.DEEPSEEK_API_KEY
+  const maskFarmCredential = mode !== 'record' && options.farmMissingCredential === true
+  const originalFarmCredential = process.env.LLAMA_ROUTER_API_KEY
   let credentialEnvironmentRestored = false
   const restoreCredentialEnvironment = (): void => {
-    if (credentialEnvironmentRestored || !maskDeepSeekCredential) return
+    if (credentialEnvironmentRestored || !maskFarmCredential) return
     credentialEnvironmentRestored = true
-    if (originalDeepSeekCredential === undefined) {
-      Reflect.deleteProperty(process.env, 'DEEPSEEK_API_KEY')
+    if (originalFarmCredential === undefined) {
+      Reflect.deleteProperty(process.env, 'LLAMA_ROUTER_API_KEY')
     } else {
-      process.env.DEEPSEEK_API_KEY = originalDeepSeekCredential
+      process.env.LLAMA_ROUTER_API_KEY = originalFarmCredential
     }
   }
   const workspaceCwd = await realpath(await mkdtemp(join(tmpdir(), 'dao-web-e2e-ws-')))
@@ -431,7 +433,7 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
     if (failures.length > 1) throw new AggregateError(failures, 'web scaffold temp-root setup failed')
     throw error
   }
-  if (maskDeepSeekCredential) Reflect.deleteProperty(process.env, 'DEEPSEEK_API_KEY')
+  if (maskFarmCredential) Reflect.deleteProperty(process.env, 'LLAMA_ROUTER_API_KEY')
 
   // The include patch set — the same layer stack the profile boot composes
   // (bundle patches in dao.profile.bundles order), applied over the SAME empty root (a
@@ -548,18 +550,23 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
         { id: 'tool-cordis', name: '@daoai/dao-tool-cordis' },
       ] }]
       : [],
-    ...options.deepSeekSearch === undefined
+    ...options.searchProvider === undefined
       ? []
       : [{
-        id: 'web-search-deepseek',
-        config: {
-          apiKeyEnv: options.deepSeekSearch.apiKeyEnv,
-          baseURL: options.deepSeekSearch.baseURL,
-        },
+        insert: [{
+          id: options.searchProvider.id ?? 'web-search-exa',
+          name: options.searchProvider.id === 'web-search-perplexity'
+            ? '@daoai/dao-web-search-perplexity'
+            : '@daoai/dao-web-search-exa',
+          config: {
+            apiKey: options.searchProvider.apiKey,
+            baseURL: options.searchProvider.baseURL,
+          },
+        }],
       }],
-    ...mode === 'record' || options.deepSeekMissingCredential === true
+    ...mode === 'record' || options.farmMissingCredential === true
       ? []
-      : [{ id: 'llm-deepseek', disabled: true }],
+      : [{ id: 'llm-pi-ai', disabled: true }],
   ]
 
   // Sessions inherit the gateway's process.cwd() default; run the boot from
@@ -647,7 +654,7 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
     port = boundPort
 
     // Fill the open llm seam on the settled root ctx. Ordinary keyless modes
-    // disable llm-deepseek; the first-run lane keeps it mounted but has no
+    // disable llm-pi-ai; the first-run lane keeps it mounted but has no
     // replay fixture and never streams. The direct install, unlike the plugin
     // row, returns the ReplayHandle for the teardown consumption check.
     if (options.replayProvidersOnly) {
@@ -691,7 +698,7 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
         ...(options.replayChildFixtures === undefined ? {} : { childFiles: options.replayChildFixtures }),
         ...(options.paceMs === undefined ? {} : { paceMs: options.paceMs }),
       })
-    } else if (mode !== 'record' && options.deepSeekMissingCredential !== true) {
+    } else if (mode !== 'record' && options.farmMissingCredential !== true) {
       // No fixture and no shipped adapter would leave the tree with ZERO
       // provider routes — a state no product composition has, and one the
       // composer refuses to type into. Register the same routes
@@ -820,13 +827,11 @@ function normalizeWebSessionVolatiles(log: string): string {
     }
     return value
   }
+  // Exa/Perplexity search providers do not emit a provider-specific session
+  // event with an endpoint to scrub (no surviving search provider emits one).
   return log.split(/\r?\n/).map((line) => {
     if (line.trim() === '') return line
-    const record = normalizeValue(JSON.parse(line)) as { type?: unknown; data?: { endpoint?: unknown } }
-    if (record.type === 'web/deepseek-search-llm-request' && typeof record.data?.endpoint === 'string') {
-      record.data.endpoint = '{{webSearchEndpoint}}'
-    }
-    return JSON.stringify(record)
+    return JSON.stringify(normalizeValue(JSON.parse(line)))
   }).join('\n')
 }
 
@@ -1106,7 +1111,7 @@ async function persistSeedSession(
  * closing quote, where the bucket is always last.
  */
 const ARIA_AGE =
-  /(?:now|\d+min|\d+h|\d+d|\d+mo|\d+y|刚刚|\d+分钟|\d+小时|\d+天|\d+个月|\d+年)(?=")/g
+  /(?:now|\d+min|\d+h|\d+d|\d+mo|\d+y|now|\d+分钟|\d+小时|\d+天|\d+个月|\d+年)(?=")/g
 
 function normalizeAria(snapshot: string, workspaceCwd: string, age: boolean): string {
   // The session heading renders the workspace's basename, not the full

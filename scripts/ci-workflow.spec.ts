@@ -286,10 +286,8 @@ describe('CI workflow', () => {
         targets: 'node24-linux-x64,node24-linux-arm64,node24-macos-arm64,node24-win-x64',
         ci: true,
       },
-      secrets: {
-        DEEPSEEK_API_KEY_EXTERNAL: '${{ secrets.DEEPSEEK_API_KEY_EXTERNAL }}',
-      },
     })
+    expect(pythonRuntime).not.toHaveProperty('secrets')
     expect(aggregate.needs).toContain('python-runtime')
   })
 
@@ -298,29 +296,6 @@ describe('CI workflow', () => {
 
     expect(config).not.toContain("pool: process.platform === 'win32' ? 'threads' : 'forks'")
     expect(config.match(/pool: 'forks'/g)).toHaveLength(2)
-  })
-})
-
-describe('DeepSeek e2e workflow', () => {
-  it('prepares bubblewrap from the pinned payload without a package transaction', () => {
-    const workflow = loadWorkflow('.github/workflows/e2e.yml')
-    const e2e = workflowJob(workflow, 'e2e')
-    if (!Array.isArray(e2e.steps)) throw new TypeError('DeepSeek e2e workflow must define steps')
-
-    const steps = e2e.steps.filter(isRecord)
-    expect(steps.find(step => step.name === 'Prepare bubblewrap (unrestrict userns)')).toMatchObject({
-      run: 'bash scripts/prepare-ci-bubblewrap.sh',
-    })
-    expect(JSON.stringify(steps)).not.toContain('apt-get')
-  })
-
-  it('bounds profile subprocess fan-out to the tested e2e default', () => {
-    const workflow = loadWorkflow('.github/workflows/e2e.yml')
-    const e2e = workflowJob(workflow, 'e2e')
-    if (!Array.isArray(e2e.steps)) throw new TypeError('DeepSeek e2e workflow must define steps')
-
-    const step = e2e.steps.filter(isRecord).find(candidate => candidate.name === 'E2E tests (real DeepSeek API)')
-    expect(step).toMatchObject({ env: { DAO_E2E_MAX_WORKERS: 4 } })
   })
 })
 
@@ -411,7 +386,7 @@ describe('Python release workflows', () => {
     const call = workflowEvent(workflow, 'workflow_call')
     const plan = workflowJob(workflow, 'plan')
     const build = workflowJob(workflow, 'build')
-    if (!isRecord(call.inputs) || !isRecord(call.secrets) || !Array.isArray(plan.steps) || !Array.isArray(build.steps)) {
+    if (!isRecord(call.inputs) || !Array.isArray(plan.steps) || !Array.isArray(build.steps)) {
       throw new TypeError('Python wheel builder must define workflow_call inputs and plan steps')
     }
 
@@ -423,14 +398,8 @@ describe('Python release workflows', () => {
     const cleanVenvWindows = buildSteps.find(step => isRecord(step) && step.name === 'Install local SDK and runtime wheels into a clean venv (Windows)')
     const installedKeylessPosix = buildSteps.find(step => isRecord(step) && step.name === 'Run installed-wheel keyless black-box tests (POSIX)')
     const installedKeylessWindows = buildSteps.find(step => isRecord(step) && step.name === 'Run installed-wheel keyless black-box tests (Windows)')
-    const realApiPreflightPosix = buildSteps.find(step => isRecord(step) && step.name === 'Preflight installed-wheel real API test (POSIX)')
-    const realApiPreflightWindows = buildSteps.find(step => isRecord(step) && step.name === 'Preflight installed-wheel real API test (Windows)')
-    const installedRealApiPosix = buildSteps.find(step => isRecord(step) && step.name === 'Run installed-wheel real API black-box test (POSIX)')
-    const installedRealApiWindows = buildSteps.find(step => isRecord(step) && step.name === 'Run installed-wheel real API black-box test (Windows)')
     if (!isRecord(cleanVenvPosix) || !isRecord(cleanVenvWindows)
-      || !isRecord(installedKeylessPosix) || !isRecord(installedKeylessWindows)
-      || !isRecord(realApiPreflightPosix) || !isRecord(realApiPreflightWindows)
-      || !isRecord(installedRealApiPosix) || !isRecord(installedRealApiWindows)) {
+      || !isRecord(installedKeylessPosix) || !isRecord(installedKeylessWindows)) {
       throw new TypeError('Python wheel builder must define native POSIX and Windows installed-wheel steps')
     }
     expect(call.inputs).toHaveProperty('targets')
@@ -438,9 +407,7 @@ describe('Python release workflows', () => {
       ci: { type: 'boolean', default: false },
       release: { type: 'boolean', default: false },
     })
-    expect(call.secrets).toMatchObject({
-      DEEPSEEK_API_KEY_EXTERNAL: { required: false },
-    })
+    expect(call.secrets ?? {}).toEqual({})
     expect(workflow.concurrency).toMatchObject({
       group: 'build-single-exe-${{ github.workflow }}-${{ github.ref }}',
     })
@@ -477,23 +444,6 @@ describe('Python release workflows', () => {
     expect(installedKeylessWindows).toMatchObject({ if: "runner.os == 'Windows'", shell: 'pwsh' })
     expect(cleanVenvWindows).toMatchObject({ if: "runner.os == 'Windows'", shell: 'pwsh' })
     expect(JSON.stringify(cleanVenvWindows)).toContain('Scripts\\\\python.exe')
-    expect(realApiPreflightPosix).toMatchObject({
-      env: { DEEPSEEK_API_KEY: '${{ secrets.DEEPSEEK_API_KEY_EXTERNAL }}' },
-    })
-    expect(String(realApiPreflightPosix.if)).toContain('inputs.ci')
-    expect(String(realApiPreflightPosix.if)).toContain('head.repo.fork')
-    expect(String(realApiPreflightPosix.if)).toContain('dependabot[bot]')
-    expect(realApiPreflightWindows).toMatchObject({ shell: 'pwsh' })
-    expect(installedRealApiPosix).toMatchObject({
-      env: {
-        DEEPSEEK_API_KEY: '${{ secrets.DEEPSEEK_API_KEY_EXTERNAL }}',
-        DEEPSEEK_BASE_URL: 'https://api.deepseek.com',
-      },
-    })
-    expect(JSON.stringify(installedRealApiPosix)).toContain('--scenario sdk-live')
-    expect(JSON.stringify(installedRealApiPosix)).toContain('-u DAO_RUNTIME_MODE')
-    expect(installedRealApiWindows).toMatchObject({ shell: 'pwsh' })
-    expect(JSON.stringify(installedRealApiWindows)).toContain('--scenario sdk-live --installed-wheel')
     expect(manylinuxSmoke).toMatchObject({ if: "runner.os == 'Linux'" })
     expect(JSON.stringify(manylinuxSmoke)).toContain('-e DAO_TELEMETRY_DISABLED')
   })

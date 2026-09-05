@@ -1,34 +1,23 @@
-# TypeScript SDK snapshot-record patch over `dsh --profile sdk`.
+# TypeScript SDK snapshot-record patch over `dao --profile sdk`.
 
 # The fixture corpus must not depend on the developer's personal skill roots.
 # Ordinary product launches retain the sdk profile's default skill discovery.
 - id: skill-filesystem
-  name: '@deepseek-ai/dsh-skill-filesystem'
+  name: '@daoai/dao-skill-filesystem'
   config:
     includeDefaultRoots: false
 
-- id: llm-deepseek
-  name: '@deepseek-ai/dsh-llm-deepseek'
-  config:
-    thinking: enabled
-    reasoningEffort: max
-
 - id: session-persistence-jsonl
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@daoai/dao-session-persistence-jsonl'
   config:
-    root: !!js dshHomePath('sessions')
-    compression: !!js "process.env.DSH_SNAPSHOT === undefined ? 'zstd' : 'none'"
+    root: !!js daoHomePath('sessions')
+    compression: !!js "process.env.DAO_SNAPSHOT === undefined ? 'zstd' : 'none'"
 
 - id: tool-subagent
-  name: '@deepseek-ai/dsh-tool-subagent'
+  name: '@daoai/dao-tool-subagent'
   config:
     provider: spawn
     toolName: subagent
     backgroundMode: one-shot
     enableRunInBackground: false
     maxDepth: 1
-
-- id: session-log-deepseek
-  name: '@deepseek-ai/dsh-session-log-deepseek'
-  config:
-    enabled: true

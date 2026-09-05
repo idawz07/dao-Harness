@@ -26,7 +26,7 @@ import { formatFileMention } from '@daoai/dao-file-reference/grammar'
 import type { FileReferenceCandidate } from '@daoai/dao-file-reference/types'
 import type { SessionReferenceMentionCandidate } from '@daoai/dao-session-reference/types'
 import { abbreviateHomePath } from '@daoai/dao-util-workspace-path'
-import { en, NS, zh, type ReferenceKey } from './locales.ts'
+import { en, NS, type ReferenceKey } from './locales.ts'
 
 /** Required services: the trigger registry, the Remote namespaces, and the copy. */
 export const inject = [
@@ -39,7 +39,7 @@ export const inject = [
  * @param ctx - client root context.
  */
 export function apply(ctx: ClientContext): void {
-  ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'ui-reference: dictionaries')
+  ctx.effect(() => ctx.locale.register(NS, { en }), 'ui-reference: dictionaries')
   const t = ctx.locale.bind(NS)
   const connection = ctx.get('connection') as ConnectionHandle
   const sessions = ctx.get('sessions') as ISessions

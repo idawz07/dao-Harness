@@ -63,7 +63,7 @@ function snapshotMode(value: string | undefined): SnapshotMode {
 }
 
 const mode = snapshotMode(process.env.DAO_SNAPSHOT)
-const RUNTIME_WORKSPACE_ENTRIES = ['.agents', '.dsh', '.snapshot-patches'] as const
+const RUNTIME_WORKSPACE_ENTRIES = ['.agents', '.dao', '.snapshot-patches'] as const
 
 interface JsonObject {
   [key: string]: unknown
@@ -112,7 +112,7 @@ function contextOf(logs: readonly string[]): NormalizeContext {
 }
 
 async function persistedSessions(cwd: string): Promise<SessionLog[]> {
-  const root = join(cwd, '.dsh', 'sessions')
+  const root = join(cwd, '.dao', 'sessions')
   const files = (await readdir(root, { recursive: true }))
     .filter(file => file.endsWith('session.jsonl'))
   const logs = await Promise.all(files.map(async (file): Promise<SessionLog> => {
@@ -265,7 +265,7 @@ function stderrFromSession(log: string): string {
   const appendReasoning = (text: string): void => {
     if (text === '') return
     if (!open) {
-      output += 'dsh: reasoning:\n'
+      output += 'dao: reasoning:\n'
       open = true
     }
     output += text
@@ -327,7 +327,7 @@ function stderrFromSession(log: string): string {
   if (typeof error?.code !== 'string' || typeof error.message !== 'string') {
     throw new Error('headless snapshot error reason has no code and message')
   }
-  return `${output}dsh: ${error.code}: ${error.message}\n`
+  return `${output}dao: ${error.code}: ${error.message}\n`
 }
 
 function modelFromSession(log: string): { provider: string; model: string } {
@@ -341,6 +341,15 @@ function modelFromSession(log: string): { provider: string; model: string } {
     }
   }
   throw new Error('headless snapshot session has no request model')
+}
+
+/** Map retired DeepSeek routes in committed sessions onto the farm for live record. */
+function liveRecordRoute(route: { provider: string; model: string }): { provider: string; model: string } {
+  if (route.provider !== 'deepseek-official') return route
+  const model = route.model.includes('vision')
+    ? 'Qwen3.8-27B-Q6_K_XL-128K-vision-exp'
+    : 'Qwen3.8-27B-Q6_K_XL-128K'
+  return { provider: 'llama-router', model }
 }
 
 async function seedWorkspace(scenario: HeadlessScenario, cwd: string): Promise<void> {
@@ -359,7 +368,7 @@ async function seedWorkspace(scenario: HeadlessScenario, cwd: string): Promise<v
 
 const workspaceSetups: Record<string, (cwd: string) => Promise<void>> = {
   async 'editing-cordis-skill'(cwd) {
-    const target = join(cwd, '.dsh', 'skills', 'editing-cordis-compositions', 'SKILL.md')
+    const target = join(cwd, '.dao', 'skills', 'editing-cordis-compositions', 'SKILL.md')
     await mkdir(dirname(target), { recursive: true })
     await copyFile(editingCordisSkill, target)
   },
@@ -521,7 +530,8 @@ describe('headless recorded-session snapshots', () => {
   })
 
   it('keeps packed chunk rows logically equal to their unpacked recording', async () => {
-    const source = await readFile(join(snapshotsRoot, 'hook-cc-pretool-deny', 'session.jsonl'), 'utf8')
+    // Unpacked twin of packed-chunks (formerly the hook-cc-pretool-deny recording).
+    const source = await readFile(join(snapshotsRoot, 'packed-chunks', 'unpacked.session.jsonl'), 'utf8')
     const packed = await readFile(join(snapshotsRoot, 'packed-chunks', 'session.jsonl'), 'utf8')
     const rowTypes = records(packed).flatMap((record) => {
       const type = record.type
@@ -563,11 +573,11 @@ describe('headless recorded-session snapshots', () => {
     ].map(record => JSON.stringify(record)).join('\n')
 
     expect(stderrFromSession(log)).toBe([
-      'dsh: reasoning:',
+      'dao: reasoning:',
       'first',
-      'dsh: reasoning:',
+      'dao: reasoning:',
       'second',
-      'dsh: reasoning:',
+      'dao: reasoning:',
       'third',
       '',
     ].join('\n'))
@@ -578,7 +588,7 @@ describe('headless recorded-session snapshots', () => {
       || scenario.manifest.platform === 'pwsh' && !hasPwsh
       || mode === 'record' && scenario.manifest.recording === 'authored'
     const scenarioTest = skipped ? it.skip : mode === 'replay' ? it.concurrent : it
-    scenarioTest(`${mode}s ${scenario.name} through dsh --profile headless`, async () => {
+    scenarioTest(`${mode}s ${scenario.name} through dao --profile headless`, async () => {
       let fixtures = await fixtureSessions(scenario)
       const primaryFixture = fixtures[0]
       if (primaryFixture === undefined) throw new Error(`${scenario.name}: missing primary session fixture`)
@@ -591,6 +601,7 @@ describe('headless recorded-session snapshots', () => {
       } catch {
         model = modelFromSession(await readFile(join(pin.dir, 'session.jsonl'), 'utf8'))
       }
+      if (mode === 'record') model = liveRecordRoute(model)
       const composition = ownerOf(scenario)
       const baseComposition = compositionOwners.get('default')
       if (baseComposition === undefined) throw new Error('headless corpus has no default composition')
@@ -616,7 +627,7 @@ describe('headless recorded-session snapshots', () => {
       try {
         result = await runLoaderSmoke({
           label: `${scenario.name} headless snapshot`,
-          tempDirPrefix: 'dsh-log-snap-',
+          tempDirPrefix: 'dao-log-snap-',
           ...(scenario.manifest.workspace?.parent === 'home' ? { tempDirParent: homedir() } : {}),
           binScript: dshBin,
           configPath: join(baseComposition.dir, 'cordis.yml'),
@@ -626,6 +637,7 @@ describe('headless recorded-session snapshots', () => {
             task,
           ],
           tsconfigPath,
+          processTimeoutMs: mode === 'record' ? 120_000 : undefined,
           expectedExitCode: turnReasonFromSession(primaryFixture)?.kind === 'completed'
             || turnReasonFromSession(primaryFixture) === undefined && scenario.manifest.input?.task !== undefined
             ? 0
@@ -701,6 +713,6 @@ describe('headless recorded-session snapshots', () => {
       } else {
         expect(finalWorkspace, `${scenario.name}: a changed workspace requires workspace.final`).toEqual(initialWorkspace)
       }
-    }, LOADER_SMOKE_TEST_TIMEOUT_MS)
+    }, mode === 'record' ? 180_000 : LOADER_SMOKE_TEST_TIMEOUT_MS)
   }
 })

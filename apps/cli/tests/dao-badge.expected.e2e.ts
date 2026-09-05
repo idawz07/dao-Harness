@@ -85,14 +85,14 @@ describe('dao badge assembled snapshot', () => {
 
       - Local PNG: [\`dao-badge.png\`](dao-badge.png), 726×120 source image; render at 121×20
       - Shields.io image URL: \`https://img.shields.io/badge/powered_by-dao-4D6BFE?style=flat-square&logo=deepseek&logoColor=white\`
-      - Project URL: \`https://github.com/deepseek-ai/deepseek-harness\`
+      - Project URL: \`https://github.com/daoAI/dao\`
 
       ## Markdown
 
       Use this linked badge in Markdown:
 
       \`\`\`markdown
-      [![](https://img.shields.io/badge/powered_by-dao-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/deepseek-ai/deepseek-harness)
+      [![](https://img.shields.io/badge/powered_by-dao-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/daoAI/dao)
       \`\`\`
 
       If attribution should not be linked, use:
@@ -124,14 +124,14 @@ describe('dao badge assembled snapshot', () => {
 
       - Local PNG: [\`dao-badge.png\`](dao-badge.png), 726×120 source image; render at 121×20
       - Shields.io image URL: \`https://img.shields.io/badge/powered_by-dao-4D6BFE?style=flat-square&logo=deepseek&logoColor=white\`
-      - Project URL: \`https://github.com/deepseek-ai/deepseek-harness\`
+      - Project URL: \`https://github.com/daoAI/dao\`
 
       ## Markdown
 
       Use this linked badge in Markdown:
 
       \`\`\`markdown
-      [![](https://img.shields.io/badge/powered_by-dao-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/deepseek-ai/deepseek-harness)
+      [![](https://img.shields.io/badge/powered_by-dao-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/daoAI/dao)
       \`\`\`
 
       If attribution should not be linked, use:

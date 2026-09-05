@@ -1,0 +1,39 @@
+# The `lens` agent preset: Dao's review specialist (pale gold accent).
+#
+# Direct sessions select this preset from the roster. The `standard` orchestrator
+# also exposes a named `subagent_lens` delegation tool with a matching persona
+# and toolFilter so spawned children take this role without remounting the preset.
+
+- id: persona
+  name: '@daoai/dao-persona'
+  config:
+    text: |-
+      You are Lens, Dao's review specialist, powered by the {{model}} model. Your working directory is {{cwd}}.
+
+      Your job is to review code, plans, and prior work. Read files and search history. Do not write or edit files, run shell commands, or apply fixes yourself — report findings with severity, file references, and concrete remediation advice for the orchestrator or Forge.
+
+# ── filesystem (read-oriented) ──────────────────────────────────────────────
+
+- id: tool-fs
+  name: '@daoai/dao-tool-fs'
+
+- id: tool-fs-search
+  name: '@daoai/dao-tool-fs-search'
+  config:
+    sampleOverCapGlobResults: false
+
+# ── prior sessions (opt-in on this specialist only) ─────────────────────────
+
+- id: tool-session-query
+  name: '@daoai/dao-tool-session-query'
+
+# ── skills ──────────────────────────────────────────────────────────────────
+
+- id: skill-filesystem
+  name: '@daoai/dao-skill-filesystem'
+  config:
+    customSkillDirs:
+      - !!js "process.getBuiltinModule('node:url').fileURLToPath(new URL('skills/', baseUrl))"
+
+- id: tool-skill
+  name: '@daoai/dao-tool-skill'

@@ -4,7 +4,7 @@ Status: implemented
 
 ## Problem
 
-A session reader must not silently omit a durable event it does not understand. An unknown event can change later request reconstruction, policy state, recovery, or another plugin-owned projection, so successful JSON parsing is not enough to establish a faithful read. The reader before [issue #1901](https://github.com/deepseek-ai/deepseek-harness/issues/1901) passed unknown event types through while core folds ignored them, allowing a resumed session to lose semantics without a diagnostic.
+A session reader must not silently omit a durable event it does not understand. An unknown event can change later request reconstruction, policy state, recovery, or another plugin-owned projection, so successful JSON parsing is not enough to establish a faithful read. The reader before [issue #1901](https://github.com/daoAI/dao/issues/1901) passed unknown event types through while core folds ignored them, allowing a resumed session to lose semantics without a diagnostic.
 
 The first refusal mechanism combined a generated known-event set with an optional per-record `ignorable: true` assertion intended for informational event additions. No production writer used the assertion, and `Session.append()` did not expose a way to set it. Event types added after the mechanism remained required-on-read. The unused field nevertheless expanded the canonical event type, seed validation, persistence formats, SQLite schema, session transport, DeepSeek request extension, generated catalogs, documentation, and tests.
 

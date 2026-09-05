@@ -23,7 +23,7 @@ printf '%s\n' "$DAO_GITHUB_WEBHOOK_SECRET"
 From a development checkout:
 
 ```sh
-export DAO_GITHUB_REVIEW_WORKSPACE=/path/to/deepseek-harness
+export DAO_GITHUB_REVIEW_WORKSPACE=/path/to/dao
 pnpm dao web --patch apps/cli/config/examples/github-review/cordis.yml
 ```
 
@@ -63,7 +63,7 @@ Active:       yes
 
 ## Rule behavior
 
-The rule accepts only source `primary-github`, repository `deepseek-harness/deepseek-harness`, event `pull_request`, and action `ready_for_review`. It passes the exact head SHA plus selected PR fields to the review prompt, labeling the JSON as untrusted metadata and forbidding file, branch, PR, or GitHub mutation.
+The rule accepts only source `primary-github`, repository `daoAI/dao`, event `pull_request`, and action `ready_for_review`. It passes the exact head SHA plus selected PR fields to the review prompt, labeling the JSON as untrusted metadata and forbidding file, branch, PR, or GitHub mutation.
 
 The Session request selects the `standard` agent preset and `read-only` permission preset. `workspacePath` is canonicalized through `WorkspaceRegistry.create()`, so the first matching delivery creates the Web Workspace when absent and later deliveries reuse it.
 
@@ -87,8 +87,8 @@ It can also map repositories to different local paths:
 
 ```js
 const workspacePath = {
-  'deepseek-harness/deepseek-harness': '/path/to/deepseek-harness',
-  'deepseek-harness/dao-sdk': '/path/to/dao-sdk',
+  'daoAI/dao': '/path/to/dao',
+  'daoAI/dao-sdk': '/path/to/dao-sdk',
 }[payload.repository.full_name]
 if (workspacePath === undefined) return null
 ```

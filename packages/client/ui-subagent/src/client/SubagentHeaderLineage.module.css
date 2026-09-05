@@ -201,10 +201,32 @@
   transform: rotate(90deg);
 }
 
+/* Squad accents from PORTRAIT_PROMPTS.md — Stage 6 reuses these for XP/badges. */
+.roleAccent {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.role_scout { background: #0d9488; }
+.role_forge { background: #ea580c; }
+.role_lens { background: #ca8a04; }
+.role_quill { background: #dc2626; }
+.role_relay { background: #22c55e; }
+.role_scribe { background: #7c3aed; }
+
 .content {
   display: flex;
   flex: 1;
   flex-direction: column;
+  min-width: 0;
+}
+
+.labelRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   min-width: 0;
 }
 
@@ -218,6 +240,17 @@
 .label {
   color: inherit;
   font-weight: 400;
+}
+
+.levelChip {
+  flex: none;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: var(--dsw-alias-interactive-bg-hover);
+  color: var(--dsw-alias-label-secondary);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 16px;
 }
 
 .currentLabel {

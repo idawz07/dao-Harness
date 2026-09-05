@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/daoAI/dao.git",
     "directory": "packages/bundle/base"
   },
   "type": "module",
@@ -69,6 +69,7 @@
     "@daoai/dao-repeat-tool-reminder": "workspace:^",
     "@daoai/dao-sandbox-local": "workspace:^",
     "@daoai/dao-sandbox-policy": "workspace:^",
+    "@daoai/dao-references": "workspace:^",
     "@daoai/dao-session": "workspace:^",
     "@daoai/dao-session-checkpoint-policy": "workspace:^",
     "@daoai/dao-session-persistence-jsonl": "workspace:^",
@@ -84,6 +85,7 @@
     "@daoai/dao-skill-filesystem": "workspace:^",
     "@daoai/dao-spill-local": "workspace:^",
     "@daoai/dao-spill-policy": "workspace:^",
+    "@daoai/dao-squad-progress": "workspace:^",
     "@daoai/dao-storage": "workspace:^",
     "@daoai/dao-storage-domain": "workspace:^",
     "@daoai/dao-storage-json": "workspace:^",
@@ -101,6 +103,8 @@
     "@daoai/dao-tool-goal": "workspace:^",
     "@daoai/dao-tool-pwsh": "workspace:^",
     "@daoai/dao-tool-ralph": "workspace:^",
+    "@daoai/dao-tool-references": "workspace:^",
+    "@daoai/dao-tool-session-query": "workspace:^",
     "@daoai/dao-tool-skill": "workspace:^",
     "@daoai/dao-tool-str-replace-editor": "workspace:^",
     "@daoai/dao-tool-subagent": "workspace:^",

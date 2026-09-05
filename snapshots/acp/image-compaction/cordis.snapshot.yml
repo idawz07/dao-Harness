@@ -2,29 +2,26 @@
 # the adapter and re-pins the recorded vision model. The replay catalog declares image input,
 # so the strict read_image gate accepts the route and the tool result carries
 # the durable image block.
-- id: llm-deepseek
-  name: '@deepseek-ai/dsh-llm-deepseek'
-  disabled: true
 
 - id: acp
-  name: '@deepseek-ai/dsh-acp'
+  name: '@daoai/dao-acp'
   config:
-    provider: deepseek-official
-    model: deepseek-v4-flash-vision-exp
+    provider: llama-router
+    model: Qwen3.8-27B-Q6_K_XL-128K-vision-exp
 
 - id: session-persistence-jsonl
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@daoai/dao-session-persistence-jsonl'
   config:
-    root: !!js process.env.DSH_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
+    root: !!js process.env.DAO_SNAPSHOT_SESSIONS_ROOT ?? './.sessions'
     compression: none
 
 - id: agent-instructions
-  name: '@deepseek-ai/dsh-agent-instructions'
+  name: '@daoai/dao-agent-instructions'
   config:
     maxBytes: 65536
 
 - id: system-prompt
-  name: '@deepseek-ai/dsh-system-prompt'
+  name: '@daoai/dao-system-prompt'
   config:
     persona: |
       You are a coding assistant powered by the {{model}} model. Your working directory is {{cwd}}. Your bash tool runs under a file sandbox — a `[sandbox: file access denied …]` result is policy, not a command bug.
@@ -33,17 +30,17 @@
 
 - insert:
     - id: llm-replay
-      name: '@deepseek-ai/dsh-llm-replay'
+      name: '@daoai/dao-llm-replay'
       config:
         providers:
-          - id: deepseek-official
+          - id: llama-router
             name: DeepSeek
             models:
-              - id: deepseek-v4-flash
+              - id: Qwen3.8-27B-Q6_K_XL-128K
                 inputModalities: [text]
-              - id: deepseek-v4-pro
+              - id: Qwen3.8-27B-Q6_K_XL-128K
                 inputModalities: [text]
-              - id: deepseek-v4-flash-vision-exp
+              - id: Qwen3.8-27B-Q6_K_XL-128K-vision-exp
                 inputModalities: [text, image]
                 # Route-priced request images at the provider cap; the small
                 # context window turns that visual pressure into an automatic
@@ -52,13 +49,13 @@
                 imageRequestTokens: 384
 
 - id: attachment-local
-  name: '@deepseek-ai/dsh-attachment-local'
+  name: '@daoai/dao-attachment-local'
 
 # Tight automatic compaction budget sized to the route-priced visual tokens of
 # the scenario's inline images: the text-only history stays under the
 # threshold, so a triggered compaction proves the routed model's image pricing
 # drove the pressure decision.
 - id: compaction-basic
-  name: '@deepseek-ai/dsh-compaction-basic'
+  name: '@daoai/dao-compaction-basic'
   config:
     retainTokens: 100

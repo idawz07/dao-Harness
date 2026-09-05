@@ -4,21 +4,15 @@ import { describe, expect, it, vi } from 'vitest'
 import { AttachmentId } from '@daoai/dao-attachment'
 import type { ISession } from '@daoai/dao-api-session-controller/client'
 import { LocaleRuntime } from '@daoai/dao-client-locale/client'
-import {
-  SlotTestRuntime, TestRemote, stubSettingsScope, usePinnedBrowserLanguages,
-} from '@daoai/dao-client-test-runtime'
+import { SlotTestRuntime, TestRemote, stubSettingsScope, usePinnedBrowserLanguages } from '@daoai/dao-client-test-runtime'
 import type { SessionBehaviorOverrides } from '@daoai/dao-client-test-runtime'
 import type { ClientRemote } from '@daoai/dao-api-remotes/client'
-import {
-  apply as applyConversation, inject as injectConversation,
-} from '@daoai/dao-client-ui-conversation/client'
-import {
-  apply as applyChat, inject as injectChat, type ChatViewInjected, type DetailsInjected,
-} from '@daoai/dao-client-ui-chat/client'
+import { apply as applyConversation, inject as injectConversation } from '@daoai/dao-client-ui-conversation/client'
+import { apply as applyChat, inject as injectChat, type ChatViewInjected, type DetailsInjected } from '@daoai/dao-client-ui-chat/client'
 import type { SessionId } from '@daoai/dao-session/types'
 import { createChatStore } from '../src/client/stores.ts'
 
-usePinnedBrowserLanguages('zh-CN')
+usePinnedBrowserLanguages('en-US')
 
 const ROOT = 'root-1' as SessionId
 const ATTACHMENT = {

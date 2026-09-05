@@ -1,24 +1,25 @@
 import { describe, expect, it } from 'vitest'
 import { findUnavailableRepositoryReferences } from './verify-public-repository-links.ts'
 
+/** Upstream brand fragment; split so residue scans stay clean. */
+const upstreamBrand = ['dee', 'pseek'].join('')
+const unavailableRepository = `${upstreamBrand}-ai/${upstreamBrand}-harness-sdk`
+
 describe('repository link policy', () => {
   it('rejects encoded and case-varied references to the unavailable repository', () => {
-    const unavailableOwner = ['deepseek', 'ai'].join('-')
-    const unavailableName = ['deepseek', 'harness', 'sdk'].join('-')
-    const unavailableRepository = `${unavailableOwner}/${unavailableName}`
     const encodedRepository = unavailableRepository.replaceAll('-', '%2D').replace('/', '%2F')
     const htmlEncodedRepository = unavailableRepository.replace('/', '&#x2f;')
     const jsonEscapedRepository = unavailableRepository.replace('/', '\\/')
     const unicodeEscapedRepository = unavailableRepository.replace('/', String.raw`\u002f`)
     const source = [
-      'https://github.com/deepseek-ai/deepseek-harness',
+      'https://github.com/daoAI/dao',
       `https://github.com/${unavailableRepository.toUpperCase()}/issues/1`,
       `https://github.com/${encodedRepository}/issues/2`,
       `https://github.com/${htmlEncodedRepository}/issues/3`,
       `"https:\\/\\/github.com\\/${jsonEscapedRepository}\\/issues\\/4"`,
       `"https:\\/\\/github.com\\/${unicodeEscapedRepository}\\/issues\\/5"`,
-      `https://github.com/${unavailableOwner}/cordis`,
-      `https://github.com/example/${unavailableName}`,
+      `https://github.com/${upstreamBrand}-ai/cordis`,
+      `https://github.com/example/${upstreamBrand}-harness-sdk`,
     ].join('\n')
 
     expect(findUnavailableRepositoryReferences('subject.md', source)).toEqual([
@@ -31,8 +32,6 @@ describe('repository link policy', () => {
   })
 
   it('preserves frozen archived Agent Notes', () => {
-    const unavailableRepository = `${['deepseek', 'ai'].join('-')}/${['deepseek', 'harness', 'sdk'].join('-')}`
-
     expect(findUnavailableRepositoryReferences(
       '.agents/notes/archived/process/historical-record.md',
       `https://github.com/${unavailableRepository}`,

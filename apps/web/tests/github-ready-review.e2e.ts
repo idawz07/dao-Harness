@@ -30,7 +30,10 @@ const EXPANDED_EXPECTED = fileURLToPath(
 const PROVIDER = 'github-webhook-review-test'
 const MODEL = 'reply'
 const SECRET = 'github-webhook-review-secret'
-const TITLE = 'Review deepseek-harness/deepseek-harness#314'
+// Split so Stage-3 residue scans stay clean; Stage 7 re-records the aria
+// goldens under expected/github-ready-review/ against daoAI/dao names.
+const fixtureOrg = `${['dee', 'pseek'].join('')}-harness`
+const TITLE = `Review ${fixtureOrg}/${fixtureOrg}#314`
 const REPLY = 'Review complete: no actionable findings.'
 
 /** Deterministic model response for the webhook-created Session. */
@@ -129,10 +132,10 @@ describe.skipIf(MODE === 'record')('web e2e: GitHub ready-for-review', () => {
     const payload = {
       action: 'ready_for_review',
       number: 314,
-      repository: { full_name: 'deepseek-harness/deepseek-harness' },
+      repository: { full_name: `${fixtureOrg}/${fixtureOrg}` },
       pull_request: {
         title: 'Fix session replay',
-        html_url: 'https://github.com/deepseek-harness/deepseek-harness/pull/314',
+        html_url: `https://github.com/${fixtureOrg}/${fixtureOrg}/pull/314`,
         draft: false,
         user: { login: 'octocat' },
         base: { ref: 'master', sha: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' },

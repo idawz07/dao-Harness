@@ -655,7 +655,7 @@ describe('createFixtureApi', () => {
       ok: true,
       value: { items: [], hasMore: false },
     })
-    const reasoningOnly = await api.sessions.search(req({ query: '思考过程' }), signal)
+    const reasoningOnly = await api.sessions.search(req({ query: 'Thinking过程' }), signal)
     expect(reasoningOnly.result).toEqual({
       ok: true,
       value: { items: [], hasMore: false },
@@ -849,7 +849,7 @@ describe('createFixtureApi', () => {
     expect(list.result.value.items.some(s => s.sessionId === createdId)).toBe(true)
   })
 
-  it('prompt replays a full streamed turn and cancel mid-replay freezes with (已中断)', async () => {
+  it('prompt replays a full streamed turn and cancel mid-replay freezes with (Interrupted)', async () => {
     const api = createFixtureApi()
     const created = await api.sessions.create(req({}))
     if (!created.result.ok) throw new Error('create failed')
@@ -1205,7 +1205,7 @@ describe('createFixtureApi', () => {
     const controlPromise = collectValues(
       api.sessionRemote.control(controlAbort.signal),
       controlAbort,
-      frames => frames.some(frame => frame.type === 'projection' && frame.key === 'title' && frame.value === '重命名'),
+      frames => frames.some(frame => frame.type === 'projection' && frame.key === 'title' && frame.value === 'Rename'),
     )
     await new Promise(resolve => setTimeout(resolve, 10))
 
@@ -1215,9 +1215,9 @@ describe('createFixtureApi', () => {
     const blank = await api.sessions.rename(req({ sessionId: sid('fx-alpha'), title: '   ' }))
     expect(blank.result).toMatchObject({ ok: false, error: { code: 'title-invalid', details: { sessionId: 'fx-alpha' } } })
 
-    const renamed = await api.sessions.rename(req({ sessionId: sid('fx-alpha'), title: '  重命名  ' }))
+    const renamed = await api.sessions.rename(req({ sessionId: sid('fx-alpha'), title: '  Rename  ' }))
     if (!renamed.result.ok) throw new Error('rename failed')
-    expect(renamed.result.value.title).toBe('重命名')
+    expect(renamed.result.value.title).toBe('Rename')
     const acceptedSeq = renamed.result.value.seq
     // The response seq addresses the appended title event (the client plane
     // has no session/title in its event union — titles ride the projection —
@@ -1227,7 +1227,7 @@ describe('createFixtureApi', () => {
     const appended = historyEvents(history.result.value.records).find(event => event.seq === acceptedSeq)
     expect(appended).toMatchObject({
       type: 'session/title',
-      data: { title: '重命名', messageSeqs: [], source: { kind: 'user' } },
+      data: { title: 'Rename', messageSeqs: [], source: { kind: 'user' } },
     })
     const followed = await followPromise
     expect(followed.some(frame => frame.type === 'event'
@@ -1238,7 +1238,7 @@ describe('createFixtureApi', () => {
       frame.type === 'projection'
       && frame.key === 'title'
       && frame.sessionId === sid('fx-alpha')
-      && frame.value === '重命名')
+      && frame.value === 'Rename')
     expect(titleFrames).toHaveLength(1)
     expect(titleFrames[0]).toMatchObject({ seq: acceptedSeq })
   })

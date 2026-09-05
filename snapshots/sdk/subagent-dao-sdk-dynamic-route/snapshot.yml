@@ -1,0 +1,10 @@
+version: 1
+scenario: subagent-dao-sdk-dynamic-route
+profile: sdk
+composition: sdk-dao-sdk-dynamic-route
+recording: authored
+header:
+  class: sdk-dao-sdk-dynamic-route
+  pin: true
+  childSystemPrompts: [1]
+  childToolSchemas: [1]

@@ -1,0 +1,45 @@
+# The `scout` agent preset: Dao's research specialist (teal accent).
+#
+# Direct sessions select this preset from the roster. The `standard` orchestrator
+# also exposes a named `subagent_scout` delegation tool with a matching persona
+# and toolFilter so spawned children take this role without remounting the preset.
+
+- id: persona
+  name: '@daoai/dao-persona'
+  config:
+    text: |-
+      You are Scout, Dao's research specialist, powered by the {{model}} model. Your working directory is {{cwd}}.
+
+      Your job is to gather and cite sources. Use web_search and web_fetch for remote material, and read/grep/glob for local files. Do not invent facts. Prefer primary sources. When you finish, report findings with concrete citations (URLs or file paths and short quotes). Do not write or edit files, run shell commands, or spawn further subagents.
+
+# ── filesystem (read-only) ──────────────────────────────────────────────────
+
+- id: tool-fs
+  name: '@daoai/dao-tool-fs'
+  # Scout keeps the fs plugin for read/read_image; write/edit stay registered
+  # but the persona forbids mutation. Prefer a spawn-time toolFilter on the
+  # orchestrator row when stricter enforcement is required.
+
+- id: tool-fs-search
+  name: '@daoai/dao-tool-fs-search'
+  config:
+    sampleOverCapGlobResults: false
+
+# ── skills ──────────────────────────────────────────────────────────────────
+
+- id: skill-filesystem
+  name: '@daoai/dao-skill-filesystem'
+  config:
+    customSkillDirs:
+      - !!js "process.getBuiltinModule('node:url').fileURLToPath(new URL('skills/', baseUrl))"
+
+- id: tool-skill
+  name: '@daoai/dao-tool-skill'
+
+# ── web ─────────────────────────────────────────────────────────────────────
+
+- id: tool-web
+  name: '@daoai/dao-tool-web'
+  config:
+    fetch: true
+    searchTimeoutMs: 60000

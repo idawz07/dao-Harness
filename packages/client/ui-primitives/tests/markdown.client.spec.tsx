@@ -63,7 +63,7 @@ describe('MarkdownText', () => {
     // The ts fence routed through the shared CodeBlock: shiki token spans + banner.
     expect(container.querySelector('pre.shiki')).not.toBeNull()
     expect(screen.getByText('ts')).toBeTruthy()
-    expect(screen.getByRole('button', { name: '复制' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Copy' })).toBeTruthy()
     expect(container.querySelector('br')).not.toBeNull()
     expect(screen.getByRole('link', { name: 'safe' }).getAttribute('target')).toBe('_blank')
     expect(screen.getByRole('link', { name: 'https://wdawal.com' })).toBeTruthy()
@@ -92,27 +92,27 @@ describe('MarkdownText', () => {
 
   it('keeps the CJK strong extension out of escaped, code, math, and ASCII contexts', () => {
     const source = [
-      String.raw`\**注意：**内容`,
-      '`**注意：**内容`',
+      String.raw`\**注意：**Content`,
+      '`**注意：**Content`',
       '**Notice:**text',
-      '*提醒！*继续',
-      '$**注意：**内容$',
+      '*提醒！*Continue',
+      '$**注意：**Content$',
       '```md',
-      '**注意：**内容',
+      '**注意：**Content',
       '```',
-      '**普通**内容',
-      '*普通*内容',
+      '**普通**Content',
+      '*普通*Content',
     ].join('\n\n')
     const { container } = render(<MarkdownText text={source} />)
 
     expect([...container.querySelectorAll('strong')].map(node => node.textContent)).toEqual(['普通'])
     expect([...container.querySelectorAll('em')].map(node => node.textContent)).toEqual(['普通'])
-    expect(container.querySelector('code')?.textContent).toBe('**注意：**内容')
-    expect(container.querySelector('.katex annotation')?.textContent).toBe('**注意：**内容')
-    expect(container.querySelector('pre code')?.textContent).toContain('**注意：**内容')
+    expect(container.querySelector('code')?.textContent).toBe('**注意：**Content')
+    expect(container.querySelector('.katex annotation')?.textContent).toBe('**注意：**Content')
+    expect(container.querySelector('pre code')?.textContent).toContain('**注意：**Content')
     expect(container.textContent).toContain('**Notice:**text')
-    expect(container.textContent).toContain('*提醒！*继续')
-    expect(container.textContent).toContain('**注意：**内容')
+    expect(container.textContent).toContain('*提醒！*Continue')
+    expect(container.textContent).toContain('**注意：**Content')
   })
 
   it('links complete HTTP(S) inline code without promoting commands, unsafe schemes, or fences', () => {
@@ -546,6 +546,6 @@ describe('JsonBlock', () => {
     const { container } = render(<JsonBlock label="x" payload={big} defaultOpen />)
     const body = container.querySelector('pre')!.textContent
     expect(body.length).toBeLessThan(30_000)
-    expect(body).toContain('截断')
+    expect(body).toContain('truncated')
   })
 })

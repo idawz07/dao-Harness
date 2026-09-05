@@ -19,7 +19,7 @@ export const inject = ['agents', 'agentLoop', 'sessionPersistence']
 export async function apply(ctx: Context): Promise<void> {
   const handle = await ctx.agents.resume({
     resumeSessionId: 'semantic-checkpoint-unknown-outcome' as SessionId,
-    agentOptions: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+    agentOptions: { provider: 'llama-router', model: 'Qwen3.8-27B-Q6_K_XL-128K' },
   })
   ctx.effect(() => () => handle.dispose(), 'semantic-checkpoint-agent.handle')
 }

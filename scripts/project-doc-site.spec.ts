@@ -189,7 +189,7 @@ describe('rewriteMarkdown', () => {
       repositoryRef: 'abc123',
     })).toBe(
       '[B](./reference/b.md#part) '
-      + '[source](https://github.com/deepseek-ai/deepseek-harness/blob/abc123/packages/tool.ts#L2) '
+      + '[source](https://github.com/daoAI/dao/blob/abc123/packages/tool.ts#L2) '
       + '[web](https://example.com)\n',
     )
   })
@@ -202,7 +202,7 @@ describe('rewriteMarkdown', () => {
       pages,
       repoRoot: root,
       repositoryRef: 'abc123',
-    })).toBe('![logo](https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/abc123/packages/logo.svg)\n')
+    })).toBe('![logo](https://raw.githubusercontent.com/daoAI/dao/abc123/packages/logo.svg)\n')
   })
 
   it('hands an image to the placer and uses the URL it returns', () => {
@@ -276,7 +276,7 @@ describe('rewriteMarkdown', () => {
       repositoryRef: 'abc123',
     })).toBe(
       '[title](./reference/b.md "b.md") '
-      + '[escaped](https://github.com/deepseek-ai/deepseek-harness/blob/abc123/docs/x(y).md)\n',
+      + '[escaped](https://github.com/daoAI/dao/blob/abc123/docs/x(y).md)\n',
     )
   })
 
@@ -464,7 +464,7 @@ describe('projectedPageContent', () => {
   })
 
   it('drops the repository badge every page links from its footer', () => {
-    const badge = '[![](https://img.shields.io/badge/powered_by-dao-4D6BFE?style=flat-square)](https://github.com/deepseek-ai/deepseek-harness)'
+    const badge = '[![](https://img.shields.io/badge/powered_by-dao-4D6BFE?style=flat-square)](https://github.com/daoAI/dao)'
     expect(projectedPageContent(`# Guide\n\nBody.\n\n${badge}\n`, page('guide')))
       .toBe('# Guide\n\nBody.\n')
   })
@@ -484,7 +484,7 @@ describe('rawMarkdownPageContent', () => {
   })
 
   it('drops the repository badge like the rendered site', () => {
-    const badge = '[![](https://img.shields.io/badge/powered_by-dao-4D6BFE?style=flat-square)](https://github.com/deepseek-ai/deepseek-harness)'
+    const badge = '[![](https://img.shields.io/badge/powered_by-dao-4D6BFE?style=flat-square)](https://github.com/daoAI/dao)'
     expect(rawMarkdownPageContent(`# Guide\n\nBody.\n\n${badge}\n`, 'docs/guide.md'))
       .toBe('# Guide\n\nBody.\n')
   })
