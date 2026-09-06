@@ -73,4 +73,26 @@ describe('child Agent options', () => {
       subagentDepth: 1,
     })
   })
+
+  it('does not inherit an effort the parent adapter itself defaulted', () => {
+    const parent = parentAgent()
+    parent.session.append('request/header', {
+      header: {
+        config: {
+          provider: 'current-provider',
+          model: 'current-model',
+          reasoningEffort: ReasoningEffortId('high'),
+        },
+        adapterDefaults: { reasoningEffort: true },
+      },
+      reason: 'initial',
+    })
+
+    expect(resolveChildAgentOptions(parent, undefined, 1)).toEqual({
+      provider: 'current-provider',
+      model: 'current-model',
+      maxTokens: 512,
+      subagentDepth: 1,
+    })
+  })
 })

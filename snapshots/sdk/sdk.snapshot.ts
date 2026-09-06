@@ -377,7 +377,7 @@ function modelFromSession(log: string): { provider: string; model: string } {
 function liveRecordRoute(route: { provider: string; model: string }): { provider: string; model: string } {
   if (route.provider !== 'deepseek-official') return route
   const model = route.model.includes('vision')
-    ? 'Qwen3.8-27B-Q6_K_XL-128K-vision-exp'
+    ? 'Qwen3.8-27B-Q4_K_XL-128K-Vision'
     : 'Qwen3.8-27B-Q6_K_XL-128K'
   return { provider: 'llama-router', model }
 }

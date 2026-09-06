@@ -61,12 +61,16 @@ export function resolveChildDepth(parent: Agent, maxDepth: number | undefined): 
  * Resolve the parent values inherited by a child. The latest request header
  * owns provider, model, and reasoning effort after request-time selection;
  * creation options remain the fallback before the first request and retain
- * the configured output-token limit.
+ * the configured output-token limit. An effort the parent's adapter itself
+ * defaulted is not a selection, so it is not inherited: the child's own
+ * adapter re-defaults it and the child's header stays in the parent's
+ * header class.
  * @param parent - delegating parent Agent.
  * @returns detached Agent options for child-option merging.
  */
 export function parentAgentOptionsForDelegation(parent: Agent): AgentOptions {
-  const requestConfig = parent.session.requestHeader()?.config
+  const header = parent.session.requestHeader()
+  const requestConfig = header?.config
   if (requestConfig === undefined) return { ...parent.options }
   const {
     provider: _createdProvider,
@@ -74,13 +78,14 @@ export function parentAgentOptionsForDelegation(parent: Agent): AgentOptions {
     reasoningEffort: _createdReasoningEffort,
     ...createdOptions
   } = parent.options
+  const headerEffort = header.adapterDefaults?.reasoningEffort === true
+    ? undefined
+    : requestConfig.reasoningEffort
   return {
     ...createdOptions,
     provider: requestConfig.provider,
     model: requestConfig.model,
-    ...requestConfig.reasoningEffort === undefined
-      ? {}
-      : { reasoningEffort: requestConfig.reasoningEffort },
+    ...headerEffort === undefined ? {} : { reasoningEffort: headerEffort },
   }
 }
 
