@@ -41,6 +41,7 @@ This table connects model-visible tool names to the plugin package and service s
 | `@daoai/dao-tool-todo` | `todo_write` | `ctx.tools`, `owning Agent session` | `tool/call`, `todo/write`, `tool/result` | - | todo_write is session-owned state; UIs render the latest todo/write event as a checklist. `allowParallelInProgress` is required with no default, so the catalog states its choice: `true`, whose description invites several `in_progress` items. A deployment choosing `false` receives the same tool with a description asking for exactly one active task. |
 | `@daoai/dao-tool-workflow` | `workflow` | `ctx.tools`, `ctx.workflowEngine`, `ctx.systemPrompt`, `a calling Agent (exec.agent parents the script children)` | `tool/call`, `tool/result` | - | - |
 | `@daoai/dao-tool-web` | `web_fetch`, `web_search` | `ctx.tools`, `ctx.web`, `ctx.systemPrompt` | `tool/call`, `tool/result` | - | web_search and web_fetch keep provider selection behind ctx.web so model-visible schemas stay stable across backend swaps. |
+| `@daoai/dao-tool-references` | `reference_add`, `reference_get`, `reference_index`, `reference_list`, `reference_remove`, `reference_search` | `ctx.tools`, `ctx.references`, `ctx.systemPrompt` | `tool/call`, `tool/result`, `references domain state` | - | The six model-facing tools operate over the durable references storage domain. The package is opt-in; compositions mount storage-domain and references store alongside it. |
 
 <a id="daoaidao-tool-ask-user"></a>
 
@@ -2277,3 +2278,133 @@ Search the web for current information. Provide 1–4 queries in the required qu
 Source: [`packages/web/tool-web/src/index.ts`](../packages/web/tool-web/src/index.ts)
 
 web_search and web_fetch keep provider selection behind ctx.web so model-visible schemas stay stable across backend swaps.
+
+<a id="daoaidao-tool-references"></a>
+
+## `@daoai/dao-tool-references`
+
+### `reference_add`
+
+Ingest one reference into the durable store. Provide exactly one of: path, url, or both title and text.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "Local filesystem path to read and ingest."
+    },
+    "url": {
+      "type": "string",
+      "description": "HTTP(S) URL to fetch and ingest (requires web)."
+    },
+    "title": {
+      "type": "string",
+      "description": "Document title when ingesting raw text."
+    },
+    "text": {
+      "type": "string",
+      "description": "Document body when ingesting raw text."
+    }
+  }
+}
+```
+
+Source: [`packages/references/tool-references/src/index.ts`](../packages/references/tool-references/src/index.ts)
+
+### `reference_get`
+
+Fetch one full reference document or one chunk by id.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "document_id": {
+      "type": "string",
+      "description": "Document id to fetch."
+    },
+    "chunk_id": {
+      "type": "string",
+      "description": "Chunk id to fetch."
+    }
+  }
+}
+```
+
+Source: [`packages/references/tool-references/src/index.ts`](../packages/references/tool-references/src/index.ts)
+
+### `reference_index`
+
+Navigate the reference store: sources → documents → chunk previews.
+
+```json
+{
+  "type": "object",
+  "properties": {}
+}
+```
+
+Source: [`packages/references/tool-references/src/index.ts`](../packages/references/tool-references/src/index.ts)
+
+### `reference_list`
+
+List ingested reference documents (id, title, source, chunk count).
+
+```json
+{
+  "type": "object",
+  "properties": {}
+}
+```
+
+Source: [`packages/references/tool-references/src/index.ts`](../packages/references/tool-references/src/index.ts)
+
+### `reference_remove`
+
+Delete one reference document and all of its chunks.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "document_id": {
+      "type": "string",
+      "description": "Document id to remove."
+    }
+  },
+  "required": [
+    "document_id"
+  ]
+}
+```
+
+Source: [`packages/references/tool-references/src/index.ts`](../packages/references/tool-references/src/index.ts)
+
+### `reference_search`
+
+Keyword-search ingested reference chunks and return the strongest hits.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "query": {
+      "type": "string",
+      "description": "Keyword query."
+    },
+    "top_k": {
+      "type": "integer",
+      "description": "Maximum hits to return (default 5)."
+    }
+  },
+  "required": [
+    "query"
+  ]
+}
+```
+
+Source: [`packages/references/tool-references/src/index.ts`](../packages/references/tool-references/src/index.ts)
+
+The six model-facing tools operate over the durable references storage domain. The package is opt-in; compositions mount storage-domain and references store alongside it.

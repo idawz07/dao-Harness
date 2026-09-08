@@ -4,7 +4,7 @@
 import { useId } from 'react'
 import type { ReactNode, RefObject } from 'react'
 import {
-  FishLogo, IconChevronDownOutline14, IconFolderClose16, IconFolderOpen16,
+  DaoMark, IconChevronDownOutline14, IconFolderClose16, IconFolderOpen16,
 } from '@daoai/dao-client-ui-primitives'
 import { workspaceTitleOf } from '@daoai/dao-util-workspace-path'
 import type { ConversationSlotProps } from '../contract/slots.ts'
@@ -116,9 +116,9 @@ export function HeroShell({ t, renderSlot, children }: HeroShellProps) {
     <div className={css.root}>
       <div className={css.stack}>
         <div className={css.headline}>
-          <span className={css.fishHitbox}>
-            {renderSlot('conversation.hero.brand.mark', { size: 34, className: css.fish }, {
-              fallback: <FishLogo size={34} className={css.fish} />,
+          <span className={css.markHitbox}>
+            {renderSlot('conversation.hero.brand.mark', { size: 34, className: css.brandMark }, {
+              fallback: <DaoMark size={34} className={css.brandMark} />,
             })}
           </span>
           <span className={css.headlineText}>{t('hero.headline')}</span>

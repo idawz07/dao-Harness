@@ -1,12 +1,15 @@
 # Keyless replay layer for the Dao SDK dynamic-route snapshot.
 
+- id: llm-pi-ai
+  disabled: true
+
 - insert:
     - id: llm-replay
       name: '@daoai/dao-llm-replay'
       config:
         providers:
           - id: llama-router
-            name: DeepSeek
+            name: Local Llama Router
             models:
               - id: mock-delegate
           - id: mock

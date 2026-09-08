@@ -100,6 +100,12 @@ export interface ReplayConfig {
    */
   file: string
   /**
+   * The live workdir that `{{cwd}}` tokens in recorded output materialize to —
+   * the snapshot lane's generated per-scenario directory. Absent falls back to
+   * `process.cwd()` for direct {@link installLlmReplay} consumers.
+   */
+  cwd?: string
+  /**
    * Optional sidecar for the PRIMARY session: a bare `ReplayEntry[]` replaces
    * the derived script; `{ patches }` keeps it and swaps the named call
    * indexes ({@link ReplayOverrideDoc}). Used by single-session scenarios not
@@ -430,26 +436,35 @@ export function resolveScriptedEntry(entry: ReplayEntry, messages: GenerateOptio
   return substituteValue(entry, leaves.join('\n')) as ReplayEntry
 }
 
+/** Map all string values in an arbitrary JSON structure. */
+function mapJsonStrings(value: unknown, transform: (str: string) => string): unknown {
+  if (typeof value === 'string') return transform(value)
+  if (Array.isArray(value)) return value.map(item => mapJsonStrings(item, transform))
+  if (value !== null && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, mapJsonStrings(v, transform)]))
+  }
+  return value
+}
+
 /** Replace typed recorded-session tokens with the live sessions bound at the same corpus indexes. */
 function materializeSessionTokens(entry: ReplayEntry, liveSessionIds: readonly (string | undefined)[]): ReplayEntry {
   if (!JSON.stringify(entry).includes('{{session:')) return entry
-  const replace = (value: unknown): unknown => {
-    if (typeof value === 'string') {
-      return value.replace(/\{\{session:([1-9]\d*)\}\}/g, (_token, ordinal: string) => {
-        const live = liveSessionIds[Number(ordinal) - 1]
-        if (live === undefined) {
-          throw new Error(`llm-replay: session token {{session:${ordinal}}} was used before that recorded session bound`)
-        }
-        return live
-      })
+  return mapJsonStrings(entry, value => value.replace(/\{\{session:([1-9]\d*)\}\}/g, (_token, ordinal: string) => {
+    const live = liveSessionIds[Number(ordinal) - 1]
+    if (live === undefined) {
+      throw new Error(`llm-replay: session token {{session:${ordinal}}} was used before that recorded session bound`)
     }
-    if (Array.isArray(value)) return value.map(replace)
-    if (value !== null && typeof value === 'object') {
-      return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, replace(item)]))
-    }
-    return value
-  }
-  return replace(entry) as ReplayEntry
+    return live
+  })) as ReplayEntry
+}
+
+/** The snapshot-corpus token stored in place of the generated per-scenario workdir. */
+const CWD_TOKEN = '{{cwd}}'
+
+/** Materialize the recorded-workdir token against the live workdir the snapshot lane generated. */
+function materializeCwdToken(entry: ReplayEntry, cwd: string): ReplayEntry {
+  if (!JSON.stringify(entry).includes(CWD_TOKEN)) return entry
+  return mapJsonStrings(entry, value => value.replaceAll(CWD_TOKEN, cwd)) as ReplayEntry
 }
 
 /** Learn a background child id from the stable tool-result text before that child reaches its first model call. */
@@ -799,6 +814,7 @@ export function installLlmReplay(ctx: Context, config: ReplayConfig): ReplayHand
   if (!Number.isInteger(paceMs) || paceMs < 0) {
     throw new Error(`llm-replay: paceMs must be a non-negative integer, got ${String(config.paceMs)}`)
   }
+  const cwd = config.cwd ?? process.cwd()
   const scripts = loadSessionScripts(config)
   // Live-session → its bound script + cursor. A new live session id claims the
   // next not-yet-bound script (scripts are in bind order); `nextScript` is the
@@ -846,7 +862,10 @@ export function installLlmReplay(ctx: Context, config: ReplayConfig): ReplayHand
         )
       }
       inferStartedSubagents(options.messages, liveSessionIds)
-      const resolved = resolveScriptedEntry(materializeSessionTokens(entry, liveSessionIds), options.messages)
+      const resolved = resolveScriptedEntry(
+        materializeCwdToken(materializeSessionTokens(entry, liveSessionIds), cwd),
+        options.messages,
+      )
       yield* replayEntry(resolved, options.signal, paceMs)
     })()
   }
@@ -881,6 +900,11 @@ export const inject = ['llm']
 export interface Config {
   /** Override the fixture path; defaults to `$DAO_SNAPSHOT_FILE`. */
   file?: string
+  /**
+   * The live workdir `{{cwd}}` tokens in recorded output materialize to;
+   * defaults to `$DAO_SNAPSHOT_CWD`, then `process.cwd()`.
+   */
+  cwd?: string
   /** Override the sidecar path; defaults to `$DAO_SNAPSHOT_OVERRIDE`. */
   overrideFile?: string
   /**
@@ -934,11 +958,13 @@ export function apply(ctx: Context, config: Config = {}): void {
   }
   validateConfiguredModels(config.providers)
   const overrideFile = config.overrideFile ?? process.env.DAO_SNAPSHOT_OVERRIDE
+  const cwd = config.cwd ?? process.env.DAO_SNAPSHOT_CWD ?? process.cwd()
   const childEnv = process.env.DAO_SNAPSHOT_CHILD_FILES
   const childFiles = config.childFiles
     ?? (childEnv !== undefined && childEnv.length > 0 ? childEnv.split(pathDelimiter) : [])
   installLlmReplay(ctx, {
     file,
+    cwd,
     ...overrideFile !== undefined && overrideFile.length > 0 ? { overrideFile } : {},
     ...childFiles.length > 0 ? { childFiles } : {},
     ...config.providers !== undefined ? { providers: config.providers } : {},

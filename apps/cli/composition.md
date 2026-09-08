@@ -64,6 +64,8 @@ flowchart LR
   cfg --> plugin_dao_base_storage_json
   plugin_dao_base_storage_domain["storage-domain<br/>@daoai/dao-storage-domain"]
   cfg --> plugin_dao_base_storage_domain
+  plugin_dao_base_squad_progress["squad-progress<br/>@daoai/dao-squad-progress"]
+  cfg --> plugin_dao_base_squad_progress
   plugin_dao_base_session_projection_cache["session-projection-cache<br/>@daoai/dao-session-projection-cache"]
   cfg --> plugin_dao_base_session_projection_cache
   plugin_dao_base_session_telemetry_otel["session-telemetry-otel<br/>@daoai/dao-session-telemetry-otel"]
@@ -210,6 +212,7 @@ flowchart LR
 | `storage` | `@daoai/dao-storage` |
 | `storage-json` | `@daoai/dao-storage-json` |
 | `storage-domain` | `@daoai/dao-storage-domain` |
+| `squad-progress` | `@daoai/dao-squad-progress` |
 | `session-projection-cache` | `@daoai/dao-session-projection-cache` |
 | `session-telemetry-otel` | `@daoai/dao-session-telemetry-otel` |
 | `subprocess` | `@daoai/dao-subprocess-local` |

@@ -5,7 +5,7 @@
  * environment variables, camelCase and PascalCase identifiers, CSS custom
  * properties, the `.dsh` home directory), the `deepseek-harness-*` product
  * distribution names become `dao-*`, and "DeepSeek Harness" prose becomes
- * "Dao" ([mapping](../REBRAND_PLAN.md), the plan's authoritative rename map).
+ * "Dao".
  *
  * The pass rewrites content only. Every file or directory whose NAME carries
  * the old token is renamed with `git mv` (see RENAMES) before `--check`
@@ -378,6 +378,7 @@ function run(mode: 'dry' | 'apply' | 'check'): void {
     }
   }
 
+  /* jscpd:ignore-start */
   for (const check of POSTCONDITIONS) {
     if (mode === 'apply') continue // post-state asserts belong to --check
     const path = resolve(root, check.file)
@@ -386,6 +387,7 @@ function run(mode: 'dry' | 'apply' | 'check'): void {
       failures.push(`postcondition: ${check.file} has ${String(hits)} occurrence(s) of ${JSON.stringify(check.text)}, expected ${String(check.count)}`)
     }
   }
+  /* jscpd:ignore-end */
 
   if (residue.length > 0) {
     for (const file of residue) failures.push(`residue: ${file} still carries a pre-rebrand token`)

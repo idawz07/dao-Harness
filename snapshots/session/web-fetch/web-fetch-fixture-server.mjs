@@ -33,7 +33,7 @@ const LIMITS = {
   maxBodyChars: 100_000,
   timeoutMs: 30_000,
   maxRedirects: 5,
-  userAgent: 'deepseek-harness-snapshot/1.0',
+  userAgent: 'dao-snapshot/1.0',
 }
 
 /**

@@ -20,11 +20,11 @@ describe('LayoutController', () => {
     service.attachPanels(panels)
 
     service.toggleSidebar()
-    service.openDetails()
+    service.openDetails('squad-progress')
     service.closeDetails()
 
     expect(panels.toggleSidebar).toHaveBeenCalledTimes(1)
-    expect(panels.openDetails).toHaveBeenCalledTimes(1)
+    expect(panels.openDetails).toHaveBeenCalledWith('squad-progress')
     expect(panels.closeDetails).toHaveBeenCalledTimes(1)
     expect(panels.setSidebar).not.toHaveBeenCalled()
     expect(panels.setDetails).not.toHaveBeenCalled()

@@ -1,5 +1,5 @@
 # Session-title snapshot composition: the optional first-prompt provider uses
-# the ordinary DeepSeek route while the every other capability stay
+# the ordinary llama-router route while the every other capability stay
 # identical to the base example.
 - insert:
     - id: session-title-provider

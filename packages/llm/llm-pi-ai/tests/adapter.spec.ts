@@ -895,10 +895,30 @@ describe('provider profile lifecycle', () => {
   })
 
   it('rejects unsupported or unresolved image input before provider I/O', async () => {
-    const adapter = adapterOf({ openai: {}, cerebras: {} })
+    const adapter = adapterOf({
+      openai: {},
+      cerebras: {},
+      'text-only': {
+        api: 'openai-completions',
+        baseURL: 'https://acme.test/v1',
+        models: [{ id: 'text-model', input: ['text'] }],
+      },
+    })
     const drain = async (options: Parameters<PiAiAdapter['stream']>[0]): Promise<void> => {
       for await (const _chunk of adapter.stream(options)) { /* drain */ }
     }
+
+    await expect(drain({
+      provider: 'text-only',
+      model: 'text-model',
+      messages: [createUserMessage({
+        content: [{ type: 'image', attachment: IMAGE_REF }],
+        source: { kind: 'plugin', plugin: 'test' },
+      })],
+    })).rejects.toMatchObject({
+      message: 'pi-ai model "text-model" does not support image input',
+      code: 'UNSUPPORTED_CONTENT',
+    })
 
     await expect(drain({
       provider: 'cerebras',

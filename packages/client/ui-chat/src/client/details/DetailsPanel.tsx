@@ -45,7 +45,7 @@ function rawResultText(block: ToolCallBlock): string {
   return parts.join('\n')
 }
 
-export function DetailsPanel({ useChat, useSessions, sessionId, useStore, renderSlot, closeDetails, t }: DetailsPanelProps) {
+export function DetailsPanel({ surface, useChat, useSessions, sessionId, useStore, renderSlot, closeDetails, t }: DetailsPanelProps) {
   const selection = useStore(s => s.selection)
   // Session workspace root: a card model resolves omitted or relative
   // tool paths against it without reading Session services.
@@ -56,6 +56,27 @@ export function DetailsPanel({ useChat, useSessions, sessionId, useStore, render
   const material = useChat(
     s => (callId === undefined ? null : materialFor(s, callId)),
     (a, b) => shallowEqual(a, b))
+  if (surface !== 'tool') {
+    return renderSlot('conversation.details.view', { closeDetails }, {
+      entryKey: surface,
+      fallback: (
+        <div className={css.root}>
+          <div className={css.header}>
+            <div className={css.title}>{t('details.title')}</div>
+            <button
+              type="button" className={css.close} aria-label={t('details.close')}
+              onClick={() => { closeDetails() }}
+            >
+              <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden>
+                <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
+          <div className={css.body}><div className={css.empty}>{t('details.empty')}</div></div>
+        </div>
+      ),
+    })
+  }
   return (
     <div className={css.root}>
       <div className={css.header}>

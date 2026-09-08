@@ -2,6 +2,9 @@
 # the auxiliary route consumes replay.override.json with pacing so its accepted
 # title commits only after the main turn has closed.
 
+- id: llm-pi-ai
+  disabled: true
+
 - id: agent-default-model
   name: '@daoai/dao-agent-default-model'
   config:
@@ -34,9 +37,13 @@
         overrideFile: ./.missing-main-replay-override.json
         providers:
           - id: llama-router
-            name: DeepSeek
+            name: Local Llama Router
             models:
               - id: Qwen3.8-27B-Q6_K_XL-128K
+                contextWindow: 131072
+                defaultMaxTokens: 65536
+                reasoningEfforts: ['off', 'minimal', 'low', 'medium', 'high']
+                defaultReasoningEffort: high
     - id: llm-replay-title
       name: '@daoai/dao-llm-replay'
       config:

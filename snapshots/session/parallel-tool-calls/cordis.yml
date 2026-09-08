@@ -1,5 +1,5 @@
 # Filesystem-scenario overlay: the sandboxed filesystem stack already lives in
-# `dsh-base`, so this patch changes only the local tool-result spill
+# `default`, so this patch changes only the local tool-result spill
 # storage those scenarios exercise.
 
 - id: spill-local

@@ -16,7 +16,11 @@ export const XP_CHILD_SPAWNED = 2
 /** XP awarded when a foreground delegation tool returns a completed child result. */
 export const XP_CHILD_SETTLED = 5
 
-/** Whether a model-facing tool name is a `dao-tool-subagent` delegation tool. */
+/**
+ * Whether a model-facing tool name is a `dao-tool-subagent` delegation tool.
+ * @param name - Candidate tool name.
+ * @returns True when the name matches a delegation tool.
+ */
 export function isDelegationToolName(name: string): boolean {
   return name === 'subagent' || name.startsWith('subagent_')
 }
@@ -79,7 +83,10 @@ export interface SquadProgressState {
   turnOpen: boolean
 }
 
-/** Build the initial empty progress state. */
+/**
+ * Build the initial empty progress state.
+ * @returns Initial zeroed squad progress state.
+ */
 export function initSquadProgressState(): SquadProgressState {
   return {
     xp: 0,

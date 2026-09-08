@@ -204,7 +204,7 @@ export function AppFrame({
             entry while no session is current. */}
         <CenterColumn>{renderSlot('conversation', {})}</CenterColumn>
         <DetailsColumn>
-          <SessionProvider>{renderSlot('details', {})}</SessionProvider>
+          <SessionProvider>{renderSlot('details', { surface: panels.detailsSurface })}</SessionProvider>
         </DetailsColumn>
       </>
       <div className={css.overlayLayer} data-shell-overlay>

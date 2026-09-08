@@ -28,6 +28,7 @@ import {
   scrubToolSchemas,
   sessionFixtureNames,
   snapshotSpillRoot,
+  snapshotTimeoutMs,
   stabilizeFixtureMessageIds,
   stabilizeRefreshLog,
   tokenizeSessionFixtureCwd,
@@ -63,6 +64,7 @@ function snapshotMode(value: string | undefined): SnapshotMode {
 }
 
 const mode = snapshotMode(process.env.DAO_SNAPSHOT)
+const recordProcessTimeoutMs = snapshotTimeoutMs('DAO_SNAPSHOT_RECORD_TIMEOUT_MS', 120_000)
 const RUNTIME_WORKSPACE_ENTRIES = ['.agents', '.dao', '.snapshot-patches'] as const
 
 interface JsonObject {
@@ -637,7 +639,7 @@ describe('headless recorded-session snapshots', () => {
             task,
           ],
           tsconfigPath,
-          processTimeoutMs: mode === 'record' ? 120_000 : undefined,
+          processTimeoutMs: mode === 'record' ? recordProcessTimeoutMs : undefined,
           expectedExitCode: turnReasonFromSession(primaryFixture)?.kind === 'completed'
             || turnReasonFromSession(primaryFixture) === undefined && scenario.manifest.input?.task !== undefined
             ? 0
@@ -713,6 +715,6 @@ describe('headless recorded-session snapshots', () => {
       } else {
         expect(finalWorkspace, `${scenario.name}: a changed workspace requires workspace.final`).toEqual(initialWorkspace)
       }
-    }, mode === 'record' ? 180_000 : LOADER_SMOKE_TEST_TIMEOUT_MS)
+    }, mode === 'record' ? recordProcessTimeoutMs + 60_000 : LOADER_SMOKE_TEST_TIMEOUT_MS)
   }
 })

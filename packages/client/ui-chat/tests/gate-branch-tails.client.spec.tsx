@@ -138,6 +138,7 @@ describe('render branch tails', () => {
     const workspaces = emptyWorkspaces()
     const view = render(
       <DetailsPanel
+        surface="tool"
         SessionProvider={SessionProviderStub}
         renderSlot={renderToolDetailsProbe()}
         sessionId={SID}
@@ -200,6 +201,7 @@ describe('render branch tails', () => {
     const owners: DetailsToolOwnerProps[] = []
     const view = render(
       <DetailsPanel
+        surface="tool"
         SessionProvider={SessionProviderStub}
         renderSlot={renderToolDetailsProbe(owners)}
         sessionId={SID}

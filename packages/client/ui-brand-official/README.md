@@ -27,7 +27,7 @@ Mount this plugin in the browser roster of a deployment whose identity is Dao's 
 
 ### Choosing the profile
 
-`DAO_CLIENT_BUILD_PROFILE` selects which brand renders. An `official` build shows the official mark and name in the sidebar and the mark in the conversation hero; any other value leaves the shell fallbacks — the fish mark and the local-build label — in place. The plugin still loads and validates in both cases; only the registration is profile-gated.
+`DAO_CLIENT_BUILD_PROFILE` selects which brand renders. An `official` build shows the blue Dao convergence mark and `dao.` wordmark in the sidebar and the mark in the conversation hero; any other value leaves the shell fallbacks — the uncolored Dao mark and the local-build label — in place. The plugin still loads and validates in both cases; only the registration is profile-gated.
 
 ### Replacing the brand
 

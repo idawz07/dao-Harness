@@ -104,8 +104,11 @@ export interface SidebarOwnerProps {
 /** Conversation owner share: business state and actions belong to the registrant. */
 export interface ConvOwnerProps {}
 
-/** Details owner share: empty — sessionId arrives as a framework-standard prop. */
-export interface DetailsOwnerProps {}
+/** Details owner share: active keyed surface; sessionId arrives as a framework-standard prop. */
+export interface DetailsOwnerProps {
+  /** Key selected by the gesture that opened the details column. */
+  surface: string
+}
 
 /** Required services (cordis fiber inject — the loader passes all module exports as an object plugin). */
 export const inject = ['slots', 'theme', 'locale']

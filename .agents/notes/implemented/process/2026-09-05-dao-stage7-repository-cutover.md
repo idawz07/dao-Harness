@@ -9,7 +9,7 @@ After the Dao rebrand, every `package.json` `repository.url` and the workspace c
 ## Decision
 
 1. Set every workspace `package.json` `repository.url` to `git+https://github.com/daoAI/dao.git`.
-2. Replace the split-fragment `upstreamBrand` constants used for **package.json** URLs in `scripts/check-workspace-constraints.ts` with direct `daoAI/dao`. Keep split encoding only for the retired `deepseek-ai/deepseek-harness-sdk` reject string in `verify-public-repository-links` so residue scans stay clean.
+2. Replace the split-fragment `upstreamBrand` constants used for **package.json** URLs in `scripts/check-workspace-constraints.ts` with direct `daoAI/dao`. Keep split encoding only for the retired legacy SDK reject string in `verify-public-repository-links` so residue scans stay clean.
 3. Rename product-owned `__dsh_*` bootstrap tokens to `__dao_*` in code-runtime, persistent bash, and webserver invariant probes; keep upstream wire names such as pi-ai `thinkingFormat: 'deepseek'` and experimental `BUILTIN_PROVIDER_IDS` entries that are not product identity.
 
 Snapshot re-record (`test:snapshot:record`), the full local gate suite, and creating/pushing the private `daoAI/dao` repository remain the remaining Stage 7 exit steps — they need the farm router key and GitHub `gh` auth against the `daoAI` org.

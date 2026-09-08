@@ -19,7 +19,13 @@ beforeEach(() => { localStorage.clear() })
 describe('createLayoutStore', () => {
   it('initializes the sidebar at its default width, details closed, wide viewport assumed', () => {
     const { store } = createLayoutStore().create()
-    expect(store.getSnapshot()).toEqual({ sidebar: SIDEBAR_DEFAULT, details: 0, narrow: false, narrowExpanded: false })
+    expect(store.getSnapshot()).toEqual({
+      sidebar: SIDEBAR_DEFAULT,
+      details: 0,
+      detailsSurface: 'tool',
+      narrow: false,
+      narrowExpanded: false,
+    })
   })
 
   it('each create() is an independent instance (factory is not a singleton)', () => {
@@ -55,7 +61,13 @@ describe('createLayoutStore', () => {
     actions.setSidebar(400)
     actions.setNarrow(true)
     actions.toggleSidebar()
-    expect(store.getSnapshot()).toEqual({ sidebar: 400, details: 0, narrow: true, narrowExpanded: true })
+    expect(store.getSnapshot()).toEqual({
+      sidebar: 400,
+      details: 0,
+      detailsSurface: 'tool',
+      narrow: true,
+      narrowExpanded: true,
+    })
     actions.toggleSidebar()
     expect(store.getSnapshot().narrowExpanded).toBe(false)
     expect(store.getSnapshot().sidebar).toBe(400)
@@ -74,15 +86,18 @@ describe('createLayoutStore', () => {
     expect(store.getSnapshot().narrowExpanded).toBe(false)
   })
 
-  it('openDetails uses the contract default, preserves an open width, and closeDetails zeroes', () => {
+  it('openDetails selects a surface, preserves an open width, and closeDetails zeroes', () => {
     const { store, actions } = createLayoutStore().create()
-    actions.openDetails()
-    expect(store.getSnapshot().details).toBe(DETAILS_DEFAULT)
+    actions.openDetails('squad-progress')
+    expect(store.getSnapshot()).toMatchObject({
+      details: DETAILS_DEFAULT,
+      detailsSurface: 'squad-progress',
+    })
     actions.setDetails(500)
     actions.openDetails()
-    expect(store.getSnapshot().details).toBe(500)
+    expect(store.getSnapshot()).toMatchObject({ details: 500, detailsSurface: 'tool' })
     actions.closeDetails()
-    expect(store.getSnapshot().details).toBe(0)
+    expect(store.getSnapshot()).toMatchObject({ details: 0, detailsSurface: 'tool' })
   })
 
   it('does not persist panel geometry', () => {
@@ -96,6 +111,7 @@ describe('createLayoutStore', () => {
     expect(second.store.getSnapshot()).toEqual({
       sidebar: SIDEBAR_DEFAULT,
       details: 0,
+      detailsSurface: 'tool',
       narrow: false,
       narrowExpanded: false,
     })

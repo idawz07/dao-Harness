@@ -12,12 +12,18 @@ import Storage, { storageBackendServiceKey } from '@daoai/dao-storage'
 import * as StorageDomain from '@daoai/dao-storage-domain'
 import { MemoryStorageBackend } from '../../../storage/storage-domain/tests/helpers/memory-backend.ts'
 import SquadProgress, {
-  levelFromXp,
+  applyCompletedTurn,
+  applySuccessfulToolResult,
   earnBadges,
+  isBackgroundDelegationStart,
+  levelFromXp,
+  squadProgressDomainSpec,
+  squadProgressProjectionDefinition,
+  squadProgressRowSchema,
+  toolResultText,
   XP_CHILD_SETTLED,
   XP_CHILD_SPAWNED,
   XP_TOOL_SUCCESS,
-  squadProgressProjectionDefinition,
 } from '../src/index.ts'
 
 const contexts: Context[] = []
@@ -48,6 +54,13 @@ describe('earnBadges', () => {
       spawnSuccesses: 2,
       errorFreeTurns: 0,
     })).toEqual(['first_delegation', 'ten_tools'])
+  })
+})
+
+describe('squadProgressDomainSpec', () => {
+  it('defines the squad_progress storage domain', () => {
+    expect(squadProgressDomainSpec.name).toBe('squad_progress')
+    expect(squadProgressDomainSpec.version).toBe(1)
   })
 })
 
@@ -163,5 +176,151 @@ describe('squadProgress projection unit', () => {
       data: { turn: 1, step: 2 },
     } as never)
     expect(idle).toBe(state)
+  })
+
+  it('parses squadProgressRowSchema and validates schema transforms', () => {
+    const parsed = squadProgressRowSchema.parse({
+      sessionId: 'sess-1',
+      xp: 10,
+      level: 2,
+      badges: ['first_delegation'],
+      updatedAt: 12345,
+    })
+    expect(parsed.sessionId).toBe('sess-1')
+    expect(parsed.level).toBe(2)
+  })
+
+  it('handles background jobs, non-text tool results, and unknown sessions in store', async () => {
+    const { ctx, session } = await harness()
+    expect(ctx.squadProgress.get(SessionId('missing-sess'))).toBeUndefined()
+
+    // Test text starting with 'started background subagent job '
+    expect(isBackgroundDelegationStart('started background subagent job job-99')).toBe(true)
+
+    // Test toolResultText with non-text parts
+    const msgWithImage = createToolResultMessage({
+      callId: ToolCallId('img-call'),
+      content: [{ type: 'image', attachment: 'ref-1' as never }],
+      isError: false,
+    })
+    expect(toolResultText(msgWithImage)).toBe('')
+
+    // Test tool result without prior call (toolName is undefined)
+    session.append('tool/result', {
+      turn: 1, step: 1,
+      message: createToolResultMessage({
+        callId: ToolCallId('orphan-tool'),
+        content: [{ type: 'text', text: 'no prior call' }],
+        isError: false,
+      }),
+    }, { surfaceOp: 'append' })
+    const view = ctx.sessionProjections.snapshot(session).values.squadProgress
+    expect(view?.xp).toBe(XP_TOOL_SUCCESS)
+  })
+
+  it('handles tool errors, turn failures, and dangling calls in projection fold', () => {
+    let state = squadProgressProjectionDefinition.init()
+
+    // applyCompletedTurn when turnOpen is false returns state
+    expect(applyCompletedTurn(state)).toBe(state)
+
+    // Tool call added to pendingCalls
+    state = squadProgressProjectionDefinition.apply(state, {
+      type: 'tool/call', seq: 1, time: 1,
+      data: { turn: 1, step: 1, callId: ToolCallId('fail-call'), name: 'bash', arguments: '{}' },
+    } as never)
+    expect(state.pendingCalls['fail-call']).toBe('bash')
+
+    // Tool result is error while turn is closed -> turnHasToolError stays false
+    state = squadProgressProjectionDefinition.apply(state, {
+      type: 'tool/result', seq: 2, time: 2,
+      data: {
+        turn: 1, step: 1,
+        message: createToolResultMessage({
+          callId: ToolCallId('fail-call'),
+          content: [{ type: 'text', text: 'fail' }],
+          isError: true,
+        }),
+      },
+    } as never)
+    expect(state.turnHasToolError).toBe(false)
+    expect(state.pendingCalls['fail-call']).toBeUndefined()
+
+    // Open turn
+    state = squadProgressProjectionDefinition.apply(state, {
+      type: 'turn/start', seq: 3, time: 3, data: { turn: 1 },
+    } as never)
+    expect(state.turnOpen).toBe(true)
+
+    // Tool error while turn is open -> turnHasToolError becomes true
+    state = squadProgressProjectionDefinition.apply(state, {
+      type: 'tool/result', seq: 4, time: 4,
+      data: {
+        turn: 1, step: 1,
+        error: { message: 'boom' },
+        message: createToolResultMessage({
+          callId: ToolCallId('err-call'),
+          content: [{ type: 'text', text: 'boom' }],
+          isError: true,
+        }),
+      },
+    } as never)
+    expect(state.turnHasToolError).toBe(true)
+
+    // Turn end with non-completed reason resets turnOpen and turnHasToolError
+    const aborted = squadProgressProjectionDefinition.apply(state, {
+      type: 'turn/end', seq: 5, time: 5,
+      data: { turn: 1, reason: { kind: 'aborted' } },
+    } as never)
+    expect(aborted.turnOpen).toBe(false)
+    expect(aborted.turnHasToolError).toBe(false)
+
+    // Non-completed turn end when turn is already closed and pendingCalls is empty returns state
+    const abortedAgain = squadProgressProjectionDefinition.apply(aborted, {
+      type: 'turn/end', seq: 6, time: 6,
+      data: { turn: 1, reason: { kind: 'aborted' } },
+    } as never)
+    expect(abortedAgain).toBe(aborted)
+
+    // Completed turn where turnHasToolError was true does not increment errorFreeTurns
+    const erroredTurnState = squadProgressProjectionDefinition.apply(state, {
+      type: 'turn/end', seq: 7, time: 7,
+      data: { turn: 1, reason: { kind: 'completed' } },
+    } as never)
+    expect(erroredTurnState.errorFreeTurns).toBe(0)
+
+    // Validate wire view schema
+    const wireView = squadProgressProjectionDefinition.wire.view(erroredTurnState)
+    expect(squadProgressProjectionDefinition.wire.viewSchema.parse(wireView)).toEqual(wireView)
+
+    // Non-completed turn end when turn has dangling pending calls resets pendingCalls
+    const stateWithDangling = {
+      ...squadProgressProjectionDefinition.init(),
+      turnOpen: true,
+      pendingCalls: { 'call-x': 'bash' },
+    }
+    const abortedDangling = squadProgressProjectionDefinition.apply(stateWithDangling, {
+      type: 'turn/end', seq: 8, time: 8,
+      data: { turn: 1, reason: { kind: 'aborted' } },
+    } as never)
+    expect(abortedDangling.pendingCalls).toEqual({})
+
+    // applyCompletedTurn when pendingCalls is non-empty resets pendingCalls
+    const completedDangling = applyCompletedTurn({
+      ...squadProgressProjectionDefinition.init(),
+      turnOpen: true,
+      pendingCalls: { 'call-y': 'bash' },
+    })
+    expect(completedDangling.pendingCalls).toEqual({})
+
+    // Level up without earning new badges (badges === state.badges path in finalizeAwards)
+    const levelingState = {
+      ...squadProgressProjectionDefinition.init(),
+      xp: 9,
+      toolSuccesses: 1,
+    }
+    const leveled = applySuccessfulToolResult(levelingState, 'bash', 'ok')
+    expect(leveled.level).toBe(2)
+    expect(leveled.badges).toBe(levelingState.badges)
   })
 })

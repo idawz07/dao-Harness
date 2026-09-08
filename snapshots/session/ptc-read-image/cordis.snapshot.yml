@@ -2,11 +2,14 @@
 # image-capable replay route. The scenario generates its tiny PNG inside the
 # run_code program, then exercises read_image as a nested dispatch.
 
+- id: llm-pi-ai
+  disabled: true
+
 - id: agent-default-model
   name: '@daoai/dao-agent-default-model'
   config:
     provider: llama-router
-    model: Qwen3.8-27B-Q6_K_XL-128K-vision-exp
+    model: Qwen3.8-27B-Q4_K_XL-128K-Vision
 
 - id: session-persistence-jsonl
   name: '@daoai/dao-session-persistence-jsonl'
@@ -38,14 +41,20 @@
       config:
         providers:
           - id: llama-router
-            name: DeepSeek
+            name: Local Llama Router
             models:
               - id: Qwen3.8-27B-Q6_K_XL-128K
+                contextWindow: 131072
+                defaultMaxTokens: 65536
+                reasoningEfforts: ['off', 'minimal', 'low', 'medium', 'high']
+                defaultReasoningEffort: high
                 inputModalities: [text]
-              - id: Qwen3.8-27B-Q6_K_XL-128K
-                inputModalities: [text]
-              - id: Qwen3.8-27B-Q6_K_XL-128K-vision-exp
+              - id: Qwen3.8-27B-Q4_K_XL-128K-Vision
+                contextWindow: 131072
+                defaultMaxTokens: 65536
                 inputModalities: [text, image]
+                reasoningEfforts: ['off', 'minimal', 'low', 'medium', 'high']
+                defaultReasoningEffort: high
 
 - id: attachment-local
   name: '@daoai/dao-attachment-local'

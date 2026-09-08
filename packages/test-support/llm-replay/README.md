@@ -46,14 +46,15 @@ With `providers` configured, the plugin registers a replay-only adapter whose ca
           - id: Qwen3.8-27B-Q6_K_XL-128K
             contextWindow: 128000
           - id: Qwen3.8-9B-Q6_K_XL-128K
-  # file/overrideFile/childFiles default to $DAO_SNAPSHOT_FILE /
-  # $DAO_SNAPSHOT_OVERRIDE / $DAO_SNAPSHOT_CHILD_FILES, set by the snapshot
-  # harness per scenario.
+  # file/overrideFile/childFiles/cwd default to $DAO_SNAPSHOT_FILE /
+  # $DAO_SNAPSHOT_OVERRIDE / $DAO_SNAPSHOT_CHILD_FILES / $DAO_SNAPSHOT_CWD,
+  # set by the snapshot harness per scenario.
 ```
 
 | Field | Default | Meaning |
 |---|---|---|
 | `file` | `$DAO_SNAPSHOT_FILE` | Path to the primary (parent) `session.jsonl` fixture; required (config or env) |
+| `cwd` | `$DAO_SNAPSHOT_CWD`, then `process.cwd()` | The live workdir that `{{cwd}}` tokens in recorded output materialize to (the lane's generated per-scenario directory) |
 | `overrideFile` | `$DAO_SNAPSHOT_OVERRIDE` | Optional `ReplayOverrideDoc` sidecar for the primary session |
 | `childFiles` | `$DAO_SNAPSHOT_CHILD_FILES` | Recorded subagent child-session logs for a nested scenario |
 | `providers` | — | Optional replay-only provider and model catalog; a model may declare `contextWindow`, text/image modalities, and positive `imageRequestTokens` when image-capable; invalid values fail at load and routes never perform provider I/O |

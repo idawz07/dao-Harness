@@ -54,4 +54,4 @@
         backgroundMode: one-shot
         maxDepth: provider-managed
     - id: release-dao-sdk-background-on-job-output
-      name: '../../../apps/cli/tests/profiles/sdk/fixtures/subagent-dsh-sdk-release-on-job-output.ts'
+      name: '../../../apps/cli/tests/profiles/sdk/fixtures/subagent-dao-sdk-release-on-job-output.ts'

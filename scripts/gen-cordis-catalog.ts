@@ -96,6 +96,8 @@ export const SERVICE_PAGE: Record<string, string> = {
   systemPrompt: 'system-prompt.md',
   jobs: 'jobs.md',
   sessionTelemetry: 'session-telemetry.md',
+  references: 'storage.md',
+  squadProgress: 'session-projection.md',
   agentTeams: 'agent-team.md',
   tokenMeter: 'token-meter.md',
   toolResultPruner: 'compaction.md',
@@ -703,6 +705,19 @@ export const TYPE_LINK_EXEMPTIONS: Readonly<Record<string, string>> = {
   WorkflowAgentEndInfo: 'event-local snapshot is owned by packages/workflow/workflow/src/index.ts',
   WorkflowAgentInfo: 'event-local snapshot is owned by packages/workflow/workflow/src/index.ts',
   WorkflowResultInfo: 'event-local snapshot is owned by packages/workflow/workflow/src/index.ts',
+  AddFromTextRequest: 'reference store input contract is owned by packages/references/references/README.md',
+  DocumentId: 'reference store identity brand is owned by packages/references/references/README.md',
+  AddFromPathRequest: 'reference store input contract is owned by packages/references/references/README.md',
+  AddFromUrlRequest: 'reference store input contract is owned by packages/references/references/README.md',
+  ReferenceSearchHit: 'reference store search hit is owned by packages/references/references/README.md',
+  ReferenceSearchRequest: 'reference store search input is owned by packages/references/references/README.md',
+  ReferenceChunk: 'reference store chunk contract is owned by packages/references/references/README.md',
+  ReferenceDocument: 'reference store document contract is owned by packages/references/references/README.md',
+  ReferenceGetRequest: 'reference store get input is owned by packages/references/references/README.md',
+  ReferenceDocumentSummary: 'reference store summary contract is owned by packages/references/references/README.md',
+  ReferenceRemoveRequest: 'reference store remove input is owned by packages/references/references/README.md',
+  ReferenceIndex: 'reference store index contract is owned by packages/references/references/README.md',
+  SquadProgressRow: 'squad progress storage mirror row is owned by packages/session/squad-progress/README.md',
 }
 
 /** Repository data policy consumed by the Cordis catalog projector. */

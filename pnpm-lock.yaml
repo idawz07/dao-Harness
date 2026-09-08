@@ -1705,9 +1705,6 @@ importers:
       '@daoai/dao-client-test-runtime':
         specifier: workspace:^
         version: link:../../test-support/client-runtime
-      '@daoai/dao-client-ui-primitives':
-        specifier: workspace:^
-        version: link:../ui-primitives
       '@daoai/dao-client-ui-renderer':
         specifier: workspace:^
         version: link:../ui-renderer
@@ -5234,12 +5231,6 @@ importers:
       '@daoai/dao-agent':
         specifier: workspace:^
         version: link:../../core/agent
-      '@daoai/dao-agent-loop':
-        specifier: workspace:^
-        version: link:../../core/agent-loop
-      '@daoai/dao-agent-loop-testkit':
-        specifier: workspace:^
-        version: link:../../test-support/agent-loop-testkit
       '@daoai/dao-attachment':
         specifier: workspace:^
         version: link:../../attachment/attachment
@@ -6503,9 +6494,6 @@ importers:
       '@daoai/dao-storage-domain':
         specifier: workspace:^
         version: link:../../storage/storage-domain
-      '@daoai/dao-storage-json':
-        specifier: workspace:^
-        version: link:../../storage/storage-json
 
   packages/references/tool-references:
     devDependencies:
@@ -8430,9 +8418,6 @@ importers:
       '@daoai/dao-agent-loop-testkit':
         specifier: workspace:^
         version: link:../../test-support/agent-loop-testkit
-      '@daoai/dao-bash-local':
-        specifier: workspace:^
-        version: link:../../shell/bash-local
       '@daoai/dao-invariants':
         specifier: workspace:^
         version: link:../../runtime-diagnostics/invariants
@@ -8448,15 +8433,6 @@ importers:
       '@daoai/dao-subagent-in-process-driver':
         specifier: workspace:^
         version: link:../subagent-in-process-driver
-      '@daoai/dao-subprocess-local':
-        specifier: workspace:^
-        version: link:../../subprocess/subprocess-local
-      '@daoai/dao-tool-bash':
-        specifier: workspace:^
-        version: link:../../shell/tool-bash
-      '@daoai/dao-tool-subagent':
-        specifier: workspace:^
-        version: link:../tool-subagent
 
   packages/subagent/tool-subagent:
     dependencies:

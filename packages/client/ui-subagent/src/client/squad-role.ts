@@ -20,7 +20,7 @@ export const SQUAD_ROLE_IDS = [
  */
 export function squadRoleFromLabel(label: string): SquadRoleId | undefined {
   const head = label.trim().split(/[\s:·\-—–|/]+/u, 1)[0]?.toLowerCase()
-  if (head === undefined) return undefined
+  if (!head) return undefined
   for (const role of SQUAD_ROLE_IDS) {
     if (head === role) return role
   }

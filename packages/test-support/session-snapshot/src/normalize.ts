@@ -1,6 +1,7 @@
 /**
  * Pure ACP transcript and session-log normalizers. They scrub session ids, run cwd, RPC ids,
- * timestamps, goal lifecycle clocks, and hook duration while preserving semantic payload values.
+ * timestamps, goal lifecycle clocks, hook duration, and llm retry delays while preserving
+ * semantic payload values.
  * Request-header scrubbers stay composable so one scenario per header class can pin prompt and
  * tool-schema sidecars.
  * @module @daoai/dao-session-snapshot/normalize
@@ -362,6 +363,10 @@ export function normalizeSessionLog(
     if (record.type === 'hook/result' && record.data !== null && typeof record.data === 'object') {
       const data = record.data as Record<string, unknown>
       if ('durationMs' in data) data.durationMs = 0
+    }
+    if (record.type === 'llm/retry' && record.data !== null && typeof record.data === 'object') {
+      const data = record.data as Record<string, unknown>
+      if ('delayMs' in data) data.delayMs = 0
     }
     if (record.type === 'goal/change' && record.data !== null && typeof record.data === 'object') {
       const data = record.data as Record<string, unknown>

@@ -178,7 +178,7 @@ describe('AppFrame', () => {
     expect(tracks(frame)).toEqual([280, 0])
   })
 
-  it('renders the session pair with empty owner shares (sessionId is framework-standard)', () => {
+  it('renders the session pair with layout-owned details selection', () => {
     const { slotCalls, getByTestId } = mountFrame()
     expect(getByTestId('center-content')).toBeTruthy()
     expect(getByTestId('details-content')).toBeTruthy()
@@ -187,7 +187,7 @@ describe('AppFrame', () => {
     expect(keys).toContain('details')
     expect(keys).not.toContain('conversation.empty')
     expect(slotCalls.find(c => c.key === 'conversation')!.props).toEqual({})
-    expect(slotCalls.find(c => c.key === 'details')!.props).toEqual({})
+    expect(slotCalls.find(c => c.key === 'details')!.props).toEqual({ surface: 'tool' })
   })
 
   it('keeps the conversation slot mounted while no session is current', () => {
@@ -282,11 +282,15 @@ describe('AppFrame', () => {
     expect(instance.getSnapshot().details).toBe(320)
   })
 
-  it('details column stays mounted at zero width', () => {
-    const { frame, getByTestId } = mountFrame()
+  it('details column stays mounted at zero width and receives surface changes', () => {
+    const { frame, instance, slotCalls, getByTestId } = mountFrame()
     expect(tracks(frame)).toEqual([280, 0])
     expect(getByTestId('details-content')).toBeTruthy()
     expect(frame.hasAttribute('data-details-collapsed')).toBe(true)
+
+    act(() => { instance.actions.openDetails('squad-progress') })
+    expect(slotCalls.filter(c => c.key === 'details').at(-1)?.props)
+      .toEqual({ surface: 'squad-progress' })
   })
 
   it('closed sidebar keeps its compact rail with mounted slot content and collapsed owner props', () => {

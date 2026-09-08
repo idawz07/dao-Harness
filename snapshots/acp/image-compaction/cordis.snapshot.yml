@@ -3,11 +3,14 @@
 # so the strict read_image gate accepts the route and the tool result carries
 # the durable image block.
 
+- id: llm-pi-ai
+  disabled: true
+
 - id: acp
   name: '@daoai/dao-acp'
   config:
     provider: llama-router
-    model: Qwen3.8-27B-Q6_K_XL-128K-vision-exp
+    model: Qwen3.8-27B-Q4_K_XL-128K-Vision
 
 - id: session-persistence-jsonl
   name: '@daoai/dao-session-persistence-jsonl'
@@ -34,19 +37,20 @@
       config:
         providers:
           - id: llama-router
-            name: DeepSeek
+            name: Local Llama Router
             models:
               - id: Qwen3.8-27B-Q6_K_XL-128K
+                contextWindow: 131072
+                defaultMaxTokens: 65536
+                reasoningEfforts: ['off', 'minimal', 'low', 'medium', 'high']
+                defaultReasoningEffort: high
                 inputModalities: [text]
-              - id: Qwen3.8-27B-Q6_K_XL-128K
-                inputModalities: [text]
-              - id: Qwen3.8-27B-Q6_K_XL-128K-vision-exp
+              - id: Qwen3.8-27B-Q4_K_XL-128K-Vision
+                contextWindow: 131072
+                defaultMaxTokens: 65536
                 inputModalities: [text, image]
-                # Route-priced request images at the provider cap; the small
-                # context window turns that visual pressure into an automatic
-                # compaction the text-only heuristic would not trigger.
-                contextWindow: 11600
-                imageRequestTokens: 384
+                reasoningEfforts: ['off', 'minimal', 'low', 'medium', 'high']
+                defaultReasoningEffort: high
 
 - id: attachment-local
   name: '@daoai/dao-attachment-local'

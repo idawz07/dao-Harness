@@ -7,6 +7,8 @@ describe('squadRoleFromLabel', () => {
     expect(squadRoleFromLabel('Forge — fix login')).toBe('forge')
     expect(squadRoleFromLabel('lens review')).toBe('lens')
     expect(squadRoleFromLabel('Quill')).toBe('quill')
+    expect(squadRoleFromLabel('relay bridge')).toBe('relay')
+    expect(squadRoleFromLabel('scribe session')).toBe('scribe')
   })
 
   it('ignores ad-hoc subagent labels', () => {

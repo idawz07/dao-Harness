@@ -143,10 +143,16 @@ export interface DetailsInjected {
   closeDetails: () => void
 }
 
+/** Owner values supplied to one non-Tool details view. */
+export interface DetailsViewOwnerProps {
+  /** Collapse the details column. */
+  closeDetails: () => void
+}
+
 /** Full details-panel props. */
 export type DetailsSlotProps =
   PropsRuntime<'details'>
-  & PropsRenderSlots<'conversation.details.tool'>
+  & PropsRenderSlots<'conversation.details.tool' | 'conversation.details.view'>
   & PropsStore<ChatStore>
   & InjectFace<DetailsInjected>
   & PropsLocale<'chat'>
@@ -206,5 +212,10 @@ declare module '@daoai/dao-client-ui-slots' {
      * replaces the shipped Tool details renderer; absence uses the raw fallback.
      */
     'conversation.details.tool': { kind: 'single'; scope: 'session'; owner: DetailsToolOwnerProps }
+    /**
+     * Keyed non-Tool views hosted by the collapsible details column. The
+     * opening gesture selects the key through `ctx.layout.openDetails(key)`.
+     */
+    'conversation.details.view': { kind: 'keyed'; scope: 'session'; owner: DetailsViewOwnerProps }
   }
 }

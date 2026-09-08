@@ -147,6 +147,7 @@ export function apply(ctx: Context): void {
         )
       }
       const chunkId = args.chunk_id
+      /* v8 ignore next 3 -- TypeScript narrowing: hasDocument === hasChunk above guarantees chunkId is defined */
       if (chunkId === undefined) {
         return Promise.reject(new Error('reference_get: provide exactly one of document_id or chunk_id'))
       }

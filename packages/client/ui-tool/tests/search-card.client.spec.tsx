@@ -380,6 +380,7 @@ describe('DetailsPanel Output section (search)', () => {
     const attention = createSnapshotStore(new Map())
     return render(
       <DetailsPanel
+        surface="tool"
         renderSlot={renderToolDetails(t)}
         SessionProvider={({ children }) => children}
         sessionId={SID}

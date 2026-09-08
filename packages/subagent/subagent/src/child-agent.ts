@@ -70,8 +70,8 @@ export function resolveChildDepth(parent: Agent, maxDepth: number | undefined): 
  */
 export function parentAgentOptionsForDelegation(parent: Agent): AgentOptions {
   const header = parent.session.requestHeader()
-  const requestConfig = header?.config
-  if (requestConfig === undefined) return { ...parent.options }
+  if (header === undefined) return { ...parent.options }
+  const requestConfig = header.config
   const {
     provider: _createdProvider,
     model: _createdModel,

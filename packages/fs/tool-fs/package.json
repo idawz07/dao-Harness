@@ -50,8 +50,6 @@
   },
   "devDependencies": {
     "@daoai/dao-agent": "workspace:^",
-    "@daoai/dao-agent-loop": "workspace:^",
-    "@daoai/dao-agent-loop-testkit": "workspace:^",
     "@daoai/dao-attachment": "workspace:^",
     "@daoai/dao-fs": "workspace:^",
     "@daoai/dao-fs-local": "workspace:^",

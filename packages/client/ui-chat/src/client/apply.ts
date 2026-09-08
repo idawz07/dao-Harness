@@ -114,7 +114,7 @@ export function apply(ctx: Context): void {
           hooks: { transcriptView: transcriptView.mode },
           openDetails: (target) => {
             actions.select(target)
-            ctx.layout.openDetails()
+            ctx.layout.openDetails('tool')
           },
           fileMentions: (owner: TurnTailOwnerProps) => ctx.get('chatFileMentions')?.forClosing(owner),
           openFile: async (path) => {
@@ -160,7 +160,10 @@ export function apply(ctx: Context): void {
   ctx.slots.inject('details', () => ctx.slots.register({
     name: 'details',
     locale: NS,
-    children: { 'conversation.details.tool': { kind: 'single', scope: 'session' } },
+    children: {
+      'conversation.details.tool': { kind: 'single', scope: 'session' },
+      'conversation.details.view': { kind: 'keyed', scope: 'session' },
+    },
     store: chatStore,
     inject: (): DetailsInjected => ({ closeDetails: () => { ctx.layout.closeDetails() } }),
   }, DetailsPanel))

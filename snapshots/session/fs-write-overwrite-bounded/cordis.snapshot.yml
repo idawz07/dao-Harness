@@ -1,5 +1,8 @@
 # Keyless replay counterpart to fs-diff-bound.cordis.yml. The ACP and
-# persistence rows keep the recorded flash model and raw JSONL harvest.
+# persistence rows keep the recorded farm model and raw JSONL harvest.
+
+- id: llm-pi-ai
+  disabled: true
 
 - id: agent-default-model
   name: '@daoai/dao-agent-default-model'
@@ -38,13 +41,12 @@
       config:
         providers:
           - id: llama-router
-            name: DeepSeek
+            name: Local Llama Router
             models:
               # Capability parity with the live adapter so replay
               # reconstructs the freshly recorded request header.
               - id: Qwen3.8-27B-Q6_K_XL-128K
-                contextWindow: 1000000
-                defaultMaxTokens: 256000
-                reasoningEfforts: ['off', 'low', 'high', 'max']
-                defaultReasoningEffort: max
-              - id: Qwen3.8-27B-Q6_K_XL-128K
+                contextWindow: 131072
+                defaultMaxTokens: 65536
+                reasoningEfforts: ['off', 'minimal', 'low', 'medium', 'high']
+                defaultReasoningEffort: high

@@ -1,6 +1,9 @@
 # Keyless replay counterpart of ptc-workspace-context.cordis.yml. It adds
 # PTC mode to the default filesystem suite and swaps in replay.
 
+- id: llm-pi-ai
+  disabled: true
+
 - id: agent-default-model
   name: '@daoai/dao-agent-default-model'
   config:
@@ -37,7 +40,10 @@
       config:
         providers:
           - id: llama-router
-            name: DeepSeek
+            name: Local Llama Router
             models:
               - id: Qwen3.8-27B-Q6_K_XL-128K
-              - id: Qwen3.8-27B-Q6_K_XL-128K
+                contextWindow: 131072
+                defaultMaxTokens: 65536
+                reasoningEfforts: ['off', 'minimal', 'low', 'medium', 'high']
+                defaultReasoningEffort: high

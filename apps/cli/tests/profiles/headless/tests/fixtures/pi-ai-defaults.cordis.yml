@@ -12,9 +12,13 @@
               api: openai-completions
               baseURL: !!js process.env.DAO_SNAPSHOT_BASE_URL
               reasoning: low
-              modelOverrides:
-                Qwen3.8-27B-Q6_K_XL-128K:
+              compat:
+                maxTokensField: max_tokens
+              models:
+                - id: Qwen3.8-27B-Q6_K_XL-128K
+                  contextWindow: 131072
                   maxTokens: 1024
+                  reasoningEfforts: { off: , minimal: minimal, low: low, medium: medium, high: high }
               streamIdleTimeoutMs: 1000
       - id: agent-spine
         config:

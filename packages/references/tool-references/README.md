@@ -68,7 +68,7 @@ Registration is effect-based through `ctx.tools.register`. The prompt section us
 
 #### What the model sees
 
-The six `reference_*` tools in the generated [tool catalog](../../../docs/tool-catalog.md) when this plugin is mounted and not restricted away.
+The six `reference_*` tools in the generated [tool catalog](../../../docs/tool-catalog.md#daoaidao-tool-references) when this plugin is mounted and not restricted away.
 
 #### Token effect
 
@@ -81,6 +81,8 @@ Append-only for new tool results. Registering or disposing the plugin changes th
 ### Reference-store guidance section
 
 #### What the model sees
+
+When mounted, the plugin injects reference-store guidance into the system prompt explaining how to ingest, search, inspect, and remove references.
 
 ##### Verbatim text for this field
 

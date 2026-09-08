@@ -138,6 +138,74 @@ type DomainChanged = DomainChangedPut | DomainChangedDeleted
 
 Generated from source by `scripts/gen-cordis-catalog.ts` (verified fresh by `pnpm run verify-cordis-catalog` in doc-sync; regenerate with `pnpm run gen-cordis-catalog`). Signature blocks use a `ts cordis-catalog` fence and keep the original source JSDoc; dispatch modes are defined in the [primer](../cordis-primer.md#dispatch-modes), and the framework-inherited `ctx` API lives in [cordis-api/inherited.md](../cordis-api/inherited.md).
 
+<a id="ctxreferences--referencesstore"></a>
+
+### `ctx.references` — `ReferencesStore`
+
+Singular Store service over the `references` storage domain. Opens the domain in Service.init and closes it on dispose.
+
+```ts cordis-catalog
+/**
+ * Ingest plain text: chunk, hash, and persist a new document.
+ * @param request - title, source, and body text.
+ * @returns the new document id.
+ */
+async addFromText(request: AddFromTextRequest): Promise<DocumentId>
+
+/**
+ * Read a local path via `ctx.fs` when present, otherwise `node:fs/promises`,
+ * then ingest with the basename as title and a path source.
+ * @param request - filesystem path.
+ * @returns the new document id.
+ */
+async addFromPath(request: AddFromPathRequest): Promise<DocumentId>
+
+/**
+ * Fetch a URL via `ctx.web.fetch` and ingest the decoded body.
+ * Fails loud when the web service is not mounted.
+ * @param request - absolute URL.
+ * @returns the new document id.
+ */
+async addFromUrl(request: AddFromUrlRequest): Promise<DocumentId>
+
+/**
+ * Keyword search over chunk text, returning the top scoring hits with
+ * document metadata.
+ * @param request - query and optional hit cap.
+ * @returns hits ordered by descending score (stable by chunk id on ties).
+ */
+search(request: ReferenceSearchRequest): readonly ReferenceSearchHit[]
+
+/**
+ * Return one full document or one full chunk.
+ * Exactly one of `documentId` or `chunkId` must be set.
+ * @param request - document or chunk identity.
+ * @returns the stored row.
+ */
+get(request: ReferenceGetRequest): ReferenceDocument | ReferenceChunk
+
+/**
+ * List document summaries in ingestion order of discovery (table iteration).
+ * @returns immutable summaries.
+ */
+list(): readonly ReferenceDocumentSummary[]
+
+/**
+ * Delete one document and every chunk it owns.
+ * @param request - document identity.
+ * @returns resolution after durable deletes.
+ */
+async remove(request: ReferenceRemoveRequest): Promise<void>
+
+/**
+ * Build a navigable tree: sources → documents → chunk manifests.
+ * @returns immutable index snapshot.
+ */
+index(): ReferenceIndex
+```
+
+Source: [`packages/references/references/src/index.ts`](../../packages/references/references/src/index.ts)
+
 <a id="ctxstorage--storage"></a>
 
 ### `ctx.storage` — `Storage`

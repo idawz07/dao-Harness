@@ -56,7 +56,6 @@
     "@daoai/dao-api-remotes": "workspace:^",
     "@daoai/dao-client-store": "workspace:^",
     "@daoai/dao-client-test-runtime": "workspace:^",
-    "@daoai/dao-client-ui-primitives": "workspace:^",
     "@daoai/dao-client-ui-renderer": "workspace:^",
     "@daoai/dao-client-ui-settings": "workspace:^",
     "@daoai/dao-client-ui-slots": "workspace:^",

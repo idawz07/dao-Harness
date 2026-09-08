@@ -1,16 +1,22 @@
 # Keyless twin of product-subagent-both.cordis.yml: preserve both named Codex
 # product tools while replacing only the external model adapter.
 
+- id: llm-pi-ai
+  disabled: true
+
 - insert:
     - id: llm-replay
       name: '@daoai/dao-llm-replay'
       config:
         providers:
           - id: llama-router
-            name: DeepSeek
+            name: Local Llama Router
             models:
               - id: Qwen3.8-27B-Q6_K_XL-128K
-              - id: Qwen3.8-27B-Q6_K_XL-128K
+                contextWindow: 131072
+                defaultMaxTokens: 65536
+                reasoningEfforts: ['off', 'minimal', 'low', 'medium', 'high']
+                defaultReasoningEffort: high
     - id: subagent-codex-primary
       name: '@daoai/dao-subagent-codex'
       config:

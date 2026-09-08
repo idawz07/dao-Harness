@@ -1239,6 +1239,61 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
     ],
   },
   {
+    key: 'references',
+    summary: 'Singular Store service over the `references` storage domain.',
+    description: 'Singular Store service over the `references` storage domain. Opens the domain in Service.init and closes it on dispose.',
+    methods: [
+      {
+        signature: 'async addFromText(request: AddFromTextRequest): Promise<DocumentId>',
+        description: 'Ingest plain text: chunk, hash, and persist a new document.',
+        parameters: [{ name: 'request', description: 'title, source, and body text.' }],
+        returns: 'the new document id.',
+      },
+      {
+        signature: 'async addFromPath(request: AddFromPathRequest): Promise<DocumentId>',
+        description: 'Read a local path via `ctx.fs` when present, otherwise `node:fs/promises`, then ingest with the basename as title and a path source.',
+        parameters: [{ name: 'request', description: 'filesystem path.' }],
+        returns: 'the new document id.',
+      },
+      {
+        signature: 'async addFromUrl(request: AddFromUrlRequest): Promise<DocumentId>',
+        description: 'Fetch a URL via `ctx.web.fetch` and ingest the decoded body. Fails loud when the web service is not mounted.',
+        parameters: [{ name: 'request', description: 'absolute URL.' }],
+        returns: 'the new document id.',
+      },
+      {
+        signature: 'search(request: ReferenceSearchRequest): readonly ReferenceSearchHit[]',
+        description: 'Keyword search over chunk text, returning the top scoring hits with document metadata.',
+        parameters: [{ name: 'request', description: 'query and optional hit cap.' }],
+        returns: 'hits ordered by descending score (stable by chunk id on ties).',
+      },
+      {
+        signature: 'get(request: ReferenceGetRequest): ReferenceDocument | ReferenceChunk',
+        description: 'Return one full document or one full chunk. Exactly one of `documentId` or `chunkId` must be set.',
+        parameters: [{ name: 'request', description: 'document or chunk identity.' }],
+        returns: 'the stored row.',
+      },
+      {
+        signature: 'list(): readonly ReferenceDocumentSummary[]',
+        description: 'List document summaries in ingestion order of discovery (table iteration).',
+        parameters: [],
+        returns: 'immutable summaries.',
+      },
+      {
+        signature: 'async remove(request: ReferenceRemoveRequest): Promise<void>',
+        description: 'Delete one document and every chunk it owns.',
+        parameters: [{ name: 'request', description: 'document identity.' }],
+        returns: 'resolution after durable deletes.',
+      },
+      {
+        signature: 'index(): ReferenceIndex',
+        description: 'Build a navigable tree: sources → documents → chunk manifests.',
+        parameters: [],
+        returns: 'immutable index snapshot.',
+      },
+    ],
+  },
+  {
     key: 'sandbox',
     summary: 'Abstract process-sandbox service.',
     description: 'Abstract process-sandbox service. confine must return enforcing argv or fail closed at wrap or runner-execution time; silent unconfined passthrough is forbidden. Functional probes arbitrate multi-runner chains and may be skipped for a sole candidate, whose own refusal remains the fail-closed end.',
@@ -2057,6 +2112,19 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         description: 'Persist `input.content` to a session-scoped spill artifact.',
         parameters: [{ name: 'input', description: 'the owner, caller-supplied source fields, suggested name, and full text to save.' }],
         returns: 'the saved artifact\'s {@link SpillRef}; rejects on a storage failure.',
+      },
+    ],
+  },
+  {
+    key: 'squadProgress',
+    summary: 'Registers the log-derived `squadProgress` projection and mirrors each change into durable storage for host inspection.',
+    description: 'Registers the log-derived `squadProgress` projection and mirrors each change into durable storage for host inspection. The projection remains the client authority; storage is a same-lifecycle mirror.',
+    methods: [
+      {
+        signature: 'get(sessionId: SessionId): SquadProgressRow | undefined',
+        description: 'Read the last mirrored snapshot for a session id.',
+        parameters: [{ name: 'sessionId', description: 'session whose mirrored progress is requested.' }],
+        returns: 'the stored row, or undefined when none has been written yet.',
       },
     ],
   },
@@ -3344,6 +3412,18 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export interface AdapterRegistrationHandle {\n    (): void;\n    replace(providers: string[]): void;\n}',
   },
   {
+    name: 'AddFromPathRequest',
+    declaration: 'export interface AddFromPathRequest {\n    readonly path: string;\n}',
+  },
+  {
+    name: 'AddFromTextRequest',
+    declaration: 'export interface AddFromTextRequest {\n    readonly title: string;\n    readonly source: ReferenceSource;\n    readonly text: string;\n}',
+  },
+  {
+    name: 'AddFromUrlRequest',
+    declaration: 'export interface AddFromUrlRequest {\n    readonly url: string;\n}',
+  },
+  {
     name: 'Agent',
     declaration: 'export interface Agent {\n    readonly id: SessionId;\n}',
   },
@@ -3546,6 +3626,10 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'Branded',
     declaration: 'export type Branded<B extends string> = string & {\n    readonly [BRAND]: B;\n};',
+  },
+  {
+    name: 'ChunkId',
+    declaration: 'export type ChunkId = Branded<\'ChunkId\'>;',
   },
   {
     name: 'ChunkRowEvent',
@@ -3838,6 +3922,10 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'DirectoryRegistrationHandle',
     declaration: 'export interface DirectoryRegistrationHandle {\n    (): void;\n    replace(entries: readonly LlmConfigurableProvider[]): void;\n}',
+  },
+  {
+    name: 'DocumentId',
+    declaration: 'export type DocumentId = Branded<\'DocumentId\'>;',
   },
   {
     name: 'Domain',
@@ -4538,6 +4626,54 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'RedactedSecret',
     declaration: 'export interface RedactedSecret {\n    path: string[];\n    set: boolean;\n}',
+  },
+  {
+    name: 'ReferenceChunk',
+    declaration: 'export interface ReferenceChunk {\n    readonly id: ChunkId;\n    readonly documentId: DocumentId;\n    readonly index: number;\n    readonly text: string;\n    readonly hash: string;\n}',
+  },
+  {
+    name: 'ReferenceChunkManifest',
+    declaration: 'export interface ReferenceChunkManifest {\n    readonly id: ChunkId;\n    readonly index: number;\n    readonly preview: string;\n}',
+  },
+  {
+    name: 'ReferenceDocument',
+    declaration: 'export interface ReferenceDocument {\n    readonly id: DocumentId;\n    readonly title: string;\n    readonly source: ReferenceSource;\n    readonly ingestedAt: number;\n    readonly chunkIds: readonly ChunkId[];\n}',
+  },
+  {
+    name: 'ReferenceDocumentSummary',
+    declaration: 'export interface ReferenceDocumentSummary {\n    readonly id: DocumentId;\n    readonly title: string;\n    readonly source: ReferenceSource;\n    readonly ingestedAt: number;\n    readonly chunkCount: number;\n}',
+  },
+  {
+    name: 'ReferenceGetRequest',
+    declaration: 'export interface ReferenceGetRequest {\n    readonly documentId?: DocumentId;\n    readonly chunkId?: ChunkId;\n}',
+  },
+  {
+    name: 'ReferenceIndex',
+    declaration: 'export interface ReferenceIndex {\n    readonly sources: readonly ReferenceIndexSource[];\n}',
+  },
+  {
+    name: 'ReferenceIndexDocument',
+    declaration: 'export interface ReferenceIndexDocument {\n    readonly id: DocumentId;\n    readonly title: string;\n    readonly chunks: readonly ReferenceChunkManifest[];\n}',
+  },
+  {
+    name: 'ReferenceIndexSource',
+    declaration: 'export interface ReferenceIndexSource {\n    readonly kind: ReferenceSource[\'kind\'];\n    readonly value: string;\n    readonly documents: readonly ReferenceIndexDocument[];\n}',
+  },
+  {
+    name: 'ReferenceRemoveRequest',
+    declaration: 'export interface ReferenceRemoveRequest {\n    readonly documentId: DocumentId;\n}',
+  },
+  {
+    name: 'ReferenceSearchHit',
+    declaration: 'export interface ReferenceSearchHit {\n    readonly chunkId: ChunkId;\n    readonly documentId: DocumentId;\n    readonly title: string;\n    readonly source: ReferenceSource;\n    readonly index: number;\n    readonly text: string;\n    readonly score: number;\n}',
+  },
+  {
+    name: 'ReferenceSearchRequest',
+    declaration: 'export interface ReferenceSearchRequest {\n    readonly query: string;\n    readonly topK?: number;\n}',
+  },
+  {
+    name: 'ReferenceSource',
+    declaration: 'export type ReferenceSource = {\n    readonly kind: \'path\';\n    readonly value: string;\n} | {\n    readonly kind: \'url\';\n    readonly value: string;\n};',
   },
   {
     name: 'RemoteEventHostInfo',
@@ -5266,6 +5402,10 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'SpillSource',
     declaration: 'export interface SpillSource {\n    toolName: string;\n    callId: ToolCallId;\n    label: string;\n}',
+  },
+  {
+    name: 'SquadProgressRow',
+    declaration: 'export type SquadProgressRow = z.infer<typeof squadProgressRowSchema>;',
   },
   {
     name: 'StorageBackend',

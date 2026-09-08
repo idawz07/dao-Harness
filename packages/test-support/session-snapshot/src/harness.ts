@@ -259,6 +259,7 @@ export async function runScenario(input: InputScript, opts: RunOptions): Promise
       ...opts.env,
       DAO_SNAPSHOT: opts.mode,
       DAO_SNAPSHOT_FILE: opts.fixtureFile,
+      DAO_SNAPSHOT_CWD: cwd,
       DAO_SNAPSHOT_SESSIONS_ROOT: sessionsRoot,
       DAO_SNAPSHOT_SPILL_ROOT: spillRoot,
       DAO_HOME: join(cwd, '.dao'),

@@ -1,16 +1,22 @@
 # Keyless replay counterpart: deterministic HTTP remains real; only the model
 # adapter is replaced by replay.
 
+- id: llm-pi-ai
+  disabled: true
+
 - insert:
     - id: llm-replay
       name: '@daoai/dao-llm-replay'
       config:
         providers:
           - id: llama-router
-            name: DeepSeek
+            name: Local Llama Router
             models:
               - id: Qwen3.8-27B-Q6_K_XL-128K
-              - id: Qwen3.8-27B-Q6_K_XL-128K
+                contextWindow: 131072
+                defaultMaxTokens: 65536
+                reasoningEfforts: ['off', 'minimal', 'low', 'medium', 'high']
+                defaultReasoningEffort: high
 
     - id: web-fetch-fixture
       name: './web-fetch-fixture-server.mjs'

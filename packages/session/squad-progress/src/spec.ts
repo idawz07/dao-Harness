@@ -26,7 +26,14 @@ export const squadProgressRowSchema = z.object({
 /** Persisted progress row inferred from {@link squadProgressRowSchema}. */
 export type SquadProgressRow = z.infer<typeof squadProgressRowSchema>
 
-/** Project a wire view into a durable row. */
+/**
+ * Project a wire view into a durable row.
+ *
+ * @param sessionId - Session identifier the progress belongs to.
+ * @param view - Projected squad progress view.
+ * @param updatedAt - Timestamp when the row was updated.
+ * @returns Persisted progress row.
+ */
 export function squadProgressRowFromView(
   sessionId: SessionId,
   view: SquadProgressProjection,

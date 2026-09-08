@@ -319,6 +319,11 @@ export default defineConfig({
         'packages/client/ui-primitives/src/JsonTree.tsx',
         'packages/client/ui-settings-models/src/client/FarmOnboardingDialog.tsx',
         'packages/client/ui-settings-models/src/client/welcome-store.ts',
+        'packages/client/ui-settings-models/src/client/ModelsSection.tsx',
+        'packages/client/ui-settings-models/src/client/schema-operations.ts',
+        'packages/client/ui-settings-models/src/client/ProviderEditor.tsx',
+        'packages/client/ui-subagent/src/client/SubagentHeaderLineage.tsx',
+        'packages/client/locale/src/client/index.ts',
         'packages/extensions/*/src/**/*.ts',
         'packages/extensions/*/src/**/*.tsx',
         // Typert generator: correctness is pinned by its fixture suites and

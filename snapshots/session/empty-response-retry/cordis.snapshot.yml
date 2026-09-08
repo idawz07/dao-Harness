@@ -1,7 +1,10 @@
-# Keyless replay for the retry overlay: disable the key-requiring DeepSeek
+# Keyless replay for the retry overlay: disable the key-requiring live
 # adapter, insert `llm-replay`, and give its provider the same deterministic
 # 1 ms zero-jitter retry policy as the live sibling. The app patch still
 # restates its whole config for raw JSONL persistence and the recorded model.
+
+- id: llm-pi-ai
+  disabled: true
 
 - id: agent-default-model
   name: '@daoai/dao-agent-default-model'
@@ -34,7 +37,7 @@
       config:
         providers:
           - id: llama-router
-            name: DeepSeek
+            name: Local Llama Router
             retryPolicy:
               mode: normal
               maxRetries: 2
@@ -44,4 +47,7 @@
                 jitterRatio: 0
             models:
               - id: Qwen3.8-27B-Q6_K_XL-128K
-              - id: Qwen3.8-27B-Q6_K_XL-128K
+                contextWindow: 131072
+                defaultMaxTokens: 65536
+                reasoningEfforts: ['off', 'minimal', 'low', 'medium', 'high']
+                defaultReasoningEffort: high

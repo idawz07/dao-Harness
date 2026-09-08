@@ -323,4 +323,23 @@ hydrate( session: Session, checkpoint: ProjectionCheckpoint, events: readonly Se
 Types: [Session](session.md) · [SessionEvent](session.md) · [SessionHeader](persistence.md)
 
 Source: [`packages/session/session-projection/src/index.ts`](../../packages/session/session-projection/src/index.ts)
+
+<a id="ctxsquadprogress--squadprogress"></a>
+
+### `ctx.squadProgress` — `SquadProgress`
+
+Registers the log-derived `squadProgress` projection and mirrors each change into durable storage for host inspection. The projection remains the client authority; storage is a same-lifecycle mirror.
+
+```ts cordis-catalog
+/**
+ * Read the last mirrored snapshot for a session id.
+ * @param sessionId - session whose mirrored progress is requested.
+ * @returns the stored row, or undefined when none has been written yet.
+ */
+get(sessionId: SessionId): SquadProgressRow | undefined
+```
+
+Types: [SessionId](core.md)
+
+Source: [`packages/session/squad-progress/src/index.ts`](../../packages/session/squad-progress/src/index.ts)
 <!-- END GENERATED cordis-surface -->

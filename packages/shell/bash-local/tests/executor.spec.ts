@@ -56,7 +56,7 @@ describe('LocalBashExecutor.run', () => {
   it('defaults cwd to process.cwd()', async () => {
     const { bash } = await setup()
     const result = await bash.run(bash.resolve({ command: 'pwd' }))
-    expect(result.stdout.text.trim()).toBe(process.cwd())
+    expect(result.stdout.text.trim().replace(/\/+$/, '')).toBe(process.cwd().replace(/\/+$/, ''))
   })
 
   it('caps per-call timeouts at maxTimeoutMs', async () => {

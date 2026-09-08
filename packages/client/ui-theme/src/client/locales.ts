@@ -6,6 +6,8 @@ export const en = {
   'appearance.light': 'Light',
   'appearance.dark': 'Dark',
   'appearance.system': 'System',
+  'toggle.dark': 'Switch to dark theme',
+  'toggle.light': 'Switch to light theme',
   'fontSize.title': 'Font size',
   'fontSize.description': 'Only affects conversation content',
   'fontSize.unit': 'px',

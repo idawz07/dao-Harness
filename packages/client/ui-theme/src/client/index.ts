@@ -8,7 +8,9 @@
  * settings General section — the theme feature owns its own settings surface.
  */
 import type { Context as ClientContext } from '@daoai/cordis'
+import type { ObservableSnapshot } from '@daoai/dao-client-store'
 import type { BoundActions } from '@daoai/dao-client-ui-slots'
+import type {} from '@daoai/dao-client-ui-conversation/client'
 // Type-only: the ctx.settingsScope Context merge. Cross-plugin collaboration
 // goes through the service, never a value import (client bundle purity gate).
 import type { SettingsScope } from '@daoai/dao-client-ui-settings/client'
@@ -22,6 +24,7 @@ import type { FontSizeRowInjected } from './FontSizeRow.tsx'
 import { FontSizeRow } from './FontSizeRow.tsx'
 import { createAppearanceRowStore, createFontSizeRowStore } from './settings-store.ts'
 import { installThemeStyles } from './styles.ts'
+import { ThemeToggle, type ThemeToggleInjected } from './ThemeToggle.tsx'
 import { en, type ThemeKey } from './locales.ts'
 import {
   DEFAULT_FONT_SIZE, DEFAULT_PREFERENCE, FONT_SIZE_FIELD, FONT_SIZE_MAX, FONT_SIZE_MIN,
@@ -430,6 +433,10 @@ export function apply(ctx: ClientContext): void {
   const host = ctx.settingsScope.bind<ThemeSettings>({ namespace: THEME_SETTINGS_NAMESPACE })
   const theme = new ThemeRuntime(ctx, host)
   ctx.provide('theme', theme)
+  const themeSource: ObservableSnapshot<ThemeSnapshot> = {
+    getSnapshot: () => theme.getTheme(),
+    subscribe: listener => ctx.on('theme/change', () => { listener() }),
+  }
 
   ctx.effect(() => ctx.locale.register(SETTINGS_NS, { en }), 'ui-theme: settings row dictionaries')
 
@@ -475,4 +482,17 @@ export function apply(ctx: ClientContext): void {
     locale: SETTINGS_NS,
     inject: fontSizeInjected,
   }, FontSizeRow))
+
+  ctx.slots.inject('conversation.session.header.utilities', () => ctx.slots.register({
+    name: 'conversation.session.header.utilities',
+    id: 'theme',
+    order: 100,
+    locale: SETTINGS_NS,
+    inject: (): ThemeToggleInjected => ({
+      hooks: { theme: themeSource },
+      toggleTheme: () => {
+        theme.setTheme(theme.getTheme().active.colorScheme === 'dark' ? 'light' : 'dark')
+      },
+    }),
+  }, ThemeToggle))
 }

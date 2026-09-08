@@ -16,9 +16,9 @@
   name: '@daoai/dao-agent-instructions'
   config:
     maxBytes: 65536
-    daoHome: !!js process.cwd() + '/.dsh'
+    daoHome: !!js process.cwd() + '/.dao'
     projectRootMarkers:
-      - .dsh-project
+      - .dao-project
 
 - id: system-prompt
   name: '@daoai/dao-system-prompt'

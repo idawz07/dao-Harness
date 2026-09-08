@@ -55,12 +55,22 @@ declare module '@daoai/cordis' {
   }
 }
 
-/** Brand a string as a {@link DocumentId}. */
+/**
+ * Brand a string as a {@link DocumentId}.
+ *
+ * @param id - Plain string document identifier.
+ * @returns Branded document identifier.
+ */
 export function DocumentId(id: string): DocumentId {
   return id as DocumentId
 }
 
-/** Brand a string as a {@link ChunkId}. */
+/**
+ * Brand a string as a {@link ChunkId}.
+ *
+ * @param id - Plain string chunk identifier.
+ * @returns Branded chunk identifier.
+ */
 export function ChunkId(id: string): ChunkId {
   return id as ChunkId
 }
@@ -221,7 +231,7 @@ export class ReferencesStore extends Service {
         score,
       }))
     }
-    hits.sort((left, right) => right.score - left.score || (left.chunkId < right.chunkId ? -1 : 1))
+    hits.sort((left, right) => right.score - left.score || left.chunkId.localeCompare(right.chunkId))
     return Object.freeze(hits.slice(0, topK).map(hit => Object.freeze({ ...hit })))
   }
 
@@ -245,6 +255,7 @@ export class ReferencesStore extends Service {
       return document
     }
     const chunkId = request.chunkId
+    /* v8 ignore next 3 -- TypeScript narrowing: hasDocument === hasChunk above guarantees chunkId is defined */
     if (chunkId === undefined) {
       throw new Error('references: get requires exactly one of documentId or chunkId')
     }
@@ -352,6 +363,7 @@ export class ReferencesStore extends Service {
   }
 
   private requireDocuments(): KvTable<DocumentId, ReferenceDocument> {
+    /* v8 ignore next 3 -- defensive: table is initialized in Service.init */
     if (this.documents === undefined) {
       throw new Error('references: durable domain is not initialized')
     }
@@ -359,6 +371,7 @@ export class ReferencesStore extends Service {
   }
 
   private requireChunks(): KvTable<ChunkId, ReferenceChunk> {
+    /* v8 ignore next 3 -- defensive: table is initialized in Service.init */
     if (this.chunks === undefined) {
       throw new Error('references: durable domain is not initialized')
     }

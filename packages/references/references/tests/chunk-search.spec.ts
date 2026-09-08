@@ -45,5 +45,7 @@ describe('keyword search scoring', () => {
     expect(scoreChunk('alpha', chunk)).toBe(0.5)
     expect(scoreChunk('missing', chunk)).toBe(0)
     expect(scoreChunk('', chunk)).toBe(0)
+    expect(scoreChunk('alpha', '')).toBe(0)
+    expect(scoreChunk('alpha', '   ---   ')).toBe(0)
   })
 })

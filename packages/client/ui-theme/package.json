@@ -36,6 +36,7 @@
         "@daoai/dao-client-locale",
         "@daoai/dao-client-ui-renderer",
         "@daoai/dao-client-ui-settings",
+        "@daoai/dao-client-ui-conversation",
         "@daoai/dao-api-remotes"
       ],
       "platform": "web",
@@ -48,6 +49,7 @@
     "@daoai/dao-api-remotes": "workspace:^",
     "@daoai/dao-client-connection": "workspace:^",
     "@daoai/dao-client-locale": "workspace:^",
+    "@daoai/dao-client-ui-conversation": "workspace:^",
     "@daoai/dao-client-ui-renderer": "workspace:^",
     "@daoai/dao-client-ui-settings": "workspace:^",
     "@daoai/dao-host-webserver": "workspace:^",
@@ -61,6 +63,7 @@
     "@daoai/dao-client-locale": "workspace:^",
     "@daoai/dao-client-store": "workspace:^",
     "@daoai/dao-client-test-runtime": "workspace:^",
+    "@daoai/dao-client-ui-conversation": "workspace:^",
     "@daoai/dao-client-ui-primitives": "workspace:^",
     "@daoai/dao-client-ui-renderer": "workspace:^",
     "@daoai/dao-client-ui-settings": "workspace:^",

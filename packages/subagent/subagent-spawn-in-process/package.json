@@ -45,15 +45,11 @@
     "@daoai/dao-agent": "workspace:^",
     "@daoai/dao-agent-loop": "workspace:^",
     "@daoai/dao-agent-loop-testkit": "workspace:^",
-    "@daoai/dao-bash-local": "workspace:^",
-    "@daoai/dao-subprocess-local": "workspace:^",
     "@daoai/dao-invariants": "workspace:^",
     "@daoai/dao-llm": "workspace:^",
     "@daoai/dao-session": "workspace:^",
     "@daoai/dao-subagent": "workspace:^",
     "@daoai/dao-subagent-in-process-driver": "workspace:^",
-    "@daoai/dao-tool-bash": "workspace:^",
-    "@daoai/dao-tool-subagent": "workspace:^",
     "@daoai/cordis": "workspace:^"
   }
 }

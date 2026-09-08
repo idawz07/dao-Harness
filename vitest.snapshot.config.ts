@@ -21,6 +21,13 @@ const snapshotMaxConcurrency = positiveIntFromEnv(
   Math.min(DEFAULT_SNAPSHOT_MAX_CONCURRENCY, availableParallelism()),
 )
 
+// Record mode spends real API quota per scenario and can exceed the default
+// margin on a contended farm router; the variable widens the vitest test
+// timeout for runs that set it. The per-driver record margins
+// (`DAO_SNAPSHOT_RECORD_TIMEOUT_MS`) stay below it so driver-level timeouts
+// report the scenario, not a vitest hang.
+const snapshotTestTimeoutMs = positiveIntFromEnv('DAO_SNAPSHOT_TEST_TIMEOUT_MS', 120_000)
+
 // Replay is the keyless default: boot real subprocess paths from recorded model responses and diff
 // assembled requests, normalized protocol or transcript output, and persisted-log expected outputs.
 // `record` calls the real API and updates fixtures and expected outputs; `refresh` replays committed scripts
@@ -59,7 +66,7 @@ export default defineConfig({
     // and refresh stay serial: record spends real API quota per scenario, and
     // refresh write-back harvests volatile values from fixtures already on
     // disk, so concurrent writers would corrupt expected outputs.
-    testTimeout: 120_000,
+    testTimeout: snapshotTestTimeoutMs,
     hookTimeout: 30_000,
     fileParallelism: (process.env.DAO_SNAPSHOT || 'replay') === 'replay' && snapshotMaxConcurrency > 1,
     maxConcurrency: snapshotMaxConcurrency,

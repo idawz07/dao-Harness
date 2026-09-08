@@ -68,6 +68,11 @@ import * as ToolWeb from '@daoai/dao-tool-web'
 import VmWorkflowEngine from '@daoai/dao-workflow-worker-thread'
 import * as ToolRalph from '@daoai/dao-tool-ralph'
 import * as ToolWorkflow from '@daoai/dao-tool-workflow'
+import Storage from '@daoai/dao-storage'
+import * as StorageDomain from '@daoai/dao-storage-domain'
+import * as StorageJson from '@daoai/dao-storage-json'
+import ReferencesStore from '@daoai/dao-references'
+import * as ToolReferences from '@daoai/dao-tool-references'
 import { githubSlug } from './verify-md-links.ts'
 
 /** Attachment seam marker that makes the attachments-conditional `read_image` schema harvestable. */
@@ -612,6 +617,22 @@ const TOOL_PACKAGES: ToolPackage[] = [
     },
     note:
       'web_search and web_fetch keep provider selection behind ctx.web so model-visible schemas stay stable across backend swaps.',
+  },
+  {
+    pkg: '@daoai/dao-tool-references',
+    dir: 'tool-references',
+    source: 'packages/references/tool-references/src/index.ts',
+    requires: ['ctx.tools', 'ctx.references', 'ctx.systemPrompt'],
+    writes: ['tool/call', 'tool/result', 'references domain state'],
+    async mount(ctx) {
+      await ctx.plugin(Storage)
+      await ctx.plugin(StorageJson, { root: resolve(root, '.tmp/tool-catalog/storage') })
+      await ctx.plugin(StorageDomain, { backend: 'json' })
+      await ctx.plugin(ReferencesStore)
+      await ctx.plugin(ToolReferences)
+    },
+    note:
+      'The six model-facing tools operate over the durable references storage domain. The package is opt-in; compositions mount storage-domain and references store alongside it.',
   },
 ]
 

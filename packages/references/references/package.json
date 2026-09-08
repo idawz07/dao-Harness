@@ -52,7 +52,6 @@
     "@daoai/dao-invariants": "workspace:^",
     "@daoai/dao-storage": "workspace:^",
     "@daoai/dao-storage-domain": "workspace:^",
-    "@daoai/dao-storage-json": "workspace:^",
     "@daoai/cordis": "workspace:^"
   }
 }

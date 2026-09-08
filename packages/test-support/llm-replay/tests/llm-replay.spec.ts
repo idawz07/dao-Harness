@@ -1164,6 +1164,41 @@ describe('installLlmReplay (per-session keying)', () => {
     await expect(drain(ctx.llm.stream(live('live-parent')))).rejects.toThrow(/used before.*bound/)
   })
 
+  it('materializes the recorded workdir token against the live cwd', async () => {
+    const reference: StreamChunk[] = [
+      {
+        type: 'block-end',
+        index: 0,
+        block: {
+          type: 'tool-call',
+          id: ToolCallId('write-cwd'),
+          name: 'fs/write',
+          arguments: '{"file_path":"{{cwd}}/notes.txt","content":"hello"}',
+        },
+      },
+      { type: 'finish', reason: { kind: 'stop' } },
+    ]
+    const parentFile = writeSession('session.jsonl', { id: 'p', createdAt: 1 }, [reference])
+    const ctx = new Context()
+    await ctx.plugin(LlmRuntime)
+    const workdir = join(dir, 'live-workdir')
+    installLlmReplay(ctx, { file: parentFile, cwd: workdir })
+
+    expect(await drain(ctx.llm.stream(live('live-parent')))).toEqual([
+      {
+        type: 'block-end',
+        index: 0,
+        block: {
+          type: 'tool-call',
+          id: ToolCallId('write-cwd'),
+          name: 'fs/write',
+          arguments: `{"file_path":"${workdir}/notes.txt","content":"hello"}`,
+        },
+      },
+      { type: 'finish', reason: { kind: 'stop' } },
+    ])
+  })
+
   it('learns a background child id from its started-subagent tool result', async () => {
     const reference: StreamChunk[] = [
       { type: 'text-delta', index: 0, text: '{{session:2}}' },
@@ -1226,12 +1261,15 @@ describe('installLlmReplay (per-session keying)', () => {
 describe('apply (the plugin entry)', () => {
   const ORIG = {
     file: process.env.DAO_SNAPSHOT_FILE,
+    cwd: process.env.DAO_SNAPSHOT_CWD,
     override: process.env.DAO_SNAPSHOT_OVERRIDE,
     children: process.env.DAO_SNAPSHOT_CHILD_FILES,
   }
   afterEach(() => {
     if (ORIG.file === undefined) delete process.env.DAO_SNAPSHOT_FILE
     else process.env.DAO_SNAPSHOT_FILE = ORIG.file
+    if (ORIG.cwd === undefined) delete process.env.DAO_SNAPSHOT_CWD
+    else process.env.DAO_SNAPSHOT_CWD = ORIG.cwd
     if (ORIG.override === undefined) delete process.env.DAO_SNAPSHOT_OVERRIDE
     else process.env.DAO_SNAPSHOT_OVERRIDE = ORIG.override
     if (ORIG.children === undefined) delete process.env.DAO_SNAPSHOT_CHILD_FILES
@@ -1258,6 +1296,42 @@ describe('apply (the plugin entry)', () => {
     expect(ctx.llm.listProviders()).toEqual([{ id: 'm', name: 'm' }, { id: 'empty', name: 'empty' }])
     await expect(ctx.llm.resolveModelInfo('m', 'm')).resolves.toMatchObject({ inputModalities: ['image'] })
     expect(await drain(ctx.llm.stream({ provider: 'm', model: 'm', messages: [] }))).toEqual(TEXT_CHUNKS)
+  })
+
+  it('materializes the cwd token from $DAO_SNAPSHOT_CWD when no config cwd is set', async () => {
+    const reference: StreamChunk[] = [
+      {
+        type: 'block-end',
+        index: 0,
+        block: {
+          type: 'tool-call',
+          id: ToolCallId('write-cwd'),
+          name: 'fs/write',
+          arguments: '{"file_path":"{{cwd}}/notes.txt"}',
+        },
+      },
+      { type: 'finish', reason: { kind: 'stop' } },
+    ]
+    writeFileSync(file, sessionJsonl(reference.map((c, i) => chunkEvent(i + 1, 1, 1, c))), 'utf8')
+    const workdir = join(dir, 'env-workdir')
+    process.env.DAO_SNAPSHOT_CWD = workdir
+    const ctx = new Context()
+    await ctx.plugin(LlmRuntime)
+    apply(ctx, { file })
+
+    expect(await drain(ctx.llm.stream({ provider: 'm', model: 'm', messages: [] }))).toEqual([
+      {
+        type: 'block-end',
+        index: 0,
+        block: {
+          type: 'tool-call',
+          id: ToolCallId('write-cwd'),
+          name: 'fs/write',
+          arguments: `{"file_path":"${workdir}/notes.txt"}`,
+        },
+      },
+      { type: 'finish', reason: { kind: 'stop' } },
+    ])
   })
 
   it('declares flat image request pricing only for models that configure it', async () => {

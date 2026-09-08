@@ -201,7 +201,7 @@
   transform: rotate(90deg);
 }
 
-/* Squad accents from PORTRAIT_PROMPTS.md — Stage 6 reuses these for XP/badges. */
+/* Squad specialist role accents (Scout, Forge, Lens, Quill, Relay, Scribe). */
 .roleAccent {
   flex: none;
   width: 8px;

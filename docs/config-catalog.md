@@ -1178,6 +1178,11 @@ Requires: `llm`
 export interface Config {
   /** Override the fixture path; defaults to `$DAO_SNAPSHOT_FILE`. */
   file?: string
+  /**
+   * The live workdir `{{cwd}}` tokens in recorded output materialize to;
+   * defaults to `$DAO_SNAPSHOT_CWD`, then `process.cwd()`.
+   */
+  cwd?: string
   /** Override the sidecar path; defaults to `$DAO_SNAPSHOT_OVERRIDE`. */
   overrideFile?: string
   /**
@@ -1242,7 +1247,7 @@ export interface ReplayModelConfig {
 
 Depends on: [`ModelModality`](../packages/llm/llm/src/index.ts) · [`RetryPolicyConfig`](../packages/llm/llm/src/index.ts)
 
-Source: [`packages/test-support/llm-replay/src/index.ts:881`](../packages/test-support/llm-replay/src/index.ts)
+Source: [`packages/test-support/llm-replay/src/index.ts:900`](../packages/test-support/llm-replay/src/index.ts)
 
 <a id="daoaidao-llm-retry"></a>
 
@@ -2344,7 +2349,7 @@ export interface Config {
 }
 ```
 
-Source: [`packages/core/system-prompt/src/index.ts:237`](../packages/core/system-prompt/src/index.ts)
+Source: [`packages/core/system-prompt/src/index.ts:238`](../packages/core/system-prompt/src/index.ts)
 
 <a id="daoaidao-terminal-bash"></a>
 
@@ -3211,12 +3216,14 @@ These load from a `cordis.yml` entry with no `config:` block; they declare no co
 - `@daoai/dao-host-plugin-inventory` — requires `loader` ([`packages/host/plugin-inventory/src/index.ts`](../packages/host/plugin-inventory/src/index.ts))
 - `@daoai/dao-llm` ([`packages/llm/llm/src/index.ts`](../packages/llm/llm/src/index.ts))
 - `@daoai/dao-lsp` ([`packages/lsp/lsp/src/index.ts`](../packages/lsp/lsp/src/index.ts))
+- `@daoai/dao-references` — requires `storageDomain` ([`packages/references/references/src/index.ts`](../packages/references/references/src/index.ts))
 - `@daoai/dao-schedule` — requires `agents` · `sessions` · `tools` · `sessionPersistence` ([`packages/schedule/schedule/src/index.ts`](../packages/schedule/schedule/src/index.ts))
 - `@daoai/dao-session` ([`packages/core/session/src/index.ts`](../packages/core/session/src/index.ts))
 - `@daoai/dao-session-checkpoint-policy` — requires `llm` · `sessionPersistence` · `sessions` · `tools` ([`packages/session/session-checkpoint-policy/src/index.ts`](../packages/session/session-checkpoint-policy/src/index.ts))
 - `@daoai/dao-session-projection` ([`packages/session/session-projection/src/index.ts`](../packages/session/session-projection/src/index.ts))
 - `@daoai/dao-session-stats` — requires `sessionProjections` ([`packages/session/session-stats/src/index.ts`](../packages/session/session-stats/src/index.ts))
 - `@daoai/dao-skill-badge` — requires `skills` ([`packages/skill/skill-badge/src/index.ts`](../packages/skill/skill-badge/src/index.ts))
+- `@daoai/dao-squad-progress` — requires `sessionProjections` · `storageDomain` ([`packages/session/squad-progress/src/index.ts`](../packages/session/squad-progress/src/index.ts))
 - `@daoai/dao-storage` ([`packages/storage/storage/src/index.ts`](../packages/storage/storage/src/index.ts))
 - `@daoai/dao-subagent` ([`packages/subagent/subagent/src/index.ts`](../packages/subagent/subagent/src/index.ts))
 - `@daoai/dao-subprocess-local` ([`packages/subprocess/subprocess-local/src/index.ts`](../packages/subprocess/subprocess-local/src/index.ts))
@@ -3224,6 +3231,7 @@ These load from a `cordis.yml` entry with no `config:` block; they declare no co
 - `@daoai/dao-tool-ask-user` — requires `tools` · `userQuestions` ([`packages/interaction/tool-ask-user/src/index.ts`](../packages/interaction/tool-ask-user/src/index.ts))
 - `@daoai/dao-tool-call-timeout-policy` — requires `tools` ([`packages/guard/timeout-policy/src/index.ts`](../packages/guard/timeout-policy/src/index.ts))
 - `@daoai/dao-tool-cordis` — requires `tools` · `systemPrompt` · `dynamicCordisRunner` · `cordisInspect` ([`packages/extensions/tool-cordis/src/index.ts`](../packages/extensions/tool-cordis/src/index.ts))
+- `@daoai/dao-tool-references` — requires `tools` · `references` · `systemPrompt` ([`packages/references/tool-references/src/index.ts`](../packages/references/tool-references/src/index.ts))
 - `@daoai/dao-tool-subagent-control` — requires `tools` · `subagents` ([`packages/subagent/tool-subagent-control/src/index.ts`](../packages/subagent/tool-subagent-control/src/index.ts))
 - `@daoai/dao-user-questions` ([`packages/interaction/user-questions/src/index.ts`](../packages/interaction/user-questions/src/index.ts))
 - `@daoai/dao-webhook` — requires `agents` · `agentDefaultModel` · `agentPresets` · `permissionPresets` · `sessionTitle` · `workspaceRegistry` ([`packages/webhook/webhook/src/index.ts`](../packages/webhook/webhook/src/index.ts))

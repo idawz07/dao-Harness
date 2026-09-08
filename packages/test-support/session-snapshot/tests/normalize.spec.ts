@@ -421,6 +421,46 @@ describe('normalizeSessionLog', () => {
     expect(out).toContain('"durationMs":0')
     expect(out).not.toContain('37')
     expect(out).toContain('"decision":"block"') // the decision is the behavior — kept
+
+    const withoutDuration = JSON.stringify({
+      type: 'hook/result', seq: 3, time: 5,
+      data: { turn: 1, point: 'UserPromptSubmit', handlerId: 'h', decision: 'pass', exitCode: 0 },
+    })
+    expect(normalizeSessionLog(`${header({})}\n${withoutDuration}\n`, ctx)).toContain('"decision":"pass"')
+  })
+
+  it('zeroes an llm/retry delayMs (jittered backoff is run-to-run noise) but keeps its policy and failure', () => {
+    const ev = JSON.stringify({
+      type: 'llm/retry', seq: 2, time: 5,
+      data: {
+        retryId: '8f2c4a61-3d5e-4b7a-9c1d-2e4f6a8b0c1d',
+        turn: 1, step: 2, provider: 'llama-router', mode: 'normal',
+        policyKey: '["normal",5,["EMPTY_RESPONSE","RATE_LIMIT","SERVER","TIMEOUT","TRANSPORT"],500,10000,0.1]',
+        retry: 1, maxRetries: 5, delayMs: 498.8167987372004,
+        failure: { message: '500 proxy error: Could not establish connection', code: 'SERVER' },
+      },
+    })
+    const out = normalizeSessionLog(`${header({})}\n${ev}\n`, ctx)
+    expect(out).toContain('"delayMs":0')
+    expect(out).not.toContain('498.8167987372004')
+    expect(out).toContain('"retry":1')
+    expect(out).toContain('"code":"SERVER"') // the failure is the behavior — kept
+
+    const withoutDelay = JSON.stringify({
+      type: 'llm/retry', seq: 3, time: 5,
+      data: {
+        retryId: '8f2c4a61-3d5e-4b7a-9c1d-2e4f6a8b0c1d',
+        turn: 1, step: 2, provider: 'llama-router', mode: 'normal',
+        retry: 1, maxRetries: 5,
+      },
+    })
+    expect(normalizeSessionLog(`${header({})}\n${withoutDelay}\n`, ctx)).toContain('"retry":1')
+  })
+
+  it('leaves a non-retry event delayMs untouched (only llm/retry is scrubbed)', () => {
+    const ev = JSON.stringify({ type: 'tool/result', seq: 2, time: 5, data: { delayMs: 88 } })
+    const out = normalizeSessionLog(`${header({})}\n${ev}\n`, ctx)
+    expect(out).toContain('"delayMs":88')
   })
 
   it('preserves a packed chunk row\'s sequence, zeroes time, and zeroes volatile dt gaps', () => {

@@ -278,8 +278,16 @@ const SERVICE_ROLES: ServiceRole[] = [
     pkg: 'storage-domain',
     title: 'Domain data facility',
     mode: 'core',
-    consumers: ['workspace', 'message-feedback'],
+    consumers: ['workspace', 'message-feedback', 'references', 'squad-progress'],
     note: 'Waits for every configured backend, then publishes the domain form as one lifecycle-bound service for typed durable state.',
+  },
+  {
+    key: 'references',
+    pkg: 'references',
+    title: 'Durable document reference store',
+    mode: 'core',
+    consumers: ['tool-references'],
+    note: 'Stores text, path, and URL references over the domain facility and indexes chunks for lexical search.',
   },
   {
     key: 'messageFeedback',
@@ -379,7 +387,7 @@ const SERVICE_ROLES: ServiceRole[] = [
     pkg: 'session-projection',
     title: 'Session projection units',
     mode: 'core',
-    consumers: ['api-session-controller', 'tool-todo', 'session-title'],
+    consumers: ['api-session-controller', 'tool-todo', 'session-title', 'squad-progress'],
     note: 'Domains register state-driven fold units; the eager drive keeps per-session watermark states and the Session controller serves baselines and pushes changed values.',
   },
   {
@@ -389,6 +397,14 @@ const SERVICE_ROLES: ServiceRole[] = [
     mode: 'core',
     consumers: ['api-session-controller', 'session-query', 'session-reference', 'subagent'],
     note: 'Durably checkpoints projection unit states per session (throttled + turn/end/detach mandatory points) and serves the cold-read ladder: cache row + persistence tail replay, so listings never load full logs.',
+  },
+  {
+    key: 'squadProgress',
+    pkg: 'squad-progress',
+    title: 'Squad progress projection and storage mirror',
+    mode: 'core',
+    consumers: [],
+    note: 'Folds session events into squad XP, levels, and badges as a projection unit and mirrors rows into storage-domain.',
   },
   {
     key: 'skills',

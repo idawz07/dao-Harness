@@ -1,6 +1,9 @@
 # Keyless replay counterpart of agent-instructions.cordis.yml: apply the
 # scenario values and model swap to the ACP profile.
 
+- id: llm-pi-ai
+  disabled: true
+
 - id: agent-default-model
   name: '@daoai/dao-agent-default-model'
   config:
@@ -17,9 +20,9 @@
   name: '@daoai/dao-agent-instructions'
   config:
     maxBytes: 65536
-    daoHome: !!js process.cwd() + '/.dsh'
+    daoHome: !!js process.cwd() + '/.dao'
     projectRootMarkers:
-      - .dsh-project
+      - .dao-project
 
 - id: system-prompt
   name: '@daoai/dao-system-prompt'
@@ -35,9 +38,12 @@
       config:
         providers:
           - id: llama-router
-            name: DeepSeek
+            name: Local Llama Router
             models:
               - id: Qwen3.8-27B-Q6_K_XL-128K
-              - id: Qwen3.8-27B-Q6_K_XL-128K
+                contextWindow: 131072
+                defaultMaxTokens: 65536
+                reasoningEfforts: ['off', 'minimal', 'low', 'medium', 'high']
+                defaultReasoningEffort: high
     - id: workspace-context-compaction
       name: '../../../packages/test-support/session-snapshot/tests/fixtures/workspace-context-compaction.ts'

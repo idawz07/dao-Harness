@@ -85,6 +85,9 @@ export {
   type SnapshotSuiteOptions,
 } from './suite.ts'
 export {
+  snapshotTimeoutMs,
+} from './timeout.ts'
+export {
   captureExpectedWorkspaceSnapshot,
   captureWorkspaceSnapshot,
   EMPTY_WORKSPACE_MARKER,
