@@ -7,7 +7,7 @@ kind: "package-reference"
 
 ## Summary
 
-`dao-client-ui-theme` lets Web GUI users choose `light`, `dark`, or `system` and set conversation content text from 12 to 17 px in Settings. A loopback client stores both values in the `ui-theme` settings namespace, which the local provider persists in `$DAO_HOME/settings.yaml` by default. The plugin resolves `system` through `prefers-color-scheme` and publishes immutable `ThemeSnapshot`s; ui-layout applies each snapshot to the document. The package also ships the `--dsw-*` token stylesheets and injects a synchronous bootstrap so the selected palette and font size apply before the shell loads. Third-party themes can register alias-token overrides through `ctx.theme`.
+`dao-client-ui-theme` lets Web GUI users choose `light`, `dark`, or `system` (the built-in default preference is `light`) and set conversation content text from 12 to 17 px in Settings. A loopback client stores both values in the `ui-theme` settings namespace, which the local provider persists in `$DAO_HOME/settings.yaml` by default. The plugin resolves `system` through `prefers-color-scheme`, publishes immutable `ThemeSnapshot`s, and applies each snapshot to the document through its DOM presenter. The package also ships the `--dsw-*` token stylesheets and injects a synchronous bootstrap so the selected palette and font size apply before the shell loads. Third-party themes can register alias-token overrides through `ctx.theme`.
 
 ## Table of Contents
 
@@ -45,7 +45,11 @@ When the host composition includes an HTTP server, the host half embeds the regi
 <details>
 <summary>Implementation internals — click to expand</summary>
 
-The service owns theme and font-size state and publishes snapshots. The ui-layout presenter applies those snapshots, and the token sheets own the color and conversation text scales.
+The service owns theme and font-size state and publishes snapshots. The plugin's DOM presenter applies those snapshots, and the token sheets own the color and conversation text scales.
+
+### DOM presenter
+
+A second effect in the client apply seats the presenter: pure DOM writes from resolved snapshots — initial state through the getter once, then event-driven only, with no React path. It projects `html { color-scheme }` for native UA chrome, `body[data-ds-dark-theme]` from the active color scheme, the theme's alias tokens and `--dao-content-font-size` as inline variables on body, and one owned `<meta name="theme-color">` whose content follows the computed body background. It applies palette, font-size, and token variables before measuring the rendered background as the single color authority; disposing it removes its metadata node with its other global writes.
 
 ### Stylesheets
 
@@ -68,9 +72,9 @@ The service provides itself immediately with the schema defaults on a loopback b
 <a id="further-exploration"></a>
 ## Further Exploration
 
-These pages cover the layout presenter, the token consumers, and the styling rules.
+These pages cover the frame chrome the presenter paints, the token consumers, and the styling rules.
 
-- [ui-layout](../ui-layout/README.md) — the presenter that applies the resolved theme snapshot.
+- [ui-layout](../ui-layout/README.md) — the AppFrame whose surfaces the presenter paints.
 - [ui-sidebar](../ui-sidebar/README.md) — a consumer of the scrollbar rebinding contract.
 - [ui-conversation](../ui-conversation/README.md) — a consumer of `--dao-scrollbar-width` for the composer seat.
 - [Web styling](../../../docs/web-styling.md) — the authoritative styling rules for web client components.

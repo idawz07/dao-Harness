@@ -34,8 +34,7 @@
       "inject": [
         "@daoai/dao-client-locale",
         "@daoai/dao-client-ui-renderer",
-        "@daoai/dao-client-ui-session",
-        "@daoai/dao-client-ui-theme"
+        "@daoai/dao-client-ui-session"
       ],
       "platform": "web"
     }
@@ -49,7 +48,6 @@
     "@daoai/dao-client-locale": "workspace:^",
     "@daoai/dao-client-ui-renderer": "workspace:^",
     "@daoai/dao-client-ui-session": "workspace:^",
-    "@daoai/dao-client-ui-theme": "workspace:^",
     "@daoai/dao-invariants": "workspace:^",
     "@daoai/cordis": "workspace:^"
   },
@@ -59,7 +57,6 @@
     "@daoai/dao-client-ui-renderer": "workspace:^",
     "@daoai/dao-client-ui-session": "workspace:^",
     "@daoai/dao-client-ui-slots": "workspace:^",
-    "@daoai/dao-client-ui-theme": "workspace:^",
     "@daoai/dao-invariants": "workspace:^",
     "@types/react": "~18.3.1",
     "@daoai/cordis": "workspace:^",

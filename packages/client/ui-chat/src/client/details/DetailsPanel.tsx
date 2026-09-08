@@ -72,7 +72,7 @@ export function DetailsPanel({ surface, useChat, useSessions, sessionId, useStor
               </svg>
             </button>
           </div>
-          <div className={css.body}><div className={css.empty}>{t('details.empty')}</div></div>
+          <div className={css.body}><div className={css.empty}>{t('details.viewEmpty')}</div></div>
         </div>
       ),
     })

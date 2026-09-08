@@ -2,6 +2,7 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, render } from '@testing-library/react'
+import type { ReactNode } from 'react'
 import { bindSnapshotSelector } from '@daoai/dao-client-test-runtime'
 import { createSnapshotStore } from '@daoai/dao-client-store'
 import type {
@@ -13,7 +14,7 @@ import type { SessionProviderComponent } from '@daoai/dao-client-ui-slots'
 import type { SessionPendingInteractionSnapshot } from '@daoai/dao-client-ui-session/client'
 import { EMPTY_CONVERSATION_SNAPSHOT } from '@daoai/dao-client-ui-conversation/client'
 import type {
-  DetailsSlotProps, DetailsToolOwnerProps, RunningToolCall, SelectionTarget,
+  DetailsSlotProps, DetailsToolOwnerProps, DetailsViewOwnerProps, RunningToolCall, SelectionTarget,
 } from '@daoai/dao-client-ui-chat/client'
 import { makeTranslate } from '@daoai/dao-client-test-runtime'
 import { en as commonEn } from '@daoai/dao-client-locale/src/locales/en.ts'
@@ -77,6 +78,20 @@ function emptyWorkspaces() {
   return createSnapshotStore<WorkspaceSnapshot>({
     items: [], archivedSessionIds: [], state: 'idle', phase: 'ready', error: null,
   })
+}
+
+/** Observe the keyed view seat: renders the registered entry, or the fallback when none is. */
+function renderViewDetailsProbe(
+  entry: ReactNode | null,
+  calls: { key: string; entryKey: string | undefined }[],
+  owner: DetailsViewOwnerProps[],
+): DetailsSlotProps['renderSlot'] {
+  return (key, ownerProps, opts) => {
+    if (key !== 'conversation.details.view') return <div data-testid="tool-details-seat" />
+    calls.push({ key, entryKey: opts?.entryKey })
+    owner.push(ownerProps as unknown as DetailsViewOwnerProps)
+    return entry ?? opts?.fallback ?? null
+  }
 }
 
 describe('render branch tails', () => {
@@ -240,5 +255,96 @@ describe('render branch tails', () => {
       call: { name: 'read', argsRaw: '{"path":"notes/demo.txt"}' },
       content: [{ type: 'text', text: longText }],
     })
+  })
+
+  it('DetailsPanel routes a non-Tool surface to the keyed view seat with the surface as entry key', () => {
+    localStorage.clear()
+    const session = sessionSnapshot()
+    const chatSnapshot = chatSnapshotFixture()
+    const chat = createChatStore().create()
+    const emptyList = createSnapshotStore<SessionListState>(
+      { ids: [], byId: {}, current: undefined, phase: 'ready', subagentsByParent: {}, jobsBySession: {}, currentAddress: undefined })
+    const workspaces = emptyWorkspaces()
+    const calls: { key: string; entryKey: string | undefined }[] = []
+    const owners: DetailsViewOwnerProps[] = []
+    const closeDetails = vi.fn()
+    const view = render(
+      <DetailsPanel
+        surface="squad-progress"
+        SessionProvider={SessionProviderStub}
+        renderSlot={renderViewDetailsProbe(<div data-testid="view-seat" />, calls, owners)}
+        sessionId={SID}
+        useSession={bindSnapshotSelector(createSnapshotStore(session))}
+        useChat={bindSnapshotSelector(createSnapshotStore(chatSnapshot))}
+        useConversation={bindSnapshotSelector(createSnapshotStore(EMPTY_CONVERSATION_SNAPSHOT))}
+        useTrajectory={(() => { throw new Error('unused') })}
+        useSessions={bindSnapshotSelector(emptyList)}
+        useSessionPendingInteraction={bindSnapshotSelector(
+          createSnapshotStore<SessionPendingInteractionSnapshot>(new Map()),
+        )}
+        useWorkspaces={bindSnapshotSelector(workspaces)}
+        useProjection={(() => undefined)}
+        useInput={(() => { throw new Error('unused') })}
+        inputActions={{
+          setDraft: () => {},
+          addImages: () => true,
+          removeImage: () => {},
+          pruneImages: () => {},
+          submit: () => {},
+        }}
+        useStore={bindSnapshotSelector(chat)}
+        actions={chat.actions}
+        closeDetails={closeDetails}
+        t={t}
+      />,
+    )
+    expect(view.getByTestId('view-seat')).toBeTruthy()
+    expect(calls).toEqual([{ key: 'conversation.details.view', entryKey: 'squad-progress' }])
+    expect(owners).toHaveLength(1)
+    expect(owners[0]?.closeDetails).toBe(closeDetails)
+  })
+
+  it('DetailsPanel renders the closeable fallback when a non-Tool surface has no registered view', () => {
+    localStorage.clear()
+    const session = sessionSnapshot()
+    const chatSnapshot = chatSnapshotFixture()
+    const chat = createChatStore().create()
+    const emptyList = createSnapshotStore<SessionListState>(
+      { ids: [], byId: {}, current: undefined, phase: 'ready', subagentsByParent: {}, jobsBySession: {}, currentAddress: undefined })
+    const workspaces = emptyWorkspaces()
+    const closeDetails = vi.fn()
+    const view = render(
+      <DetailsPanel
+        surface="squad-progress"
+        SessionProvider={SessionProviderStub}
+        renderSlot={renderViewDetailsProbe(null, [], [])}
+        sessionId={SID}
+        useSession={bindSnapshotSelector(createSnapshotStore(session))}
+        useChat={bindSnapshotSelector(createSnapshotStore(chatSnapshot))}
+        useConversation={bindSnapshotSelector(createSnapshotStore(EMPTY_CONVERSATION_SNAPSHOT))}
+        useTrajectory={(() => { throw new Error('unused') })}
+        useSessions={bindSnapshotSelector(emptyList)}
+        useSessionPendingInteraction={bindSnapshotSelector(
+          createSnapshotStore<SessionPendingInteractionSnapshot>(new Map()),
+        )}
+        useWorkspaces={bindSnapshotSelector(workspaces)}
+        useProjection={(() => undefined)}
+        useInput={(() => { throw new Error('unused') })}
+        inputActions={{
+          setDraft: () => {},
+          addImages: () => true,
+          removeImage: () => {},
+          pruneImages: () => {},
+          submit: () => {},
+        }}
+        useStore={bindSnapshotSelector(chat)}
+        actions={chat.actions}
+        closeDetails={closeDetails}
+        t={t}
+      />,
+    )
+    expect(view.getByText('No details available for this view.')).toBeTruthy()
+    view.getByRole('button', { name: 'Close details' }).click()
+    expect(closeDetails).toHaveBeenCalledOnce()
   })
 })

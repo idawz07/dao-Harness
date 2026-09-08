@@ -2,7 +2,7 @@ import {
   IconDarkOutline16, IconLightOutline16,
 } from '@daoai/dao-client-ui-primitives'
 import type { ObservableSnapshot } from '@daoai/dao-client-store'
-import type { PropsLocale, PropsRuntime } from '@daoai/dao-client-ui-slots'
+import type { InjectFace, PropsLocale, PropsRuntime } from '@daoai/dao-client-ui-slots'
 import type { ThemeSnapshot } from './index.ts'
 import type {} from '@daoai/dao-client-ui-conversation/client'
 import css from './ThemeToggle.module.css'
@@ -19,7 +19,7 @@ export interface ThemeToggleInjected {
 export type ThemeToggleProps =
   PropsRuntime<'conversation.session.header.utilities'>
   & PropsLocale<'settings.theme'>
-  & ThemeToggleInjected
+  & InjectFace<ThemeToggleInjected>
 
 /** Render the compact light/dark action in the Session header. */
 export function ThemeToggle({ useTheme, toggleTheme, t }: ThemeToggleProps) {

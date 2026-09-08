@@ -2,7 +2,7 @@
  * Theme bootstrap row for the browser's pre-plugin interval. Each index
  * render embeds the current durable built-in preference and content font size;
  * the browser resolves only `system`, then writes the same DOM fields
- * ui-layout's ThemePresenter owns after the client plugin tree activates.
+ * ui-theme's ThemePresenter owns after the client plugin tree activates.
  */
 
 import type { IndexInjection } from '@daoai/dao-host-webserver'

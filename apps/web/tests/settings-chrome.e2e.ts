@@ -268,7 +268,7 @@ describe('web e2e: settings modal and General preferences', () => {
       expect(state.background).not.toBe('rgba(0, 0, 0, 0)')
       expect(state.themeColor).toBe(state.background)
     }
-    // Pin the OS scheme to light so the default `system` preference resolves
+    // Pin the OS scheme to light so the default light preference renders
     // light and the dark flip below is unambiguously the gesture's doing.
     await page.emulateMedia({ colorScheme: 'light' })
     const light = await readState()

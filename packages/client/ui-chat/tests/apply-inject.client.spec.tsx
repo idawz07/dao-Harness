@@ -107,7 +107,7 @@ describe('Chat inject API', () => {
     const { instance, injected } = b.chatViewApi(ROOT)
     injected.openDetails({ turnSeq: 2, callId: 'c1' })
     expect(instance.store.getSnapshot().selection).toEqual({ turnSeq: 2, callId: 'c1' })
-    expect(b.layout.openDetails).toHaveBeenCalledOnce()
+    expect(b.layout.openDetails).toHaveBeenCalledWith('tool')
     expect(b.runtime.storeOf('details', ROOT)).toBe(instance)
     expect(b.runtime.storeOf('conversation.session', ROOT)).not.toBe(instance)
     await b.runtime.dispose()

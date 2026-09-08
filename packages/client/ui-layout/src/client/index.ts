@@ -4,19 +4,16 @@
  * four child slots (declaration = exclusive render authority), seats the
  * layout store (panel geometry), and wires the panel-action service face.
  * ctx.layout is the cross-plugin panel-action contract; navigation state lives
- * with the runtime sessions service. A second effect seats the theme
- * presenter, which projects ctx.theme snapshots onto document.body.
+ * with the runtime sessions service.
  */
 import type { Context as ClientContext } from '@daoai/cordis'
 import type {} from '@daoai/dao-client-locale/client'
 import type {} from '@daoai/dao-client-ui-renderer/client'
 import type {} from '@daoai/dao-client-ui-session/client'
-import type {} from '@daoai/dao-client-ui-theme/client'
 import type { PanelActions } from './service.ts'
 import { AppFrame } from './AppFrame.tsx'
 import { createLayoutStore } from './stores.ts'
 import { LayoutController } from './service.ts'
-import { ThemePresenter } from './theme-presenter.ts'
 
 // Contract exports only (export-convergence rule: cross-package consumers
 // keep a symbol exported; test-only/package-internal symbols live off /src).
@@ -65,12 +62,14 @@ declare module '@daoai/dao-client-ui-slots' {
     'conversation': { kind: 'single'; scope: 'session-maybe'; owner: ConvOwnerProps }
     /**
      * The right details column, shown when the layout opens it. OCCUPIED by
-     * ui-conversation's DetailsPanel, which declares the tool-details seat
-     * inside it — registering here replaces the column and takes that seat
-     * with it. Absent an occupant the column renders nothing.
+     * ui-conversation's DetailsPanel, which declares the tool-details and
+     * keyed view seats inside it — registering here replaces the column and
+     * takes those seats with it. Absent an occupant the column renders
+     * nothing.
      *
-     * No owner props: the framework injects the session id and hooks for the
-     * `session` scope, and `ctx.layout` owns whether the column is open.
+     * Owner props carry the active surface key (`ctx.layout` owns whether
+     * the column is open and which surface opened it); the framework
+     * injects the session id and hooks for the `session` scope.
      */
     'details': { kind: 'single'; scope: 'session'; owner: DetailsOwnerProps }
     /**
@@ -111,7 +110,7 @@ export interface DetailsOwnerProps {
 }
 
 /** Required services (cordis fiber inject — the loader passes all module exports as an object plugin). */
-export const inject = ['slots', 'theme', 'locale']
+export const inject = ['slots', 'locale']
 
 /**
  * Client plugin body: provide ctx.layout, then one register() call — AppFrame
@@ -148,16 +147,4 @@ export function apply(ctx: ClientContext): void {
       void disposeService()
     }
   }, 'ui-layout: service + root registration')
-
-  // Theme presentation: pure DOM writes from resolved snapshots — initial
-  // state through the getter once, then event-driven only; no React path.
-  ctx.effect(() => {
-    const presenter = new ThemePresenter()
-    presenter.apply(ctx.theme.getTheme())
-    const off = ctx.on('theme/change', (snapshot) => { presenter.apply(snapshot) })
-    return () => {
-      off()
-      presenter.dispose()
-    }
-  }, 'ui-layout: theme presenter')
 }

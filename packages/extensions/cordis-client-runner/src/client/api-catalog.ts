@@ -92,9 +92,9 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         parameters: [],
       },
       {
-        signature: 'openDetails(): void',
-        description: 'Open the details panel (no-op when already open).',
-        parameters: [],
+        signature: 'openDetails(surface?: string): void',
+        description: 'Open the details panel on one registered surface (no-op when already open); the omitted surface keeps the Tool details view.',
+        parameters: [{ name: 'surface', description: 'Key of the registered details surface to open (keyed `conversation.details.view` entry).' }],
       },
       {
         signature: 'closeDetails(): void',

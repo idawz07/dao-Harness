@@ -2534,9 +2534,6 @@ importers:
       '@daoai/dao-client-ui-slots':
         specifier: workspace:^
         version: link:../ui-slots
-      '@daoai/dao-client-ui-theme':
-        specifier: workspace:^
-        version: link:../ui-theme
       '@daoai/dao-invariants':
         specifier: workspace:^
         version: link:../../runtime-diagnostics/invariants
@@ -3379,6 +3376,9 @@ importers:
       '@daoai/dao-client-test-runtime':
         specifier: workspace:^
         version: link:../../test-support/client-runtime
+      '@daoai/dao-client-ui-conversation':
+        specifier: workspace:^
+        version: link:../ui-conversation
       '@daoai/dao-client-ui-primitives':
         specifier: workspace:^
         version: link:../ui-primitives

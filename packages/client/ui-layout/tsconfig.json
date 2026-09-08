@@ -18,9 +18,6 @@
       "path": "../ui-slots"
     },
     {
-      "path": "../ui-theme"
-    },
-    {
       "path": "../ui-primitives"
     },
     {

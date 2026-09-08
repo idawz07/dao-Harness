@@ -25,6 +25,7 @@ import { FontSizeRow } from './FontSizeRow.tsx'
 import { createAppearanceRowStore, createFontSizeRowStore } from './settings-store.ts'
 import { installThemeStyles } from './styles.ts'
 import { ThemeToggle, type ThemeToggleInjected } from './ThemeToggle.tsx'
+import { ThemePresenter } from './theme-presenter.ts'
 import { en, type ThemeKey } from './locales.ts'
 import {
   DEFAULT_FONT_SIZE, DEFAULT_PREFERENCE, FONT_SIZE_FIELD, FONT_SIZE_MAX, FONT_SIZE_MIN,
@@ -423,7 +424,8 @@ function dynamicToken(name: string): ThemeTokenInspection {
 export const inject = ['slots', 'locale', 'connection', 'remote', 'settingsScope']
 
 /**
- * Client plugin body: provide the theme service and register the
+ * Client plugin body: provide the theme service, seat the DOM presenter that
+ * projects resolved snapshots onto the document, and register the
  * feature-owned Appearance preference row into the General section's item
  * slot (a feature owns its settings surface).
  * @param ctx - client cordis context.
@@ -433,6 +435,22 @@ export function apply(ctx: ClientContext): void {
   const host = ctx.settingsScope.bind<ThemeSettings>({ namespace: THEME_SETTINGS_NAMESPACE })
   const theme = new ThemeRuntime(ctx, host)
   ctx.provide('theme', theme)
+
+  // Theme presentation: pure DOM writes from resolved snapshots — initial
+  // state through the getter once, then event-driven only; no React path.
+  // Non-DOM hosts (server contexts) skip the seat, matching the stylesheet
+  // guard in installThemeStyles.
+  if (typeof document !== 'undefined') {
+    ctx.effect(() => {
+      const presenter = new ThemePresenter()
+      presenter.apply(ctx.theme.getTheme())
+      const off = ctx.on('theme/change', (snapshot) => { presenter.apply(snapshot) })
+      return () => {
+        off()
+        presenter.dispose()
+      }
+    }, 'ui-theme: theme presenter')
+  }
   const themeSource: ObservableSnapshot<ThemeSnapshot> = {
     getSnapshot: () => theme.getTheme(),
     subscribe: listener => ctx.on('theme/change', () => { listener() }),

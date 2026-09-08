@@ -20,6 +20,7 @@ export const en = {
   'details.title': 'Details',
   'details.close': 'Close details',
   'details.empty': 'Click a tool row in the message flow to view its details',
+  'details.viewEmpty': 'No details available for this view.',
   'details.notInWindow': 'This call is outside the current window',
   'details.input': 'Input',
   'details.output': 'Output',

@@ -2,7 +2,7 @@
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import type { ThemeSnapshot } from '@daoai/dao-client-ui-theme/client'
-import { DARK_ATTRIBUTE, ThemePresenter } from '@daoai/dao-client-ui-layout/src/client/theme-presenter.ts'
+import { DARK_ATTRIBUTE, ThemePresenter } from '@daoai/dao-client-ui-theme/src/client/theme-presenter.ts'
 
 const LIGHT_THEME_COLOR = 'rgb(255, 255, 255)'
 const DARK_THEME_COLOR = 'rgb(21, 21, 23)'

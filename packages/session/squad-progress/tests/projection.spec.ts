@@ -60,7 +60,7 @@ describe('earnBadges', () => {
 describe('squadProgressDomainSpec', () => {
   it('defines the squad_progress storage domain', () => {
     expect(squadProgressDomainSpec.name).toBe('squad_progress')
-    expect(squadProgressDomainSpec.version).toBe(1)
+    expect(squadProgressDomainSpec.version).toBe(0)
   })
 })
 

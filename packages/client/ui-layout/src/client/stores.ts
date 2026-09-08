@@ -76,7 +76,7 @@ export function createLayoutStore(): EngineStoreHandle<LayoutState, LayoutAction
         d.narrow = narrow
         d.narrowExpanded = false
       },
-      openDetails: (d, surface = 'tool') => {
+      openDetails: (d, surface: string = 'tool') => {
         d.detailsSurface = surface
         if (d.details === 0) d.details = DETAILS_DEFAULT
       },
