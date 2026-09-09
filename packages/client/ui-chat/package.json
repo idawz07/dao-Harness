@@ -106,8 +106,8 @@
     "@daoai/dao-token-meter": "workspace:^",
     "@daoai/dao-tools": "workspace:^",
     "@daoai/dao-util-workspace-path": "workspace:^",
-    "@types/react": "~18.3.1",
-    "react": "^18.2.0"
+    "@types/react": "~19.2.18",
+    "react": "^19.2.8"
   },
   "dependencies": {
     "@daoai/schemastery": "workspace:^"

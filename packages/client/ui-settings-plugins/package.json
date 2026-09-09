@@ -65,8 +65,8 @@
     "@daoai/dao-client-ui-settings": "workspace:^",
     "@daoai/dao-client-ui-slots": "workspace:^",
     "@daoai/dao-invariants": "workspace:^",
-    "@types/react": "~18.3.1",
-    "react": "^18.2.0",
+    "@types/react": "~19.2.18",
+    "react": "^19.2.8",
     "@daoai/dao-client-ui-renderer": "workspace:^"
   },
   "files": [
