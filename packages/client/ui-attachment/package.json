@@ -52,7 +52,7 @@
     "@daoai/cordis": "workspace:^",
     "@daoai/dao-invariants": "workspace:^",
     "@types/react": "~18.3.1",
-    "@types/react-dom": "~18.3.0",
+    "@types/react-dom": "~19.2.4",
     "@daoai/dao-client-ui-chat": "workspace:^",
     "@daoai/dao-client-ui-conversation": "workspace:^",
     "@daoai/dao-client-ui-trajectory": "workspace:^",
@@ -60,7 +60,7 @@
     "@daoai/dao-client-ui-primitives": "workspace:^",
     "@daoai/dao-client-ui-slots": "workspace:^",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react-dom": "^19.2.8",
     "@daoai/dao-attachment": "workspace:^"
   },
   "files": [

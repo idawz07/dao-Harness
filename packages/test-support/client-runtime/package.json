@@ -48,7 +48,7 @@
     "@daoai/dao-subagent": "workspace:^",
     "@daoai/cordis": "workspace:^",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@daoai/dao-api-session-controller": "workspace:^",
@@ -66,10 +66,10 @@
     "@daoai/dao-session": "workspace:^",
     "@daoai/dao-subagent": "workspace:^",
     "@types/react": "~18.3.1",
-    "@types/react-dom": "~18.3.0",
+    "@types/react-dom": "~19.2.4",
     "@daoai/cordis": "workspace:^",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^19.2.8"
   },
   "files": [
     "lib/index.js",
