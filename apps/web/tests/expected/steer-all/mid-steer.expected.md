@@ -6,6 +6,8 @@
   - button "Session log":
     - text: Session log
     - img
+  - 'button "Squad progress: level 1, 0 XP"': Lv.1
+  - button "Switch to dark theme": Dark
   - tablist:
     - tab "Chat" [selected]
     - tab "Trajectory"
@@ -20,6 +22,10 @@
   - img
   - img
   - text: Context injection @daoai/dao-system-prompt
+- button "Context injection skill-catalog":
+  - img
+  - img
+  - text: Context injection skill-catalog
 - button "Think The user wants me to ask them a checkpoint question first, then continue with whatever they interject. Let me do exactly that.":
   - img
   - img
@@ -35,7 +41,7 @@
 - button "Commands":
   - img
 - 'button "Access mode, current: Workspace Write"': Workspace Write
-- button "Select model, current DeepSeek-V4-Flash":
-  - text: DeepSeek-V4-Flash
+- button "Select model, current Qwen3.8-27B-Q6_K_XL-128K":
+  - text: Qwen3.8-27B-Q6_K_XL-128K
   - img
 - button "Stop generating"

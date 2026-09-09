@@ -1,0 +1,121 @@
+.card {
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 20px 22px 18px;
+  border: 1px solid var(--dsw-alias-mission-border);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 88% 0%, var(--dsw-alias-mission-glow), transparent 42%),
+    var(--dsw-alias-mission-surface);
+  box-shadow: var(--dsw-shadow-lv2);
+}
+
+.headingRow,
+.progressMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.eyebrow,
+.phase {
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--dsw-alias-state-business-primary);
+}
+
+.phase {
+  overflow: hidden;
+  color: var(--dsw-alias-label-tertiary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.phase[data-phase='active'],
+.phase[data-phase='complete'] {
+  color: var(--dsw-alias-state-success-primary);
+}
+
+.phase[data-phase='blocked'] {
+  color: var(--dsw-alias-state-warn-label);
+}
+
+.objective {
+  margin: 8px 0 0;
+  color: var(--dsw-alias-label-primary);
+  font-size: clamp(21px, 2.4vw, 28px);
+  line-height: 1.16;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.reason {
+  margin: 7px 0 0;
+  color: var(--dsw-alias-label-secondary);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.progressMeta {
+  margin-top: 18px;
+  color: var(--dsw-alias-label-secondary);
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 500;
+}
+
+.track {
+  position: relative;
+  height: 5px;
+  margin-top: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--dsw-alias-mission-track);
+}
+
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: var(--dsw-alias-mission-progress);
+  transition: width var(--ds-transition-duration-slow) var(--ds-ease-in-out);
+}
+
+@media (max-width: 760px) {
+  .card {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .objective {
+    font-size: 20px;
+  }
+
+  .progressMeta {
+    margin-top: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .phase {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill {
+    transition: none;
+  }
+}

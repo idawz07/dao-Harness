@@ -62,6 +62,11 @@
   --dao-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
 }
 
+.card:focus-within {
+  border-color: var(--dsw-alias-focus-ring);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--dsw-alias-focus-ring) 24%, transparent), var(--dsw-shadow-lv2);
+}
+
 /* No-workspace trigger state: dashed l4 stroke marks the card as a pick-a-
    workspace affordance rather than a live composer; hover answers in the
    business blue to invite the click. Native `dashed` has a fixed browser
@@ -262,6 +267,14 @@
   background: var(--dsw-alias-interactive-bg-hover-solid);
 }
 
+.add:focus-visible,
+.select:focus-visible,
+.primary:focus-visible,
+.retry:focus-visible {
+  outline: 2px solid var(--dsw-alias-focus-ring);
+  outline-offset: 2px;
+}
+
 .add:disabled {
   opacity: 0.5;
   cursor: default;
@@ -311,9 +324,7 @@
   border: none;
   border-radius: 999px;
   background: var(--dsw-alias-button-info-fill);
-  /* Static white, not the foreground token: the arrow stays white on the blue
-     fill in both themes (design 34:10465). */
-  color: #fff;
+  color: var(--dsw-alias-label-primary-foreground);
   cursor: pointer;
   transition: background-color 100ms ease;
   /* Opts out of the row's 2px downward shift (.row top pad): the send circle

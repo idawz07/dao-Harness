@@ -41,7 +41,7 @@ function fakeRoster(
       list: () => {
         if (options.throwOnList === true) return Promise.reject(new Error('socket closed'))
         return Promise.resolve(options.failList === undefined
-          ? { ok: true as const, value: { presets, authorable: true } }
+          ? { ok: true as const, value: { presets, authorable: true, maxAvatarBytes: 2 * 1024 * 1024 } }
           : {
             ok: false as const,
             error: { code: options.failListCode ?? 'internal', message: options.failList, details: {} },
@@ -303,7 +303,7 @@ describe('the new-session chip controller', () => {
         list: () => {
           if (options.throwOn === 'list') return Promise.reject(new Error('socket closed'))
           return Promise.resolve(options.failList === undefined
-            ? { ok: true as const, value: { presets, authorable: true } }
+            ? { ok: true as const, value: { presets, authorable: true, maxAvatarBytes: 2 * 1024 * 1024 } }
             : {
               ok: false as const,
               error: { code: options.failListCode ?? 'internal', message: options.failList, details: {} },

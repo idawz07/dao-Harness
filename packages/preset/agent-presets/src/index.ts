@@ -22,6 +22,8 @@
  */
 
 import { stat } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
+import { dirname, join } from 'node:path'
 import { Context } from '@daoai/cordis'
 import z from '@daoai/schemastery'
 import { Remote, TypertRemoteFailure, TypertRemoteService } from '@daoai/dao-typert-protocol'
@@ -29,7 +31,11 @@ import { bindScopeParent, createScope, scopeOf, type Scope, type ScopeKey, type 
 // Type-only: resolves the `agent/created` lifecycle event this service watches.
 import type {} from '@daoai/dao-agent'
 import type { Agent } from '@daoai/dao-agent'
-import type { AgentPresetDocument, AgentPresetErrorDetailsMap, AgentPresetRoster } from './types.ts'
+import type {
+  AgentPresetDocument, AgentPresetErrorDetailsMap, AgentPresetRoster,
+  CreateSquadMemberInput, SquadAvatar, SquadService, SquadSessionSnapshot, SquadWriteResult,
+} from './types.ts'
+import { SQUAD_AUTHORING_LIMITS } from './types.ts'
 import type {} from '@daoai/dao-session-projection'
 // Type-only: resolves the registry notification emitted after scope reparenting.
 import type {} from '@daoai/dao-tools'
@@ -46,6 +52,11 @@ import {
   type AgentPreset, type Config, type PresetRoot,
 } from './preset.ts'
 import { agentPresetProjectionDefinition } from './session.ts'
+import {
+  createManagedMember, effectiveMemberState, InvalidSquadMemberError,
+  readCompositionPersona, readManagedAvatar, resetManagedPersona,
+  saveManagedAvatar, saveManagedPersona, SquadRevisionConflictError,
+} from './squad-authoring.ts'
 export type * from './types.ts'
 
 /** Settings namespace carrying the user's chosen default preset. */
@@ -97,6 +108,19 @@ function presetFailure(error: unknown, agentPreset: string): TypertRemoteFailure
       { sessionId: error.sessionId, agentPreset: error.presetId },
     )
   }
+  if (error instanceof SquadRevisionConflictError) {
+    return remotePresetFailure('squad-revision-conflict', error.message, {
+      agentPreset: error.presetId,
+      expectedRevision: error.expectedRevision,
+      actualRevision: error.actualRevision,
+    })
+  }
+  if (error instanceof InvalidSquadMemberError) {
+    return remotePresetFailure('squad-member-invalid', error.message, {
+      agentPreset: error.presetId,
+      reason: error.message,
+    })
+  }
   return undefined
 }
 
@@ -135,6 +159,13 @@ export {
   copyComposition, deleteComposition, InvalidPresetIdError, PresetExistsError,
   PresetNotWritableError, readComposition, writableRoot,
 } from './authoring.ts'
+export {
+  createManagedMember, effectiveMemberState, InvalidSquadMemberError,
+  MAX_AVATAR_BYTES, MAX_PERSONA_BYTES, PERSONA_OVERRIDE_FILE,
+  readCompositionPersona, readManagedAvatar, resetManagedPersona,
+  saveManagedAvatar, saveManagedPersona, SquadRevisionConflictError,
+  userMemberDirectory,
+} from './squad-authoring.ts'
 export { agentPresetProjectionDefinition } from './session.ts'
 export { PresetLockedError, PresetMountError, UnknownPresetError } from './preset.ts'
 export type { AgentPreset, Config, PresetRoot, PresetTrust } from './preset.ts'
@@ -152,7 +183,7 @@ declare module '@daoai/cordis' {
  * call so a preset authored while the process runs is visible immediately,
  * and a preset deleted underneath a picker disappears from the next read.
  */
-export class AgentPresets extends TypertRemoteService {
+export class AgentPresets extends TypertRemoteService implements SquadService {
   static inject = ['loader']
 
   /** Runtime schema for the preset roster. */
@@ -235,6 +266,7 @@ export class AgentPresets extends TypertRemoteService {
       ...config.roots,
       ...config.includeUserRoot ? [{ path: daoHomePath(USER_PRESET_DIR), trust: 'user' } satisfies PresetRoot] : [],
     ]
+    ctx.provide('squad', this)
     // Deliberately not `installSettingsSection`: that helper exists to re-judge
     // what a consumer DERIVED from the source — memoized resolutions,
     // registration-level facts — across attach, detach, and change. Nothing
@@ -303,7 +335,26 @@ export class AgentPresets extends TypertRemoteService {
    * @returns the presets, first-root-wins per id.
    */
   async list(): Promise<AgentPreset[]> {
-    return await discoverPresets(this.resolvedRoots, this.harnessBase)
+    const presets = await discoverPresets(this.resolvedRoots, this.harnessBase)
+    return await Promise.all(presets.map(async (preset) => {
+      if (!this.authorable) {
+        let persona: string | undefined
+        try {
+          persona = await readCompositionPersona(preset)
+        } catch {
+          // Discovery already owns the broken-row diagnostic. Persona is an
+          // optional roster projection and must not replace that diagnosis.
+        }
+        return {
+          ...preset,
+          ...persona === undefined ? {} : { persona },
+          personaOverridden: false,
+          toolsDeny: [],
+          ...preset.avatar === undefined ? {} : { avatarPath: join(dirname(preset.path), preset.avatar) },
+        }
+      }
+      return { ...preset, ...await effectiveMemberState(this.resolvedRoots, preset) }
+    }))
   }
 
   /**
@@ -324,9 +375,182 @@ export class AgentPresets extends TypertRemoteService {
         isDefault: preset.id === defaultId,
         ...preset.name === undefined ? {} : { name: preset.name },
         ...preset.description === undefined ? {} : { description: preset.description },
+        ...preset.order === undefined ? {} : { order: preset.order },
+        ...preset.avatar === undefined ? {} : { avatar: preset.avatar },
+        squadMember: preset.squadMember ?? false,
+        ...preset.persona === undefined ? {} : { persona: preset.persona },
+        personaOverridden: preset.personaOverridden as boolean,
+        revision: preset.revision ?? null,
+        tools: preset.toolsDeny as readonly string[],
         ...preset.broken === undefined ? {} : { broken: preset.broken },
       })),
       authorable: this.authorable,
+      maxAvatarBytes: SQUAD_AUTHORING_LIMITS.avatarBytes,
+    }
+  }
+
+  /**
+   * Read the current squad roster through the Host capability name.
+   * @returns The current effective member roster.
+   */
+  async roster(): Promise<AgentPresetRoster> {
+    return await this.remoteExportList()
+  }
+
+  /** Serialize bounded writes per member so each revision check sees the prior commit. */
+  private readonly memberWrites = new Map<string, Promise<unknown>>()
+
+  /** Run one member mutation after every earlier mutation for the same id. */
+  private async mutateMember<T>(id: string, operation: () => Promise<T>): Promise<T> {
+    const prior = this.memberWrites.get(id) ?? Promise.resolve()
+    const turn = prior.then(operation)
+    const guard = turn.catch(() => undefined)
+    this.memberWrites.set(id, guard)
+    try {
+      return await turn
+    } finally {
+      if (this.memberWrites.get(id) === guard) this.memberWrites.delete(id)
+    }
+  }
+
+  /**
+   * Replace one member's persona and restrict-only tool deny list.
+   * @param id - Member preset id.
+   * @param persona - Persona text stored verbatim.
+   * @param toolsDeny - Restrict-only tool names.
+   * @param expectedRevision - Revision read by the editor, or null for an unshadowed shipped member.
+   * @returns The committed revision and effective member.
+   */
+  @Remote('savePersona')
+  async savePersona(
+    id: string,
+    persona: string,
+    toolsDeny: readonly string[],
+    expectedRevision: string | null,
+  ): Promise<SquadWriteResult> {
+    validatePresetId(id, 'agentPreset')
+    try {
+      return await this.mutateMember(id, async () => {
+        const result = await saveManagedPersona(
+          this.resolvedRoots,
+          await this.resolve(id),
+          persona,
+          toolsDeny,
+          expectedRevision,
+        )
+        this.standing.clear()
+        this.ctx.emit('squad/change')
+        return result
+      })
+    } catch (error: unknown) {
+      return rejectPreset(error, id, `failed to save squad member "${id}": ${String(error)}`)
+    }
+  }
+
+  /**
+   * Remove a shipped member's managed persona and tool restrictions.
+   * @param id - Shipped member preset id.
+   * @param expectedRevision - Revision read by the editor.
+   */
+  @Remote('resetPersona')
+  async resetPersona(id: string, expectedRevision: string): Promise<void> {
+    validatePresetId(id, 'agentPreset')
+    try {
+      await this.mutateMember(id, async () => {
+        await resetManagedPersona(this.resolvedRoots, await this.resolve(id), expectedRevision)
+        this.standing.clear()
+        this.ctx.emit('squad/change')
+      })
+    } catch (error: unknown) {
+      rejectPreset(error, id, `failed to reset squad member "${id}": ${String(error)}`)
+    }
+  }
+
+  /**
+   * Create a user-owned member from reviewed bounded fields.
+   * @param id - New member preset id.
+   * @param input - Reviewed bounded member fields.
+   * @returns The committed revision and effective member.
+   */
+  @Remote('createMember')
+  async createMember(id: string, input: CreateSquadMemberInput): Promise<SquadWriteResult> {
+    validatePresetId(id, 'agentPreset')
+    try {
+      return await this.mutateMember(id, async () => {
+        if ((await this.list()).some(preset => preset.id === id)) throw new PresetExistsError(id)
+        const occupiedToolNames = new Set(
+          this.selfCtx.get('tools')?.schemas().map(schema => schema.name) ?? [],
+        )
+        const result = await createManagedMember(this.resolvedRoots, id, input, occupiedToolNames)
+        this.standing.clear()
+        this.ctx.emit('squad/change')
+        return result
+      })
+    } catch (error: unknown) {
+      return rejectPreset(error, id, `failed to create squad member "${id}": ${String(error)}`)
+    }
+  }
+
+  /**
+   * Delete one user-owned member.
+   * @param id - User-owned member preset id.
+   */
+  @Remote('deleteMember')
+  async deleteMember(id: string): Promise<void> {
+    validatePresetId(id, 'agentPreset')
+    try {
+      await this.mutateMember(id, () => this.remove(id))
+      this.ctx.emit('squad/change')
+    } catch (error: unknown) {
+      rejectPreset(error, id, `failed to delete squad member "${id}": ${String(error)}`)
+    }
+  }
+
+  /**
+   * Replace one UI-only avatar under the writable root.
+   * @param id - Member preset id.
+   * @param mediaType - Allowlisted browser image media type.
+   * @param base64 - Base64-encoded image bytes.
+   * @param expectedRevision - Revision read by the editor, or null for an unshadowed shipped member.
+   * @returns The committed revision and effective member.
+   */
+  @Remote('saveAvatar')
+  async saveAvatar(
+    id: string,
+    mediaType: SquadAvatar['mediaType'],
+    base64: string,
+    expectedRevision: string | null,
+  ): Promise<SquadWriteResult> {
+    validatePresetId(id, 'agentPreset')
+    try {
+      return await this.mutateMember(id, async () => {
+        const result = await saveManagedAvatar(
+          this.resolvedRoots,
+          await this.resolve(id),
+          mediaType,
+          base64,
+          expectedRevision,
+        )
+        this.ctx.emit('squad/change')
+        return result
+      })
+    } catch (error: unknown) {
+      return rejectPreset(error, id, `failed to save avatar for squad member "${id}": ${String(error)}`)
+    }
+  }
+
+  /**
+   * Read one UI-only avatar without exposing its Host path.
+   * @param id - Member preset id.
+   * @returns The image payload, or undefined when none is stored.
+   */
+  @Remote('readAvatar')
+  async readAvatar(id: string): Promise<SquadAvatar | undefined> {
+    validatePresetId(id, 'agentPreset')
+    try {
+      return await readManagedAvatar(await this.resolve(id))
+    } catch (error: unknown) {
+      return rejectPreset(error, id, `failed to read avatar for squad member "${id}": ${String(error)}`)
     }
   }
 
@@ -381,6 +605,11 @@ export class AgentPresets extends TypertRemoteService {
    */
   private readonly standing = new Map<string, Promise<StandingMount>>()
 
+  /** Drop cached pointers for one preset while joined Agents keep their mounted generation. */
+  private invalidateStanding(id: string): void {
+    this.standing.delete(id)
+  }
+
   /**
    * Parent bindings of the agents this roster composed, keyed by the agent's
    * scope key. The binding is dao-scope's only re-link capability; holding it
@@ -388,6 +617,38 @@ export class AgentPresets extends TypertRemoteService {
    * standing compositions. WeakMap: entries die with their agents.
    */
   private readonly bindings = new WeakMap<ScopeKey, ScopeParentBinding>()
+
+  /** Exact roster snapshot each joined Agent composition resolves through. */
+  private readonly agentSquadSnapshots = new WeakMap<ScopeKey, SquadSessionSnapshot>()
+
+  /** Build the deterministic effective roster value written to new Session logs. */
+  private async currentSquadSnapshot(): Promise<SquadSessionSnapshot> {
+    const members = (await this.remoteExportList()).presets
+      .filter((member): member is typeof member & { readonly persona: string } =>
+        member.squadMember && member.broken === undefined && member.persona !== undefined)
+      .sort((left, right) => {
+        const order = (left.order ?? Number.POSITIVE_INFINITY) - (right.order ?? Number.POSITIVE_INFINITY)
+        return Number.isNaN(order) || order === 0 ? left.id.localeCompare(right.id) : order
+      })
+      .map(member => ({
+        id: member.id,
+        trust: member.trust,
+        ...member.name === undefined ? {} : { name: member.name },
+        ...member.description === undefined ? {} : { description: member.description },
+        ...member.order === undefined ? {} : { order: member.order },
+        persona: member.persona,
+        tools: member.tools,
+      }))
+    return {
+      revision: createHash('sha256').update(JSON.stringify(members)).digest('hex'),
+      members,
+    }
+  }
+
+  /** Last roster snapshot already present in an adopted, resumed, or forked Session. */
+  private recordedSquadSnapshot(agentCtx: Context): SquadSessionSnapshot | undefined {
+    return agentCtx.agent?.session.events.findLast(event => event.type === 'squad/roster-snapshot')?.data
+  }
 
   /**
    * Compose one agent from a preset: ensure the preset's standing mount, then
@@ -408,12 +669,16 @@ export class AgentPresets extends TypertRemoteService {
       throw new Error('agent-presets: refusing to compose an unscoped context; the scope key is what joins an agent to its preset')
     }
     const preset = await this.resolveMountable(id)
-    const standing = await this.ensureStanding(preset)
+    const recorded = this.recordedSquadSnapshot(agentCtx)
+    const snapshot = recorded ?? await this.currentSquadSnapshot()
+    const standing = await this.ensureStanding(preset, snapshot)
     // The one bind of this agent's ancestry. The binding is the only re-link
     // authority, held privately so nothing outside this roster can move a
     // composed agent to another preset; a later recompose layer re-links
     // through it under the caller-owned blank-session contract.
     this.bindings.set(agentKey, bindScopeParent(agentKey, standing.key))
+    this.agentSquadSnapshots.set(agentKey, snapshot)
+    if (recorded === undefined) agentCtx.agent?.session.append('squad/roster-snapshot', snapshot)
     return preset
   }
 
@@ -451,6 +716,14 @@ export class AgentPresets extends TypertRemoteService {
     const standing = standingMountFor(parentCtx)
     if (standing === undefined) return undefined
     this.bindings.set(agentKey, bindScopeParent(agentKey, standing.key))
+    const parentKey = scopeOf(parentCtx) as ScopeKey
+    const snapshot = this.agentSquadSnapshots.get(parentKey)
+    if (snapshot !== undefined) {
+      this.agentSquadSnapshots.set(agentKey, snapshot)
+      if (this.recordedSquadSnapshot(agentCtx) === undefined) {
+        agentCtx.agent?.session.append('squad/roster-snapshot', snapshot)
+      }
+    }
     return standing.presetId
   }
 
@@ -544,7 +817,7 @@ export class AgentPresets extends TypertRemoteService {
     // A settled mount under this id can only be stale (its preset was deleted
     // from disk outside `remove`); the new preset must not inherit it. Every
     // session already joined keeps the generation it runs on regardless.
-    this.standing.delete(id)
+    this.invalidateStanding(id)
   }
 
   /**
@@ -577,7 +850,7 @@ export class AgentPresets extends TypertRemoteService {
     await deleteComposition(this.resolvedRoots, await this.resolve(id))
     // Sessions on the deleted preset keep their standing mount; only new
     // sessions see the roster without it.
-    this.standing.delete(id)
+    this.standing.clear()
     // Storing a default that does not exist YET is deliberate — the roster is a
     // live directory, so a name absent now may exist by the time a session asks
     // for it, and `resolve` reports it then. A default this call just deleted is
@@ -656,13 +929,15 @@ export class AgentPresets extends TypertRemoteService {
       throw new Error('agent-presets: refusing to recompose an unscoped context')
     }
     const preset = await this.resolveMountable(id)
-    const standing = await this.ensureStanding(preset)
+    const snapshot = await this.currentSquadSnapshot()
+    const standing = await this.ensureStanding(preset, snapshot)
     const binding = this.bindings.get(agentKey)
     if (binding === undefined) {
       this.bindings.set(agentKey, bindScopeParent(agentKey, standing.key))
     } else {
       binding.rebind(standing.key)
     }
+    this.agentSquadSnapshots.set(agentKey, snapshot)
     // Reparenting changes every scope-layered tool view without adding or
     // removing a registration. Publish the registry's normal invalidation so
     // Agent-owned overlays can reconcile with the new ancestry.
@@ -723,6 +998,9 @@ export class AgentPresets extends TypertRemoteService {
     // Recorded only after the swap committed: the log states what the agent
     // runs, and a rejected mount leaves the previous composition.
     agent.session.append('agent-preset/selected', { agentPreset: preset.id })
+    const key = scopeOf(agent.ctx) as ScopeKey
+    const snapshot = this.agentSquadSnapshots.get(key)
+    agent.session.append('squad/roster-snapshot', snapshot as SquadSessionSnapshot)
     return preset.id
   }
 
@@ -739,21 +1017,26 @@ export class AgentPresets extends TypertRemoteService {
    */
   async standingKeyFor(id?: string): Promise<ScopeKey> {
     const preset = await this.resolveMountable(id)
-    return (await this.ensureStanding(preset)).key
+    return (await this.ensureStanding(preset, await this.currentSquadSnapshot())).key
   }
 
   /** Resolve (or create, single-flight) the standing mount of one preset. */
-  private async ensureStanding(preset: AgentPreset): Promise<StandingMount> {
+  private async ensureStanding(
+    preset: AgentPreset,
+    requestedSnapshot?: SquadSessionSnapshot,
+  ): Promise<StandingMount> {
     const pending = this.standing.get(preset.id)
     if (pending !== undefined) {
       const mounted = await pending
+      const snapshot = requestedSnapshot ?? mounted.snapshot
       // Files are the only composition editor (authoring is copy/delete), so
       // the stamp is what notices an edit: a changed file starts the next
       // generation here, for this and later sessions. An unreadable stamp
       // serves the current generation — a mount must survive its file
       // disappearing, and failing the session over a stat would not.
-      const current = await compositionStamp(preset.path)
-      if (current === undefined || sameStamp(mounted.stamp, current)) return mounted
+      const current = await compositionStamp(preset.path, preset.revision)
+      if (current === undefined || (sameStamp(mounted.stamp, current)
+        && mounted.snapshot.revision === snapshot.revision)) return mounted
       // TODO: reclaim the superseded generation once the last agent joined to
       // it is gone. The subtree is not inert — `dao-skill-filesystem` watches its
       // roots — and the settings-page authoring flow turns "a composition
@@ -761,10 +1044,10 @@ export class AgentPresets extends TypertRemoteService {
       // StandingMount, incremented in `mount`/`composeFrom`/`recompose` and
       // decremented when the agent's scope key dies.
       // Guarded delete: a caller that raced this one may have already started
-      // the next generation, and dropping THAT pointer would fork a third.
       if (this.standing.get(preset.id) === pending) this.standing.delete(preset.id)
-      return this.ensureStanding(preset)
+      return this.ensureStanding(preset, snapshot)
     }
+    const snapshot = requestedSnapshot ?? { revision: 'empty', members: [] }
     const created = (async (): Promise<StandingMount> => {
       const key: ScopeKey = { agentPreset: preset.id }
       const scope = createScope(this.selfCtx, key)
@@ -772,12 +1055,12 @@ export class AgentPresets extends TypertRemoteService {
         // Stamped before the file is read: an edit racing the mount makes the
         // stamp stale rather than silently current, so the next session
         // refreshes instead of trusting a composition older than its stamp.
-        const stamp = await compositionStamp(preset.path)
+        const stamp = await compositionStamp(preset.path, preset.revision)
         if (stamp === undefined) {
           throw new PresetMountError(preset.id, `composition file is unreadable: ${preset.path}`)
         }
-        await mountPreset(scope.ctx, preset)
-        return { key, scope, stamp }
+        await mountPreset(scope.ctx, preset, snapshot)
+        return { key, scope, stamp, snapshot }
       } catch (error) {
         this.standing.delete(preset.id)
         await scope.dispose()
@@ -795,13 +1078,15 @@ interface CompositionStamp {
   readonly mtimeMs: number
   /** File size in bytes, the tiebreak for edits within one mtime tick. */
   readonly size: number
+  /** Managed-sidecar revision applied as an in-memory composition patch. */
+  readonly variant?: string
 }
 
 /** Read one composition file's stamp, or undefined when it cannot be statted. */
-async function compositionStamp(path: string): Promise<CompositionStamp | undefined> {
+async function compositionStamp(path: string, variant?: string): Promise<CompositionStamp | undefined> {
   try {
     const { mtimeMs, size } = await stat(path)
-    return { mtimeMs, size }
+    return { mtimeMs, size, ...variant === undefined ? {} : { variant } }
   } catch {
     // Deleted, replaced by an unreadable entry, or otherwise unstattable all
     // mean the same to the caller: the file offers no identity to compare.
@@ -811,7 +1096,7 @@ async function compositionStamp(path: string): Promise<CompositionStamp | undefi
 
 /** Whether two stamps name the same file state. */
 function sameStamp(a: CompositionStamp, b: CompositionStamp): boolean {
-  return a.mtimeMs === b.mtimeMs && a.size === b.size
+  return a.mtimeMs === b.mtimeMs && a.size === b.size && a.variant === b.variant
 }
 
 /** One preset's standing composition. */
@@ -822,6 +1107,8 @@ interface StandingMount {
   readonly scope: Scope
   /** Stamp of the composition file this generation was mounted from. */
   readonly stamp: CompositionStamp
+  /** Effective delegation roster this generation was built from. */
+  readonly snapshot: SquadSessionSnapshot
 }
 
 export default AgentPresets

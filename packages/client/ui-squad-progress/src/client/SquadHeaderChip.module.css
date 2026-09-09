@@ -1,0 +1,93 @@
+/* Compact XP/level chip in the Session header. Sits among the right-aligned
+   utilities; a sparkle glyph, the level, and a thin progress track to the
+   next level. Width flexes with the label; the track is fixed so the chip
+   stays stable as XP accrues. */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 34px;
+  padding: 0 12px 0 10px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--dsw-alias-bg-layer-1) 72%, transparent);
+  color: var(--dsw-alias-label-secondary);
+  font-size: 12px;
+  line-height: 18px;
+  cursor: pointer;
+  transition:
+    transform var(--ds-transition-duration-fast) var(--ds-ease-in-out),
+    color var(--ds-transition-duration-fast) var(--ds-ease-in-out),
+    background-color var(--ds-transition-duration-fast) var(--ds-ease-in-out),
+    border-color var(--ds-transition-duration-fast) var(--ds-ease-in-out);
+}
+
+.chip:active {
+  transform: scale(0.96);
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--dsw-alias-focus-ring);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chip:hover {
+    color: var(--dsw-alias-label-primary);
+    background: var(--dsw-alias-interactive-bg-hover);
+    border-color: var(--dsw-alias-border-l3);
+  }
+}
+
+.icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--dsw-alias-brand-primary);
+}
+
+.level {
+  flex: none;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--dsw-alias-label-primary);
+}
+
+.track {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 36px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--dsw-alias-bg-layer-3);
+  overflow: hidden;
+}
+
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: var(--dsw-alias-brand-primary);
+  transition: width var(--ds-transition-duration-slow) var(--ds-ease-in-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip {
+    transition-property: color, background-color, border-color;
+  }
+
+  .fill {
+    transition: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .chip {
+    padding-right: 10px;
+  }
+
+  .track {
+    display: none;
+  }
+}

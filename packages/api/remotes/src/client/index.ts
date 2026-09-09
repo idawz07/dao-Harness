@@ -10,6 +10,7 @@ import dynamicRemote from '@daoai/dao-cordis-host-runner/remote'
 import pluginInventoryRemote from '@daoai/dao-host-plugin-inventory/remote'
 import messageFeedbackRemote from '@daoai/dao-message-feedback/remote'
 import sessionReferencesRemote from '@daoai/dao-session-reference/remote'
+import squadDraftRemote from '@daoai/dao-squad-draft/remote'
 import subagentsRemote from '@daoai/dao-subagent/remote'
 import sessionRemote from '@daoai/dao-api-session-controller/remote'
 import workspaceRemote from '@daoai/dao-api-workspace-controller/remote'
@@ -25,6 +26,7 @@ export type {} from '@daoai/dao-llm/remote'
 export type {} from '@daoai/dao-host-plugin-inventory/remote'
 export type {} from '@daoai/dao-message-feedback/remote'
 export type {} from '@daoai/dao-session-reference/remote'
+export type {} from '@daoai/dao-squad-draft/remote'
 export type {} from '@daoai/dao-subagent/remote'
 export type * from '@daoai/dao-subagent/client'
 export type {} from '@daoai/dao-api-session-controller/remote'
@@ -157,7 +159,7 @@ export async function apply(ctx: Context): Promise<() => Promise<void>> {
     for (const contribution of [
       agentPresetsRemote, commandsRemote, settingsControllerRemote, goalsRemote, llmRemote, dynamicRemote,
       pluginInventoryRemote, messageFeedbackRemote, sessionReferencesRemote,
-      subagentsRemote, sessionRemote, workspaceRemote,
+      squadDraftRemote, subagentsRemote, sessionRemote, workspaceRemote,
     ]) {
       disposers.push(await ctx.remote.$mount(contribution))
     }

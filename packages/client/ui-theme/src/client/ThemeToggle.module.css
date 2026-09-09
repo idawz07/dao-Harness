@@ -15,13 +15,18 @@
   cursor: pointer;
   transition:
     transform var(--ds-transition-duration-fast) var(--ds-ease-in-out),
-    color var(--ds-transition-duration-fast) ease,
-    background-color var(--ds-transition-duration-fast) ease,
-    border-color var(--ds-transition-duration-fast) ease;
+    color var(--ds-transition-duration-fast) var(--ds-ease-in-out),
+    background-color var(--ds-transition-duration-fast) var(--ds-ease-in-out),
+    border-color var(--ds-transition-duration-fast) var(--ds-ease-in-out);
 }
 
 .toggle:active {
   transform: scale(0.96);
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--dsw-alias-focus-ring);
+  outline-offset: 2px;
 }
 
 .icon {

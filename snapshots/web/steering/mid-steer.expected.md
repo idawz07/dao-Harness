@@ -6,6 +6,8 @@
   - button "Session log":
     - text: Session log
     - img
+  - 'button "Squad progress: level 1, 0 XP"': Lv.1
+  - button "Switch to dark theme": Dark
   - tablist:
     - tab "Chat" [selected]
     - tab "Trajectory"
@@ -16,10 +18,14 @@
 - text: Use the ask_user_question tool to ask me exactly one question with id "checkpoint", question "Ready to continue?", header "Checkpoint", and options labeled "Yes" and "No". After I answer, reply with one short sentence acknowledging my answer and stop. {{clock}}
 - button "Copy":
   - img
-- button "Context injection @deepseek-ai/dsh-system-prompt":
+- button "Context injection @daoai/dao-system-prompt":
   - img
   - img
-  - text: Context injection @deepseek-ai/dsh-system-prompt
+  - text: Context injection @daoai/dao-system-prompt
+- button "Context injection skill-catalog":
+  - img
+  - img
+  - text: Context injection skill-catalog
 - text: Running
 - button "Ask question waiting":
   - img

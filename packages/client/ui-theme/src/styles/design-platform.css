@@ -174,6 +174,7 @@ body {
   --dsw-alias-border-l2: rgba(0, 0, 0, 0.1);
   --dsw-alias-border-l3: rgba(0, 0, 0, 0.12);
   --dsw-alias-border-l4: rgba(0, 0, 0, 0.16);
+  --dsw-alias-focus-ring: var(--dsw-static-dao-500);
   --dsw-alias-brand-primary-invert: var(--dsw-static-neutral-bluish-1000);
   --dsw-alias-brand-primary-new-colorprimary-new-color: rgb(65, 118, 230);
   --dsw-alias-brand-primary: var(--dsw-static-neutral-bluish-1000);
@@ -215,6 +216,11 @@ body {
   --dsw-alias-markdown-inline-code: var(--dsw-static-neutral-bluish-100);
   --dsw-alias-markdown-placeholder: var(--dsw-static-neutral-bluish-60);
   --dsw-alias-markdown-tag: var(--dsw-static-neutral-bluish-75);
+  --dsw-alias-mission-border: rgba(65, 118, 230, 0.18);
+  --dsw-alias-mission-glow: rgba(103, 158, 254, 0.18);
+  --dsw-alias-mission-progress: linear-gradient(90deg, var(--dsw-static-dao-500), rgb(139, 111, 255));
+  --dsw-alias-mission-surface: rgba(255, 255, 255, 0.9);
+  --dsw-alias-mission-track: rgba(65, 118, 230, 0.14);
   --dsw-alias-scrollbar-bg-l1: var(--dsw-static-neutral-200);
   --dsw-alias-scrollbar-bg-l2: var(--dsw-static-neutral-200);
   --dsw-alias-scrollbar-hover-l1: var(--dsw-static-neutral-300);
@@ -266,6 +272,7 @@ body[data-ds-dark-theme] {
   --dsw-alias-border-l2: rgba(255, 255, 255, 0.12);
   --dsw-alias-border-l3: rgba(255, 255, 255, 0.16);
   --dsw-alias-border-l4: rgba(255, 255, 255, 0.2);
+  --dsw-alias-focus-ring: var(--dsw-static-dao-400);
   --dsw-alias-brand-primary-invert: var(--dsw-static-neutral-bluish-50);
   --dsw-alias-brand-primary-new-colorprimary-new-color: var(--dsw-static-dao-450);
   --dsw-alias-brand-primary: var(--dsw-static-neutral-bluish-50);
@@ -307,6 +314,11 @@ body[data-ds-dark-theme] {
   --dsw-alias-markdown-inline-code: var(--dsw-static-neutral-bluish-850);
   --dsw-alias-markdown-placeholder: var(--dsw-static-neutral-bluish-850);
   --dsw-alias-markdown-tag: var(--dsw-static-neutral-bluish-850);
+  --dsw-alias-mission-border: rgba(103, 158, 254, 0.24);
+  --dsw-alias-mission-glow: rgba(65, 118, 230, 0.2);
+  --dsw-alias-mission-progress: linear-gradient(90deg, var(--dsw-static-dao-400), rgb(160, 132, 255));
+  --dsw-alias-mission-surface: rgba(35, 35, 36, 0.92);
+  --dsw-alias-mission-track: rgba(103, 158, 254, 0.18);
   --dsw-alias-scrollbar-bg-l1: var(--dsw-static-neutral-700);
   --dsw-alias-scrollbar-bg-l2: var(--dsw-static-neutral-600);
   --dsw-alias-scrollbar-hover-l1: var(--dsw-static-neutral-600);

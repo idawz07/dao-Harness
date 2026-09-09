@@ -8,7 +8,7 @@
   - button "Close":
     - img
   - heading "Members" [level=3]
-  - 'button "lead Idle · Model: deepseek-v4-flash" [disabled]'
+  - 'button "lead Idle · Model: Qwen3.8-27B-Q6_K_XL-128K" [disabled]'
   - heading "Shared tasks" [level=3]
   - button "New task":
     - img

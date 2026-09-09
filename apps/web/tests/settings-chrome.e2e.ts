@@ -3,7 +3,7 @@
 // real theme gesture — click Dark and the whole cascade runs: ThemeRuntime preference -> Host settings
 // -> theme/change -> ui-layout's presenter -> body attribute -> alias token +
 // browser theme-color metadata)
-// the Language row and busy-state Enter preference (both Host-backed), plus
+// the busy-state Enter preference (Host-backed), plus
 // Permission as the persisted default for subsequently created sessions.
 // Zero model calls: everything is pure client + persistence state on a blank
 // frame, so there is no fixture and a stray stream would fail loud on the
@@ -38,8 +38,8 @@ describe('web e2e: settings modal and General preferences', () => {
   beforeAll(async () => {
     scaffold = await launchWebScaffold({})
     browser = await chromium.launch()
-    // Chinese browser: the shared page asserts the localized settings surface
-    // the client derives from it (the English default has its own spec below).
+    // The product ships English only; the separate fallback case below asks
+    // for an unsupported browser locale.
     page = await browser.newPage({ viewport: { width: 1680, height: 1000 }, locale: 'en-US' })
     tripwire = watchConsole(page)
     await page.goto(scaffold.authenticatedUrl, { waitUntil: 'load' })
@@ -60,7 +60,7 @@ describe('web e2e: settings modal and General preferences', () => {
     const dialog = page.getByRole('dialog', { name: 'Settings' })
     await dialog.waitFor({ timeout: 10_000 })
     expect(await trigger.getAttribute('aria-expanded')).toBe('true')
-    // General is active by default; Permission, Language and Appearance are functional.
+    // General is active by default; Permission and Appearance are functional.
     expect(await dialog.getByRole('button', { name: 'General' }).getAttribute('aria-current')).toBe('true')
     await dialog.getByRole('button', { name: 'Workspace Write' }).waitFor({ timeout: 10_000 })
     await expect.poll(() => dialog.getByText('Appearance', { exact: true }).count(), { timeout: 5_000 }).toBe(1)
@@ -88,18 +88,21 @@ describe('web e2e: settings modal and General preferences', () => {
     await expect.poll(() => openRequests, { timeout: 5_000 }).toBe(1)
     await expect.poll(() => openDocument.isEnabled(), { timeout: 5_000 }).toBe(true)
     await page.unroute('**/api/settings/openSettingsDocument')
-    // Golden of the freshly opened dialog (default zh, General active).
+    // Golden of the freshly opened English dialog with General active.
     const snapshot = await captureStableAria(page, '[role="dialog"]', scaffold.workspaceCwd)
     await compareOrRefreshGolden(DIALOG_EXPECTED, snapshot, MODE)
     // Section switch: aria-current moves (the Models page itself has its own scenario file).
-    await dialog.getByRole('button', { name: 'Model' }).click()
-    await expect.poll(() => dialog.getByRole('button', { name: 'Model' }).getAttribute('aria-current'), { timeout: 5_000 }).toBe('true')
+    await dialog.getByRole('button', { name: 'Models', exact: true }).click()
+    await expect.poll(
+      () => dialog.getByRole('button', { name: 'Models', exact: true }).getAttribute('aria-current'),
+      { timeout: 5_000 },
+    ).toBe('true')
     expect(await dialog.getByRole('button', { name: 'General' }).getAttribute('aria-current')).toBeNull()
     // Plugins is a read-only projection of the same assembled Loader tree.
     // Capture one stable shipped row rather than the whole inventory so adding
     // an unrelated plugin does not rewrite this surface's golden.
-    await dialog.getByRole('button', { name: 'Plugin', exact: true }).click()
-    await dialog.getByRole('heading', { name: 'Plugin', exact: true }).waitFor({ timeout: 10_000 })
+    await dialog.getByRole('button', { name: 'Plugins', exact: true }).click()
+    await dialog.getByRole('heading', { name: 'Plugins', exact: true }).waitFor({ timeout: 10_000 })
     await dialog.getByRole('tab', { name: 'Plugin list', exact: true }).click()
     const pluginRow = dialog.locator(PLUGIN_ROW_SELECTOR)
     await pluginRow.waitFor({ timeout: 10_000 })
@@ -110,9 +113,9 @@ describe('web e2e: settings modal and General preferences', () => {
     expect(await dialog.locator('[data-plugin-entry]').count()).toBe(expectedPluginCount)
     expect(await dialog.locator('[data-plugin-count]').getAttribute('data-plugin-count'))
       .toBe(String(expectedPluginCount))
-    expect(await dialog.getByRole('button', { name: 'Plugin', exact: true }).getAttribute('aria-current')).toBe('true')
+    expect(await dialog.getByRole('button', { name: 'Plugins', exact: true }).getAttribute('aria-current')).toBe('true')
     expect(await dialog.getByRole('tab', { name: 'Plugin list', exact: true }).getAttribute('aria-selected')).toBe('true')
-    expect(await dialog.getByRole('button', { name: 'Model' }).getAttribute('aria-current')).toBeNull()
+    expect(await dialog.getByRole('button', { name: 'Models', exact: true }).getAttribute('aria-current')).toBeNull()
     const pluginsSnapshot = await captureStableAria(
       page,
       PLUGIN_ROW_SELECTOR,
@@ -443,8 +446,8 @@ describe('web e2e: settings modal and General preferences', () => {
     const dialog = page.getByRole('dialog', { name: 'Settings' })
     await dialog.waitFor({ timeout: 10_000 })
     await dialog.getByRole('button', { name: 'Queue' }).click()
-    await page.getByRole('menuitem', { name: 'Steer queued message' }).click()
-    await dialog.getByRole('button', { name: 'Steer queued message' }).waitFor({ timeout: 10_000 })
+    await page.getByRole('menuitem', { name: 'Steer' }).click()
+    await dialog.getByRole('button', { name: 'Steer' }).waitFor({ timeout: 10_000 })
     expect(await page.evaluate(() => localStorage.getItem('dao.conversation.busyEnter'))).toBeNull()
     await expect.poll(async () => readFile(join(scaffold.harnessHome, 'settings.yaml'), 'utf8'), { timeout: 5_000 })
       .toMatch(/ui-conversation:\n\s+busyEnter: steer/)
@@ -456,7 +459,7 @@ describe('web e2e: settings modal and General preferences', () => {
     acknowledgeReloadConnectionLoss(tripwire, warningStart)
     await page.getByRole('button', { name: 'Settings', exact: true }).click()
     const reloaded = page.getByRole('dialog', { name: 'Settings' })
-    await reloaded.getByRole('button', { name: 'Steer queued message' }).waitFor({ timeout: 10_000 })
+    await reloaded.getByRole('button', { name: 'Steer' }).waitFor({ timeout: 10_000 })
 
     const second = await launchWebScaffold({ harnessHome: scaffold.harnessHome })
     const secondPage = await browser.newPage({ viewport: { width: 1680, height: 1000 }, locale: 'en-US' })
@@ -467,7 +470,7 @@ describe('web e2e: settings modal and General preferences', () => {
       await secondPage.waitForSelector('[class*="frame"]', { timeout: 30_000 })
       await secondPage.getByRole('button', { name: 'Settings', exact: true }).click()
       await secondPage.getByRole('dialog', { name: 'Settings' })
-        .getByRole('button', { name: 'Steer queued message' }).waitFor({ timeout: 10_000 })
+        .getByRole('button', { name: 'Steer' }).waitFor({ timeout: 10_000 })
       expect(await secondPage.evaluate(() => localStorage.getItem('dao.conversation.busyEnter'))).toBeNull()
       expect(secondTripwire.pageErrors).toEqual([])
       expect(secondTripwire.warnings).toEqual([])
@@ -476,7 +479,7 @@ describe('web e2e: settings modal and General preferences', () => {
       await second.close()
     }
 
-    await reloaded.getByRole('button', { name: 'Steer queued message' }).click()
+    await reloaded.getByRole('button', { name: 'Steer' }).click()
     await page.getByRole('menuitem', { name: 'Queue' }).click()
     await reloaded.getByRole('button', { name: 'Queue' }).waitFor({ timeout: 10_000 })
     expect(await page.evaluate(() => localStorage.getItem('dao.conversation.busyEnter'))).toBeNull()
@@ -485,13 +488,8 @@ describe('web e2e: settings modal and General preferences', () => {
     await page.keyboard.press('Escape')
     expect(tripwire.pageErrors).toEqual([])
   }, 90_000)
-
-
-
-  it('opens a browser asking for no shipped language in English', async () => {
-    // The product default for "no usable signal": a French browser ships
-    // neither zh nor en, so resolution falls to FALLBACK_LOCALE (en) rather
-    // than to Chinese.
+  it('keeps an unsupported browser locale in English', async () => {
+    // A French browser still receives the only shipped product locale.
     const fresh = await launchWebScaffold({})
     const frPage = await browser.newPage({ viewport: { width: 1680, height: 1000 }, locale: 'fr-FR' })
     const frTripwire = watchConsole(frPage)
@@ -503,16 +501,13 @@ describe('web e2e: settings modal and General preferences', () => {
       await frPage.getByRole('button', { name: 'Settings', exact: true }).click()
       const dialog = frPage.getByRole('dialog', { name: 'Settings' })
       await dialog.waitFor({ timeout: 10_000 })
-      await dialog.getByRole('button', { name: 'English' }).waitFor({ timeout: 10_000 })
+      expect(await dialog.getByRole('button', { name: 'English' }).count()).toBe(0)
       const preset = dialog.getByRole('button', { name: 'Standard mode' })
       await expect.poll(() => preset.isEnabled(), { timeout: 10_000 }).toBe(true)
-      // The markup already ships `en`, so this alone cannot prove the sync ran
-      // — the zh scenario above is the discriminating half. Asserted here too
-      // so a future change that resolves en but writes the wrong tag is caught.
+      // The document tag and visible golden pin the fixed locale without a
+      // language selector.
       expect(await frPage.evaluate(() => document.documentElement.lang)).toBe('en')
-      // Golden of the English fallback dialog — the visible output this change
-      // produces. The zh golden above covers the detected-locale surface, so
-      // the pair pins both directions of the resolution.
+      // Golden of the English fallback dialog.
       const snapshot = await captureStableAria(frPage, '[role="dialog"]', fresh.workspaceCwd)
       await compareOrRefreshGolden(DIALOG_EN_EXPECTED, snapshot, MODE)
       expect(frTripwire.pageErrors).toEqual([])

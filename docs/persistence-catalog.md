@@ -122,7 +122,7 @@ Source: [`packages/core/agent/src/types.ts:38`](../packages/core/agent/src/types
 'agent-preset/selected': { agentPreset: string }
 ```
 
-Source: [`packages/preset/agent-presets/src/session.ts:28`](../packages/preset/agent-presets/src/session.ts)
+Source: [`packages/preset/agent-presets/src/session.ts:29`](../packages/preset/agent-presets/src/session.ts)
 
 ### `approval/*`
 
@@ -676,6 +676,19 @@ Source: [`packages/session/session-title/src/index.ts:100`](../packages/session/
 Types: [SessionTitleLlmRequestEventData](subsystems/session-title.md)
 
 Source: [`packages/session/session-title-llm/src/index.ts:43`](../packages/session/session-title-llm/src/index.ts)
+
+### `squad/*`
+
+<a id="squadroster-snapshot--log-only"></a>
+
+#### `squad/roster-snapshot` — log-only
+
+```ts persistence-catalog
+/** Effective delegation roster frozen before this session can make a model request. */
+'squad/roster-snapshot': SquadSessionSnapshot
+```
+
+Source: [`packages/preset/agent-presets/src/session.ts:31`](../packages/preset/agent-presets/src/session.ts)
 
 ### `step/*`
 

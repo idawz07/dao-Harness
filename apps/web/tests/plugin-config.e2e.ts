@@ -56,9 +56,9 @@ describe('web e2e: plugin configuration section', () => {
     await page.getByRole('button', { name: 'Settings', exact: true }).click()
     const dialog = page.getByRole('dialog', { name: 'Settings' })
     await dialog.waitFor({ timeout: 10_000 })
-    await dialog.getByRole('button', { name: 'Plugin', exact: true }).click()
+    await dialog.getByRole('button', { name: 'Plugins', exact: true }).click()
     await expect
-      .poll(() => dialog.getByRole('button', { name: 'Plugin', exact: true }).getAttribute('aria-current'), { timeout: 5_000 })
+      .poll(() => dialog.getByRole('button', { name: 'Plugins', exact: true }).getAttribute('aria-current'), { timeout: 5_000 })
       .toBe('true')
     await expect
       .poll(() => dialog.getByRole('tab', { name: 'Plugin configuration', exact: true }).getAttribute('aria-selected'), { timeout: 5_000 })
@@ -75,13 +75,13 @@ describe('web e2e: plugin configuration section', () => {
     onTestFailed(() => saveFailureShot(page, 'web-e2e-plugin-config-cards'))
     const dialog = await openPlugins()
 
-    // Every card the shipped web composition exposes: the shell executor, the
-    // agent loop, subagent selection, and the search provider.
+    // Every card the shipped web composition exposes: the shell executor,
+    // agent loop, and subagent selection. Search providers are deployment rows.
     await dialog.getByText('Subagent', { exact: true }).waitFor({ timeout: 10_000 })
     expect(await dialog.getByRole('button', { name: 'Show settings: Subagent' }).count()).toBe(1)
     await dialog.getByText('Shell', { exact: true }).waitFor({ timeout: 10_000 })
     expect(await dialog.getByText('Agent loop', { exact: true }).count()).toBe(1)
-    expect(await dialog.getByText('Web search', { exact: true }).count()).toBe(1)
+    expect(await dialog.getByText('Web search', { exact: true }).count()).toBe(0)
     // Collapsed: a card's fields appear only once it is expanded.
     expect(await dialog.getByLabel('Command timeout (ms)').count()).toBe(0)
 

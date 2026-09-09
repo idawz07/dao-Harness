@@ -12,6 +12,8 @@ import type { AppearanceRowInjected, FontSizeRowInjected, ThemeRuntime } from '@
 import { THEME_SETTINGS_NAMESPACE, ThemeSettingsSchema } from '../src/theme-settings.ts'
 import { AppearanceRow } from '../src/client/AppearanceRow.tsx'
 import { FontSizeRow } from '../src/client/FontSizeRow.tsx'
+import { ThemeToggle } from '../src/client/ThemeToggle.tsx'
+import type { ThemeToggleInjected } from '../src/client/ThemeToggle.tsx'
 import type { createAppearanceRowStore, createFontSizeRowStore } from '../src/client/settings-store.ts'
 
 // These specs assert the shipped Chinese copy. The lane has no jsdom `window`,
@@ -19,6 +21,7 @@ import type { createAppearanceRowStore, createFontSizeRowStore } from '../src/cl
 // FALLBACK_LOCALE (en); bench may stage an extra language pack on the locale instead.
 
 const SLOT = 'settings.general.item'
+const UTILITY_SLOT = 'conversation.session.header.utilities'
 
 function deferred<T>() {
   let resolve!: (value: T) => void
@@ -62,7 +65,13 @@ async function bench(isLoopback = true) {
 /** Stand in for the settings shell: declare the General item slot from root. */
 function declareItems(slots: SlotRegistry): () => void {
   return slots.register(
-    { name: 'root', children: { [SLOT]: { kind: 'list', scope: 'root' } } } as never,
+    {
+      name: 'root',
+      children: {
+        [SLOT]: { kind: 'list', scope: 'root' },
+        [UTILITY_SLOT]: { kind: 'list', scope: 'root' },
+      },
+    } as never,
     () => null,
   )
 }
@@ -113,6 +122,25 @@ describe('ui-theme apply', () => {
     await Promise.resolve()
     expect(after.slots.entries(SLOT).some(e => e.component === AppearanceRow)).toBe(true)
     expect(after.slots.entries(SLOT).some(e => e.component === FontSizeRow)).toBe(true)
+  })
+
+  it('registers a live header toggle and switches both concrete themes', async () => {
+    const b = await bench()
+    declareItems(b.slots)
+    await b.ctx.plugin({ inject: [...inject], apply }).await()
+    const entry = b.slots.entries(UTILITY_SLOT)[0]!
+    expect(entry.component).toBe(ThemeToggle)
+    expect(entry.options).toMatchObject({ id: 'theme', order: 100 })
+    const face = (entry.inject as unknown as () => ThemeToggleInjected)()
+    expect(face.hooks.theme.getSnapshot().active.colorScheme).toBe('light')
+    const listener = vi.fn()
+    const off = face.hooks.theme.subscribe(listener)
+    face.toggleTheme()
+    expect(face.hooks.theme.getSnapshot().active.colorScheme).toBe('dark')
+    face.toggleTheme()
+    expect(face.hooks.theme.getSnapshot().active.colorScheme).toBe('light')
+    expect(listener).toHaveBeenCalledTimes(2)
+    off()
   })
 
   it('projects service snapshots into the row store and routes face writes back', async () => {

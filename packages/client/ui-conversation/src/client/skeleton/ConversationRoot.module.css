@@ -4,7 +4,9 @@
   flex-direction: column;
   height: 100%;
   min-width: 0;
-  background: var(--dsw-alias-bg-base);
+  background: var(--dsw-alias-bg-module-platform);
+  --dao-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
+  --dao-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
 
   /* Shared width axis for the whole column: one content width W
      (--dao-chat-content-width) for the transcript, the dock cards
@@ -124,6 +126,12 @@
   background: var(--dsw-alias-interactive-bg-hover);
 }
 
+.crumb:focus-visible,
+.tab:focus-visible {
+  outline: 2px solid var(--dsw-alias-focus-ring);
+  outline-offset: 2px;
+}
+
 .crumbCurrent {
   font-weight: 500;
   color: var(--dsw-alias-label-primary);
@@ -146,6 +154,15 @@
 }
 
 .headerUtilities:empty {
+  display: none;
+}
+
+.missionSlot {
+  width: min(100%, 920px);
+  margin: 16px auto 14px;
+}
+
+.missionSlot:empty {
   display: none;
 }
 
@@ -192,6 +209,22 @@
 
 .tabActive::after {
   background: var(--dsw-alias-state-business-primary);
+}
+
+@media (max-width: 760px) {
+  .header {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  .missionSlot {
+    margin-top: 12px;
+    margin-bottom: 10px;
+  }
+
+  .headerUtilities {
+    margin-left: 8px;
+  }
 }
 
 .viewArea {
@@ -350,13 +383,12 @@
   /* Input mask (figma 1205:27463): transcript fades out under a FIXED 36px
      band at the seat's top (the figma 24% of the resting ~150px composer),
      solid below — px stops, not %, so a growing draft only widens the solid
-     region and the fade band never stretches. The 0px stop is bg-base at
-     zero alpha (not white, which the figma export hardcodes) so both themes
-     fade from their own base. */
+     region and the fade band never stretches. The 0px stop uses the module
+     canvas at zero alpha so both themes fade from their own surface. */
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--dsw-alias-bg-base) 0%, transparent) 0px,
-    var(--dsw-alias-bg-base) 36px
+    color-mix(in srgb, var(--dsw-alias-bg-module-platform) 0%, transparent) 0px,
+    var(--dsw-alias-bg-module-platform) 36px
   );
 }
 

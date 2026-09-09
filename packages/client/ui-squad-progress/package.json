@@ -1,0 +1,97 @@
+{
+  "name": "@daoai/dao-client-ui-squad-progress",
+  "description": "Squad progress UI: header and sidebar XP/level chips and a keyed right-column progress surface",
+  "version": "0.1.2-alpha.1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daoAI/dao.git",
+    "directory": "packages/client/ui-squad-progress"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "dao": {
+    "client": {
+      "inject": [
+        "@daoai/dao-api-session-controller",
+        "@daoai/dao-client-locale",
+        "@daoai/dao-client-ui-chat",
+        "@daoai/dao-client-ui-conversation",
+        "@daoai/dao-client-ui-layout",
+        "@daoai/dao-client-ui-primitives",
+        "@daoai/dao-client-ui-session",
+        "@daoai/dao-client-ui-sidebar",
+        "@daoai/dao-squad-progress"
+      ],
+      "platform": "web"
+    }
+  },
+  "scripts": {
+    "bundle": "tsdown",
+    "watch": "tsdown --watch"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@daoai/dao-api-session-controller": "workspace:^",
+    "@daoai/dao-client-locale": "workspace:^",
+    "@daoai/dao-client-ui-chat": "workspace:^",
+    "@daoai/dao-client-ui-conversation": "workspace:^",
+    "@daoai/dao-client-ui-layout": "workspace:^",
+    "@daoai/dao-client-ui-session": "workspace:^",
+    "@daoai/dao-client-ui-sidebar": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-squad-progress": "workspace:^",
+    "@daoai/dao-subagent": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-client-ui-renderer": "workspace:^"
+  },
+  "devDependencies": {
+    "@daoai/dao-api-session-controller": "workspace:^",
+    "@daoai/dao-client-locale": "workspace:^",
+    "@daoai/dao-client-test-runtime": "workspace:^",
+    "@daoai/dao-client-ui-chat": "workspace:^",
+    "@daoai/dao-client-ui-conversation": "workspace:^",
+    "@daoai/dao-client-ui-layout": "workspace:^",
+    "@daoai/dao-client-ui-primitives": "workspace:^",
+    "@daoai/dao-client-ui-renderer": "workspace:^",
+    "@daoai/dao-client-ui-session": "workspace:^",
+    "@daoai/dao-client-ui-sidebar": "workspace:^",
+    "@daoai/dao-client-ui-slots": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-squad-progress": "workspace:^",
+    "@daoai/dao-subagent": "workspace:^",
+    "@daoai/dao-session": "workspace:^",
+    "@daoai/cordis": "workspace:^",
+    "@types/react": "~18.3.1",
+    "@types/react-dom": "~18.3.0",
+    "clsx": "^2.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/client.js",
+    "lib/types/**/*.d.ts"
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "name": "@daoai/dao-squad-roster",
+  "description": "Roster-driven named delegation tools and prompt guidance for Dao squads",
+  "version": "0.1.2-alpha.1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daoAI/dao.git",
+    "directory": "packages/subagent/squad-roster"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-agent-presets": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-system-prompt": "workspace:^",
+    "@daoai/dao-subagent": "workspace:^",
+    "@daoai/dao-tools": "workspace:^",
+    "@daoai/dao-tool-subagent": "workspace:^"
+  },
+  "dependencies": {
+    "@daoai/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@daoai/cordis": "workspace:^",
+    "@daoai/dao-agent-presets": "workspace:^",
+    "@daoai/dao-invariants": "workspace:^",
+    "@daoai/dao-system-prompt": "workspace:^",
+    "@daoai/dao-tool-subagent": "workspace:^"
+  }
+}

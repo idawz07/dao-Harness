@@ -52,6 +52,10 @@ describe('web e2e: goal bar clear convergence', () => {
 
     const bar = page.locator('[data-goal-bar]')
     await bar.waitFor({ timeout: 10_000 })
+    const mission = page.locator('[data-goal-mission]')
+    await mission.waitFor({ timeout: 10_000 })
+    await expect.poll(() => mission.getByRole('heading').textContent()).toBe('guard rapid clear clicks')
+    await expect.poll(() => mission.getByRole('progressbar').getAttribute('aria-valuemax')).toBe('256')
     const snapshot = await captureStableAria(page, '[data-goal-bar]', scaffold.workspaceCwd)
     await compareOrRefreshGolden(ACTIVE_EXPECTED, snapshot, MODE)
 
@@ -62,6 +66,7 @@ describe('web e2e: goal bar clear convergence', () => {
       control.click()
     })
     await expect.poll(() => page.locator('[data-goal-bar]').count(), { timeout: 10_000 }).toBe(0)
+    await expect.poll(() => page.locator('[data-goal-mission]').count(), { timeout: 10_000 }).toBe(0)
     expect(await page.getByText(/no current goal/iu).count()).toBe(0)
     expect(tripwire.pageErrors).toEqual([])
     expect(tripwire.warnings).toEqual([])

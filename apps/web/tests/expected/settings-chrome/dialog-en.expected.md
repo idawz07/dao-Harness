@@ -13,6 +13,9 @@
     - button "Agent presets":
       - img
       - text: Agent presets
+    - button "Squad members":
+      - img
+      - text: Squad members
   - button "Open configuration file"
   - button "Close":
     - img
@@ -25,18 +28,14 @@
   - button "Workspace Write":
     - text: Workspace Write
     - img
-  - text: Language
-  - button "English":
-    - text: English
-    - img
   - text: Appearance
-  - button "Light":
+  - button "Light" [pressed]:
     - img
     - text: Light
   - button "Dark":
     - img
     - text: Dark
-  - button "System" [pressed]:
+  - button "System":
     - img
     - text: System
   - text: Font size Only affects conversation content 14

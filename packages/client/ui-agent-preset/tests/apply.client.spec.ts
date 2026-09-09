@@ -22,6 +22,8 @@ import { AgentPresetSection } from '../src/client/AgentPresetSection.tsx'
 import type { AgentPresetSectionInjected } from '../src/client/AgentPresetSection.tsx'
 import { AgentPresetSeat } from '../src/client/AgentPresetSeat.tsx'
 import type { AgentPresetSeatInjected } from '../src/client/AgentPresetSeat.tsx'
+import { SquadManager } from '../src/client/SquadManager.tsx'
+import type { SquadManagerInjected } from '../src/client/SquadManager.tsx'
 import { AgentPresetSeatController } from '../src/client/seat-store.ts'
 
 // These specs assert the shipped Chinese copy. The lane has no jsdom `window`,
@@ -33,6 +35,7 @@ const ROSTER_ONE = {
   value: {
     presets: [{ id: 'standard', trust: 'system', isDefault: true }],
     authorable: true,
+    maxAvatarBytes: 2 * 1024 * 1024,
   },
 }
 
@@ -45,6 +48,7 @@ const ROSTER_AUTHORED = {
       { id: 'mine', trust: 'user', isDefault: false },
     ],
     authorable: true,
+    maxAvatarBytes: 2 * 1024 * 1024,
   },
 }
 
@@ -57,6 +61,7 @@ const ROSTER_MOVED = {
       { id: 'minimal', trust: 'system', isDefault: true },
     ],
     authorable: true,
+    maxAvatarBytes: 2 * 1024 * 1024,
   },
 }
 
@@ -108,13 +113,26 @@ async function bench() {
       return Promise.resolve({ ok: true as const, value: undefined })
     },
     deletePreset: () => Promise.resolve({ ok: true as const, value: undefined }),
+    readAvatar: () => Promise.resolve({ ok: true as const, value: undefined }),
+    savePersona: () => Promise.resolve({ ok: true as const, value: { revision: 'r2' } }),
+    resetPersona: () => Promise.resolve({ ok: true as const, value: undefined }),
+    createMember: () => Promise.resolve({ ok: true as const, value: { revision: 'r1' } }),
+    deleteMember: () => Promise.resolve({ ok: true as const, value: undefined }),
+    saveAvatar: () => Promise.resolve({ ok: true as const, value: { revision: 'r2' } }),
     select: (_agentId: SessionId, agentPreset: string) => {
       calls.push(`select:${agentPreset}`)
       return Promise.resolve({ ok: true as const, value: agentPreset })
     },
   }
   ctx.provide('remote.agentPresets', agentPresets as never)
-  Object.assign(remote, { agentPresets })
+  const squadDraft = {
+    draft: () => Promise.resolve({
+      ok: true as const,
+      value: { name: 'Reviewer', description: 'Reviews.', persona: 'Review.', toolsDenySuggestion: [] },
+    }),
+  }
+  ctx.provide('remote.squadDraft', squadDraft as never)
+  Object.assign(remote, { agentPresets, squadDraft })
   ctx.provide('connection', { isLoopback: true } as never)
   await ctx.plugin({ inject: [...settingsInject], apply: settingsApply }).await()
   return { ctx, slots: ctx.get('slots') as SlotRegistry, calls, moveDefault, remote }
@@ -177,7 +195,7 @@ function sessionsDouble(state: {
 describe('ui-agent-preset apply', () => {
   it('declares the services it uses', () => {
     expect(inject).toEqual([
-      'slots', 'locale', 'remote', 'remote.agentPresets', 'remote.settings', 'settingsScope',
+      'slots', 'locale', 'remote', 'remote.agentPresets', 'remote.settings', 'remote.squadDraft', 'settingsScope',
     ])
   })
 
@@ -193,8 +211,55 @@ describe('ui-agent-preset apply', () => {
     const section = slots.entries('settings.section')[0]!
     expect(section.component).toBe(AgentPresetSection)
     expect(section.options).toMatchObject({ id: 'agent-presets', order: 20 })
+    const squad = slots.entries('settings.section')[1]!
+    expect(squad.component).toBe(SquadManager)
+    expect(squad.options).toMatchObject({ id: 'squad-members', order: 25 })
     // The nav label is a locale-following thunk; owners resolve it at read time.
     expect(resolveSlotLabel(section.options.label)).toBe('Agent presets')
+    expect(resolveSlotLabel(squad.options.label)).toBe('Squad members')
+  })
+
+  it('routes every squad action and refreshes an opened preset section after writes', async () => {
+    const { ctx, slots, remote } = await bench()
+    declareRoot(slots)
+    declareConversation(slots)
+    ctx.provide('conversation', {} as never)
+    ctx.provide('sessions', sessionsDouble({ byId: {} }) as never)
+    ctx.provide('uiWorkspace', uiWorkspaceDouble() as never)
+    await ctx.plugin({ inject: [...inject, 'conversation', 'sessions', 'uiWorkspace'], apply }).await()
+    const entries = slots.entries('settings.section')
+    const section = (entries[0]!.inject as unknown as () => AgentPresetSectionInjected)()
+    const squad = (entries[1]!.inject as unknown as () => SquadManagerInjected)()
+
+    await squad.load()
+    remote.emit('settings/document-updated', ['agent-presets', 1])
+    squad.beginEdit('missing')
+    squad.setEditPersona('persona')
+    squad.setEditTools('write')
+    squad.cancelEdit()
+    await squad.saveEdit()
+    await squad.resetEdit()
+    squad.beginCreate()
+    squad.setCreate('descriptionPrompt', 'reviewer')
+    await squad.draftCreate()
+    squad.setCreate('id', 'reviewer')
+    await squad.saveCreate()
+    squad.cancelCreate()
+    await squad.saveAvatar('missing', 'image/png', 'AA==')
+    squad.reportError('avatar failed')
+    squad.confirmDelete(null)
+    await squad.remove()
+    expect(squad.hooks.squadManager.getSnapshot().error).toBe('avatar failed')
+
+    await section.load()
+    squad.beginCreate()
+    squad.setCreate('descriptionPrompt', 'tester')
+    await squad.draftCreate()
+    squad.setCreate('id', 'tester')
+    await squad.saveCreate()
+    await vi.waitFor(() => {
+      expect(section.hooks.agentPresetSection.getSnapshot().status).toBe('ready')
+    })
   })
 
   it('registers into a declaration that arrives after apply', async () => {
@@ -203,7 +268,7 @@ describe('ui-agent-preset apply', () => {
 
     declareRoot(slots)
 
-    await vi.waitFor(() => { expect(slots.entries('settings.section')).toHaveLength(1) })
+    await vi.waitFor(() => { expect(slots.entries('settings.section')).toHaveLength(2) })
   })
 
   it('hands each surface its own store and actions', async () => {

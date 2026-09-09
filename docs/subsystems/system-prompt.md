@@ -39,6 +39,8 @@ interface ToolProviderResult {
 
 `PromptSection` is a readonly same-process registration contract. Its text may be static or resolved from the current assembly context. Sections sort by ascending order and then code-unit name; `FIRST_PARTY_SECTION_ORDER` publishes the sparse named allocation for repository-owned contributions. One effective `complete` section becomes the sole prompt section after cooperative assembly.
 
+`FIRST_PARTY_SECTION_ORDER.SQUAD_ROSTER` places roster-derived delegation guidance in a stable first-party slot. `dao-squad-roster` sorts effective members by configured order and then id. Preset-mounted instances receive the session's frozen roster snapshot, so later authoring writes cannot change a running or resumed session's prompt.
+
 ```ts type-equiv
 /** One contributed section of the system prompt (registry input). */
 interface PromptSection {

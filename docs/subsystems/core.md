@@ -409,6 +409,60 @@ async list(): Promise<AgentPreset[]>
 @Remote('list') async remoteExportList(): Promise<AgentPresetRoster>
 
 /**
+ * Read the current squad roster through the Host capability name.
+ * @returns The current effective member roster.
+ */
+async roster(): Promise<AgentPresetRoster>
+
+/**
+ * Replace one member's persona and restrict-only tool deny list.
+ * @param id - Member preset id.
+ * @param persona - Persona text stored verbatim.
+ * @param toolsDeny - Restrict-only tool names.
+ * @param expectedRevision - Revision read by the editor, or null for an unshadowed shipped member.
+ * @returns The committed revision and effective member.
+ */
+@Remote('savePersona') async savePersona( id: string, persona: string, toolsDeny: readonly string[], expectedRevision: string | null, ): Promise<SquadWriteResult>
+
+/**
+ * Remove a shipped member's managed persona and tool restrictions.
+ * @param id - Shipped member preset id.
+ * @param expectedRevision - Revision read by the editor.
+ */
+@Remote('resetPersona') async resetPersona(id: string, expectedRevision: string): Promise<void>
+
+/**
+ * Create a user-owned member from reviewed bounded fields.
+ * @param id - New member preset id.
+ * @param input - Reviewed bounded member fields.
+ * @returns The committed revision and effective member.
+ */
+@Remote('createMember') async createMember(id: string, input: CreateSquadMemberInput): Promise<SquadWriteResult>
+
+/**
+ * Delete one user-owned member.
+ * @param id - User-owned member preset id.
+ */
+@Remote('deleteMember') async deleteMember(id: string): Promise<void>
+
+/**
+ * Replace one UI-only avatar under the writable root.
+ * @param id - Member preset id.
+ * @param mediaType - Allowlisted browser image media type.
+ * @param base64 - Base64-encoded image bytes.
+ * @param expectedRevision - Revision read by the editor, or null for an unshadowed shipped member.
+ * @returns The committed revision and effective member.
+ */
+@Remote('saveAvatar') async saveAvatar( id: string, mediaType: SquadAvatar['mediaType'], base64: string, expectedRevision: string | null, ): Promise<SquadWriteResult>
+
+/**
+ * Read one UI-only avatar without exposing its Host path.
+ * @param id - Member preset id.
+ * @returns The image payload, or undefined when none is stored.
+ */
+@Remote('readAvatar') async readAvatar(id: string): Promise<SquadAvatar | undefined>
+
+/**
  * Resolve one preset by id.
  *
  * A broken preset resolves — deleting one, reading one, and reporting one
@@ -778,6 +832,70 @@ roots(): Agent[]
 
 Source: [`packages/core/agent/src/index.ts`](../../packages/core/agent/src/index.ts)
 
+<a id="ctxsquad--squadservice"></a>
+
+### `ctx.squad` — `SquadService`
+
+Host capability for bounded squad-member authoring.
+
+```ts cordis-catalog
+/**
+ * Read effective squad members and authoring availability.
+ * @returns The current effective member roster.
+ */
+roster(): Promise<AgentPresetRoster>
+
+/**
+ * Replace one member's managed persona and restrictions conditionally.
+ * @param id - Member preset id.
+ * @param persona - Persona text stored verbatim.
+ * @param toolsDeny - Restrict-only tool names.
+ * @param expectedRevision - Revision read by the editor, or null for an unshadowed shipped member.
+ * @returns The committed revision and effective member.
+ */
+savePersona(id: string, persona: string, toolsDeny: readonly string[], expectedRevision: string | null): Promise<SquadWriteResult>
+
+/**
+ * Remove a shipped member's managed override.
+ * @param id - Shipped member preset id.
+ * @param expectedRevision - Revision read by the editor.
+ */
+resetPersona(id: string, expectedRevision: string): Promise<void>
+
+/**
+ * Create one user-owned managed member.
+ * @param id - New member preset id.
+ * @param input - Reviewed bounded member fields.
+ * @returns The committed revision and effective member.
+ */
+createMember(id: string, input: CreateSquadMemberInput): Promise<SquadWriteResult>
+
+/**
+ * Delete one user-owned member.
+ * @param id - User-owned member preset id.
+ */
+deleteMember(id: string): Promise<void>
+
+/**
+ * Replace one member's UI-only avatar.
+ * @param id - Member preset id.
+ * @param mediaType - Allowlisted browser image media type.
+ * @param base64 - Base64-encoded image bytes.
+ * @param expectedRevision - Revision read by the editor, or null for an unshadowed shipped member.
+ * @returns The committed revision and effective member.
+ */
+saveAvatar(id: string, mediaType: SquadAvatar['mediaType'], base64: string, expectedRevision: string | null): Promise<SquadWriteResult>
+
+/**
+ * Read one member's UI-only avatar.
+ * @param id - Member preset id.
+ * @returns The image payload, or undefined when none is stored.
+ */
+readAvatar(id: string): Promise<SquadAvatar | undefined>
+```
+
+Source: [`packages/preset/agent-presets/src/types.ts`](../../packages/preset/agent-presets/src/types.ts)
+
 <a id="agent-events"></a>
 
 ### `agent/*` events
@@ -1120,6 +1238,26 @@ One session committed a different agent preset to its durable log. Consumers inv
  * @param agentPreset - the preset recorded by the committed selection.
  */
 'agent-preset/selected'(sessionId: SessionId, agentPreset: string): void
+```
+
+Source: [`packages/preset/agent-presets/src/types.ts`](../../packages/preset/agent-presets/src/types.ts)
+
+<a id="squad-events"></a>
+
+### `squad/*` events
+
+<a id="squadchange--emit"></a>
+
+#### `squad/change` — emit
+
+The effective squad roster changed after a committed user-root write.
+
+```ts cordis-catalog
+/**
+ * The effective squad roster changed after a committed user-root write.
+ * @mode emit
+ */
+'squad/change'(): void
 ```
 
 Source: [`packages/preset/agent-presets/src/types.ts`](../../packages/preset/agent-presets/src/types.ts)

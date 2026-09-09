@@ -20,6 +20,7 @@ import { Include } from '@daoai/cordis-plugin-include'
 import type { EntryTree } from '@daoai/cordis-plugin-loader'
 import { scopeOf, scopeParentOf, type ScopeKey } from '@daoai/dao-scope'
 import { PresetMountError, type AgentPreset } from './preset.ts'
+import type { SquadSessionSnapshot } from './types.ts'
 import { classifyRowSpecifier } from './specifier.ts'
 
 /** What one mounted subtree publishes about itself for the audit to read. */
@@ -356,10 +357,15 @@ function mountDetail(error: unknown): string {
  * the caller receives no disposer. A rejection leaves nothing mounted.
  * @param agentCtx - the agent's scope context, from the agent factory's `setup`.
  * @param preset - the resolved preset to compose the agent from.
+ * @param squadSnapshot - effective roster frozen for this Session generation.
  * @throws when `agentCtx` carries no scope, a row is unusable, or a row
  * published a service into the root realm.
  */
-export async function mountPreset(agentCtx: Context, preset: AgentPreset): Promise<void> {
+export async function mountPreset(
+  agentCtx: Context,
+  preset: AgentPreset,
+  squadSnapshot?: SquadSessionSnapshot,
+): Promise<void> {
   const scope = scopeOf(agentCtx)
   if (scope === undefined) {
     throw new Error(
@@ -367,7 +373,25 @@ export async function mountPreset(agentCtx: Context, preset: AgentPreset): Promi
       + 'its registrations would apply to every agent in the process',
     )
   }
-  const config: Include.Config = { path: pathToFileURL(preset.path).href }
+  const patches: NonNullable<Include.Config['patches']> = []
+  if (preset.personaOverridden && preset.persona !== undefined) {
+    patches.push({
+      id: 'persona',
+      name: '@daoai/dao-persona',
+      config: { text: preset.persona, complete: false, includeRuntimeContext: true },
+    })
+  }
+  if (squadSnapshot !== undefined) {
+    patches.push({
+      id: 'squad-roster',
+      name: '@daoai/dao-squad-roster',
+      config: { frozen: true, members: squadSnapshot.members },
+    })
+  }
+  const config: Include.Config = {
+    path: pathToFileURL(preset.path).href,
+    ...patches.length === 0 ? {} : { patches },
+  }
   // Captured before the subtree exists: the standing scope context still
   // carries the host composition's base, which is inside the installed
   // harness and is therefore where a row's package name has to resolve from.

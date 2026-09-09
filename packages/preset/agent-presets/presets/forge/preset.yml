@@ -1,3 +1,4 @@
 name: Forge
-description: Engineering specialist: full coding toolset for implementation work in the repository.
+description: "Engineering specialist: full coding toolset for implementation work in the repository."
 order: 6
+squadMember: true

@@ -36,7 +36,14 @@ export interface PresetMetadata {
    * can read in capability order while authored ones stay alphabetical.
    */
   readonly order?: number
+  /** UI-only image filename beside the preset composition. */
+  readonly avatar?: string
+  /** Whether this preset is a delegable squad member. */
+  readonly squadMember?: boolean
 }
+
+/** Safe avatar filenames accepted from preset metadata. */
+const AVATAR_FILE = /^avatar\.(?:png|jpe?g|webp|gif)$/
 
 /** A non-empty trimmed string, or undefined for anything else. */
 function text(value: unknown): string | undefined {
@@ -77,10 +84,17 @@ export async function readPresetMetadata(directory: string): Promise<PresetMetad
   const order = typeof record.order === 'number' && Number.isFinite(record.order)
     ? record.order
     : undefined
+  const avatarText = text(record.avatar)
+  const avatar = avatarText !== undefined && AVATAR_FILE.test(avatarText)
+    ? avatarText
+    : undefined
+  const squadMember = record.squadMember === true ? true : undefined
   return {
     ...name === undefined ? {} : { name },
     ...description === undefined ? {} : { description },
     ...order === undefined ? {} : { order },
+    ...avatar === undefined ? {} : { avatar },
+    ...squadMember === undefined ? {} : { squadMember },
   }
 }
 
@@ -96,10 +110,18 @@ export function renderPresetMetadata(metadata: PresetMetadata): string | undefin
   const name = text(metadata.name)
   const description = text(metadata.description)
   const { order } = metadata
-  if (name === undefined && description === undefined && order === undefined) return undefined
+  const avatar = text(metadata.avatar)
+  if (avatar !== undefined && !AVATAR_FILE.test(avatar)) {
+    throw new TypeError(`agent-presets: avatar filename ${JSON.stringify(avatar)} must match ${String(AVATAR_FILE)}`)
+  }
+  const squadMember = metadata.squadMember === true ? true : undefined
+  if (name === undefined && description === undefined && order === undefined
+    && avatar === undefined && squadMember === undefined) return undefined
   return yaml.dump({
     ...name === undefined ? {} : { name },
     ...description === undefined ? {} : { description },
     ...order === undefined ? {} : { order },
+    ...avatar === undefined ? {} : { avatar },
+    ...squadMember === undefined ? {} : { squadMember },
   }, { lineWidth: -1 })
 }

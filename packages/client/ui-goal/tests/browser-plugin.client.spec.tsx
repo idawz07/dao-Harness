@@ -24,6 +24,7 @@ import { en as commonEn } from '@daoai/dao-client-locale/src/locales/en.ts'
 import type { GoalBarActions } from '../src/client/slots.ts'
 import { apply, inject } from '../src/client/index.ts'
 import { GoalDock } from '../src/client/GoalBar.tsx'
+import { GoalMissionCard } from '../src/client/GoalMissionCard.tsx'
 import { en } from '../src/client/locales.ts'
 import { apply as nodeApply } from '../src/index.ts'
 
@@ -97,6 +98,7 @@ async function bench(options: {
     name: 'root', children: {
       'conversation.input.dock': { kind: 'list', scope: 'session' },
       'conversation.chat.node': { kind: 'keyed', scope: 'session' },
+      'conversation.session.header.mission': { kind: 'single', scope: 'session' },
     },
   } as never, (() => null) as never)
   ctx.provide('locale', new LocaleRuntime(ctx))
@@ -118,11 +120,12 @@ async function bench(options: {
       }
     },
     chatEntry: () => ctx.slots.entries('conversation.chat.node')[0],
+    missionEntry: () => ctx.slots.entries('conversation.session.header.mission')[0],
   }
 }
 
 describe('ui-goal browser plugin', () => {
-  it('registers the GoalBar dock, command input Definition, and keyed Chat renderer', async () => {
+  it('registers the goal dock, mission summary, command input Definition, and keyed Chat renderer', async () => {
     const b = await bench()
     await b.fiber.await()
     expect(b.entry()).toMatchObject({ id: 'goal', order: 10, locale: 'goal' })
@@ -130,6 +133,8 @@ describe('ui-goal browser plugin', () => {
     expect(b.definitions().map(definition => definition.kind)).toEqual(['goal-command-input'])
     expect(b.chatEntry()?.options).toMatchObject({ key: 'command-input' })
     expect(b.chatEntry()?.locale).toBe('goal')
+    expect(b.missionEntry()?.component).toBe(GoalMissionCard)
+    expect(b.missionEntry()?.locale).toBe('goal')
   })
 
   it('verbs read the CAS ref from the current projected value at call time', async () => {
@@ -205,6 +210,7 @@ describe('ui-goal browser plugin', () => {
     await b.fiber.dispose()
     expect(b.entry()).toBeUndefined()
     expect(b.chatEntry()).toBeUndefined()
+    expect(b.missionEntry()).toBeUndefined()
     expect(b.definitions()).toHaveLength(0)
   })
 })

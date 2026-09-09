@@ -14,7 +14,10 @@ import { settingsNamespace } from '@daoai/dao-settings'
 import { SUBAGENT_MODEL_SELECTION_SETTINGS_NAMESPACE } from '@daoai/dao-tool-subagent/model-selection-settings'
 import { SETTINGS_NAMESPACE, SHIPPED_PRESET_ROOT } from '@daoai/dao-agent-presets'
 import { applyChildComposition, childSessionMeta } from '@daoai/dao-subagent'
-import { ToolCallId } from '@daoai/dao-llm'
+import {
+  LlmAdapter, ToolCallId,
+  type GenerateOptions, type LlmResolvedModelInfo, type StreamChunk,
+} from '@daoai/dao-llm'
 import type {} from '@daoai/dao-compaction-basic'
 import type {} from '@daoai/dao-skill'
 import type {} from '@daoai/dao-tools'
@@ -27,7 +30,6 @@ const REPO_ROOT = fileURLToPath(new URL('../../..', import.meta.url))
 const BASE_PATCH = join(REPO_ROOT, 'packages/bundle/base/cordis.patch.yml')
 const WEB_PATCH = join(REPO_ROOT, 'packages/bundle/web-app/cordis.patch.yml')
 const CODEX_PACKAGE_DIR = join(REPO_ROOT, 'packages/subagent/subagent-codex')
-const CLAUDE_CODE_PACKAGE_DIR = join(REPO_ROOT, 'packages/subagent/subagent-claude-code')
 /** The installation anchor whose dependency surface the preset module fallback mirrors. */
 const INSTALL_ANCHOR = join(REPO_ROOT, 'apps/cli/package.json')
 const MINIMAL_PROMPT = 'You are a helpful software engineer assistant.'
@@ -39,6 +41,29 @@ const MINIMAL_BASH_DESCRIPTION = `Run commands in a bash shell
 * To inspect a particular line range of a file, e.g. lines 10-25, try 'sed -n 10,25p /path/to/the/file'.
 * Please avoid commands that may produce a very large amount of output.
 * Please run long lived commands in the background, e.g. 'sleep 10 &' or start a server in the background.`
+
+/** Deterministic provider for the shipped squad-draft composition test. */
+class SquadDraftAdapter extends LlmAdapter {
+  readonly requests: GenerateOptions[] = []
+
+  override resolveModel(provider: string, model: string): Promise<LlmResolvedModelInfo> {
+    return Promise.resolve({ provider, id: model, name: model })
+  }
+
+  override async * stream(options: GenerateOptions): AsyncIterable<StreamChunk> {
+    this.requests.push(options)
+    const text = JSON.stringify({
+      name: 'QA Reviewer',
+      description: 'Checks tests before merge.',
+      persona: 'Review the change, run relevant tests, and report concrete failures.',
+      toolsDenySuggestion: ['write'],
+    })
+    yield { type: 'block-start', index: 0, blockType: 'text' }
+    yield { type: 'text-delta', index: 0, text }
+    yield { type: 'block-end', index: 0, block: { type: 'text', text } }
+    yield { type: 'finish', reason: { kind: 'stop' } }
+  }
+}
 
 /**
  * Boot the shipped Web composition, minus the rows that would bind a port,
@@ -220,6 +245,10 @@ describe('the shipped Web composition', () => {
       'cordis', 'forge', 'lens', 'minimal', 'ptc', 'quill', 'relay', 'scout', 'scribe', 'standard',
     ])
     expect(listed.every(preset => preset.trust === 'system')).toBe(true)
+    expect(listed.filter(preset => preset.squadMember).map(preset => preset.id)).toEqual([
+      'scout', 'forge', 'lens', 'quill', 'relay', 'scribe',
+    ])
+    expect(listed.filter(preset => preset.squadMember).every(preset => preset.persona !== undefined)).toBe(true)
     expect(ctx.agentPresets.defaultId).toBe('standard')
   })
 
@@ -514,11 +543,10 @@ describe('the shipped Web composition', () => {
 })
 
 describe('product Bundle and user-preset intersection', () => {
-  const presetIds = ['products-none', 'products-codex', 'products-claude', 'products-both'] as const
-  type Product = 'codex' | 'claude-code'
+  const presetIds = ['products-none', 'products-codex'] as const
   type PresetId = typeof presetIds[number]
 
-  async function bootProducts(installed: readonly Product[]): Promise<Context> {
+  async function bootProducts(installed: boolean): Promise<Context> {
     const root = await mkdtemp(join(tmpdir(), 'dao-product-presets-'))
     const userRoot = join(root, 'presets')
     const settingsFile = join(root, 'settings.yaml')
@@ -526,24 +554,13 @@ describe('product Bundle and user-preset intersection', () => {
     await writeFile(settingsFile, '{}\n')
     for (const id of presetIds) {
       let composition = standard
-      if (id === 'products-codex' || id === 'products-both') {
+      if (id === 'products-codex') {
         composition = enablePresetTool(composition, 'tool-subagent-codex')
-      }
-      if (id === 'products-claude' || id === 'products-both') {
-        composition = enablePresetTool(composition, 'tool-subagent-claude-code')
       }
       const directory = join(userRoot, id)
       await mkdir(directory, { recursive: true })
       await writeFile(join(directory, 'agent.cordis.yml'), composition)
     }
-    const packageDir = (product: Product): string => (
-      product === 'codex' ? CODEX_PACKAGE_DIR : CLAUDE_CODE_PACKAGE_DIR
-    )
-    const packageName = (product: Product): string => (
-      product === 'codex'
-        ? '@daoai/dao-subagent-codex'
-        : '@daoai/dao-subagent-claude-code'
-    )
     return await bootWeb(settingsFile, [
       {
         id: 'agent-presets',
@@ -554,25 +571,21 @@ describe('product Bundle and user-preset intersection', () => {
           includeUserRoot: false,
         },
       },
-    ], installed.map(packageDir), [
+    ], installed ? [CODEX_PACKAGE_DIR] : [], [
       '@daoai/dao-base',
       '@daoai/dao-web-app',
-      ...installed.map(packageName),
+      ...(installed ? ['@daoai/dao-subagent-codex'] : []),
     ])
   }
 
   it('composes the intersection of installed Bundles and enabled preset rows', async () => {
-    const enabledByPreset: Record<PresetId, Product[]> = {
-      'products-none': [],
-      'products-codex': ['codex'],
-      'products-claude': ['claude-code'],
-      'products-both': ['codex', 'claude-code'],
+    const enabledByPreset: Record<PresetId, boolean> = {
+      'products-none': false,
+      'products-codex': true,
     }
-    const scenarios: Array<{ installed: Product[]; presets: readonly PresetId[] }> = [
-      { installed: [], presets: ['products-both'] },
-      { installed: ['codex'], presets: ['products-both'] },
-      { installed: ['claude-code'], presets: ['products-both'] },
-      { installed: ['codex', 'claude-code'], presets: presetIds },
+    const scenarios: Array<{ installed: boolean; presets: readonly PresetId[] }> = [
+      { installed: false, presets: ['products-codex'] },
+      { installed: true, presets: presetIds },
     ]
 
     for (const { installed, presets } of scenarios) {
@@ -580,21 +593,18 @@ describe('product Bundle and user-preset intersection', () => {
       const spawn = vi.spyOn(productCtx.subprocess, 'spawn')
       try {
         expect(productCtx.subagents.list()
-          .filter(name => name === 'codex' || name === 'claude-code')
+          .filter(name => name === 'codex')
           .sort())
-          .toEqual([...installed].sort())
+          .toEqual(installed ? ['codex'] : [])
         for (const id of presets) {
           const handle = await productCtx.agents.create({
-            sessionId: SessionId(`preset-${id}-${installed.join('-') || 'none'}-${randomUUID()}`),
+            sessionId: SessionId(`preset-${id}-${installed ? 'codex' : 'none'}-${randomUUID()}`),
             setup: agentCtx => productCtx.agentPresets.mount(agentCtx, id).then(() => undefined),
           })
           try {
-            const productTools = enabledByPreset[id]
-              .filter(product => installed.includes(product))
-              .map(product => product === 'codex' ? 'subagent_codex' : 'subagent_claude_code')
-              .sort()
+            const productTools = enabledByPreset[id] && installed ? ['subagent_codex'] : []
             const tools = toolNames(productCtx, handle.agent)
-            expect(tools.filter(name => name === 'subagent_codex' || name === 'subagent_claude_code'))
+            expect(tools.filter(name => name === 'subagent_codex'))
               .toEqual(productTools)
             expect(tools).toEqual(expect.arrayContaining(['job_kill', 'job_list', 'job_output']))
             for (const productTool of productTools) {
@@ -615,7 +625,7 @@ describe('product Bundle and user-preset intersection', () => {
   }, 120_000)
 
   it('applies a product-row edit only to later sessions on the preset', async () => {
-    const productCtx = await bootProducts(['codex'])
+    const productCtx = await bootProducts(true)
     const preset = await productCtx.agentPresets.resolve('products-none')
     const original = await readFile(preset.path, 'utf8')
     const existing = await productCtx.agents.create({
@@ -848,6 +858,7 @@ describe('a launcher that configures no writable root', () => {
 describe('authoring a preset on the shipped composition', () => {
   let authorCtx: Context
   let userRoot: string
+  const draftAdapter = new SquadDraftAdapter()
 
   beforeAll(async () => {
     userRoot = join(await mkdtemp(join(tmpdir(), 'dao-preset-authoring-')), 'profiles')
@@ -863,7 +874,22 @@ describe('authoring a preset on the shipped composition', () => {
         roots: [{ path: userRoot, trust: 'user' }],
         includeUserRoot: false,
       },
+    }, {
+      id: 'squad-draft',
+      config: {
+        provider: 'squad-authoring-test',
+        model: 'fixture',
+        maxOutputTokens: 1200,
+        maxInputBytes: 65536,
+        maxPersonaBytes: 16384,
+        timeoutMs: 30000,
+      },
     }])
+    authorCtx.llm.registerAdapter(['squad-authoring-test'], draftAdapter)
+  })
+
+  afterAll(async () => {
+    await authorCtx.fiber.dispose()
   })
 
   it('refuses to copy over or delete a shipped preset', async () => {
@@ -910,6 +936,54 @@ describe('authoring a preset on the shipped composition', () => {
     await authorCtx.agentPresets.remove('doomed')
 
     expect((await authorCtx.agentPresets.list()).map(preset => preset.id)).not.toContain('doomed')
+  })
+
+  it('drafts, commits, mounts, updates, and deletes a bounded squad member', async () => {
+    const draft = await authorCtx.squadDraft.draft('a QA reviewer')
+    const created = await authorCtx.squad.createMember('qa-reviewer', {
+      ...draft,
+      toolsDeny: draft.toolsDenySuggestion,
+    })
+    expect(draftAdapter.requests).toHaveLength(1)
+    expect(draftAdapter.requests[0]?.tools).toEqual([])
+
+    const edited = await authorCtx.squad.savePersona(
+      'qa-reviewer',
+      'Review tests and report only verified failures.',
+      ['write'],
+      created.revision,
+    )
+    const png = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 1])
+    await authorCtx.squad.saveAvatar('qa-reviewer', 'image/png', png.toString('base64'), edited.revision)
+    await expect(authorCtx.squad.readAvatar('qa-reviewer')).resolves.toEqual({
+      mediaType: 'image/png',
+      base64: png.toString('base64'),
+    })
+
+    const first = await authorCtx.agents.create({
+      sessionId: SessionId('preset-squad-authored'),
+      setup: agentCtx => authorCtx.agentPresets.mount(agentCtx, 'standard').then(() => undefined),
+    })
+    try {
+      expect(toolNames(authorCtx, first.agent)).toContain('subagent_qa-reviewer')
+      const assembly = await authorCtx.systemPrompt.assemble({ scope: first.agent })
+      expect(assembly.sections.find(section => section.name === 'squad:roster')?.text)
+        .toContain('QA Reviewer (qa-reviewer): use `subagent_qa-reviewer`')
+
+      await authorCtx.squad.deleteMember('qa-reviewer')
+      expect(toolNames(authorCtx, first.agent)).toContain('subagent_qa-reviewer')
+      const second = await authorCtx.agents.create({
+        sessionId: SessionId('preset-squad-after-delete'),
+        setup: agentCtx => authorCtx.agentPresets.mount(agentCtx, 'standard').then(() => undefined),
+      })
+      try {
+        expect(toolNames(authorCtx, second.agent)).not.toContain('subagent_qa-reviewer')
+      } finally {
+        await second.dispose()
+      }
+    } finally {
+      await first.dispose()
+    }
   })
 })
 
@@ -1008,7 +1082,9 @@ describe('a composition that configures its own preset roots', () => {
     ])
 
     const listed = await rootsCtx.agentPresets.list()
-    expect(listed.map(preset => preset.id).sort()).toEqual(['cordis', 'minimal', 'ptc', 'standard', 'team-spec'])
+    expect(listed.map(preset => preset.id).sort()).toEqual([
+      'cordis', 'forge', 'lens', 'minimal', 'ptc', 'quill', 'relay', 'scout', 'scribe', 'standard', 'team-spec',
+    ])
     expect(listed.every(preset => preset.broken === undefined)).toBe(true)
     // The shipped root comes first: a configured directory claiming a shipped
     // id is shadowed, never the other way around.

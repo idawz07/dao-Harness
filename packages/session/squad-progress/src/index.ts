@@ -77,11 +77,12 @@ export class SquadProgress extends Service {
     this.ctx.effect(() => async () => {
       await domain.close()
     }, 'squad-progress.domainClose')
-    this.table = domain.table('sessions')
+    const table = domain.table('sessions')
+    this.table = table
     this.ctx.effect(() => this.ctx.sessionProjections.onChanged((session, key, value) => {
-      if ((key as string) !== 'squadProgress' || this.table === undefined) return
+      if ((key as string) !== 'squadProgress') return
       const view = value as SquadProgressProjection
-      void this.table.put(
+      void table.put(
         session.id,
         squadProgressRowFromView(session.id, view, Date.now()),
       )

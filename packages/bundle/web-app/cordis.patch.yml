@@ -250,6 +250,9 @@
     - id: ui-subagent
       name: '@daoai/dao-client-ui-subagent'
 
+    - id: ui-squad-progress
+      name: '@daoai/dao-client-ui-squad-progress'
+
     - id: ui-reference
       name: '@daoai/dao-client-ui-reference'
 
@@ -436,3 +439,12 @@
       name: '@daoai/dao-agent-presets'
       config:
         default: standard
+    - id: squad-draft
+      name: '@daoai/dao-squad-draft'
+      config:
+        provider: llama-router
+        model: Qwen3.8-27B-Q6_K_XL-128K
+        maxOutputTokens: 1200
+        maxInputBytes: 65536
+        maxPersonaBytes: 16384
+        timeoutMs: 30000

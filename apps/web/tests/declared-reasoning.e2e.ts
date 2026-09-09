@@ -29,7 +29,11 @@ describe.skipIf(MODE === 'record')('web e2e: declared reasoning efforts reach th
   let tripwire: ReturnType<typeof watchConsole>
 
   beforeAll(async () => {
-    scaffold = await launchWebScaffold({ extraOverlayPath: OVERLAY })
+    scaffold = await launchWebScaffold({
+      extraOverlayPath: OVERLAY,
+      farmMissingCredential: true,
+      piAiConfig: { providers: {} },
+    })
     // The whole reasoning offer is the profile: key = selectable level, value
     // = the wire spelling dispatch would send (`max: ultra` renames; the
     // valueless `off` means "supported, send nothing"). The route sets no
@@ -85,7 +89,7 @@ describe.skipIf(MODE === 'record')('web e2e: declared reasoning efforts reach th
       { timeout: 10_000 },
     ).toContain('reasoningEffort: high')
     await expect.poll(() => trigger.getAttribute('aria-label'), { timeout: 10_000 })
-      .toBe('Select model，当前 Acme Think，Effort High')
+      .toBe('Select model, current Acme Think, reasoning effort High')
     expect(tripwire.pageErrors).toEqual([])
   }, 60_000)
 

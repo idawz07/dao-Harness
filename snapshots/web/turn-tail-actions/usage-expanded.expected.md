@@ -6,6 +6,8 @@
   - button "Session log":
     - text: Session log
     - img
+  - 'button "Squad progress: level 1, 1 XP"': Lv.1
+  - button "Switch to dark theme": Dark
   - tablist:
     - tab "Chat" [selected]
     - tab "Trajectory"
@@ -24,7 +26,7 @@
   - img
   - text: Turn usage 15.8K tok · Cache hit 49.7%
 - term: Provider / model
-- definition: deepseek-official/deepseek-v4-flash
+- definition: llama-router/Qwen3.8-27B-Q6_K_XL-128K
 - term: Uncached input
 - definition: 7,891 tok
 - term: Cached input
@@ -46,8 +48,8 @@
 - button "Commands":
   - img
 - 'button "Access mode, current: Workspace Write"': Workspace Write
-- button "Select model, current DeepSeek-V4-Flash":
-  - text: DeepSeek-V4-Flash
+- button "Select model, current Qwen3.8-27B-Q6_K_XL-128K":
+  - text: Qwen3.8-27B-Q6_K_XL-128K
   - img
 - button "6% of context used"
 - button "Send message" [disabled]

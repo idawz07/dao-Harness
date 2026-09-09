@@ -713,6 +713,9 @@ importers:
       '@daoai/dao-settings':
         specifier: workspace:^
         version: link:../../settings/settings
+      '@daoai/dao-squad-draft':
+        specifier: workspace:^
+        version: link:../../preset/squad-draft
       '@daoai/dao-subagent':
         specifier: workspace:^
         version: link:../../subagent/subagent
@@ -1506,6 +1509,9 @@ importers:
       '@daoai/dao-client-ui-skill':
         specifier: workspace:^
         version: link:../../client/ui-skill
+      '@daoai/dao-client-ui-squad-progress':
+        specifier: workspace:^
+        version: link:../../client/ui-squad-progress
       '@daoai/dao-client-ui-subagent':
         specifier: workspace:^
         version: link:../../client/ui-subagent
@@ -1578,6 +1584,12 @@ importers:
       '@daoai/dao-session-stats':
         specifier: workspace:^
         version: link:../../session/session-stats
+      '@daoai/dao-squad-draft':
+        specifier: workspace:^
+        version: link:../../preset/squad-draft
+      '@daoai/dao-squad-roster':
+        specifier: workspace:^
+        version: link:../../subagent/squad-roster
       '@daoai/dao-subprocess':
         specifier: workspace:^
         version: link:../../subprocess/subprocess
@@ -1811,6 +1823,9 @@ importers:
       '@daoai/dao-session':
         specifier: workspace:^
         version: link:../../core/session
+      '@daoai/dao-squad-draft':
+        specifier: workspace:^
+        version: link:../../preset/squad-draft
       '@types/react':
         specifier: ~18.3.1
         version: 18.3.31
@@ -3285,6 +3300,72 @@ importers:
       '@types/react':
         specifier: ~18.3.1
         version: 18.3.31
+
+  packages/client/ui-squad-progress:
+    devDependencies:
+      '@daoai/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@daoai/dao-api-session-controller':
+        specifier: workspace:^
+        version: link:../../api/session-controller
+      '@daoai/dao-client-locale':
+        specifier: workspace:^
+        version: link:../locale
+      '@daoai/dao-client-test-runtime':
+        specifier: workspace:^
+        version: link:../../test-support/client-runtime
+      '@daoai/dao-client-ui-chat':
+        specifier: workspace:^
+        version: link:../ui-chat
+      '@daoai/dao-client-ui-conversation':
+        specifier: workspace:^
+        version: link:../ui-conversation
+      '@daoai/dao-client-ui-layout':
+        specifier: workspace:^
+        version: link:../ui-layout
+      '@daoai/dao-client-ui-primitives':
+        specifier: workspace:^
+        version: link:../ui-primitives
+      '@daoai/dao-client-ui-renderer':
+        specifier: workspace:^
+        version: link:../ui-renderer
+      '@daoai/dao-client-ui-session':
+        specifier: workspace:^
+        version: link:../ui-session
+      '@daoai/dao-client-ui-sidebar':
+        specifier: workspace:^
+        version: link:../ui-sidebar
+      '@daoai/dao-client-ui-slots':
+        specifier: workspace:^
+        version: link:../ui-slots
+      '@daoai/dao-invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@daoai/dao-session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@daoai/dao-squad-progress':
+        specifier: workspace:^
+        version: link:../../session/squad-progress
+      '@daoai/dao-subagent':
+        specifier: workspace:^
+        version: link:../../subagent/subagent
+      '@types/react':
+        specifier: ~18.3.1
+        version: 18.3.31
+      '@types/react-dom':
+        specifier: ~18.3.0
+        version: 18.3.7(@types/react@18.3.31)
+      clsx:
+        specifier: ^2.0.0
+        version: 2.1.1
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.3.1(react@18.3.1)
 
   packages/client/ui-subagent:
     devDependencies:
@@ -6467,6 +6548,34 @@ importers:
         specifier: workspace:^
         version: link:../../core/system-prompt
 
+  packages/preset/squad-draft:
+    dependencies:
+      '@daoai/schemastery':
+        specifier: link:../../../vendor/schemastery
+        version: link:../../../vendor/schemastery
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@daoai/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@daoai/dao-agent-presets':
+        specifier: workspace:^
+        version: link:../agent-presets
+      '@daoai/dao-invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@daoai/dao-llm':
+        specifier: workspace:^
+        version: link:../../llm/llm
+      '@daoai/dao-tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+      '@daoai/dao-typert-protocol':
+        specifier: workspace:^
+        version: link:../../typert/protocol
+
   packages/references/references:
     dependencies:
       zod:
@@ -8044,6 +8153,34 @@ importers:
         specifier: workspace:^
         version: link:../storage
 
+  packages/subagent/squad-roster:
+    dependencies:
+      '@daoai/dao-subagent':
+        specifier: workspace:^
+        version: link:../subagent
+      '@daoai/dao-tools':
+        specifier: workspace:^
+        version: link:../../core/tools
+      '@daoai/schemastery':
+        specifier: link:../../../vendor/schemastery
+        version: link:../../../vendor/schemastery
+    devDependencies:
+      '@daoai/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@daoai/dao-agent-presets':
+        specifier: workspace:^
+        version: link:../../preset/agent-presets
+      '@daoai/dao-invariants':
+        specifier: workspace:^
+        version: link:../../runtime-diagnostics/invariants
+      '@daoai/dao-system-prompt':
+        specifier: workspace:^
+        version: link:../../core/system-prompt
+      '@daoai/dao-tool-subagent':
+        specifier: workspace:^
+        version: link:../tool-subagent
+
   packages/subagent/subagent:
     dependencies:
       zod:
@@ -9596,6 +9733,9 @@ importers:
       '@daoai/dao-agent-loop':
         specifier: workspace:^
         version: link:../../packages/core/agent-loop
+      '@daoai/dao-agent-presets':
+        specifier: workspace:^
+        version: link:../../packages/preset/agent-presets
       '@daoai/dao-agent-spine-demo':
         specifier: workspace:^
         version: link:../../packages/examples/agent-spine-demo
@@ -9797,6 +9937,9 @@ importers:
       '@daoai/dao-squad-progress':
         specifier: workspace:^
         version: link:../../packages/session/squad-progress
+      '@daoai/dao-squad-roster':
+        specifier: workspace:^
+        version: link:../../packages/subagent/squad-roster
       '@daoai/dao-storage':
         specifier: workspace:^
         version: link:../../packages/storage/storage

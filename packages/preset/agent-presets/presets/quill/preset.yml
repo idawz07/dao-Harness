@@ -1,3 +1,4 @@
 name: Quill
-description: Documentation specialist: read and write documentation under docs paths and READMEs.
+description: "Documentation specialist: read and write documentation under docs paths and READMEs."
 order: 8
+squadMember: true

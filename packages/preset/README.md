@@ -7,7 +7,7 @@ kind: "package-group"
 
 ## Summary
 
-The preset group provides per-session agent composition: an agent preset is a directory holding one `agent.cordis.yml`, and a session composed from a preset runs that preset's tools, prompt sections, and skills while every other session keeps its own. `agent-presets` owns the roster — discovery over configured roots plus the harness home, the guarded per-agent mount, and copy-only authoring — and `persona` supplies the composable row that lets a preset change an agent's identity and not only its tools. Together they let one process run several differently composed agents at once.
+The preset group provides per-session agent composition and squad authoring. `agent-presets` owns preset discovery, `ctx.squad`, confined user-root writes, and immutable per-session roster snapshots; `persona` supplies scoped identity; `squad-draft` supplies explicit, tool-free, user-reviewed LLM drafts.
 
 ## Table of Contents
 
@@ -24,6 +24,7 @@ The preset group provides per-session agent composition: an agent preset is a di
 |---|---|---|
 | [`agent-presets`](agent-presets/README.md) | Preset roster, discovery over trusted and user roots, per-agent composition, copy-only authoring | `ctx.agentPresets` |
 | [`persona`](persona/README.md) | The composable persona row a preset mounts to shadow or replace the deployment persona | — |
+| [`squad-draft`](squad-draft/README.md) | One-shot validated persona and metadata drafts for review before commit | `ctx.squadDraft` |
 
 -----
 

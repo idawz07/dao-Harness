@@ -4,6 +4,8 @@
   - button "Session log":
     - text: Session log
     - img
+  - 'button "Squad progress: level 1, 2 XP"': Lv.1
+  - button "Switch to dark theme": Dark
   - tablist:
     - tab "Chat" [selected]
     - tab "Trajectory"
@@ -39,8 +41,8 @@
 - button "Commands":
   - img
 - 'button "Access mode, current: Workspace Write"': Workspace Write
-- button "Select model, current DeepSeek-V4-Flash":
-  - text: DeepSeek-V4-Flash
+- button "Select model, current Qwen3.8-27B-Q6_K_XL-128K":
+  - text: Qwen3.8-27B-Q6_K_XL-128K
   - img
 - button "Send message" [disabled]
 - text: 1 turns · 2 steps LLM {{duration}} · Tool call {{duration}} TTFT avg {{duration}} · {{throughput}} tok/s Cache hit 98% Input 15.8K tok · Output 135 tok

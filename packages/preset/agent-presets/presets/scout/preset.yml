@@ -1,3 +1,4 @@
 name: Scout
-description: Research specialist: web fetch/search and read-only filesystem tools. No writes or shell.
+description: "Research specialist: web fetch/search and read-only filesystem tools. No writes or shell."
 order: 5
+squadMember: true

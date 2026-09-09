@@ -1,3 +1,4 @@
 name: Scribe
-description: Knowledge keeper: organizes reference material with the durable reference store.
+description: "Knowledge keeper: organizes reference material with the durable reference store."
 order: 10
+squadMember: true

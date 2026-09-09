@@ -218,6 +218,20 @@ describe('squadProgress projection unit', () => {
     expect(view?.xp).toBe(XP_TOOL_SUCCESS)
   })
 
+  it('ignores projection changes owned by another unit', async () => {
+    const { ctx, session } = await harness()
+    ctx.sessionProjections.register({
+      key: 'other',
+      stateSchema: { parse: (value: unknown) => value },
+      init: () => 0,
+      apply: (state: number) => state + 1,
+      wire: { viewSchema: { parse: (value: unknown) => value }, view: (state: number) => state },
+      stateVersion: 1,
+    } as never)
+    session.append('step/start', { turn: 1, step: 1 })
+    expect(ctx.squadProgress.get(session.id)).toBeUndefined()
+  })
+
   it('handles tool errors, turn failures, and dangling calls in projection fold', () => {
     let state = squadProgressProjectionDefinition.init()
 

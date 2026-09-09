@@ -155,7 +155,7 @@ export interface PresetRoot {
 export type PresetTrust = 'system' | 'user'
 ```
 
-Source: [`packages/preset/agent-presets/src/preset.ts:54`](../packages/preset/agent-presets/src/preset.ts)
+Source: [`packages/preset/agent-presets/src/preset.ts:68`](../packages/preset/agent-presets/src/preset.ts)
 
 <a id="daoaidao-agent-spine-demo"></a>
 
@@ -2066,6 +2066,52 @@ export interface Config {
 
 Source: [`packages/spill/spill-policy/src/index.ts:60`](../packages/spill/spill-policy/src/index.ts)
 
+<a id="daoaidao-squad-draft"></a>
+
+## `@daoai/dao-squad-draft`
+
+Requires: `llm` · `squad` · `tools`
+
+```ts config-catalog
+/** Plugin route and bounded-output policy. */
+export interface Config {
+  /** Registered LLM provider route. */
+  provider: string
+  /** Provider model id. */
+  model: string
+  /** Maximum output tokens for the single call. */
+  maxOutputTokens: number
+  /** Maximum UTF-8 bytes in the final JSON user message. */
+  maxInputBytes: number
+  /** Maximum accepted persona size in UTF-8 bytes. */
+  maxPersonaBytes: number
+  /** Maximum call duration in milliseconds. */
+  timeoutMs: number
+}
+```
+
+Source: [`packages/preset/squad-draft/src/index.ts:22`](../packages/preset/squad-draft/src/index.ts)
+
+<a id="daoaidao-squad-roster"></a>
+
+## `@daoai/dao-squad-roster`
+
+Requires: `squad` · `systemPrompt`
+
+```ts config-catalog
+/** Optional immutable roster supplied by an Agent preset's Session generation. */
+export interface Config {
+  /** Mount one immutable session roster instead of following global authoring writes. */
+  frozen?: boolean
+  /** Effective model-visible members captured for the session generation. */
+  members?: SquadSessionMember[]
+}
+```
+
+Depends on: `SquadSessionMember` (`@daoai/dao-agent-presets/types`)
+
+Source: [`packages/subagent/squad-roster/src/index.ts:13`](../packages/subagent/squad-roster/src/index.ts)
+
 <a id="daoaidao-storage-domain"></a>
 
 ## `@daoai/dao-storage-domain`
@@ -2349,7 +2395,7 @@ export interface Config {
 }
 ```
 
-Source: [`packages/core/system-prompt/src/index.ts:238`](../packages/core/system-prompt/src/index.ts)
+Source: [`packages/core/system-prompt/src/index.ts:239`](../packages/core/system-prompt/src/index.ts)
 
 <a id="daoaidao-terminal-bash"></a>
 
@@ -3196,6 +3242,7 @@ These load from a `cordis.yml` entry with no `config:` block; they declare no co
 - `@daoai/dao-client-ui-settings-plugins` ([`packages/client/ui-settings-plugins/src/index.ts`](../packages/client/ui-settings-plugins/src/index.ts))
 - `@daoai/dao-client-ui-sidebar` ([`packages/client/ui-sidebar/src/index.ts`](../packages/client/ui-sidebar/src/index.ts))
 - `@daoai/dao-client-ui-skill` ([`packages/client/ui-skill/src/index.ts`](../packages/client/ui-skill/src/index.ts))
+- `@daoai/dao-client-ui-squad-progress` ([`packages/client/ui-squad-progress/src/index.ts`](../packages/client/ui-squad-progress/src/index.ts))
 - `@daoai/dao-client-ui-subagent` ([`packages/client/ui-subagent/src/index.ts`](../packages/client/ui-subagent/src/index.ts))
 - `@daoai/dao-client-ui-theme` ([`packages/client/ui-theme/src/index.ts`](../packages/client/ui-theme/src/index.ts))
 - `@daoai/dao-client-ui-tool` ([`packages/client/ui-tool/src/index.ts`](../packages/client/ui-tool/src/index.ts))

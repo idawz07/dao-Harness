@@ -6,6 +6,14 @@
   - button "Session log":
     - text: Session log
     - img
+  - 'button "Squad progress: level 1, 0 XP"': Lv.1
+  - button "Switch to dark theme": Dark
+  - region "Current mission":
+    - img
+    - text: Current mission Ongoing Goal
+    - heading "Keep the composer context panels aligned" [level=1]
+    - text: Mission progress 0 of 256 rounds
+    - 'progressbar "Mission progress: 0 of 256 rounds"'
   - tablist:
     - tab "Chat" [selected]
     - tab "Trajectory"
@@ -22,10 +30,14 @@
   - img
   - img
   - text: Context injection goal
-- button "Context injection @deepseek-ai/dsh-system-prompt":
+- button "Context injection @daoai/dao-system-prompt":
   - img
   - img
-  - text: Context injection @deepseek-ai/dsh-system-prompt
+  - text: Context injection @daoai/dao-system-prompt
+- button "Context injection skill-catalog":
+  - img
+  - img
+  - text: Context injection skill-catalog
 - paragraph: partial
 - status: Deep diving...
 - region "To-dos":
@@ -43,7 +55,7 @@
 - button "Commands":
   - img
 - 'button "Access mode, current: Workspace Write"': Workspace Write
-- button "Select model, current DeepSeek-V4-Flash":
-  - text: DeepSeek-V4-Flash
+- button "Select model, current Qwen3.8-27B-Q6_K_XL-128K":
+  - text: Qwen3.8-27B-Q6_K_XL-128K
   - img
 - button "Stop generating"

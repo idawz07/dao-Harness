@@ -2405,7 +2405,11 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
   const presetRemotes = {
     // Both trusts appear, because a surface must present a locally authored
     // preset differently from one the deployment vetted.
-    list(): RpcResult<{ presets: { id: string; trust: 'system' | 'user'; isDefault: boolean }[]; authorable: boolean }> {
+    list(): RpcResult<{
+      presets: { id: string; trust: 'system' | 'user'; isDefault: boolean }[]
+      authorable: boolean
+      maxAvatarBytes: number
+    }> {
       return {
         ok: true,
         value: {
@@ -2415,6 +2419,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
             isDefault: id === fixtureDefaultPreset,
           })),
           authorable: true,
+          maxAvatarBytes: 2 * 1024 * 1024,
         },
       }
     },

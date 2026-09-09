@@ -1,3 +1,3 @@
 name: Minimal
-description: Two-tool coding agent: persistent shell and str_replace_editor only.
+description: "Two-tool coding agent: persistent shell and str_replace_editor only."
 order: 3

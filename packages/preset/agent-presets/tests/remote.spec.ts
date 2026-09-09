@@ -109,9 +109,13 @@ describe('the roster a client reads', () => {
 
     expect(roster.authorable).toBe(true)
     expect(roster.presets).toEqual([
-      { id: 'minimal', trust: 'system', isDefault: true },
-      { id: 'standard', trust: 'system', isDefault: false },
-      { id: 'documented', trust: 'user', isDefault: false, name: '我的模式', description: '只做检索。' },
+      { id: 'minimal', trust: 'system', isDefault: true, squadMember: false, personaOverridden: false, revision: null, tools: [] },
+      { id: 'standard', trust: 'system', isDefault: false, squadMember: false, personaOverridden: false, revision: null, tools: [] },
+      {
+        id: 'documented', trust: 'user', isDefault: false,
+        name: '我的模式', description: '只做检索。',
+        squadMember: false, personaOverridden: false, revision: null, tools: [],
+      },
     ])
     // No row carries the composition's location: a preset is addressed by id
     // everywhere off the Host.
@@ -142,7 +146,7 @@ describe('the roster a client reads', () => {
 
     // Composing no presets is a valid deployment: every session then shares
     // the host composition, and nothing can be written either.
-    expect(roster).toEqual({ presets: [], authorable: false })
+    expect(roster).toEqual({ presets: [], authorable: false, maxAvatarBytes: 2 * 1024 * 1024 })
   })
 })
 

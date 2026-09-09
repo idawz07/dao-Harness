@@ -73,6 +73,13 @@ describe('reading display metadata', () => {
     expect(await readPresetMetadata(dir)).toEqual({ name: '标准模式', order: 1 })
   })
 
+  it('reads only managed avatar filenames and the squad marker', async () => {
+    expect(await readPresetMetadata(await presetDir('avatar: avatar.png\nsquadMember: true\n')))
+      .toEqual({ avatar: 'avatar.png', squadMember: true })
+    expect(await readPresetMetadata(await presetDir('avatar: ../avatar.png\nsquadMember: false\n')))
+      .toEqual({})
+  })
+
   it('ignores an order that is not a finite number', async () => {
     expect(await readPresetMetadata(await presetDir('order: first\n'))).toEqual({})
     expect(await readPresetMetadata(await presetDir('order: .inf\n'))).toEqual({})
@@ -110,5 +117,11 @@ describe('rendering display metadata', () => {
     // an intentional blank name.
     expect(renderPresetMetadata({})).toBeUndefined()
     expect(renderPresetMetadata({ name: '  ', description: '' })).toBeUndefined()
+  })
+
+  it('renders managed avatars and squad membership and rejects unsafe filenames', () => {
+    expect(renderPresetMetadata({ avatar: 'avatar.webp', squadMember: true }))
+      .toBe('avatar: avatar.webp\nsquadMember: true\n')
+    expect(() => renderPresetMetadata({ avatar: '../avatar.webp' })).toThrow('must match')
   })
 })

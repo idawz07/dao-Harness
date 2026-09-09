@@ -93,9 +93,9 @@ describe('web e2e: agent-preset authoring is a host-side copy', () => {
     // The intro states the copy path directly, and the shipped rows offer
     // view/copy but never delete or a location — their
     // install is overwritten by upgrades and is not the user's to manage.
-    expect(snapshot).toContain('或用「Creator mode」让 Agent 帮你Create')
-    expect(snapshot).not.toContain('新建预设')
-    expect(snapshot).toContain('Inspect: Standard mode')
+    expect(snapshot).toContain('let the agent draft one for you in Creator mode')
+    expect(snapshot).not.toContain('Create a blank preset')
+    expect(snapshot).toContain('View: Standard mode')
     expect(snapshot).not.toContain('Delete: Standard mode')
     expect(snapshot).not.toContain('Open folder')
   }, 60_000)
@@ -103,8 +103,8 @@ describe('web e2e: agent-preset authoring is a host-side copy', () => {
   it('views a shipped composition read-only instead of editing it', async () => {
     onTestFailed(() => saveFailureShot(page, 'web-e2e-preset-authoring-view'))
     const dialog = settingsDialog()
-    await dialog.getByRole('button', { name: 'Inspect: Standard mode' }).click()
-    const viewer = page.getByRole('dialog', { name: 'Inspect · Standard mode' })
+    await dialog.getByRole('button', { name: 'View: Standard mode' }).click()
+    const viewer = page.getByRole('dialog', { name: 'View · Standard mode' })
     await viewer.waitFor({ timeout: 10_000 })
 
     // The real shipped composition, not a golden: the viewer shows whatever
@@ -131,7 +131,7 @@ describe('web e2e: agent-preset authoring is a host-side copy', () => {
     // Two fields and nothing else: the id is the directory name the host
     // needs up front; description and composition live in the files.
     expect(dialogSnapshot).toContain('Identifier')
-    expect(dialogSnapshot).not.toContain('描述')
+    expect(dialogSnapshot).not.toContain('Description')
 
     await copyDialog.getByPlaceholder('my-agent').fill('my-agent')
     await copyDialog.getByPlaceholder('Shown in the picker; defaults to the identifier').fill('我的模式')
@@ -151,15 +151,14 @@ describe('web e2e: agent-preset authoring is a host-side copy', () => {
     await compareOrRefreshGolden(CREATED_EXPECTED, snapshot, MODE)
     expect(snapshot).toContain('{{presetRoot}}/my-agent')
 
-    // The host copied the whole directory and rewrote only the display
-    // metadata: the composition is byte-identical to the shipped source, the
-    // description rides along for the user to edit in place, and neither the
-    // source's name nor its roster order survives into the copy.
+    // The host copied the whole directory and rewrote only the display name:
+    // the composition and description stay with the copy, while shipped
+    // roster ordering does not.
     const composition = await readFile(join(userRoot, 'my-agent', 'agent.cordis.yml'), 'utf8')
     expect(composition).toBe(await readFile(join(SHIPPED_PRESETS, 'minimal', 'agent.cordis.yml'), 'utf8'))
     const metadata = await readFile(join(userRoot, 'my-agent', 'preset.yml'), 'utf8')
     expect(metadata).toContain('name: 我的模式')
-    expect(metadata).toContain('description: Two-tool coding agent with persistent bash and str_replace_editor.')
+    expect(metadata).toContain("description: 'Two-tool coding agent: persistent shell and str_replace_editor only.'")
     expect(metadata).not.toContain('order:')
   }, 60_000)
 

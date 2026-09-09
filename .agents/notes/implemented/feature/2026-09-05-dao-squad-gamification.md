@@ -17,11 +17,11 @@ Ship `@daoai/dao-squad-progress` under `packages/session/squad-progress/`:
 2. **Level curve** — `level = floor(sqrt(xp / 10)) + 1`.
 3. **Badge rule table** — `first_delegation`, `ten_tools`, `error_free_turn` (completed turn with no tool errors).
 4. **Storage mirror** — `ctx.squadProgress` opens storage-domain `squad_progress` v0 and puts per-session rows on projection change. Storage is not the client authority.
-5. **UI** — `ui-subagent` lineage rows with a resolved squad role show a compact `Lv.{n}` chip (and badge count when earned) from `summary.projectionValues.squadProgress`; absent projection keeps Stage 4 accent-only behavior. Copy is locale-owned.
+5. **UI** — `ui-subagent` lineage rows with a resolved squad role show a compact `Lv.{n}` chip (and badge count when earned) from `summary.projectionValues.squadProgress`; absent projection keeps Stage 4 accent-only behavior. `@daoai/dao-client-ui-squad-progress` owns the richer header, sidebar, details, and earned-badge surfaces described by [Web Mission Control](2026-09-08-web-mission-control.md). Copy is locale-owned.
 
 Mount on `dao-base` (after storage-domain) so every surface gets the fold. Add the package to `dao-base` and `python/sdk-runtime` dependency closures.
 
-Document-ingest +3 XP is skipped until reference puts leave a session-visible event. Portrait images, model-visible squad status prompts, and rich badge UI are deferred.
+Document-ingest +3 XP is skipped until reference puts leave a session-visible event. Portrait images and model-visible squad status prompts are deferred.
 
 ## Alternatives considered
 
@@ -31,7 +31,7 @@ Document-ingest +3 XP is skipped until reference puts leave a session-visible ev
 
 ## Consequences
 
-Sessions that run tools or spawn specialists accumulate `squadProgress` in listing projections; Web roster chips render level/badges for role-prefixed children. Background/continuable starts award spawn XP only until a later settle signal is logged. Cross-session career XP is not accumulated — each session's fold is independent.
+Sessions that run tools or spawn specialists accumulate `squadProgress` in listing projections; Web roster chips and Mission Control progress surfaces render level/badges from those projections. Background/continuable starts award spawn XP only until a later settle signal is logged. Cross-session career XP is not accumulated — each session's fold is independent.
 
 ## Required verification
 

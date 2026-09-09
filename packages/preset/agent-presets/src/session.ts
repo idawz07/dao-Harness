@@ -16,6 +16,7 @@
 
 import type { ProjectionDefinition } from '@daoai/dao-session-projection'
 import { z } from 'zod'
+import type { SquadSessionSnapshot } from './types.ts'
 
 declare module '@daoai/dao-session/types' {
   interface SessionEventMap {
@@ -26,6 +27,8 @@ declare module '@daoai/dao-session/types' {
      * the header's creation-time value.
      */
     'agent-preset/selected': { agentPreset: string }
+    /** Effective delegation roster frozen before this session can make a model request. */
+    'squad/roster-snapshot': SquadSessionSnapshot
   }
 }
 

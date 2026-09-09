@@ -973,6 +973,24 @@ stream(options: GenerateOptions): AsyncIterable<StreamChunk>
 
 Source: [`packages/llm/llm/src/index.ts`](../../packages/llm/llm/src/index.ts)
 
+<a id="ctxsquaddraft--squaddraft"></a>
+
+### `ctx.squadDraft` — `SquadDraft`
+
+One-shot drafter whose output always returns to the UI for review.
+
+```ts cordis-catalog
+/**
+ * Draft member fields from user-supplied descriptive data.
+ * @param description - Explicit user description treated as data.
+ * @param baseMember - Optional existing member used as drafting context.
+ * @returns One validated, uncommitted draft for review.
+ */
+@Remote('draft') async draft(description: string, baseMember?: SquadDraftBaseMember): Promise<SquadMemberDraft>
+```
+
+Source: [`packages/preset/squad-draft/src/index.ts`](../../packages/preset/squad-draft/src/index.ts)
+
 <a id="llm-events"></a>
 
 ### `llm/*` events

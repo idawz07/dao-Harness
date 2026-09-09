@@ -6,6 +6,14 @@
   - button "Session log":
     - text: Session log
     - img
+  - 'button "Squad progress: level 2, 11 XP"': Lv.2
+  - button "Switch to dark theme": Dark
+  - region "Current mission":
+    - img
+    - text: Current mission Complete Goal
+    - heading "做两个turn，每个turn输出随机一个包的文件结构。注意你做完一个turn之后，直接输出内容，停止，我们的系统会帮你再开一个turn，你看着做一个类似的" [level=1]
+    - text: Mission progress 2 of 256 rounds
+    - 'progressbar "Mission progress: 2 of 256 rounds"'
   - tablist:
     - tab "Chat" [selected]
     - tab "Trajectory"
@@ -112,8 +120,8 @@
 - button "Commands":
   - img
 - 'button "Access mode, current: Workspace Write"': Workspace Write
-- button "Select model, current DeepSeek-V4-Flash":
-  - text: DeepSeek-V4-Flash
+- button "Select model, current Qwen3.8-27B-Q6_K_XL-128K":
+  - text: Qwen3.8-27B-Q6_K_XL-128K
   - img
 - button "9% of context used"
 - button "Send message" [disabled]

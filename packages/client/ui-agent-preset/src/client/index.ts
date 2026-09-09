@@ -34,6 +34,9 @@ import { AgentPresetSection } from './AgentPresetSection.tsx'
 import type { AgentPresetSectionInjected } from './AgentPresetSection.tsx'
 import { AgentPresetSeatController } from './seat-store.ts'
 import { AgentPresetSectionController } from './section-store.ts'
+import { SquadManager } from './SquadManager.tsx'
+import type { SquadManagerInjected } from './SquadManager.tsx'
+import { SquadManagerController } from './squad-store.ts'
 import { en } from './locales.ts'
 import { AGENT_PRESET_SETTINGS_NS, AgentPresetSettingsController } from './settings-store.ts'
 
@@ -41,16 +44,18 @@ export type { AgentPresetLabelInjected, AgentPresetLabelProps } from './AgentPre
 export type { AgentPresetRowInjected, AgentPresetRowProps } from './AgentPresetRow.tsx'
 export type { AgentPresetSeatInjected, AgentPresetSeatProps } from './AgentPresetSeat.tsx'
 export type { AgentPresetSectionInjected, AgentPresetSectionProps } from './AgentPresetSection.tsx'
+export type { SquadManagerInjected, SquadManagerProps } from './SquadManager.tsx'
 export type { AgentPresetSeatState } from './seat-store.ts'
 export {
   draftBlocker, type AgentPresetSectionState, type CopyDraft, type PresetRow, type PresetView,
 } from './section-store.ts'
 export type { AgentPresetOption, AgentPresetSettingsState } from './settings-store.ts'
 export { AGENT_PRESET_SETTINGS_NS, writeDefaultPreset } from './settings-store.ts'
+export { createBlocker, parseToolRestrictions, type SquadManagerState } from './squad-store.ts'
 
 /** Required services (cordis fiber inject). */
 export const inject = [
-  'slots', 'locale', 'remote', 'remote.agentPresets', 'remote.settings', 'settingsScope',
+  'slots', 'locale', 'remote', 'remote.agentPresets', 'remote.settings', 'remote.squadDraft', 'settingsScope',
 ]
 
 /**
@@ -65,6 +70,11 @@ export function apply(ctx: ClientContext): void {
   const rosterReaders = new Set<() => void>()
   const section = new AgentPresetSectionController(ctx.remote, () => {
     void controller.load()
+    for (const read of rosterReaders) read()
+  })
+  const squad = new SquadManagerController(ctx.remote, () => {
+    void controller.load()
+    if (section.store.getSnapshot().status !== 'idle') void section.load()
     for (const read of rosterReaders) read()
   })
 
@@ -84,6 +94,7 @@ export function apply(ctx: ClientContext): void {
       // The section reads the same roster and marks the same default, so a
       // change made from either surface converges both.
       if (section.store.getSnapshot().status !== 'idle') void section.load()
+      if (squad.store.getSnapshot().status !== 'idle') void squad.load()
     }
     const disposers = [
       ctx.remote.$on('settings/document-updated', (ns) => {
@@ -193,6 +204,26 @@ export function apply(ctx: ClientContext): void {
     makeDefault: (id: string) => section.makeDefault(id),
   })
 
+  const squadInjected = (): SquadManagerInjected => ({
+    hooks: { squadManager: squad.store },
+    load: () => squad.load(),
+    beginEdit: (id: string) => { squad.beginEdit(id) },
+    setEditPersona: (value: string) => { squad.setEditPersona(value) },
+    setEditTools: (value: string) => { squad.setEditTools(value) },
+    cancelEdit: () => { squad.cancelEdit() },
+    saveEdit: () => squad.saveEdit(),
+    resetEdit: () => squad.resetEdit(),
+    beginCreate: () => { squad.beginCreate() },
+    setCreate: (field, value) => { squad.setCreate(field, value) },
+    cancelCreate: () => { squad.cancelCreate() },
+    draftCreate: () => squad.draftCreate(),
+    saveCreate: () => squad.saveCreate(),
+    saveAvatar: (id, mediaType, base64) => squad.saveAvatar(id, mediaType, base64),
+    reportError: (message: string) => { squad.reportError(message) },
+    confirmDelete: (id: string | null) => { squad.confirmDelete(id) },
+    remove: () => squad.remove(),
+  })
+
   ctx.slots.inject('settings.general.item', () => ctx.slots.register({
     name: 'settings.general.item',
     id: 'agent-preset',
@@ -210,4 +241,12 @@ export function apply(ctx: ClientContext): void {
     locale: 'settings.agentPreset',
     inject: sectionInjected,
   }, AgentPresetSection))
+  ctx.slots.inject('settings.section', () => ctx.slots.register({
+    name: 'settings.section',
+    id: 'squad-members',
+    order: 25,
+    label: () => ctx.locale.bind('settings.agentPreset')('squadNav'),
+    locale: 'settings.agentPreset',
+    inject: squadInjected,
+  }, SquadManager))
 }

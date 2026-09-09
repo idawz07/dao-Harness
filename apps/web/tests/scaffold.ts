@@ -62,6 +62,7 @@ import { LlmAdapter } from '@daoai/dao-llm'
 import type {
   LlmModelInfo, LlmProviderInfo, LlmResolvedModelInfo, RetryPolicyConfig, StreamChunk,
 } from '@daoai/dao-llm'
+import type { Config as PiAiConfig } from '@daoai/dao-llm-pi-ai'
 import type { ReplayHandle } from '@daoai/dao-llm-replay'
 import { installLlmReplay, parseSessionLog } from '@daoai/dao-llm-replay'
 import SessionStore, {
@@ -302,6 +303,8 @@ export interface LaunchOptions {
    * keyless first-run configuration lane; the default disables the adapter.
    */
   farmMissingCredential?: boolean
+  /** Replace the shipped pi-ai row config while keeping that adapter mounted. */
+  piAiConfig?: PiAiConfig
   /** Leave the current welcome notice pending; ordinary scenarios pre-acknowledge it before browser boot. */
   welcomeNoticePending?: boolean
   /**
@@ -564,6 +567,7 @@ export async function launchWebScaffold(options: LaunchOptions = {}): Promise<We
           },
         }],
       }],
+    ...options.piAiConfig === undefined ? [] : [{ id: 'llm-pi-ai', config: options.piAiConfig }],
     ...mode === 'record' || options.farmMissingCredential === true
       ? []
       : [{ id: 'llm-pi-ai', disabled: true }],

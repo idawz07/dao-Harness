@@ -44,8 +44,7 @@ const CALLED: [string, Record<string, unknown>, readonly string[]][] = [
   ['node:child_process', childProcess, ['execFileSync', 'execSync', 'fork']],
   ['node-pty', nodePty, ['spawn', 'open']],
   ['@daoai/pi-ai', piAi, [
-    'createProvider', 'createModels', 'openAICompletionsApi', 'openAIResponsesApi', 'anthropicMessagesApi',
-    'isContextOverflow', 'getSupportedThinkingLevels',
+    'isContextOverflow',
   ]],
 ]
 
@@ -79,6 +78,70 @@ describe('not-implemented stubs', () => {
       }
     })
   }
+
+  it('lets pi-ai assemble and mutate a configured provider catalog', () => {
+    quiet()
+    const api = piAi.openAICompletionsApi()
+    const model = {
+      provider: 'local',
+      id: 'model',
+      api: 'openai-completions',
+      reasoning: true,
+      thinkingLevelMap: { minimal: null, xhigh: 'xhigh' },
+    } as const
+    const provider = piAi.createProvider({
+      id: 'local',
+      name: 'Local',
+      baseUrl: 'https://example.invalid/v1',
+      headers: { 'x-test': 'worker' },
+      auth: { apiKey: {} },
+      models: [model],
+      api,
+    })
+    const models = piAi.createModels()
+    models.setProvider(provider)
+
+    expect(models.getProviders()).toEqual([provider])
+    expect(models.getProvider('local')).toBe(provider)
+    expect(models.getModels()).toEqual([model])
+    expect(models.getModels('local')).toEqual([model])
+    expect(models.getModels('missing')).toEqual([])
+    expect(models.getModel('local', 'model')).toBe(model)
+    expect(models.getModel('missing', 'model')).toBeUndefined()
+    expect(provider).toMatchObject({
+      name: 'Local',
+      baseUrl: 'https://example.invalid/v1',
+      headers: { 'x-test': 'worker' },
+    })
+    expect(provider.getModels()).toEqual([model])
+    expect(piAi.getSupportedThinkingLevels(model)).toEqual(['off', 'low', 'medium', 'high', 'xhigh'])
+    expect(piAi.getSupportedThinkingLevels({ provider: 'local', id: 'plain' })).toEqual(['off'])
+    expect(() => provider.stream(model)).toThrow(/openAICompletionsApi\.stream\b.*not available/)
+    expect(() => models.streamSimple(model)).toThrow(/openAICompletionsApi\.streamSimple\b.*not available/)
+    expect(() => models.streamSimple({ provider: 'missing', id: 'model' })).toThrow(/Models\.streamSimple\b.*not available/)
+    expect(() => models.login()).toThrow(/Models\.login\b.*not available/)
+
+    models.deleteProvider('local')
+    expect(models.getProviders()).toEqual([])
+    const fallbackName = piAi.createProvider({ id: 'fallback', auth: {}, models: [], api })
+    expect(fallbackName.name).toBe('fallback')
+    models.setProvider(fallbackName)
+    models.clearProviders()
+    expect(models.getProviders()).toEqual([])
+  })
+
+  it('returns request-time refusals from every pi-ai protocol binding', () => {
+    quiet()
+    for (const [name, factory] of [
+      ['anthropicMessagesApi', piAi.anthropicMessagesApi],
+      ['openAICompletionsApi', piAi.openAICompletionsApi],
+      ['openAIResponsesApi', piAi.openAIResponsesApi],
+    ] as const) {
+      const api = factory()
+      expect(() => api.stream()).toThrow(new RegExp(`${name}\\.stream\\b.*not available`))
+      expect(() => api.streamSimple()).toThrow(new RegExp(`${name}\\.streamSimple\\b.*not available`))
+    }
+  })
 
   for (const [module, namespace, members] of CONSTRUCTED) {
     it(`${module} refuses ${String(members.length)} constructed symbol(s)`, () => {

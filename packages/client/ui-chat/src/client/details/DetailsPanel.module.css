@@ -49,6 +49,11 @@
   background: var(--dsw-alias-interactive-bg-hover);
 }
 
+.close:focus-visible {
+  outline: 2px solid var(--dsw-alias-focus-ring);
+  outline-offset: 2px;
+}
+
 .body {
   flex: 1;
   min-height: 0;
@@ -64,7 +69,11 @@
 }
 
 .section {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  padding: 14px;
+  border: 1px solid var(--dsw-alias-border-l1);
+  border-radius: 12px;
+  background: var(--dsw-alias-bg-layer-1);
 }
 
 .sectionLabel {

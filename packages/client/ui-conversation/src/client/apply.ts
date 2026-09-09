@@ -231,6 +231,7 @@ export function apply(ctx: Context): void {
       'conversation.session.header.lineage': { kind: 'single', scope: 'session' },
       'conversation.session.header.actions': { kind: 'list', scope: 'session' },
       'conversation.session.header.utilities': { kind: 'list', scope: 'session' },
+      'conversation.session.header.mission': { kind: 'single', scope: 'session' },
     },
     store: conversationStore,
     inject: (): ConversationSessionHeaderInjected => ({

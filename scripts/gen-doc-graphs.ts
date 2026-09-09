@@ -112,7 +112,7 @@ const SERVICE_ROLES: ServiceRole[] = [
     title: 'LLM adapter registry',
     mode: 'seam',
     implementations: ['llm-pi-ai', 'llm-replay'],
-    consumers: ['agent-loop', 'compaction-basic'],
+    consumers: ['agent-loop', 'compaction-basic', 'squad-draft'],
     note: 'Adapters register provider implementations; the loop and compaction call the provider-neutral stream service.',
   },
   {
@@ -374,6 +374,22 @@ const SERVICE_ROLES: ServiceRole[] = [
     title: 'Per-session agent composition',
     mode: 'core',
     note: 'Discovers preset directories over trusted and user-authored roots and mounts one preset cordis.yml under an agent scope during creation, rejecting a row that never activates or that publishes into the root service realm.',
+  },
+  {
+    key: 'squad',
+    pkg: 'agent-presets',
+    title: 'Effective squad roster and bounded authoring',
+    mode: 'core',
+    consumers: ['squad-roster', 'ui-agent-preset', 'squad-draft'],
+    note: 'Owns effective member discovery and user-root persona, restriction, member, and avatar writes; preset generations freeze model-visible rows in the session log.',
+  },
+  {
+    key: 'squadDraft',
+    pkg: 'squad-draft',
+    title: 'Reviewed squad-member drafting',
+    mode: 'core',
+    consumers: ['ui-agent-preset'],
+    note: 'Makes one explicit tool-free LLM call and returns validated uncommitted member fields for user review.',
   },
   {
     key: 'commands',

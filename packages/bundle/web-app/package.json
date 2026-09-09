@@ -45,6 +45,8 @@
   },
   "dependencies": {
     "@daoai/dao-agent-presets": "workspace:^",
+    "@daoai/dao-squad-roster": "workspace:^",
+    "@daoai/dao-squad-draft": "workspace:^",
     "@daoai/dao-tool-subagent": "workspace:^",
     "@daoai/dao-api-remotes": "workspace:^",
     "@daoai/dao-app-boot": "workspace:^",
@@ -82,6 +84,7 @@
     "@daoai/dao-client-ui-input-trigger": "workspace:^",
     "@daoai/dao-client-ui-reference": "workspace:^",
     "@daoai/dao-client-ui-subagent": "workspace:^",
+    "@daoai/dao-client-ui-squad-progress": "workspace:^",
     "@daoai/dao-client-ui-jobs": "workspace:^",
     "@daoai/dao-client-ui-theme": "workspace:^",
     "@daoai/dao-client-ui-tool": "workspace:^",

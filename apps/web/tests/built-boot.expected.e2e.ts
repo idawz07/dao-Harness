@@ -62,10 +62,10 @@ it('boots the built plugin graph and renders a fixture session end to end', asyn
   // The sidebar renders from the boot graph: every inject layer activated.
   const tree = await screen.findByRole('tree', { name: 'Sessions' }, { timeout: 10_000 })
   if (clientBuildValue('DAO_CLIENT_BUILD_PROFILE') === 'official') {
-    expect(document.querySelector('svg[viewBox="26 0 156 24"]')).not.toBeNull()
+    expect(document.querySelector('svg[viewBox="40 0 92 32"]')).not.toBeNull()
     expect(screen.queryByText('DAO Local Build')).toBeNull()
   } else {
-    expect(document.querySelector('svg[viewBox="0 0 23.16 17.04"]')).not.toBeNull()
+    expect(document.querySelector('svg[viewBox="0 0 32 32"]')).not.toBeNull()
     const version = clientBuildValue('DAO_CLIENT_VERSION')
     if (version === undefined) throw new Error('default client build record must carry DAO_CLIENT_VERSION')
     const commit = clientBuildValue('DAO_CLIENT_COMMIT_HASH')
@@ -156,7 +156,7 @@ it('boots the built plugin graph and renders a fixture session end to end', asyn
   // Every bundle injected its plugin-owned style tag (the loader's CSS path).
   const styleOwners = [...document.head.querySelectorAll('style[data-plugin]')]
     .map(style => style.getAttribute('data-plugin'))
-  for (const plugin of ['@daoai/dao-client-ui-layout', '@daoai/dao-client-ui-sidebar', '@daoai/dao-client-ui-conversation', '@daoai/dao-client-ui-tool']) {
+  for (const plugin of ['@daoai/dao-client-ui-layout', '@daoai/dao-client-ui-sidebar', '@daoai/dao-client-ui-conversation', '@daoai/dao-client-ui-squad-progress', '@daoai/dao-client-ui-tool']) {
     expect(styleOwners).toContain(plugin)
   }
 })

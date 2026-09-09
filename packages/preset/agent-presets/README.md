@@ -7,7 +7,7 @@ kind: "package-reference"
 
 ## Summary
 
-`dao-agent-presets` composes each agent session from one preset: a directory holding a single `agent.cordis.yml` that names the plugins the session runs with. A session that names a preset gets that preset's tools, prompt sections, and skills, while every other session keeps its own, so one process can run several differently composed agents at once. The package maintains the preset roster: it lists every preset the configured roots supply — shipped ones and your own under `<daoHome>/.agent-presets` — shows a reason when a preset cannot start a session, and lets you create new presets by copying existing ones. The default preset is a setting you can override per deployment or per user, and a session can switch to a different preset only while it has produced nothing. A preset is as privileged as the plugins it names, so a preset you author carries the same trust as shell access.
+`dao-agent-presets` composes each agent session from one preset and owns the effective squad roster. It discovers shipped and user presets, applies user-root persona overrides without changing shipped compositions, and supports bounded creation, deletion, tool restriction, and avatar writes for squad members. Each session records and mounts one immutable roster snapshot, so later roster edits affect new sessions without changing the model-visible inputs of running or resumed sessions.
 
 ## Table of Contents
 
@@ -68,9 +68,9 @@ The value is read when a session is created, so a changed default affects only s
 
 ### Authoring presets
 
-Authoring is copy-only: creating a preset copies an existing preset's whole directory — composition, display metadata, skill directories, assets — into the first `user` root. The copy keeps the source's description but gets its own id and an optional display name, so no caller supplies composition text and a copy grants nothing the roster did not already carry. After creation, everything happens in the preset's own files.
+General preset authoring remains copy-only. Squad authoring adds a narrower path: a user may save persona text and deny-only tool restrictions, create a minimal persona-only member preset, reset a shipped persona override, delete a user member, or save an allowlisted avatar. These writes are confined to the first user root. Every persona and avatar edit commits through `persona.override.yml`; revision-addressed avatar files become effective only when that sidecar commits, and shipped or user-authored composition bytes remain untouched.
 
-A copy is refused when the id is not `[a-z0-9][a-z0-9-]*` (the id becomes a directory name), when the id is already taken (a copy never overwrites), or when the source is unknown. Deleting removes only locally authored presets; presets that ship with the deployment are not removable. A session already running on a deleted preset keeps running on it.
+A copy or member creation is refused when its id exceeds 64 characters or does not match `[a-z0-9][a-z0-9-]{0,63}`, when the id is already taken, or when the source is unknown. A squad member id is also refused when its generated `subagent_<id>` name is reserved or already registered. Squad writes use optimistic revisions and reject stale editors. Names and descriptions are single-line text; names, descriptions, personas, deny lists, deny entries, and avatar uploads have fixed wire and persistence limits exported as `SQUAD_AUTHORING_LIMITS`. The roster reports `maxAvatarBytes` so browser clients can reject an oversized file before reading it; the Host revalidates every payload. Tool edits can only deny names; they cannot grant capabilities. Deleting removes only locally authored presets, while resetting a shipped member removes its user override. A session already using an edited or deleted member keeps its recorded roster snapshot.
 
 ### Switching a session's preset
 
@@ -92,8 +92,8 @@ This section explains the design behind the roster and the standing mount; obser
 
 ### Design philosophy
 
-- **One standing composition per preset.** A preset is mounted once per process under a standing scope; agents join by parenting their scope key to the mount, so the mount's registrations and listeners cover every joined agent and no sibling preset's.
-- **Generations keyed on the composition file.** The mount records the composition file's stamp (mtime and size); a session that finds the stamp stale starts the next generation, while sessions already joined keep the generation they run on — a running session outlives its file changing or disappearing.
+- **One standing composition per preset generation.** Agents with the same composition stamp and roster revision share a standing scope. A composition edit or committed squad change starts the next generation, while joined agents retain their original generation.
+- **The session snapshot selects the roster.** `squad/roster-snapshot` records the exact ordered members, personas, and restrictions before publication. Resume and fork mount from that event rather than current user files.
 - **The preset file is an input, never a persistence target.** The mounted subtree overrides `write()` as a no-op, so a loader-initiated write-back never rewrites a shared preset file.
 - **Discovery owns health.** A directory whose composition is missing or unloadable is a broken roster row with a reason, not a skip — a skipped directory would still occupy its id while no surface shows anything to delete.
 
@@ -107,7 +107,8 @@ This section explains the design behind the roster and the standing mount; obser
 | [`src/mount.ts`](src/mount.ts) | Subtree mounting, host base-URL handling, mount audit, `write()` suppression |
 | [`src/authoring.ts`](src/authoring.ts) | Copy/delete/read of locally authored presets, permission tightening |
 | [`src/metadata.ts`](src/metadata.ts) | `preset.yml` display metadata |
-| [`src/session.ts`](src/session.ts) | `agent-preset/selected` event and the `agentPreset` Session projection |
+| [`src/squad-authoring.ts`](src/squad-authoring.ts) | Confined persona, member, restriction, and avatar writes |
+| [`src/session.ts`](src/session.ts) | Preset selection and immutable squad-roster session events |
 | [`src/types.ts`](src/types.ts) | Client-safe wire payloads and cordis event declaration |
 | [`src/invariant.ts`](src/invariant.ts) | Invariant companion: post-mount service-leak recheck, unjoined-agent failure |
 
@@ -125,7 +126,7 @@ A copy dereferences symlinks so it is self-contained, re-tightens the tree to ow
 
 ### The session record
 
-The creation header names the preset a session started with; the `agentPreset` Session projection names the preset it runs. A switch appends an `agent-preset/selected` event after the swap commits because the preset decides the tool schemas and prompt sections the model sees. The service re-emits that committed fact as the unscoped cordis event `agent-preset/selected(sessionId, agentPreset)`. Reconstruction consumes the projection, which starts from the creation header and applies the newest selection; it never folds the log independently.
+The creation header names the preset a session started with; the `agentPreset` projection names the preset it runs. Before an agent is published, `squad/roster-snapshot` records the exact effective member rows used by its standing generation. Resume and fork reuse that record. A blank-session preset switch records both the new preset and a fresh roster snapshot after the swap commits.
 
 </details>
 
@@ -149,7 +150,7 @@ Read these pages when the package-level contract is not enough; they move from t
 <a id="model-experience"></a>
 ## Model Experience
 
-Indirectly, through the plugins a preset's standing composition installs, which own every tool schema, prompt section, and skill the preset makes visible to the agents joined to it.
+Indirectly, through the plugins a preset's standing composition installs, including squad-member personas used by named delegation tools and roster guidance.
 
 #### KV Cache effect
 
@@ -163,7 +164,7 @@ These limits define when the roster is a poor fit or needs special operational c
 
 - **A preset outside the writable root is discoverable but not deletable** — `remove()` refuses anything that does not live under the first `user` root, so a deployment that configures its own writable root while leaving `includeUserRoot` on lists the harness-home presets, mounts them, and answers "it does not live under the writable preset root" for every delete. A deployment that wants only its own presets sets `includeUserRoot: false`.
 - **A session cannot change preset once it has produced anything** — switching re-links a blank session's parent scope to another standing mount, and only a blank one: swapping tools mid-conversation would strand tools the model has called.
-- **A generation is keyed on the composition file alone** — the stamp check notices `agent.cordis.yml` changing, not an edit to a skill file or asset beside it; those reach new sessions only once the composition file itself moves or the process restarts.
+- **A generation is keyed on composition and roster state** — composition changes and committed persona/member/restriction edits reach new sessions. Skill files and unrelated assets still require a composition change or restart.
 - **A superseded generation is never reclaimed** — sessions already joined keep the generation they run on, and the roster holds no join count that could tell when the last one left, so the whole subtree stays mounted until the process ends. The cost is per generation rather than per session, but it is not free: `dao-skill-filesystem` watches its roots by default, so each edit-then-create cycle adds a live watcher set.
 - **A copy is never mounted to validate** — it is byte-identical to its source, so a source broken on disk yields a copy exactly as broken as the source; discovery's health check marks both rows on the next roster read rather than deferring the failure to a session start.
 - **Health asks what is installed, not what would import** — discovery proves the composition parses in the loader dialect, holds named rows, and that each row it can prove will start names a package present above the harness base or a file that exists; it never imports one, so a package whose own entry file is missing, a plugin that throws on apply, and one waiting forever for a service all still fail at the first session. `disabled` is the one entry field the Loader interpolates, so a row carrying an expression there is left unchecked rather than judged from the file.

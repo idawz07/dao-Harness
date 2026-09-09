@@ -310,7 +310,7 @@ async function detailsTrack(page: Page): Promise<number> {
 const UI_PLUGIN_DIRS = [
   'connection', 'ui-theme', 'locale', 'ui-layout', 'ui-renderer', 'ui-session', 'ui-sidebar',
   'ui-settings', 'ui-settings-general', 'ui-settings-models', 'ui-conversation', 'ui-approval', 'ui-chat',
-  'ui-model-selection', 'ui-user-questions', 'ui-trajectory', '../session-query/session-log-export',
+  'ui-model-selection', 'ui-user-questions', 'ui-squad-progress', 'ui-trajectory', '../session-query/session-log-export',
 ]
 const ROUND_DONE_MARKER = 'WEB_ROUND_DONE'
 const notReady = UI_PLUGIN_DIRS.filter((dir) => {
@@ -484,10 +484,12 @@ describe('dao web keyless CLI smoke', () => {
       }
       const workspaceMessage = captured.messages?.find(message =>
         message.role === 'user' && message.content?.includes('web-workspace-context-probe'))
-      const systemMessage = captured.messages?.find(message => message.role === 'system')
+      const instructionMessage = captured.messages?.find(message => (
+        message.role === 'system' || message.role === 'developer'
+      ))
       const expectedWebSection = readFileSync(WEB_SURFACE_PROMPT, 'utf8').trimEnd()
         .replace('{{webUrl}}', new URL(baseUrl).origin)
-      expect(systemMessage?.content).toContain(expectedWebSection)
+      expect(instructionMessage?.content).toContain(expectedWebSection)
       expect(workspaceMessage).toMatchInlineSnapshot(`
         {
           "content": "<system-reminder>
@@ -531,8 +533,12 @@ describe('dao web keyless CLI smoke', () => {
       request.setEncoding('utf8')
       request.on('data', (chunk: string) => { body += chunk })
       request.on('end', () => {
-        const parsed = JSON.parse(body) as { max_tokens?: number; messages?: unknown[] }
-        const titleRequest = parsed.max_tokens === 64
+        const parsed = JSON.parse(body) as {
+          max_completion_tokens?: number
+          max_tokens?: number
+          messages?: unknown[]
+        }
+        const titleRequest = (parsed.max_tokens ?? parsed.max_completion_tokens) === 64
         const mainRequest = !titleRequest && body.includes(promptMarker)
         response.writeHead(200, { 'content-type': 'text/event-stream' })
         if (!mainRequest) {
@@ -680,9 +686,11 @@ describe('dao web keyless CLI smoke', () => {
         }),
       ])
       expect(captured.tools?.map(tool => tool.function?.name)).toEqual(['run_code'])
-      const system = captured.messages?.find(message => message.role === 'system')
-      expect(system?.content).toContain('## Writing code for run_code')
-      expect(system?.content).toContain('declare const tools')
+      const instructions = captured.messages?.find(message => (
+        message.role === 'system' || message.role === 'developer'
+      ))
+      expect(instructions?.content).toContain('## Writing code for run_code')
+      expect(instructions?.content).toContain('declare const tools')
     } finally {
       const closed = child.exitCode === null
         ? new Promise<void>((resolveClose) => { child.once('close', () => { resolveClose() }) })

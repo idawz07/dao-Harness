@@ -7,7 +7,7 @@ kind: "package-reference"
 
 ## Summary
 
-This package renders the goal surface in the Web GUI: a strip in the composer-context stack that shows the current goal of the session and offers edit, pause, resume, and clear actions. It reads the live goal from the host-computed projection and routes every mutation through the goal service, surfacing rejections inline. It also projects each durable `/goal` command run as a `Command input` bubble in the chat, so a goal command entered by the user or the model appears in the transcript. Goal creation is outside this plugin. The shipped Web presets other than `minimal` mount `/goal` in their agent scope.
+This package renders the goal surfaces in the Web GUI: a mission summary in the Session header and a strip in the composer-context stack that offers edit, pause, resume, and clear actions. Both read the host-computed goal projection; the mission summary displays the durable objective, phase, and admitted-round progress, while the strip routes mutations through the goal service and surfaces rejections inline. The package also projects each durable `/goal` command run as a `Command input` bubble in the chat, so a goal command entered by the user or the model appears in the transcript. Goal creation is outside this plugin. The shipped Web presets other than `minimal` mount `/goal` in their agent scope.
 
 ## Table of Contents
 
@@ -23,7 +23,7 @@ This package renders the goal surface in the Web GUI: a strip in the composer-co
 <a id="use-this-package"></a>
 ## Use this package
 
-Mount this plugin alongside `ui-conversation` and the goal domain package; the strip then appears as the second card in the composer-context stack (after Todo, before Queue) whenever the session has a goal. An active goal offers pause; a paused one offers resume; edit rewrites the objective; clear removes the goal and suppresses the strip until the projection catches up.
+Mount this plugin alongside `ui-conversation` and the goal domain package. A current goal appears as a mission card below the Session title and as the second card in the composer-context stack (after Todo, before Queue). The mission card reports admitted rounds against the goal's round cap without deriving prototype checkpoints or rewards. An active goal offers pause; a paused one offers resume; edit rewrites the objective; clear removes the goal and suppresses both entries when the projection catches up.
 
 ### The command-input bubble
 
@@ -41,7 +41,7 @@ A rejected mutation surfaces the Remote error inline on the strip; loading, abse
 <details>
 <summary>Implementation internals — click to expand</summary>
 
-The strip is projection-mode: the live goal arrives through `useProjection('goal')` (seeded by the history tail page and updated by `session/projection` frames), so the plugin owns no domain store, refresh chain, or event listener. The inject face carries only the four mutation verbs through `ctx.remote.goals`; each reads the CAS ref from the session's current projected value at call time, and the RPC's compare-and-set is the staleness guard. The strip single-flights mutations synchronously because a pending render cannot fence same-frame clicks. The command-input projection is a separate Conversation Definition that builds a `command-input` Chat Node before the generic command result Node; it never creates `user/message` or a model turn.
+Both goal entries read `useProjection('goal')`, seeded by the history tail page and updated by `session/projection` frames, so the plugin owns no domain store, refresh chain, or event listener. The mission card occupies `conversation.session.header.mission`; the strip occupies `conversation.input.dock`. The strip's inject face carries only the four mutation verbs through `ctx.remote.goals`; each reads the CAS ref from the session's current projected value at call time, and the RPC's compare-and-set is the staleness guard. The strip single-flights mutations synchronously because a pending render cannot fence same-frame clicks. The command-input projection is a separate Conversation Definition that builds a `command-input` Chat Node before the generic command result Node; it never creates `user/message` or a model turn.
 
 </details>
 

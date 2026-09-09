@@ -142,6 +142,9 @@ export function ConversationSessionHeader({
               {renderSlot('conversation.session.header.utilities', {})}
             </div>
           </div>
+          <div className={css.missionSlot}>
+            {renderSlot('conversation.session.header.mission', {})}
+          </div>
           {tabs.length > 1 && (
             <div className={css.tabs} role="tablist">
               {tabs.map(viewTab => (

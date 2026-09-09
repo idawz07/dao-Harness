@@ -195,6 +195,13 @@
   background: var(--dsw-alias-interactive-bg-hover);
 }
 
+.brand:focus-visible,
+.iconButton:focus-visible,
+.newSession:focus-visible {
+  outline: 2px solid var(--dsw-alias-focus-ring);
+  outline-offset: 2px;
+}
+
 .collapsed .iconButton {
   width: 36px;
   height: 36px;

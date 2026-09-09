@@ -32,6 +32,7 @@ The subagent group is the delegation family: it lets an agent hand a task to a c
 | [`tool-subagent/`](tool-subagent/README.md) | Exposes delegation to the model | registers on `ctx.tools` |
 | [`tool-subagent-control/`](tool-subagent-control/README.md) | Exposes follow-up, interrupt, and listing to the model | registers on `ctx.tools` |
 | [`tool-subagent-report/`](tool-subagent-report/README.md) | Provides the child-to-parent report channel | registers in child scopes |
+| [`squad-roster/`](squad-roster/README.md) | Derives deterministic named delegation tools and roster guidance from `ctx.squad` | registers on `ctx.tools` and `ctx.systemPrompt` |
 
 -----
 

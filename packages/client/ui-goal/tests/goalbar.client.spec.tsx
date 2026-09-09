@@ -2,10 +2,11 @@
 
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { GoalSnapshot } from '@daoai/dao-goal/client'
+import type { GoalProjection, GoalSnapshot } from '@daoai/dao-goal/client'
 import { makeTranslate } from '@daoai/dao-client-test-runtime'
 import { en as commonEn } from '@daoai/dao-client-locale/src/locales/en.ts'
 import { GoalBar } from '../src/client/GoalBar.tsx'
+import { GoalMissionCard } from '../src/client/GoalMissionCard.tsx'
 import type { GoalActionResult, GoalBarActions } from '../src/client/slots.ts'
 import { en } from '../src/client/locales.ts'
 
@@ -199,5 +200,63 @@ describe('GoalBar', () => {
     expect(screen.getByText('Ship the redesign')).toBeTruthy()
     fireEvent.click(screen.getByRole('button', { name: 'Clear goal' }))
     await waitFor(() => { expect(actions.onClear).toHaveBeenCalledTimes(2) })
+  })
+})
+
+describe('GoalMissionCard', () => {
+  function props(projection: GoalProjection | null | undefined) {
+    return {
+      sessionId: 'session-1',
+      useProjection: () => projection,
+      t,
+    } as unknown as Parameters<typeof GoalMissionCard>[0]
+  }
+
+  it('renders nothing while the goal projection is absent or empty', () => {
+    const absent = render(<GoalMissionCard {...props(undefined)} />)
+    expect(absent.container.firstChild).toBeNull()
+    absent.unmount()
+    const empty = render(<GoalMissionCard {...props(null)} />)
+    expect(empty.container.firstChild).toBeNull()
+  })
+
+  it('renders the objective, phase, and durable round progress', () => {
+    render(<GoalMissionCard {...props({
+      goal: makeGoal({ objective: 'Ship the auth cache safely', maxGoalRounds: 4 }),
+      roundsStarted: 2,
+      createdAt: 10,
+      updatedAt: 20,
+    })} />)
+    expect(screen.getByRole('heading', { name: 'Ship the auth cache safely' })).toBeTruthy()
+    expect(screen.getByText('Ongoing Goal')).toBeTruthy()
+    expect(screen.getByText('2 of 4 rounds')).toBeTruthy()
+    expect(screen.getByRole('progressbar', { name: 'Mission progress: 2 of 4 rounds' })
+      .getAttribute('aria-valuenow')).toBe('2')
+  })
+
+  it('shows the durable block reason and clamps the round label', () => {
+    const view = render(<GoalMissionCard {...props({
+      goal: makeGoal({
+        phase: 'blocked',
+        blockedReason: { code: 'waiting', message: 'Waiting for approval' },
+      }),
+      roundsStarted: 9,
+      createdAt: 10,
+      updatedAt: 20,
+    })} />)
+    expect(view.getByText('Blocked Goal')).toBeTruthy()
+    expect(view.getByText('Waiting for approval')).toBeTruthy()
+    expect(view.getByText('4 of 4 rounds')).toBeTruthy()
+  })
+
+  it('fills completed mission progress regardless of admitted rounds', () => {
+    const view = render(<GoalMissionCard {...props({
+      goal: makeGoal({ phase: 'complete', maxGoalRounds: 0 }),
+      roundsStarted: -1,
+      createdAt: 10,
+      updatedAt: 20,
+    })} />)
+    expect(view.getByText('Complete Goal')).toBeTruthy()
+    expect(view.getByRole('progressbar').querySelector('span')?.style.width).toBe('100%')
   })
 })

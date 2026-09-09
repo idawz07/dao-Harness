@@ -45,7 +45,7 @@ When the host composition includes an HTTP server, the host half embeds the regi
 <details>
 <summary>Implementation internals — click to expand</summary>
 
-The service owns theme and font-size state and publishes snapshots. The plugin's DOM presenter applies those snapshots, and the token sheets own the color and conversation text scales.
+The service owns theme and font-size state and publishes snapshots. The plugin's DOM presenter applies those snapshots, and the token sheets own the color and conversation text scales. Mission Control surfaces consume the theme-owned mission, focus-ring, module-platform, and existing layer aliases rather than declaring feature colors.
 
 ### DOM presenter
 

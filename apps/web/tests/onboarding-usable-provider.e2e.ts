@@ -28,7 +28,20 @@ describe.skipIf(MODE === 'record')('web e2e: another usable provider ends first-
   let tripwire: ReturnType<typeof watchConsole>
 
   beforeAll(async () => {
-    scaffold = await launchWebScaffold({ farmMissingCredential: true })
+    scaffold = await launchWebScaffold({
+      farmMissingCredential: true,
+      piAiConfig: {
+        providers: {
+          'llama-router': {
+            displayName: 'Local Llama Router',
+            apiKeyEnv: 'LLAMA_ROUTER_API_KEY',
+            api: 'openai-completions',
+            baseURL: 'http://127.0.0.1:1/v1',
+            models: [{ id: 'onboarding-model' }],
+          },
+        },
+      },
+    })
     browser = await chromium.launch()
     page = await browser.newPage({ viewport: { width: 1440, height: 960 }, locale: 'en-US' })
     tripwire = watchConsole(page)
@@ -41,7 +54,7 @@ describe.skipIf(MODE === 'record')('web e2e: another usable provider ends first-
     await scaffold?.close()
   })
 
-  it('closes the setup card without discarding the add card beside it', async () => {
+  it('dismisses setup and still lets the user add a provider', async () => {
     onTestFailed(() => saveFailureShot(page, 'web-e2e-onboarding-setup-card-cancel'))
     const credentialStep = page.getByRole('dialog', { name: CREDENTIAL_STEP })
     await credentialStep.waitFor({ timeout: 15_000 })
@@ -51,11 +64,10 @@ describe.skipIf(MODE === 'record')('web e2e: another usable provider ends first-
     await page.getByRole('button', { name: 'Settings', exact: true }).click()
     const settings = page.getByRole('dialog', { name: 'Settings' })
     await settings.waitFor({ timeout: 10_000 })
-    // Dismissing the onboarding step leaves Settings closed, so enter the
-    // Models section explicitly before exercising its normal cards.
+    // Dismissing onboarding leaves Settings closed. Its ordinary provider
+    // controls remain available when the user opens Models later.
     await settings.getByRole('button', { name: 'Models' }).click()
-    const setupKey = settings.getByRole('textbox', { name: 'API key', exact: true })
-    await setupKey.waitFor({ timeout: 10_000 })
+    await settings.getByRole('button', { name: 'Edit Local Llama Router (llama-router)' }).waitFor({ timeout: 10_000 })
 
     const add = settings.getByRole('button', { name: 'Add provider' })
     await expect.poll(async () => add.isEnabled(), { timeout: 10_000 }).toBe(true)
@@ -66,17 +78,8 @@ describe.skipIf(MODE === 'record')('web e2e: another usable provider ends first-
     await expect.poll(
       async () => settings.getByRole('textbox', { name: 'API key', exact: true }).count(),
       { timeout: 10_000 },
-    ).toBe(2)
-
-    // Cancelling the setup card must not close the independent add-provider
-    // draft beside it.
-    await settings.getByRole('button', { name: 'Cancel', exact: true }).first().click()
-    expect(await settings.getByLabel('Provider').count()).toBe(1)
-    await expect.poll(
-      async () => settings.getByRole('textbox', { name: 'API key', exact: true }).count(),
-      { timeout: 10_000 },
     ).toBe(1)
-    await settings.getByRole('button', { name: 'Edit Local Llama Router (llama-router)' }).waitFor({ timeout: 10_000 })
+    expect(await settings.getByLabel('Provider').count()).toBe(1)
     const dismissed = await captureStableAria(page, '[role="dialog"]', scaffold.workspaceCwd)
     await compareOrRefreshGolden(DISMISSED_EXPECTED, dismissed, MODE)
 

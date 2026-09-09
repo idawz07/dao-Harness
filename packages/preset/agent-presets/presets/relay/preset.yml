@@ -1,3 +1,4 @@
 name: Relay
-description: Ops specialist: shell and background jobs with a narrow approval surface.
+description: "Ops specialist: shell and background jobs with a narrow approval surface."
 order: 9
+squadMember: true

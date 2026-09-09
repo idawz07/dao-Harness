@@ -1,3 +1,4 @@
 name: Lens
-description: Review specialist: read-only inspection and prior-session search. No writes or shell.
+description: "Review specialist: read-only inspection and prior-session search. No writes or shell."
 order: 7
+squadMember: true

@@ -2,21 +2,23 @@
   - treeitem "{{workspace}}" [expanded]:
     - img
     - text: {{workspace}}
-  - treeitem "Review deepseek-harness/deepseek-harness#314 Session actions for Review deepseek-harness/deepseek-harness#314" [selected]:
-    - text: Review deepseek-harness/deepseek-harness#314
-    - button "Session actions for Review deepseek-harness/deepseek-harness#314":
+  - treeitem "Review daoAI/dao#314 Session actions for Review daoAI/dao#314" [selected]:
+    - text: Review daoAI/dao#314
+    - button "Session actions for Review daoAI/dao#314":
       - img
 
 ---
 
 - banner:
   - navigation "Session hierarchy":
-    - button "Review deepseek-harness/deepseek-harness#314" [disabled]
+    - button "Review daoAI/dao#314" [disabled]
   - img
   - text: Standard mode
   - button "Session log":
     - text: Session log
     - img
+  - 'button "Squad progress: level 1, 0 XP"': Lv.1
+  - button "Switch to dark theme": Dark
   - tablist:
     - tab "Chat" [selected]
     - tab "Trajectory"

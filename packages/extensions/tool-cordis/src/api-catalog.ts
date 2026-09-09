@@ -148,6 +148,46 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         returns: 'the rows and the authoring capability.',
       },
       {
+        signature: 'async roster(): Promise<AgentPresetRoster>',
+        description: 'Read the current squad roster through the Host capability name.',
+        parameters: [],
+        returns: 'The current effective member roster.',
+      },
+      {
+        signature: '@Remote(\'savePersona\') async savePersona( id: string, persona: string, toolsDeny: readonly string[], expectedRevision: string | null, ): Promise<SquadWriteResult>',
+        description: 'Replace one member\'s persona and restrict-only tool deny list.',
+        parameters: [{ name: 'id', description: 'Member preset id.' }, { name: 'persona', description: 'Persona text stored verbatim.' }, { name: 'toolsDeny', description: 'Restrict-only tool names.' }, { name: 'expectedRevision', description: 'Revision read by the editor, or null for an unshadowed shipped member.' }],
+        returns: 'The committed revision and effective member.',
+      },
+      {
+        signature: '@Remote(\'resetPersona\') async resetPersona(id: string, expectedRevision: string): Promise<void>',
+        description: 'Remove a shipped member\'s managed persona and tool restrictions.',
+        parameters: [{ name: 'id', description: 'Shipped member preset id.' }, { name: 'expectedRevision', description: 'Revision read by the editor.' }],
+      },
+      {
+        signature: '@Remote(\'createMember\') async createMember(id: string, input: CreateSquadMemberInput): Promise<SquadWriteResult>',
+        description: 'Create a user-owned member from reviewed bounded fields.',
+        parameters: [{ name: 'id', description: 'New member preset id.' }, { name: 'input', description: 'Reviewed bounded member fields.' }],
+        returns: 'The committed revision and effective member.',
+      },
+      {
+        signature: '@Remote(\'deleteMember\') async deleteMember(id: string): Promise<void>',
+        description: 'Delete one user-owned member.',
+        parameters: [{ name: 'id', description: 'User-owned member preset id.' }],
+      },
+      {
+        signature: '@Remote(\'saveAvatar\') async saveAvatar( id: string, mediaType: SquadAvatar[\'mediaType\'], base64: string, expectedRevision: string | null, ): Promise<SquadWriteResult>',
+        description: 'Replace one UI-only avatar under the writable root.',
+        parameters: [{ name: 'id', description: 'Member preset id.' }, { name: 'mediaType', description: 'Allowlisted browser image media type.' }, { name: 'base64', description: 'Base64-encoded image bytes.' }, { name: 'expectedRevision', description: 'Revision read by the editor, or null for an unshadowed shipped member.' }],
+        returns: 'The committed revision and effective member.',
+      },
+      {
+        signature: '@Remote(\'readAvatar\') async readAvatar(id: string): Promise<SquadAvatar | undefined>',
+        description: 'Read one UI-only avatar without exposing its Host path.',
+        parameters: [{ name: 'id', description: 'Member preset id.' }],
+        returns: 'The image payload, or undefined when none is stored.',
+      },
+      {
         signature: 'async resolve(id?: string): Promise<AgentPreset>',
         description: 'Resolve one preset by id.\n\nA broken preset resolves — deleting one, reading one, and reporting one all need the row — and the mounting paths refuse it AFTER resolution through resolveMountable.',
         parameters: [{ name: 'id', description: 'the preset id, or `undefined` for {@link defaultId}.' }],
@@ -2116,6 +2156,66 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
     ],
   },
   {
+    key: 'squad',
+    summary: 'Host capability for bounded squad-member authoring.',
+    description: 'Host capability for bounded squad-member authoring.',
+    methods: [
+      {
+        signature: 'roster(): Promise<AgentPresetRoster>',
+        description: 'Read effective squad members and authoring availability.',
+        parameters: [],
+        returns: 'The current effective member roster.',
+      },
+      {
+        signature: 'savePersona(id: string, persona: string, toolsDeny: readonly string[], expectedRevision: string | null): Promise<SquadWriteResult>',
+        description: 'Replace one member\'s managed persona and restrictions conditionally.',
+        parameters: [{ name: 'id', description: 'Member preset id.' }, { name: 'persona', description: 'Persona text stored verbatim.' }, { name: 'toolsDeny', description: 'Restrict-only tool names.' }, { name: 'expectedRevision', description: 'Revision read by the editor, or null for an unshadowed shipped member.' }],
+        returns: 'The committed revision and effective member.',
+      },
+      {
+        signature: 'resetPersona(id: string, expectedRevision: string): Promise<void>',
+        description: 'Remove a shipped member\'s managed override.',
+        parameters: [{ name: 'id', description: 'Shipped member preset id.' }, { name: 'expectedRevision', description: 'Revision read by the editor.' }],
+      },
+      {
+        signature: 'createMember(id: string, input: CreateSquadMemberInput): Promise<SquadWriteResult>',
+        description: 'Create one user-owned managed member.',
+        parameters: [{ name: 'id', description: 'New member preset id.' }, { name: 'input', description: 'Reviewed bounded member fields.' }],
+        returns: 'The committed revision and effective member.',
+      },
+      {
+        signature: 'deleteMember(id: string): Promise<void>',
+        description: 'Delete one user-owned member.',
+        parameters: [{ name: 'id', description: 'User-owned member preset id.' }],
+      },
+      {
+        signature: 'saveAvatar(id: string, mediaType: SquadAvatar[\'mediaType\'], base64: string, expectedRevision: string | null): Promise<SquadWriteResult>',
+        description: 'Replace one member\'s UI-only avatar.',
+        parameters: [{ name: 'id', description: 'Member preset id.' }, { name: 'mediaType', description: 'Allowlisted browser image media type.' }, { name: 'base64', description: 'Base64-encoded image bytes.' }, { name: 'expectedRevision', description: 'Revision read by the editor, or null for an unshadowed shipped member.' }],
+        returns: 'The committed revision and effective member.',
+      },
+      {
+        signature: 'readAvatar(id: string): Promise<SquadAvatar | undefined>',
+        description: 'Read one member\'s UI-only avatar.',
+        parameters: [{ name: 'id', description: 'Member preset id.' }],
+        returns: 'The image payload, or undefined when none is stored.',
+      },
+    ],
+  },
+  {
+    key: 'squadDraft',
+    summary: 'One-shot drafter whose output always returns to the UI for review.',
+    description: 'One-shot drafter whose output always returns to the UI for review.',
+    methods: [
+      {
+        signature: '@Remote(\'draft\') async draft(description: string, baseMember?: SquadDraftBaseMember): Promise<SquadMemberDraft>',
+        description: 'Draft member fields from user-supplied descriptive data.',
+        parameters: [{ name: 'description', description: 'Explicit user description treated as data.' }, { name: 'baseMember', description: 'Optional existing member used as drafting context.' }],
+        returns: 'One validated, uncommitted draft for review.',
+      },
+    ],
+  },
+  {
     key: 'squadProgress',
     summary: 'Registers the log-derived `squadProgress` projection and mirrors each change into durable storage for host inspection.',
     description: 'Registers the log-derived `squadProgress` projection and mirrors each change into durable storage for host inspection. The projection remains the client authority; storage is a same-lifecycle mirror.',
@@ -3244,6 +3344,14 @@ export const EVENT_API: readonly EventApiEntry[] = [
     parameters: [],
   },
   {
+    name: 'squad/change',
+    mode: 'emit',
+    signature: '\'squad/change\'(): void',
+    summary: 'The effective squad roster changed after a committed user-root write.',
+    description: 'The effective squad roster changed after a committed user-root write.',
+    parameters: [],
+  },
+  {
     name: 'subagent/end',
     mode: 'emit',
     signature: '\'subagent/end\'(this: Scoped<SubagentRuntime>, info: SubagentRunEndInfo): void',
@@ -3445,7 +3553,7 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   },
   {
     name: 'AgentPreset',
-    declaration: 'export interface AgentPreset {\n    readonly id: string;\n    readonly trust: PresetTrust;\n    readonly path: string;\n    readonly name?: string;\n    readonly description?: string;\n    readonly order?: number;\n    readonly broken?: string;\n}',
+    declaration: 'export interface AgentPreset {\n    readonly id: string;\n    readonly trust: PresetTrust;\n    readonly path: string;\n    readonly name?: string;\n    readonly description?: string;\n    readonly order?: number;\n    readonly avatar?: string;\n    readonly squadMember?: boolean;\n    readonly persona?: string;\n    readonly personaOverridden?: boolean;\n    readonly revision?: string;\n    readonly toolsDeny?: readonly string[];\n    readonly avatarPath?: string;\n    readonly broken?: string;\n}',
   },
   {
     name: 'AgentPresetDirectoryOpenValue',
@@ -3457,11 +3565,11 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   },
   {
     name: 'AgentPresetRoster',
-    declaration: 'export interface AgentPresetRoster {\n    readonly presets: readonly AgentPresetRow[];\n    readonly authorable: boolean;\n}',
+    declaration: 'export interface AgentPresetRoster {\n    readonly presets: readonly AgentPresetRow[];\n    readonly authorable: boolean;\n    readonly maxAvatarBytes: number;\n}',
   },
   {
     name: 'AgentPresetRow',
-    declaration: 'export interface AgentPresetRow {\n    readonly id: string;\n    readonly trust: PresetTrust;\n    readonly isDefault: boolean;\n    readonly name?: string;\n    readonly description?: string;\n    readonly broken?: string;\n}',
+    declaration: 'export interface AgentPresetRow {\n    readonly id: string;\n    readonly trust: PresetTrust;\n    readonly isDefault: boolean;\n    readonly name?: string;\n    readonly description?: string;\n    readonly order?: number;\n    readonly avatar?: string;\n    readonly squadMember: boolean;\n    readonly persona?: string;\n    readonly personaOverridden: boolean;\n    readonly revision: string | null;\n    readonly tools: readonly string[];\n    readonly broken?: string;\n}',
   },
   {
     name: 'AgentSetup',
@@ -3850,6 +3958,10 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'CreateSessionOptions',
     declaration: 'export interface CreateSessionOptions {\n    readonly seed?: readonly SessionEvent[];\n    readonly meta?: {\n        readonly cwd?: string;\n        readonly parentSession?: SessionId;\n        readonly createdAt?: number;\n        readonly seedLength?: number;\n        readonly origin?: \'subagent\';\n        readonly delegationDepth?: number;\n        readonly agentPreset?: string;\n    };\n}',
+  },
+  {
+    name: 'CreateSquadMemberInput',
+    declaration: 'export interface CreateSquadMemberInput {\n    readonly name: string;\n    readonly description?: string;\n    readonly persona: string;\n    readonly toolsDeny?: readonly string[];\n}',
   },
   {
     name: 'CreateTeamTaskRequest',
@@ -5404,8 +5516,24 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export interface SpillSource {\n    toolName: string;\n    callId: ToolCallId;\n    label: string;\n}',
   },
   {
+    name: 'SquadAvatar',
+    declaration: 'export interface SquadAvatar {\n    readonly mediaType: \'image/png\' | \'image/jpeg\' | \'image/webp\' | \'image/gif\';\n    readonly base64: string;\n}',
+  },
+  {
+    name: 'SquadDraftBaseMember',
+    declaration: 'export interface SquadDraftBaseMember {\n    readonly id: string;\n}',
+  },
+  {
+    name: 'SquadMemberDraft',
+    declaration: 'export interface SquadMemberDraft {\n    readonly name: string;\n    readonly description: string;\n    readonly persona: string;\n    readonly toolsDenySuggestion: readonly string[];\n}',
+  },
+  {
     name: 'SquadProgressRow',
     declaration: 'export type SquadProgressRow = z.infer<typeof squadProgressRowSchema>;',
+  },
+  {
+    name: 'SquadWriteResult',
+    declaration: 'export interface SquadWriteResult {\n    readonly revision: string;\n}',
   },
   {
     name: 'StorageBackend',

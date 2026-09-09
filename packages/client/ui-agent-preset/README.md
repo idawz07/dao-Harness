@@ -7,7 +7,7 @@ kind: "package-reference"
 
 ## Summary
 
-This package provides the agent-preset surfaces of the Web GUI: a General-settings row choosing which preset new sessions are composed from, a chip on the new-session screen choosing the next session's preset, a read-only label in the session header, and a settings section that manages the roster — copy, delete, default, and the way into a preset's own files. A session's preset is fixed at creation, so the choice applies to sessions started afterwards while running sessions keep the composition they began with. When a deployment composes no presets, all four surfaces render nothing and every session shares the host composition.
+This package provides the agent-preset and squad-management surfaces of the Web GUI. Alongside preset selection and roster file management, it renders effective squad members, persona personalization and reset, reviewed one-shot member drafting, deny-only tool restrictions, avatars, and deletion of user-authored members. Changes affect new sessions; running and resumed sessions retain their logged roster snapshots.
 
 ## Table of Contents
 
@@ -27,7 +27,9 @@ Mount this plugin alongside the settings and conversation packages; the preset s
 
 ### Managing the roster
 
-The settings section shows the roster as cards: a copy dialog is the only way a preset is created — the browser edits no composition text — and every custom card keeps a location action that opens the preset's own files. The default is set from any surface; deleting removes the preset directory while sessions already composed from it keep running. A shipped preset opens in a read-only viewer and offers no location or delete. A roster row carrying `broken` renders as a marked card whose body and duplication are disabled, because a copy of a broken preset is another broken preset; broken custom rows keep their location and delete actions so the files can be fixed and ghost directories cleared. The card face still shows the preset's own description — a chooser cannot act on a package specifier there — and the host's reason rides the badge as a tooltip, plus a visually hidden alert that carries it to assistive technology, which a disabled card body cannot.
+The settings section shows the roster as cards: a copy dialog is the only way the browser creates an arbitrary preset composition, while the Squad members section can create only a bounded persona preset. The browser edits no composition text, and every custom card keeps a location action that opens the preset's own files. The default is set from any surface; deleting removes the preset directory while sessions already composed from it keep running. A shipped preset opens in a read-only viewer and offers no location or delete. A roster row carrying `broken` renders as a marked card whose body and duplication are disabled, because a copy of a broken preset is another broken preset; broken custom rows keep their location and delete actions so the files can be fixed and ghost directories cleared. The card face still shows the preset's own description — a chooser cannot act on a package specifier there — and the host's reason rides the badge as a tooltip, plus a visually hidden alert that carries it to assistive technology, which a disabled card body cannot.
+
+The Squad members section shows an avatar or generated initial, ownership state, effective persona, and restrictions. Personalizing a shipped role creates a confined sidecar and can be reset to shipped text. Creating a member requires an explicit draft action followed by review and an explicit commit; the draft is never saved automatically. Changes affect new sessions. Avatar bytes are admitted by media type and size before the browser reads them and are used only by this client surface.
 
 ### The conversational entry
 

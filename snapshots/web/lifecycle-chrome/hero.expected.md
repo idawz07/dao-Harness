@@ -17,6 +17,7 @@
     - img
     - text: workspace
   - treeitem "New Session" [selected]
+- 'button "Squad: Level 1, No members yet"': Squad Level 1No members yet
 - button "Settings":
   - img
   - text: Settings
@@ -34,8 +35,8 @@
 - button "Commands":
   - img
 - 'button "Access mode, current: Workspace Write"': Workspace Write
-- button "Select model, current DeepSeek-V4-Flash":
-  - text: DeepSeek-V4-Flash
+- button "Select model, current Qwen3.8-27B-Q6_K_XL-128K":
+  - text: Qwen3.8-27B-Q6_K_XL-128K
   - img
 - button "Send message" [disabled]
 - text: Details

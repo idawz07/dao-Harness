@@ -14,9 +14,9 @@ import AgentRegistry, { assembleContextFor, type Agent } from '@daoai/dao-agent'
 import AgentLoop from '@daoai/dao-agent-loop'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import AgentPresets, {
-  COMPOSITION_FILE, leakedServices, livePresetMounts, mountPreset, PresetMountError, serviceForAgent,
+  COMPOSITION_FILE, leakedServices, livePresetMounts, METADATA_FILE, mountPreset, PresetMountError, serviceForAgent,
 } from '@daoai/dao-agent-presets'
-import type { Config } from '@daoai/dao-agent-presets'
+import type { AgentPreset, Config } from '@daoai/dao-agent-presets'
 import type {} from '@daoai/dao-agent-presets/types'
 import { bindScopeParent, createScope, scopeOf } from '@daoai/dao-scope'
 
@@ -39,9 +39,12 @@ const ROOTS = [
  * @param roster - roster config, defaulting to the fixture roots.
  * @returns the booted context.
  */
-async function harness(roster: Config = { default: 'standard', roots: ROOTS, includeShippedRoot: false, includeUserRoot: false }): Promise<Context> {
+async function harness(
+  roster: Config = { default: 'standard', roots: ROOTS, includeShippedRoot: false, includeUserRoot: false },
+  base = FIXTURES,
+): Promise<Context> {
   const ctx = new Context()
-  ctx.baseUrl = pathToFileURL(FIXTURES).href + '/'
+  ctx.baseUrl = pathToFileURL(base).href + '/'
   await ctx.plugin(Loader)
   ctx.loader.builtins.include = Include
   // A preset outside this workspace cannot resolve `cordis-plugin-group` by
@@ -89,6 +92,148 @@ beforeEach(async () => {
 })
 
 describe('composing an agent from a preset', () => {
+  it('records the exact effective squad roster before publication', async () => {
+    const agent = await agentOn(ctx, 'sess-squad-snapshot', 'standard')
+
+    const snapshot = agent.session.events.find(event => event.type === 'squad/roster-snapshot')
+    expect(snapshot?.data).toEqual({
+      revision: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+      members: [],
+    })
+    expect(agent.session.events.filter(event => event.type === 'squad/roster-snapshot')).toHaveLength(1)
+  })
+
+  it('records a filtered, ordered, path-free squad roster with optional display fields', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'dao-squad-snapshot-'))
+    const personaPackage = join(root, 'node_modules', '@daoai', 'dao-persona')
+    await mkdir(personaPackage, { recursive: true })
+    await writeFile(join(personaPackage, 'package.json'), JSON.stringify({
+      name: '@daoai/dao-persona', type: 'module', exports: './index.js',
+    }))
+    await writeFile(join(personaPackage, 'index.js'), 'export function apply() {}\n')
+    const persona = (text: string) => `- id: persona\n  name: '@daoai/dao-persona'\n  config:\n    text: ${text}\n`
+    const seed = async (id: string, composition: string | undefined, metadata: string) => {
+      await mkdir(join(root, id))
+      if (composition !== undefined) await writeFile(join(root, id, COMPOSITION_FILE), composition)
+      await writeFile(join(root, id, METADATA_FILE), metadata)
+    }
+    await seed('alpha', persona('Alpha.'), 'name: Alpha\ndescription: First.\norder: 10\nsquadMember: true\navatar: avatar.png\n')
+    await seed('beta', persona('Beta.'), 'name: Beta\norder: 10\nsquadMember: true\n')
+    await seed('plain', persona('Plain.'), 'squadMember: true\n')
+    await seed('zulu', persona('Zulu.'), 'squadMember: true\n')
+    await seed('broken-member', undefined, 'squadMember: true\n')
+    await seed(
+      'no-persona',
+      `- id: tool\n  name: ${join(FIXTURES, 'plugins', 'contribute.js')}\n  config:\n    tool: no-persona\n`,
+      'squadMember: true\n',
+    )
+    await seed('ordinary', persona('Ordinary.'), 'name: Ordinary\n')
+    const scoped = await harness({
+      default: 'standard',
+      roots: [{ path: root, trust: 'system' }, ROOTS[0]!],
+      includeShippedRoot: false,
+      includeUserRoot: false,
+    }, root)
+    const rosterRows = (await scoped.agentPresets.remoteExportList()).presets.filter(row => row.squadMember)
+    expect(rosterRows.map(row => ({ id: row.id, persona: row.persona })))
+      .toEqual(expect.arrayContaining([{ id: 'alpha', persona: 'Alpha.' }]))
+    const originalList = scoped.agentPresets.list.bind(scoped.agentPresets)
+    const listedDuringMount: AgentPreset[][] = []
+    const list = vi.spyOn(scoped.agentPresets, 'list').mockImplementation(async () => {
+      const rows = await originalList()
+      listedDuringMount.push(rows)
+      return rows
+    })
+    const agent = await agentOn(scoped, 'sess-rich-squad', 'standard')
+    expect(list).toHaveBeenCalledTimes(2)
+    expect(listedDuringMount[1]?.filter(row => row.squadMember).map(row => ({
+      id: row.id, persona: row.persona, broken: row.broken !== undefined,
+    }))).toEqual([
+      { id: 'alpha', persona: 'Alpha.', broken: false },
+      { id: 'beta', persona: 'Beta.', broken: false },
+      { id: 'broken-member', persona: undefined, broken: true },
+      { id: 'no-persona', persona: undefined, broken: false },
+      { id: 'plain', persona: 'Plain.', broken: false },
+      { id: 'zulu', persona: 'Zulu.', broken: false },
+    ])
+    const snapshot = agent.session.events.findLast(event => event.type === 'squad/roster-snapshot')?.data
+    expect(snapshot?.members).toEqual([
+      { id: 'alpha', trust: 'system', name: 'Alpha', description: 'First.', order: 10, persona: 'Alpha.', tools: [] },
+      { id: 'beta', trust: 'system', name: 'Beta', order: 10, persona: 'Beta.', tools: [] },
+      { id: 'plain', trust: 'system', persona: 'Plain.', tools: [] },
+      { id: 'zulu', trust: 'system', persona: 'Zulu.', tools: [] },
+    ])
+    expect((await scoped.agentPresets.list()).find(preset => preset.id === 'alpha')?.avatarPath)
+      .toBe(join(root, 'alpha', 'avatar.png'))
+  })
+
+  it('reuses a roster snapshot already recorded by an adopted session', async () => {
+    const frozen = { revision: 'frozen', members: [] }
+    const handle = await ctx.agents.create({
+      sessionId: SessionId('sess-recorded-squad'),
+      setup: async (agentCtx: Context) => {
+        agentCtx.agent?.session.append('squad/roster-snapshot', frozen)
+        await ctx.agentPresets.mount(agentCtx, 'standard')
+      },
+    })
+    expect(handle.agent.session.events.filter(event => event.type === 'squad/roster-snapshot'))
+      .toEqual([expect.objectContaining({ data: frozen })])
+  })
+
+  it('keeps a direct standing mount usable when no service snapshot owns its parent', async () => {
+    const parent = (await ctx.agents.create({ sessionId: SessionId('sess-direct-parent') })).agent
+    const preset = await ctx.agentPresets.resolve('standard')
+    const holder = createScope(ctx, { test: 'direct-standing-holder' })
+    await mountPreset(holder.ctx, preset)
+    const standing = livePresetMounts().findLast(candidate => candidate.presetId === 'standard')!
+    bindScopeParent(scopeOf(parent.ctx)!, standing.key!)
+    const child = (await ctx.agents.create({
+      sessionId: SessionId('sess-direct-child'),
+      setup: (agentCtx: Context) => { ctx.agentPresets.composeFrom(agentCtx, parent.ctx) },
+    })).agent
+    expect(child.session.events.some(event => event.type === 'squad/roster-snapshot')).toBe(false)
+  })
+
+  it('does not duplicate a child roster snapshot already present in its session', async () => {
+    const parent = await agentOn(ctx, 'sess-snapshot-parent', 'standard')
+    const frozen = { revision: 'child-frozen', members: [] }
+    const child = (await ctx.agents.create({
+      sessionId: SessionId('sess-snapshot-child'),
+      setup: (agentCtx: Context) => {
+        agentCtx.agent?.session.append('squad/roster-snapshot', frozen)
+        ctx.agentPresets.composeFrom(agentCtx, parent.ctx)
+      },
+    })).agent
+    expect(child.session.events.filter(event => event.type === 'squad/roster-snapshot'))
+      .toEqual([expect.objectContaining({ data: frozen })])
+  })
+
+  it('keys a standing generation by its managed-state revision', async () => {
+    const userRoot = await mkdtemp(join(tmpdir(), 'dao-preset-variant-'))
+    const scoped = await harness({
+      default: 'standard',
+      roots: [ROOTS[0]!, { path: userRoot, trust: 'user' }],
+      includeShippedRoot: false,
+      includeUserRoot: false,
+    })
+    const png = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
+    await scoped.squad.saveAvatar('standard', 'image/png', png.toString('base64'), null)
+    await agentOn(scoped, 'sess-managed-variant', 'standard')
+    expect(livePresetMounts().some(mount => mount.presetId === 'standard')).toBe(true)
+  })
+
+  it('rejects an authored member whose generated delegation tool is occupied', async () => {
+    ctx.effect(() => ctx.tools.register({
+      name: 'subagent_occupied',
+      description: 'occupied test name',
+      parameters: { type: 'object', properties: {}, additionalProperties: false },
+      output: { schema: { type: 'string' }, render: () => [] },
+      execute: () => Promise.resolve('occupied'),
+    }))
+    await expect(ctx.squad.createMember('occupied', { name: 'Occupied', persona: 'Valid.' }))
+      .rejects.toMatchObject({ failure: { code: 'squad-member-invalid' } })
+  })
+
   it('hands an absolute plugin path to Node as a file URL', async () => {
     const root = await mkdtemp(join(tmpdir(), 'dao-preset-absolute-plugin-'))
     const presetDir = join(root, 'absolute')
@@ -132,6 +277,18 @@ describe('composing an agent from a preset', () => {
     const agent = await agentOn(ctx, 'sess-default')
 
     expect(toolNames(ctx, agent)).toEqual(['alpha'])
+  })
+
+  it('builds direct mounts with and without a managed persona patch', async () => {
+    const preset = await ctx.agentPresets.resolve('standard')
+    const before = livePresetMounts().length
+    const withoutText = createScope(ctx, { test: 'direct-without-text' })
+    const { persona: _persona, ...presetWithoutPersona } = preset
+    await mountPreset(withoutText.ctx, { ...presetWithoutPersona, personaOverridden: true })
+
+    const withText = createScope(ctx, { test: 'direct-with-text' })
+    await mountPreset(withText.ctx, { ...preset, personaOverridden: true, persona: 'Managed persona.' })
+    expect(livePresetMounts()).toHaveLength(before + 2)
   })
 
   it('lets two sessions share one preset without colliding', async () => {

@@ -8,26 +8,34 @@
 - button "1 tool call" [expanded]:
   - text: 1 tool call
   - img
-- button "Context injection @deepseek-ai/dsh-system-prompt":
+- button "Context injection @daoai/dao-system-prompt":
   - img
   - img
-  - text: Context injection @deepseek-ai/dsh-system-prompt
-- button "Think The user wants me to use the workflow tool exactly once with specific parameters. Let me carefully follow the instructions:":
+  - text: Context injection @daoai/dao-system-prompt
+- button "Context injection skill-catalog":
   - img
   - img
-  - text: "Think The user wants me to use the workflow tool exactly once with specific parameters. Let me carefully follow the instructions:"
-- button "Tool call workflow ·":
+  - text: Context injection skill-catalog
+- button "Think The user is asking to use the workflow tool exactly once, without arguments, with the specified meta, and with the exact script body. After that, reply with WORKFLOW_DONE and stop.":
   - img
   - img
-  - text: Tool call workflow ·
+  - text: Think The user is asking to use the workflow tool exactly once, without arguments, with the specified meta, and with the exact script body. After that, reply with WORKFLOW_DONE and stop.
+- button "Tool call workflow · phase('Run')":
+  - img
+  - img
+  - text: Tool call workflow · phase('Run')
 - button "snapshot-flow 1 member Completed":
   - img
   - text: snapshot-flow 1 member Completed
-- button "Think The workflow returned successfully with the reply \"WF_CHILD_OK\". Now I need to reply with exactly \"WORKFLOW_DONE\" and stop.":
+- button "Think The workflow completed and returned WF_CHILD_OK from the child element. I need to reply with the single word WORKFLOW_DONE and stop. I won't use any other tools.":
   - img
   - img
-  - text: Think The workflow returned successfully with the reply "WF_CHILD_OK". Now I need to reply with exactly "WORKFLOW_DONE" and stop.
+  - text: Think The workflow completed and returned WF_CHILD_OK from the child element. I need to reply with the single word WORKFLOW_DONE and stop. I won't use any other tools.
 - paragraph: WORKFLOW_DONE
+- button "Turn usage 16.2K tok":
+  - img
+  - img
+  - text: Turn usage 16.2K tok
 - button "Copy":
   - img
 - button "Good response":

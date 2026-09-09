@@ -5,4 +5,10 @@
   - menuitem "PTC mode All Standard mode capabilities, with tools exposed through the PTC mode SDK so the model can combine multi-step operations in one TypeScript program."
   - menuitem "Minimal mode Two-tool coding agent with persistent bash and str_replace_editor."
   - menuitem "Creator mode Built for creating custom agent presets, with all Standard mode capabilities plus runtime inspection, plugin experiments, and preset-authoring guidance."
+  - 'menuitem "Scout Research specialist: web fetch/search and read-only filesystem tools. No writes or shell."'
+  - 'menuitem "Forge Engineering specialist: full coding toolset for implementation work in the repository."'
+  - 'menuitem "Lens Review specialist: read-only inspection and prior-session search. No writes or shell."'
+  - 'menuitem "Quill Documentation specialist: read and write documentation under docs paths and READMEs."'
+  - 'menuitem "Relay Ops specialist: shell and background jobs with a narrow approval surface."'
+  - 'menuitem "Scribe Knowledge keeper: organizes reference material with the durable reference store."'
   - menuitem "Refusing mode Resolves, then refuses to start."

@@ -1,54 +1,53 @@
-- dialog "设置":
+- dialog "Settings":
   - navigation:
-    - text: 设置
-    - button "通用设置":
+    - text: Settings
+    - button "General":
       - img
-      - text: 通用设置
-    - button "模型":
+      - text: General
+    - button "Models":
       - img
-      - text: 模型
-    - button "插件":
+      - text: Models
+    - button "Plugins":
       - img
-      - text: 插件
-    - button "Agent 预设":
+      - text: Plugins
+    - button "Agent presets":
       - img
-      - text: Agent 预设
-  - button "打开配置文件"
-  - button "关闭":
+      - text: Agent presets
+    - button "Squad members":
+      - img
+      - text: Squad members
+  - button "Open configuration file"
+  - button "Close":
     - img
-    - text: 关闭
-  - text: Agent 预设 对此后新建的会话生效。运行中的会话保持它开始时的预设。
-  - button "标准模式":
-    - text: 标准模式
+    - text: Close
+  - text: Agent preset Applies to sessions you start from now on. Running sessions keep the preset they began with.
+  - button "Standard mode":
+    - text: Standard mode
     - img
-  - text: 权限 选择新会话的默认权限模式
+  - text: Permission Choose the default permission mode for new sessions
   - button "Workspace Write":
     - text: Workspace Write
     - img
-  - text: 语言
-  - button "中文":
-    - text: 中文
+  - text: Appearance
+  - button "Light" [pressed]:
     - img
-  - text: 外观
-  - button "浅色":
+    - text: Light
+  - button "Dark":
     - img
-    - text: 浅色
-  - button "深色":
+    - text: Dark
+  - button "System":
     - img
-    - text: 深色
-  - button "跟随系统" [pressed]:
+    - text: System
+  - text: Font size Only affects conversation content 14
+  - button "Increase font size":
     - img
-    - text: 跟随系统
-  - text: 字号大小 仅影响会话内容的字号 14
-  - button "增大字号":
+  - button "Decrease font size":
     - img
-  - button "减小字号":
-    - img
-  - text: px 对话显示 控制已完成轮次的过程内容
+  - text: px Conversation display Controls process content in completed turns
   - button "Compact":
     - text: Compact
     - img
-  - text: 繁忙时 Enter 键行为 仅在智能体运行时生效；Cmd/Ctrl+Enter 使用另一行为
-  - button "排队发送":
-    - text: 排队发送
+  - text: Enter behavior while busy Busy only; Cmd/Ctrl+Enter uses the other behavior
+  - button "Queue":
+    - text: Queue
     - img

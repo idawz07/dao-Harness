@@ -28,6 +28,7 @@ import type {} from '@daoai/dao-client-ui-session/client'
 import type { GoalProjection, GoalRef } from '@daoai/dao-goal/client'
 import type { GoalActionResult, GoalBarActions } from './slots.ts'
 import { GoalDock } from './GoalBar.tsx'
+import { GoalMissionCard } from './GoalMissionCard.tsx'
 import { GoalCommandInputView } from './GoalCommandInputView.tsx'
 import { goalCommandInputDefinition } from './goal-command-input.ts'
 import { en, type GoalKey } from './locales.ts'
@@ -106,4 +107,9 @@ export function apply(ctx: ClientContext): void {
       },
     }),
   }, GoalDock))
+
+  ctx.slots.inject('conversation.session.header.mission', () => ctx.slots.register({
+    name: 'conversation.session.header.mission',
+    locale: NS,
+  }, GoalMissionCard))
 }

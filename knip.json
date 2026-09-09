@@ -408,6 +408,11 @@
         "zod"
       ]
     },
+    "packages/preset/squad-draft": {
+      "ignoreDependencies": [
+        "zod"
+      ]
+    },
     "packages/llm/llm-pi-ai": {
       "entry": [
         "tests/**/*.spec.ts",

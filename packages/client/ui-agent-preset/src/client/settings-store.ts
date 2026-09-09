@@ -73,7 +73,7 @@ export type RosterPreset = AgentPresetRoster['presets'][number]
 /** The roster, or the message to show in its place. */
 export type RosterRead = { ok: true; value: AgentPresetRoster } | { ok: false; error: string }
 
-const EMPTY_ROSTER: AgentPresetRoster = { presets: [], authorable: false }
+const EMPTY_ROSTER: AgentPresetRoster = { presets: [], authorable: false, maxAvatarBytes: 0 }
 
 /**
  * Read the roster, folding both refusal shapes into one message.

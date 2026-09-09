@@ -17,7 +17,7 @@ export type PresetTrust = 'system' | 'user'
  * composition outside the root the deployment authorised. Discovery shares it:
  * a directory whose name no copy could ever claim is not a preset slot.
  */
-export const PRESET_ID = /^[a-z0-9][a-z0-9-]*$/
+export const PRESET_ID = /^[a-z0-9][a-z0-9-]{0,63}$/
 
 /** One preset directory that carries a mountable agent composition. */
 export interface AgentPreset {
@@ -33,6 +33,20 @@ export interface AgentPreset {
   readonly description?: string
   /** Declared position within its group; absent sorts after those that declare one. */
   readonly order?: number
+  /** UI-only image filename beside the effective member directory. */
+  readonly avatar?: string
+  /** Whether this preset participates in roster-driven delegation. */
+  readonly squadMember?: boolean
+  /** Effective persona text read from the composition or managed override. */
+  readonly persona?: string
+  /** Whether a managed sidecar replaces the composition persona. */
+  readonly personaOverridden?: boolean
+  /** Opaque revision required by the next managed write. */
+  readonly revision?: string
+  /** Tools removed from children delegated as this member. */
+  readonly toolsDeny?: readonly string[]
+  /** Absolute avatar path, retained on the Host only. */
+  readonly avatarPath?: string
   /**
    * Why this preset cannot compose a session, absent when it can. A broken
    * preset stays on the roster — hiding it would leave its directory blocking

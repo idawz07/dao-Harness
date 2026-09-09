@@ -57,7 +57,11 @@ describe('web e2e: the composer model switch is the default for later sessions',
   }
 
   beforeAll(async () => {
-    scaffold = await launchWebScaffold({ extraOverlayPath: OVERLAY })
+    scaffold = await launchWebScaffold({
+      extraOverlayPath: OVERLAY,
+      farmMissingCredential: true,
+      piAiConfig: { providers: {} },
+    })
     // Two routes so the picker has somewhere to start and somewhere to go.
     // Declared through the settings seam rather than the Models page: this
     // scenario is about the composer, and the declaring flow is covered by
@@ -136,7 +140,16 @@ describe('web e2e: the composer model switch is the default for later sessions',
     // default still names the route, and nothing serves it any more.
     // `replace`, not `update`: a merge patch of `{providers: {}}` leaves every
     // stored profile in place.
-    await scaffold.ctx.settings.replace(settingsNamespace('llm-pi-ai'), { providers: {} })
+    await scaffold.ctx.settings.replace(settingsNamespace('llm-pi-ai'), {
+      providers: {
+        [START_ROUTE]: {
+          displayName: 'Origin Gateway',
+          api: 'openai-completions',
+          baseURL: 'https://gateway.origin.example/v1',
+          models: [{ id: START_MODEL, name: 'Origin Large' }],
+        },
+      },
+    })
 
     await expect.poll(async () => box.isEnabled(), { timeout: 15_000 }).toBe(false)
     expect(await box.getAttribute('data-placeholder')).toBe('This model is unavailable — select one to continue')

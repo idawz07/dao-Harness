@@ -17,6 +17,16 @@ export type AgentPresetSettingsKey =
   | 'openLocation' | 'showLocation' | 'revealedPathLabel'
   | 'idRequired' | 'idInvalid' | 'idTaken'
   | 'deleteTitle' | 'deleteDescription' | 'deleteConfirm' | 'deleting'
+  | 'squadNav' | 'squadTitle' | 'squadIntro' | 'squadLoadError' | 'squadCreate'
+  | 'squadBuiltIn' | 'squadCustom' | 'squadPersonalized' | 'squadPersonalize' | 'squadEdit'
+  | 'squadAvatar' | 'squadEditTitle' | 'squadEditIntro' | 'squadPersona' | 'squadPersonaHelp'
+  | 'squadToolRestrictions' | 'squadToolPlaceholder' | 'squadToolHelp' | 'squadReset'
+  | 'squadSave' | 'squadSaving' | 'squadCreateTitle' | 'squadDraftIntro' | 'squadReviewIntro'
+  | 'squadDescribe' | 'squadDescribePlaceholder' | 'squadDraftAction' | 'squadDrafting'
+  | 'squadRoleDescription' | 'squadReviewHelp' | 'squadCreateMember'
+  | 'squadDeleteTitle' | 'squadDeleteDescription'
+  | 'squadAvatarError'
+  | 'memberIdRequired' | 'memberIdInvalid' | 'memberIdTaken' | 'memberNameRequired' | 'personaRequired'
 
 /** English copy. */
 export const en: Record<AgentPresetSettingsKey, string> = {
@@ -76,13 +86,52 @@ export const en: Record<AgentPresetSettingsKey, string> = {
   showLocation: 'Show location',
   revealedPathLabel: 'Preset files:',
   idRequired: 'Give the preset an identifier.',
-  idInvalid: 'Use lowercase letters, digits, and hyphens, starting with a letter or digit.',
+  idInvalid: 'Use up to 64 lowercase letters, digits, and hyphens, starting with a letter or digit.',
   idTaken: 'A preset with this identifier already exists.',
   deleteTitle: 'Delete this preset?',
   deleteDescription:
     'The preset directory is deleted. Sessions already running on it keep working; new sessions cannot select it.',
   deleteConfirm: 'Delete',
   deleting: 'Deleting…',
+  squadNav: 'Squad members',
+  squadTitle: 'Squad members',
+  squadIntro: 'Personalize the specialists Dao can delegate to, restrict their tools, or create a reviewed member of your own. Changes apply to new sessions.',
+  squadLoadError: 'Could not load squad members.',
+  squadCreate: 'Create member',
+  squadBuiltIn: 'Built-in',
+  squadCustom: 'Custom',
+  squadPersonalized: 'Personalized',
+  squadPersonalize: 'Personalize',
+  squadEdit: 'Edit',
+  squadAvatar: 'Choose avatar',
+  squadEditTitle: 'Edit squad member',
+  squadEditIntro: 'Edit the member persona and remove tools from its existing access. The underlying built-in preset is never overwritten.',
+  squadPersona: 'Persona',
+  squadPersonaHelp: 'Describe the role, working method, boundaries, and reporting style. Template variables supported by the persona plugin remain available.',
+  squadToolRestrictions: 'Tools to remove',
+  squadToolPlaceholder: 'bash, write, web_search',
+  squadToolHelp: 'Comma-separated tool names. This field can only restrict the member; it cannot grant new tools.',
+  squadReset: 'Reset to built-in',
+  squadSave: 'Save changes',
+  squadSaving: 'Saving…',
+  squadCreateTitle: 'Create squad member',
+  squadDraftIntro: 'Describe the specialist you need. Drafting makes one tool-free model call and does not save anything.',
+  squadReviewIntro: 'Review and edit every field. The member is created only when you commit this form.',
+  squadDescribe: 'What should this member do?',
+  squadDescribePlaceholder: 'For example: review database migrations for safety, reversibility, and operational risk.',
+  squadDraftAction: 'Draft for review',
+  squadDrafting: 'Drafting…',
+  squadRoleDescription: 'Role description',
+  squadReviewHelp: 'The draft is untrusted text. Check the persona and restrictions before creating the member.',
+  squadCreateMember: 'Create member',
+  squadDeleteTitle: 'Delete this squad member?',
+  squadDeleteDescription: 'This removes the user-owned member from future delegation:',
+  squadAvatarError: 'Choose a PNG, JPEG, WebP, or GIF image within the upload limit.',
+  memberIdRequired: 'Give the member an identifier.',
+  memberIdInvalid: 'Use up to 64 lowercase letters, digits, and hyphens, starting with a letter or digit.',
+  memberIdTaken: 'A preset with this identifier already exists.',
+  memberNameRequired: 'Give the member a display name.',
+  personaRequired: 'The persona cannot be empty.',
 }
 
 /** Preset roster fields needed to resolve Web display copy. */
