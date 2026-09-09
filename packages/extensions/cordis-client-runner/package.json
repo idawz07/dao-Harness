@@ -63,9 +63,9 @@
     "@daoai/dao-client-ui-renderer": "workspace:^",
     "@daoai/dao-client-ui-theme": "workspace:^",
     "@daoai/dao-invariants": "workspace:^",
-    "@types/react": "~18.3.1",
+    "@types/react": "~19.2.18",
     "@daoai/cordis": "workspace:^",
-    "react": "^18.2.0"
+    "react": "^19.2.8"
   },
   "files": [
     "lib/index.js",

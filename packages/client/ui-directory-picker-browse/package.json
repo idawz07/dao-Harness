@@ -66,9 +66,9 @@
     "@daoai/dao-client-ui-workspace": "workspace:^",
     "@daoai/dao-invariants": "workspace:^",
     "@testing-library/react": "^16.1.0",
-    "@types/react": "~18.3.1",
+    "@types/react": "~19.2.18",
     "@daoai/cordis": "workspace:^",
-    "react": "^18.2.0",
+    "react": "^19.2.8",
     "react-dom": "^18.2.0"
   },
   "files": [
